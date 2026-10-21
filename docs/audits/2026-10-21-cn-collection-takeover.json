@@ -1,0 +1,1738 @@
+{
+  "observed_at": "2026-10-21T02:59:20.158088+00:00",
+  "read_only": true,
+  "scope": 71,
+  "data_verified": false,
+  "code_commit": "ecb9c4efe3d52eab3521153171e02569bb0923fa",
+  "raw_artifact": "var/cn-collection-review-20261021/raw-takeover.json",
+  "raw_sha256": "f692af6c180011b90f5bfa9b0d687aaba881862f3793db847d7fd5570dfabfcd",
+  "job_artifact": "var/cn-collection-review-20261021/jobs.json",
+  "job_sha256": "3acf0545068a342b3f9a02183c6eb62aea244efa691ddb6e7e2496cdc1c4ecb6",
+  "rows": [
+    {
+      "table": "exchange_calendar",
+      "physical": {
+        "id": 296,
+        "directoryName": "exchange_calendar~296",
+        "designatedTimestamp": "cal_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 9,
+        "wal_txn": 9
+      },
+      "job_ids": [
+        "data.exchange_calendar"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/exchange_calendar.json",
+      "freshness_field": "cal_date",
+      "freshness_latest": "2027-09-27T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "etf_adj",
+      "physical": {
+        "id": 1818,
+        "directoryName": "etf_adj~1818",
+        "designatedTimestamp": "timestamp",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 96,
+        "wal_txn": 96
+      },
+      "job_ids": [
+        "data.etf_adj"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/etf_adj.json",
+      "freshness_field": "timestamp",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "etf_basic",
+      "physical": {
+        "id": 1685,
+        "directoryName": "etf_basic~1685",
+        "designatedTimestamp": "timestamp",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 8,
+        "wal_txn": 8
+      },
+      "job_ids": [
+        "data.etf_basic"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/etf_basic.json",
+      "freshness_field": "update_time",
+      "freshness_latest": "2026-09-24T19:03:46.839299Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "etf_daily",
+      "physical": {
+        "id": 1686,
+        "directoryName": "etf_daily~1686",
+        "designatedTimestamp": "timestamp",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 131,
+        "wal_txn": 131
+      },
+      "job_ids": [
+        "data.etf_daily"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/etf_daily.json",
+      "freshness_field": "timestamp",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "etf_factor",
+      "physical": {
+        "id": 1819,
+        "directoryName": "etf_factor~1819",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 148,
+        "wal_txn": 148
+      },
+      "job_ids": [
+        "data.etf_factor"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/etf_factor.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "etf_portfolio",
+      "physical": {
+        "id": 307,
+        "directoryName": "etf_portfolio~307",
+        "designatedTimestamp": "end_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 1529,
+        "wal_txn": 1529
+      },
+      "job_ids": [
+        "data.etf_portfolio"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/etf_portfolio.json",
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-08-31T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "etf_share",
+      "physical": {
+        "id": 1850,
+        "directoryName": "etf_share_stage_20260928_174145_144587~1850",
+        "designatedTimestamp": "timestamp",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 8,
+        "wal_txn": 8
+      },
+      "job_ids": [
+        "data.etf_share"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/etf_share.json",
+      "freshness_field": "timestamp",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stock_minute_bars",
+      "physical": {
+        "id": 1766,
+        "directoryName": "stock_minute_bars~1766",
+        "designatedTimestamp": "bar_time",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 2517,
+        "wal_txn": 2517
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "bar_time",
+      "freshness_latest": "2026-09-11T07:00:00.000000Z",
+      "code_finding": "文件导入来源，需核对原文件和导入记录",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "cn_bond_yield_curve",
+      "physical": {
+        "id": 1846,
+        "directoryName": "cn_bond_yield_curve_stage_20260928_174124_549276~1846",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 15,
+        "wal_txn": 15
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/cn_bond_yield_curve.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "正式 owner 在主策略入口，不在数据入口的这份任务注册中",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "cn_cpi",
+      "physical": {
+        "id": 1828,
+        "directoryName": "cn_cpi_stage_20260928_172457_114956~1828",
+        "designatedTimestamp": "month",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [
+        "data.cn_cpi"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/cn_cpi.json",
+      "freshness_field": "month",
+      "freshness_latest": "2026-08-01T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "cn_gdp",
+      "physical": {
+        "id": 1571,
+        "directoryName": "cn_gdp~1571",
+        "designatedTimestamp": "report_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 3,
+        "wal_txn": 3
+      },
+      "job_ids": [
+        "data.cn_gdp"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/cn_gdp.json",
+      "freshness_field": "report_date",
+      "freshness_latest": "2026-06-30T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "cn_m",
+      "physical": {
+        "id": 1831,
+        "directoryName": "cn_m_stage_20260928_172511_058531~1831",
+        "designatedTimestamp": "month",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [
+        "data.cn_m"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/cn_m.json",
+      "freshness_field": "month",
+      "freshness_latest": "2026-08-01T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "cn_pmi",
+      "physical": {
+        "id": 1829,
+        "directoryName": "cn_pmi_stage_20260928_172504_051432~1829",
+        "designatedTimestamp": "month",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [
+        "data.cn_pmi"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/cn_pmi.json",
+      "freshness_field": "month",
+      "freshness_latest": "2026-08-01T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "cn_ppi",
+      "physical": {
+        "id": 1832,
+        "directoryName": "cn_ppi_stage_20260928_172516_507534~1832",
+        "designatedTimestamp": "month",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [
+        "data.cn_ppi"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/cn_ppi.json",
+      "freshness_field": "month",
+      "freshness_latest": "2026-08-01T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "hibor",
+      "physical": {
+        "id": 1837,
+        "directoryName": "hibor_stage_20260928_174101_121465~1837",
+        "designatedTimestamp": "timestamp",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [
+        "data.hibor"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/hibor.json",
+      "freshness_field": "timestamp",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "sf_month",
+      "physical": {
+        "id": 1830,
+        "directoryName": "sf_month_stage_20260928_172508_654300~1830",
+        "designatedTimestamp": "month",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [
+        "data.sf_month"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/sf_month.json",
+      "freshness_field": "month",
+      "freshness_latest": "2026-08-01T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "shibor",
+      "physical": {
+        "id": 1839,
+        "directoryName": "shibor_stage_20260928_174105_840230~1839",
+        "designatedTimestamp": "timestamp",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [
+        "data.shibor"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/shibor.json",
+      "freshness_field": "timestamp",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "shibor_lpr",
+      "physical": {
+        "id": 1647,
+        "directoryName": "shibor_lpr~1647",
+        "designatedTimestamp": "date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [
+        "data.shibor_lpr"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/shibor_lpr.json",
+      "freshness_field": "date",
+      "freshness_latest": "2026-08-20T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "l2_live_normalized_events",
+      "physical": {
+        "id": 1706,
+        "directoryName": "l2_live_normalized_events~1706",
+        "designatedTimestamp": "recv_ts",
+        "walEnabled": true,
+        "dedup": false,
+        "table_suspended": false,
+        "table_txn": 122815,
+        "wal_txn": 122815
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "recv_ts",
+      "freshness_latest": "2026-10-14T15:01:39.571501Z",
+      "code_finding": "旧历史表；当前实时结果写 SQLite/Parquet，不恢复旧 QuestDB writer",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "dc_index",
+      "physical": {
+        "id": 1854,
+        "directoryName": "dc_index_stage_20260928_174222_987870~1854",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": false,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [
+        "data.dc_index"
+      ],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "index",
+      "physical": {
+        "id": 332,
+        "directoryName": "index~332",
+        "designatedTimestamp": "import_time",
+        "walEnabled": true,
+        "dedup": false,
+        "table_suspended": false,
+        "table_txn": 1,
+        "wal_txn": 1
+      },
+      "job_ids": [
+        "data.index"
+      ],
+      "source_contract": null,
+      "freshness_field": "import_time",
+      "freshness_latest": "2026-04-02T13:14:45.221299Z",
+      "code_finding": "文件导入来源，需核对原文件和导入记录",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "index_daily_basic",
+      "physical": {
+        "id": 1448,
+        "directoryName": "index_daily_basic~1448",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 44,
+        "wal_txn": 44
+      },
+      "job_ids": [
+        "data.index_daily_basic"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/index_daily_basic.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-08-03T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "index_daily_market",
+      "physical": {
+        "id": 1853,
+        "directoryName": "index_daily_market_stage_20260928_174208_752144~1853",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [
+        "data.index_daily_market"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/index_daily_market.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "index_member",
+      "physical": {
+        "id": 1760,
+        "directoryName": "index_member_sw2021_stage_20260912_035448~1760",
+        "designatedTimestamp": "update_time",
+        "walEnabled": true,
+        "dedup": false,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [
+        "data.index_member"
+      ],
+      "source_contract": null,
+      "freshness_field": "update_time",
+      "freshness_latest": "2026-09-11T19:54:57.559719Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "index_monthly",
+      "physical": {
+        "id": 334,
+        "directoryName": "index_monthly~334",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": false,
+        "table_suspended": false,
+        "table_txn": 11,
+        "wal_txn": 11
+      },
+      "job_ids": [
+        "data.index_monthly"
+      ],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-08-31T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "index_weight",
+      "physical": {
+        "id": 1857,
+        "directoryName": "index_weight_stage_20260928_174248_245924~1857",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 30,
+        "wal_txn": 30
+      },
+      "job_ids": [
+        "data.index_weight"
+      ],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-30T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "ths_index",
+      "physical": {
+        "id": 1754,
+        "directoryName": "ths_index_stage_20260912_022059_65d6f07d~1754",
+        "designatedTimestamp": "update_time",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [
+        "data.ths_index"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/ths_index.json",
+      "freshness_field": "update_time",
+      "freshness_latest": "2026-09-11T18:20:59.807013Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "ths_member",
+      "physical": {
+        "id": 1779,
+        "directoryName": "ths_member_stage_20260916_000918_ed422f99~1779",
+        "designatedTimestamp": "update_time",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 3,
+        "wal_txn": 3
+      },
+      "job_ids": [
+        "data.ths_member"
+      ],
+      "source_contract": null,
+      "freshness_field": "update_time",
+      "freshness_latest": "2026-09-15T16:09:12.595230Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "block_trade",
+      "physical": {
+        "id": 1860,
+        "directoryName": "block_trade_stage_20260928_181026_670250~1860",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-18T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "broker_recommend",
+      "physical": {
+        "id": 1557,
+        "directoryName": "broker_recommend~1557",
+        "designatedTimestamp": "month",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 3,
+        "wal_txn": 3
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "month",
+      "freshness_latest": "2026-09-01T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "cyq_chips",
+      "physical": {
+        "id": 1628,
+        "directoryName": "cyq_chips~1628",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 5761,
+        "wal_txn": 5761
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-11T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "cyq_perf",
+      "physical": {
+        "id": 1679,
+        "directoryName": "cyq_perf~1679",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 13,
+        "wal_txn": 13
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/cyq_perf.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-30T00:00:00.000000Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "pledge_stat",
+      "physical": {
+        "id": 1865,
+        "directoryName": "pledge_stat_stage_20260928_181438_800771~1865",
+        "designatedTimestamp": "end_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 11,
+        "wal_txn": 11
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "end_date",
+      "freshness_latest": "2026-09-18T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "repurchase",
+      "physical": {
+        "id": 1816,
+        "directoryName": "repurchase~1816",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-09-19T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "share_float",
+      "physical": {
+        "id": 1872,
+        "directoryName": "share_float_stage_20260928_184417_615630~1872",
+        "designatedTimestamp": "float_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 35,
+        "wal_txn": 35
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/share_float.json",
+      "freshness_field": "ann_date",
+      "freshness_latest": "20260919",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stk_alert",
+      "physical": {
+        "id": 1840,
+        "directoryName": "stk_alert_stage_20260928_174108_001386~1840",
+        "designatedTimestamp": "start_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "start_date",
+      "freshness_latest": "2026-09-18T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stk_high_shock",
+      "physical": {
+        "id": 1578,
+        "directoryName": "stk_high_shock~1578",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 9,
+        "wal_txn": 9
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-22T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stk_holdernumber",
+      "physical": {
+        "id": 1851,
+        "directoryName": "stk_holdernumber_stage_20260928_174153_894550~1851",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 5,
+        "wal_txn": 5
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-09-20T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stk_holdertrade",
+      "physical": {
+        "id": 1849,
+        "directoryName": "stk_holdertrade_stage_20260928_174136_599741~1849",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-09-19T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stk_shock",
+      "physical": {
+        "id": 1726,
+        "directoryName": "stk_shock~1726",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 9,
+        "wal_txn": 9
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-18T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "ft_limit",
+      "physical": {
+        "id": 1843,
+        "directoryName": "ft_limit_stage_20260928_174115_825717~1843",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/ft_limit.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "fut_basic",
+      "physical": {
+        "id": 1595,
+        "directoryName": "fut_basic~1595",
+        "designatedTimestamp": "timestamp",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 10,
+        "wal_txn": 10
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/fut_basic.json",
+      "freshness_field": "update_time",
+      "freshness_latest": "2026-09-24T11:03:49.204116Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "fut_daily",
+      "physical": {
+        "id": 1842,
+        "directoryName": "fut_daily_stage_20260928_174113_511027~1842",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/fut_daily.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "fut_holding",
+      "physical": {
+        "id": 1867,
+        "directoryName": "fut_holding_stage_20260928_182407_398210~1867",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/fut_holding.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "fut_mapping",
+      "physical": {
+        "id": 1838,
+        "directoryName": "fut_mapping_stage_20260928_174103_231873~1838",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/fut_mapping.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "fut_settle",
+      "physical": {
+        "id": 1841,
+        "directoryName": "fut_settle_stage_20260928_174110_795801~1841",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/fut_settle.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "daily",
+      "physical": {
+        "id": 1680,
+        "directoryName": "daily~1680",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 603,
+        "wal_txn": 603
+      },
+      "job_ids": [
+        "data.daily"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/daily.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "daily_basic",
+      "physical": {
+        "id": 1876,
+        "directoryName": "daily_basic_stage_20260928_185816_917214~1876",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 688,
+        "wal_txn": 688
+      },
+      "job_ids": [
+        "data.daily_basic"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/daily_basic.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stk_factor",
+      "physical": {
+        "id": 1722,
+        "directoryName": "stk_factor~1722",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 703,
+        "wal_txn": 703
+      },
+      "job_ids": [
+        "data.stk_factor"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/stk_factor.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stk_limit",
+      "physical": {
+        "id": 1725,
+        "directoryName": "stk_limit~1725",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 745,
+        "wal_txn": 745
+      },
+      "job_ids": [
+        "data.stk_limit"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/stk_limit.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stk_st_daily",
+      "physical": {
+        "id": 3132,
+        "directoryName": "java_d012_stk_st_daily_stage_df2f6244c38e4931af0330591f0cbc19~3132",
+        "designatedTimestamp": "timestamp",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": null,
+        "wal_txn": null
+      },
+      "job_ids": [
+        "data.stk_st_daily"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/stk_st_daily.json",
+      "freshness_field": "timestamp",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stk_suspend",
+      "physical": {
+        "id": 3115,
+        "directoryName": "java_stk_suspend_stage_64f2b7909e3844139cac348fc284bd4a~3115",
+        "designatedTimestamp": "timestamp",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": null,
+        "wal_txn": null
+      },
+      "job_ids": [
+        "data.stk_suspend"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/stk_suspend.json",
+      "freshness_field": "timestamp",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "stock_detail_info",
+      "physical": {
+        "id": 3200,
+        "directoryName": "stock_detail_info",
+        "designatedTimestamp": null,
+        "walEnabled": false,
+        "dedup": false,
+        "table_suspended": false,
+        "table_txn": null,
+        "wal_txn": null
+      },
+      "job_ids": [
+        "data.stock_detail_info"
+      ],
+      "source_contract": null,
+      "freshness_field": "update_time",
+      "freshness_latest": "2026-10-18T20:27:39.498427Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "balance",
+      "physical": {
+        "id": 1620,
+        "directoryName": "balance~1620",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 5,
+        "wal_txn": 5
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-08-28T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "cashflow",
+      "physical": {
+        "id": 1619,
+        "directoryName": "cashflow~1619",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 14,
+        "wal_txn": 14
+      },
+      "job_ids": [
+        "data.cashflow"
+      ],
+      "source_contract": null,
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-08-28T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "disclosure_date",
+      "physical": {
+        "id": 582,
+        "directoryName": "disclosure_date~582",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 400,
+        "wal_txn": 400
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/disclosure_date.json",
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-09-24T00:00:00.000000Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "dividend",
+      "physical": {
+        "id": 1618,
+        "directoryName": "dividend~1618",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 3,
+        "wal_txn": 3
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/dividend.json",
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-09-05T00:00:00.000000Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "express",
+      "physical": {
+        "id": 1609,
+        "directoryName": "express~1609",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 14,
+        "wal_txn": 14
+      },
+      "job_ids": [
+        "data.express"
+      ],
+      "source_contract": null,
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-08-25T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "fina_audit",
+      "physical": {
+        "id": 1616,
+        "directoryName": "fina_audit~1616",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/fina_audit.json",
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-05-29T00:00:00.000000Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "fina_indicator",
+      "physical": {
+        "id": 1622,
+        "directoryName": "fina_indicator~1622",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 144,
+        "wal_txn": 144
+      },
+      "job_ids": [
+        "data.fina_indicator"
+      ],
+      "source_contract": null,
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-09-23T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "fina_mainbz",
+      "physical": {
+        "id": 1861,
+        "directoryName": "fina_mainbz_stage_20260928_181058_858233~1861",
+        "designatedTimestamp": "end_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 5,
+        "wal_txn": 5
+      },
+      "job_ids": [],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/fina_mainbz.json",
+      "freshness_field": "end_date",
+      "freshness_latest": "2026-06-30T00:00:00.000000Z",
+      "code_finding": "有来源契约，但数据入口未注册正式 owner；Batch 仍只写隔离表",
+      "contract_differences": [
+        {
+          "column": "bz_code",
+          "contract": "STRING",
+          "actual": "VARCHAR"
+        }
+      ],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "forecast",
+      "physical": {
+        "id": 1862,
+        "directoryName": "forecast_stage_20260928_181158_217386~1862",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 4,
+        "wal_txn": 4
+      },
+      "job_ids": [
+        "data.forecast"
+      ],
+      "source_contract": null,
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-09-18T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "income",
+      "physical": {
+        "id": 1621,
+        "directoryName": "income~1621",
+        "designatedTimestamp": "ann_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 14,
+        "wal_txn": 14
+      },
+      "job_ids": [
+        "data.income"
+      ],
+      "source_contract": null,
+      "freshness_field": "ann_date",
+      "freshness_latest": "2026-08-29T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "margin_all",
+      "physical": {
+        "id": 214,
+        "directoryName": "margin_all~214",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": false,
+        "table_suspended": false,
+        "table_txn": 8,
+        "wal_txn": 8
+      },
+      "job_ids": [
+        "data.margin_all"
+      ],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-03-19T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "margin_detail",
+      "physical": {
+        "id": 1708,
+        "directoryName": "margin_detail~1708",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 265,
+        "wal_txn": 265
+      },
+      "job_ids": [
+        "data.margin_detail"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/margin_detail.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "margin_secs",
+      "physical": {
+        "id": 1864,
+        "directoryName": "margin_secs_stage_20260928_181253_876146~1864",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 11,
+        "wal_txn": 11
+      },
+      "job_ids": [
+        "data.margin_secs"
+      ],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "margin_trading",
+      "physical": {
+        "id": 187,
+        "directoryName": "margin_trading~187",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": false,
+        "table_suspended": false,
+        "table_txn": 210,
+        "wal_txn": 210
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-03-11T00:00:00.000000Z",
+      "code_finding": "文件导入来源，需核对原文件和导入记录",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "moneyflow",
+      "physical": {
+        "id": 1873,
+        "directoryName": "moneyflow_stage_20260928_184806_272189~1873",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 405,
+        "wal_txn": 405
+      },
+      "job_ids": [
+        "data.moneyflow"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/moneyflow.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "moneyflow_hsgt",
+      "physical": {
+        "id": 3196,
+        "directoryName": "java_d027_moneyflow_hsgt_stage_25330b50d1284084a6cd955a7f55f172~3196",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": null,
+        "wal_txn": null
+      },
+      "job_ids": [
+        "data.moneyflow_hsgt"
+      ],
+      "source_contract": "markets/cn/source/src/main/resources/contracts/source/moneyflow_hsgt.json",
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-10-16T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": [],
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "moneyflow_ths",
+      "physical": {
+        "id": 1866,
+        "directoryName": "moneyflow_ths_stage_20260928_181457_424762~1866",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": true,
+        "table_suspended": false,
+        "table_txn": 18,
+        "wal_txn": 18
+      },
+      "job_ids": [
+        "data.moneyflow_ths"
+      ],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "已注册正式 owner；仍须核对运行绑定、原账本和调度",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    },
+    {
+      "table": "sge_daily",
+      "physical": {
+        "id": 1852,
+        "directoryName": "sge_daily_stage_20260928_174201_962179~1852",
+        "designatedTimestamp": "trade_date",
+        "walEnabled": true,
+        "dedup": false,
+        "table_suspended": false,
+        "table_txn": 2,
+        "wal_txn": 2
+      },
+      "job_ids": [],
+      "source_contract": null,
+      "freshness_field": "trade_date",
+      "freshness_latest": "2026-09-21T00:00:00.000000Z",
+      "code_finding": "数据入口没有正式 owner，也没有通用来源契约；旧库有数据不代表新程序接管",
+      "contract_differences": null,
+      "inspection_error": null,
+      "complete": false,
+      "last_success": "待查原部署账本",
+      "runtime_cause": "待查原部署配置和运行记录"
+    }
+  ]
+}
