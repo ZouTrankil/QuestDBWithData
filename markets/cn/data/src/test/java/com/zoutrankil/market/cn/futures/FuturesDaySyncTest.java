@@ -75,7 +75,7 @@ class FuturesDaySyncTest {
                                         c.target().equals("ts_code")
                                                 ? code(dataset)
                                                 : c.target().equals("mapping_ts_code")
-                                                        ? "IF2612.CFX"
+                                                        ? price >= 200 ? "IF2701.CFX" : "IF2612.CFX"
                                                         : "CFFEX");
                         case "TIMESTAMP" ->
                                 new TextNode(date.format(DateTimeFormatter.BASIC_ISO_DATE));
@@ -152,8 +152,10 @@ class FuturesDaySyncTest {
         assertEquals(SyncRunState.VERIFIED, owner.run(plan).state());
         assertEquals(2, target.rows.size());
         assertTrue(
-                target.rows.values().stream().anyMatch(r -> r.values().contains(200d))
-                        || dataset.equals("fut_mapping"));
+                dataset.equals("fut_mapping")
+                        ? target.rows.values().stream()
+                                .anyMatch(r -> "IF2701.CFX".equals(r.get("mapping_ts_code")))
+                        : target.rows.values().stream().anyMatch(r -> r.values().contains(200d)));
     }
 
     @ParameterizedTest

@@ -41,6 +41,24 @@ public class FuturesDayConfiguration {
     }
 
     @Bean
+    FuturesDaySyncOwner futuresMappingOwner(
+            JdbcTemplate jdbc,
+            @Lazy QuestDB questdb,
+            TusharePageService pages,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledger) {
+        return new FuturesDaySyncOwner(
+                "fut_mapping",
+                new QuestDbFuturesDayTarget("fut_mapping", jdbc, questdb),
+                pages,
+                Path.of(ledger));
+    }
+
+    @Bean
+    ReadBindingCatalog.Registration<DatasetValues> futuresMappingRead() {
+        return ReadBindingCatalog.generic("fut_mapping", 1);
+    }
+
+    @Bean
     @ConditionalOnNotWebApplication
     FuturesDayCommands futuresDayCommands(List<FuturesDaySyncOwner> owners) {
         return new FuturesDayCommands(owners);
