@@ -17,6 +17,9 @@ import java.util.Objects;
 
 /** 串行执行有界写入批次；收到发送确认不等于数据已可读取。 */
 public final class VerifiedBatchExecutor<T, K> {
+    // 大页只合并有界发送和等待；总行数、完整键值与 WAL 门槛仍由同一执行器核对。
+    public static final int MAX_ROWS_PER_BATCH = 32768;
+
     public record Policy(
             int maxRowsPerBatch,
             int maxBytesPerBatch,
@@ -25,7 +28,7 @@ public final class VerifiedBatchExecutor<T, K> {
             Duration pollInterval) {
         public Policy {
             if (maxRowsPerBatch < 1
-                    || maxRowsPerBatch > 10_000
+                    || maxRowsPerBatch > MAX_ROWS_PER_BATCH
                     || maxBytesPerBatch < 1
                     || maxBytesPerBatch > 32 * 1024 * 1024
                     || maxBatches < 1

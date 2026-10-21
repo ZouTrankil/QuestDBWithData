@@ -30,7 +30,7 @@ public final class SyncJobRunner<T, K> {
             List<T> rows, String sourceFingerprint, String responseEvidence, String cursor) {
         public Page {
             rows = List.copyOf(rows);
-            if (rows.size() > 10000
+            if (rows.size() > VerifiedBatchExecutor.MAX_ROWS_PER_BATCH
                     || sourceFingerprint == null
                     || sourceFingerprint.isBlank()
                     || responseEvidence == null
@@ -471,8 +471,9 @@ public final class SyncJobRunner<T, K> {
                     }
                 };
         int capacity = adapter.maxWriteBatchRows(request);
-        if (capacity < 1 || capacity > 10_000)
-            throw new IllegalArgumentException("Write batch capacity must be 1..10000");
+        if (capacity < 1 || capacity > VerifiedBatchExecutor.MAX_ROWS_PER_BATCH)
+            throw new IllegalArgumentException(
+                    "Write batch capacity must be 1.." + VerifiedBatchExecutor.MAX_ROWS_PER_BATCH);
         int batchRows = Math.min(capacity, page.rows().size());
         long remainingNanos = durationNanos - (System.nanoTime() - startedNanos);
         if (remainingNanos < 1_000_000) throw new CancellationException("Write deadline reached");

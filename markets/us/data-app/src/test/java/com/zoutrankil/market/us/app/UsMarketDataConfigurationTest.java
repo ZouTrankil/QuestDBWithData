@@ -18,8 +18,8 @@ class UsMarketDataConfigurationTest {
                 symbols.containsAll(
                         List.of("SPY", "QQQ", "IWM", "TLT", "GLD", "USO", "AAPL", "NVDA")));
         var page = UsBroadDailyCollector.publicationPage(ProjectConfiguration.load("us-data"));
-        assertEquals(10000, page.rows());
-        assertEquals(8388608, page.bytes());
+        assertEquals(32768, page.rows());
+        assertEquals(33554432, page.bytes());
         var environment = ProjectConfiguration.load("us-data");
         assertTrue(
                 environment.getProperty("app.market-data.broad-prefetch-enabled", Boolean.class));

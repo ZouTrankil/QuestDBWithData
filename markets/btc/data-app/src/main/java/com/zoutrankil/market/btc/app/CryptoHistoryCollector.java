@@ -324,18 +324,30 @@ final class CryptoHistoryCollector {
                         byte[] bytes = Files.readAllBytes(response.path());
                         if (!VerifiedMarketDataStore.sha(bytes).equals(response.sha256()))
                             throw new IllegalStateException("BTC 冻结响应摘要变化");
+                        // 显式 REST 单日证明须另验原生日线；原归档仍沿官方 CHECKSUM 解析。
                         var rows =
                                 task.source().startsWith("BINANCE")
-                                        ? CryptoPriceMapper.binance(
-                                                bytes,
-                                                task.symbol(),
-                                                !task.instrument().equals("SPOT"),
-                                                response.sha256(),
-                                                response.observedAt(),
-                                                task.from(),
-                                                task.through(),
-                                                60,
-                                                closures)
+                                        ? BinanceFrozenRestDay.supports(proof)
+                                                ? BinanceFrozenRestDay.read(
+                                                        root,
+                                                        bytes,
+                                                        response.sha256(),
+                                                        response.observedAt(),
+                                                        task.symbol(),
+                                                        task.instrument(),
+                                                        task.from(),
+                                                        task.through(),
+                                                        proof)
+                                                : CryptoPriceMapper.binance(
+                                                        bytes,
+                                                        task.symbol(),
+                                                        !task.instrument().equals("SPOT"),
+                                                        response.sha256(),
+                                                        response.observedAt(),
+                                                        task.from(),
+                                                        task.through(),
+                                                        60,
+                                                        closures)
                                         : bybit(bytes, task, response);
                         var missing =
                                 CryptoPriceMapper.missingHours(rows, task.from(), task.through());
