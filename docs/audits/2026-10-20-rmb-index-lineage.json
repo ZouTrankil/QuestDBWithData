@@ -1,0 +1,18 @@
+{
+  "table": "rmb_index_daily",
+  "source_repository": "../back-monitor",
+  "revision": "c6eeb403",
+  "path": "src/quant_platform/data/adapters/connectors/macro/rmb_index_daily_sync.py",
+  "file_sha256": "a5086cf14d6f9044b9862c42c01ea8d656c3183acd363d3808580d5302c64fc5",
+  "function": "_build_rmb_index_daily",
+  "classification": "DERIVED",
+  "base_value": 100.0,
+  "weights": {
+    "usd_per_cny": 0.4,
+    "eur_per_cny": 0.3,
+    "jpy_per_cny": 0.2,
+    "gbp_per_cny": 0.1
+  },
+  "formula": "指数 = 上一基值 × cumulative_product(1 + 四种汇率日收益的加权和)",
+  "notes": "原实现还会向前填充汇率并接入上一行基值。这里只更正目录分类，不执行计算、补行或改库。"
+}
