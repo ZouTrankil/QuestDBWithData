@@ -155,6 +155,7 @@ public class ExternalApiController {
                         "GET /api/v1/datasets",
                         "GET /api/v1/datasets/{datasetId}/sample?limit=20",
                         "GET /api/v1/jobs",
+                        "GET /api/v1/jobs/financial-daily/status",
                         "GET /api/v1/stock-basic/latest",
                         "POST /api/v1/stock-basic/sync",
                         "GET /api/v1/data-catalog",

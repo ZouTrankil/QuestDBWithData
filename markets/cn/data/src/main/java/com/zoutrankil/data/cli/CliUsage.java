@@ -9,6 +9,7 @@ public final class CliUsage {
                 + "inspect-main-strategy-data OR "
                 + "plan-cn-bond-yield-curve-job|run-cn-bond-yield-curve-job --from DATE --to DATE --logical-date DATE OR "
                 + "export-etf-observations --panel PATH --output NEW_PATH --computed-at DATETIME [--factors ID,ID] OR run-etf-factor-pipeline --date DATE --history-from DATE --root DIRECTORY OR resume-etf-factor-pipeline --run DIRECTORY OR "
+                + "show-financial-daily-queue OR "
                 + "plan-financial-growth-repair|run-financial-growth-repair --source CAPTURED_VIP_JSON --logical-date DATE --evidence-root NEW_DIRECTORY OR "
                 + "compute-l2-factor-panel --history-from DATE --from DATE --to DATE --factors ID,ID --output PATH [--pools ID,ID --receipt-directory DIRECTORY] [--evidence-output PATH | --evidence-directory DIRECTORY] OR "
                 + "record-factor-pool-coverage|inspect-factor-pool-coverage --artifact PATH --store DIRECTORY OR "

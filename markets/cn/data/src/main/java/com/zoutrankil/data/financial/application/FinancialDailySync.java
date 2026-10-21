@@ -3,7 +3,8 @@ package com.zoutrankil.data.financial.application;
 import com.zoutrankil.data.config.TushareProperties;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
-import com.zoutrankil.data.domain.SyncRunState;
+import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
+import com.zoutrankil.data.financial.config.FinancialQueueFactory;
 import com.zoutrankil.data.financial.domain.FinancialContract;
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.market.cn.time.CnMarketTime;
@@ -23,7 +24,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /** 单独启用才调度；证券范围由摘要固定的清单提供，不从当前目标行数猜全市场。 */
@@ -93,35 +94,89 @@ public class FinancialDailySync {
                 owners.stream()
                         .sorted(Comparator.comparing(FinancialSyncOwner::datasetId))
                         .toList();
-        // 先验证所有请求和总预算，再运行任何来源，防止第五条请求非法时前四条已经写入。
-        var plans =
-                ordered.stream()
-                        .map(
-                                owner ->
-                                        owner.plan(
-                                                codes,
-                                                periods,
-                                                logicalDate,
-                                                SyncJobDefinition.Mode.INCREMENTAL))
-                        .toList();
-        FinancialDailyBudget.requireFits(
-                codes.size(),
-                periods.size(),
-                ordered.stream().map(FinancialSyncOwner::datasetId).toList(),
-                quota,
-                maxAttempts,
-                window);
-        long deadline = System.nanoTime() + window.toNanos();
-        for (int i = 0; i < ordered.size(); i++) {
-            if (System.nanoTime() - deadline >= 0)
-                throw new IllegalStateException("财务日批执行窗口已用完，剩余来源未执行，不标记整轮完成");
-            var result =
-                    ordered.get(i)
-                            .runWithin(
-                                    plans.get(i), Duration.ofNanos(deadline - System.nanoTime()));
-            if (!Set.of(SyncRunState.VERIFIED, SyncRunState.VERIFIED_EMPTY)
-                    .contains(result.state()))
-                throw new IllegalStateException("财务日批未完成，保留原运行：" + result.runId());
+        var ledgers = ordered.stream().map(FinancialSyncOwner::ledgerPath).distinct().toList();
+        if (ledgers.size() != 1) throw new IllegalStateException("财务分片必须使用同一原账本");
+        // 先验证全部范围，再切成单证券、单季度、单来源；五条来源轮流处理，防止后面的来源饿死。
+        for (var owner : ordered) {
+            owner.plan(codes, periods, logicalDate, SyncJobDefinition.Mode.INCREMENTAL);
+            FinancialDailyBudget.requireFits(
+                    1, 1, List.of(owner.datasetId()), quota, maxAttempts, window);
         }
+        var byDataset =
+                ordered.stream()
+                        .collect(Collectors.toMap(FinancialSyncOwner::datasetId, owner -> owner));
+        var targets = new TreeMap<String, String>();
+        for (var owner : ordered) targets.put(owner.datasetId(), owner.publicationTargetId());
+        var queue = FinancialQueueFactory.forLedger(ledgers.getFirst());
+        queue.runPlanned(
+                sha,
+                logicalDate,
+                previous -> {
+                    LocalDate previousOld = null;
+                    if (previous != null) {
+                        var oldPeriods =
+                                previous.slices().stream()
+                                        .map(FinancialDailyQueue.Slice::period)
+                                        .distinct()
+                                        .sorted()
+                                        .toList();
+                        if (oldPeriods.size() > 4) previousOld = oldPeriods.getFirst();
+                    }
+                    var selected =
+                            FinancialSyncOwner.queuedPeriods(logicalDate, earliest, previousOld);
+                    var slices = new ArrayList<FinancialDailyQueue.Slice>();
+                    for (var period : selected.stream().sorted(Comparator.reverseOrder()).toList())
+                        for (var code : codes.stream().sorted().toList())
+                            for (var owner : ordered)
+                                slices.add(
+                                        new FinancialDailyQueue.Slice(
+                                                owner.datasetId(), code, period));
+                    return slices;
+                },
+                maxAttempts,
+                quota.getMaxAttempts(),
+                window,
+                new FinancialDailyQueue.Executor() {
+                    public String targetFingerprint() throws Exception {
+                        var current = new TreeMap<String, String>();
+                        for (var owner : ordered)
+                            current.put(owner.datasetId(), owner.publicationTargetId());
+                        return FileEvidenceStore.sha256(
+                                JobDefinitionJson.canonicalMapper().writeValueAsBytes(current));
+                    }
+
+                    private FrozenRequest request(FinancialDailyQueue.Slice slice, LocalDate date) {
+                        return byDataset
+                                .get(slice.dataset())
+                                .plan(
+                                        List.of(slice.code()),
+                                        List.of(slice.period()),
+                                        date,
+                                        SyncJobDefinition.Mode.INCREMENTAL);
+                    }
+
+                    public void run(
+                            FinancialDailyQueue.Slice slice,
+                            LocalDate date,
+                            String runId,
+                            Duration remaining)
+                            throws Exception {
+                        byDataset
+                                .get(slice.dataset())
+                                .runQueued(
+                                        request(slice, date),
+                                        runId,
+                                        remaining,
+                                        targets.get(slice.dataset()));
+                    }
+
+                    public boolean verified(
+                            FinancialDailyQueue.Slice slice, LocalDate date, String runId)
+                            throws Exception {
+                        return byDataset
+                                .get(slice.dataset())
+                                .queuedVerified(request(slice, date), runId);
+                    }
+                });
     }
 }

@@ -57,7 +57,7 @@ app.sync.financial:
   scope-file: ""
   scope-sha256: ""
   earliest-period: 2018-03-31
-  # 含客户端重试的整轮请求预算；超限在采集前阻断，不静默截断证券。
+  # 每天预留的请求尝试数，包含客户端重试；用完后保留原分片队列，次日继续。
   max-request-attempts: 1000
   execution-window: PT4H
 

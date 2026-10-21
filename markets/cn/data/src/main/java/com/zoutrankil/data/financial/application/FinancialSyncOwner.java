@@ -18,6 +18,7 @@ import com.zoutrankil.data.financial.domain.FinancialContract;
 import com.zoutrankil.data.financial.domain.FinancialContract.Key;
 import com.zoutrankil.data.financial.domain.FinancialContract.Row;
 import com.zoutrankil.data.financial.port.FinancialTarget;
+import com.zoutrankil.data.financial.storage.FinancialQueuedRunInspection;
 import com.zoutrankil.data.financial.storage.FinancialWritePort;
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.service.DatasetIntervalLock;
@@ -146,8 +147,25 @@ public final class FinancialSyncOwner implements DatasetImplementation, SyncJobO
         return List.copyOf(result);
     }
 
+    /** 跨日队列按已完成轮次推进旧期，不能用日历取模跳过长期未查的季度。 */
+    public static List<LocalDate> queuedPeriods(
+            LocalDate logical, LocalDate earliest, LocalDate previousOld) {
+        var recent = new TreeSet<>(dailyPeriods(logical, earliest));
+        while (recent.size() > 4) recent.removeFirst();
+        LocalDate firstRecent = recent.first();
+        if (earliest.isBefore(firstRecent)) {
+            LocalDate next =
+                    previousOld == null
+                            ? earliest
+                            : previousOld.plusMonths(3).with(TemporalAdjusters.lastDayOfMonth());
+            if (next.isBefore(earliest) || !next.isBefore(firstRecent)) next = earliest;
+            recent.add(next);
+        }
+        return List.copyOf(recent);
+    }
+
     public SyncJobRunner.Result run(FrozenRequest request) throws Exception {
-        return execute(request, null, Duration.ofHours(12));
+        return execute(request, null, Duration.ofHours(12), null, null);
     }
 
     /** 日批共享剩余时间；沿用同一冻结请求和恢复身份，不修改持久化任务定义。 */
@@ -157,17 +175,49 @@ public final class FinancialSyncOwner implements DatasetImplementation, SyncJobO
                 || remaining.isZero()
                 || remaining.compareTo(Duration.ofHours(12)) > 0)
             throw new IllegalArgumentException("财务执行剩余时间需在 0 到 12 小时内");
-        return execute(request, null, remaining);
+        return execute(request, null, remaining, null, null);
     }
 
     public SyncJobRunner.Result resume(String previous) throws Exception {
         var saved = FrozenRunRequest.restore(ledger, previous, job());
         if (!target.targetId().equals(saved.targetId()))
             throw new IllegalStateException("财务恢复目标已重建");
-        return execute(saved.request(), previous, Duration.ofHours(12));
+        return execute(saved.request(), previous, Duration.ofHours(12), null, null);
     }
 
-    private SyncJobRunner.Result execute(FrozenRequest request, String previous, Duration remaining)
+    /** 队列先落运行意图；正式执行仍使用原账本、物理目标和写后验收。 */
+    public SyncJobRunner.Result runQueued(
+            FrozenRequest request, String runId, Duration remaining, String expectedTargetId)
+            throws Exception {
+        if (remaining.isZero()
+                || remaining.isNegative()
+                || remaining.compareTo(Duration.ofHours(12)) > 0)
+            throw new IllegalArgumentException("财务分片执行窗口无效");
+        return execute(request, null, remaining, runId, expectedTargetId);
+    }
+
+    public String publicationTargetId() throws Exception {
+        return target.targetId();
+    }
+
+    public Path ledgerPath() {
+        return ledger;
+    }
+
+    /** 接受原运行或人工恢复产生的后继；每个后继必须保持原冻结请求与物理目标。 */
+    public boolean queuedVerified(FrozenRequest request, String runId) throws Exception {
+        String expected = target.targetId();
+        boolean verified = FinancialQueuedRunInspection.verified(ledger, expected, request, runId);
+        if (!expected.equals(target.targetId())) throw new IllegalStateException("财务分片物理目标已改变");
+        return verified;
+    }
+
+    private SyncJobRunner.Result execute(
+            FrozenRequest request,
+            String previous,
+            Duration remaining,
+            String queuedId,
+            String expectedTargetId)
             throws Exception {
         final long deadline = System.nanoTime() + remaining.toNanos();
         if (!request.definition().equals(job())) throw new IllegalArgumentException("财务任务定义不匹配");
@@ -181,7 +231,12 @@ public final class FinancialSyncOwner implements DatasetImplementation, SyncJobO
                 .equals(SyncRequestIdentity.snapshotJson(request)))
             throw new IllegalArgumentException("财务冻结请求被改变");
         String targetId = target.targetId(),
-                id = "financial-" + datasetId() + "-" + UUID.randomUUID();
+                id =
+                        queuedId == null
+                                ? "financial-" + datasetId() + "-" + UUID.randomUUID()
+                                : queuedId;
+        if (expectedTargetId != null && !expectedTargetId.equals(targetId))
+            throw new IllegalStateException("财务分片不能切换冻结的物理目标");
         Path evidence = ledger.getParent().resolve("sync-evidence").resolve(id);
         var source = new FinancialSource(pages, contract, evidence);
         var adapter =

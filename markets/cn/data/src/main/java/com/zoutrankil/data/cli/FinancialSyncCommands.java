@@ -3,6 +3,7 @@ package com.zoutrankil.data.cli;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.financial.application.FinancialSyncOwner;
+import com.zoutrankil.data.financial.config.FinancialQueueFactory;
 import com.zoutrankil.data.service.SyncJobRunner.Result;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
@@ -25,10 +26,24 @@ public final class FinancialSyncCommands implements CliCommandFamily {
     }
 
     public Set<String> commands() {
-        return Set.of("plan-financial-sync", "run-financial-sync", "resume-financial-sync");
+        return Set.of(
+                "plan-financial-sync",
+                "run-financial-sync",
+                "resume-financial-sync",
+                "show-financial-daily-queue");
     }
 
     public void execute(String command, Map<String, String> o) throws Exception {
+        if (command.equals("show-financial-daily-queue")) {
+            if (!o.isEmpty()) throw new IllegalArgumentException("队列状态查询不接受参数");
+            var ledgers = owners.stream().map(FinancialSyncOwner::ledgerPath).distinct().toList();
+            if (ledgers.size() != 1) throw new IllegalStateException("财务队列账本不唯一");
+            CliOutput.printJson(
+                    FinancialQueueFactory.forLedger(ledgers.getFirst()).status(),
+                    CliOutput.Profile.JOB_DEFINITION,
+                    true);
+            return;
+        }
         if (!commands().contains(command) || !o.containsKey("--dataset"))
             throw new IllegalArgumentException("需 --dataset");
         var owner =

@@ -218,7 +218,25 @@ class FinancialSyncTest {
     }
 
     @Test
-    void dailyBudgetRejectsFullMarketBeforeAnySourceOrTargetAccess() throws Exception {
+    void historicalQuarterAdvancesByCompletedCycleEvenWhenEachCycleTakesManyDays() {
+        var first = LocalDate.parse("2018-03-31");
+        LocalDate previousOld = null;
+        var seen = new HashSet<LocalDate>();
+        for (int cycle = 0; cycle < 40; cycle++) {
+            var periods =
+                    FinancialSyncOwner.queuedPeriods(DAY.plusDays(cycle * 31L), first, previousOld);
+            assertEquals(5, periods.size());
+            previousOld = periods.getFirst();
+            seen.add(previousOld);
+        }
+        for (LocalDate period = first;
+                period.isBefore(LocalDate.parse("2025-10-01"));
+                period = period.plusMonths(3).with(TemporalAdjusters.lastDayOfMonth()))
+            assertTrue(seen.contains(period), period.toString());
+    }
+
+    @Test
+    void invalidSliceBudgetRejectsFullMarketBeforeAnySourceOrTargetAccess() throws Exception {
         var pages = mock(TusharePageService.class);
         var target = mock(FinancialTarget.class);
         var owners =
@@ -256,12 +274,70 @@ class FinancialSyncTest {
                         FileEvidenceStore.sha256(scope),
                         "2018-03-31",
                         new TushareProperties(),
-                        1000,
+                        2,
                         Duration.ofHours(4));
         var error = assertThrows(IllegalStateException.class, () -> scheduler.runAt(DAY));
         assertTrue(error.getMessage().contains("超过预算"));
         verifyNoInteractions(pages, target);
         assertFalse(Files.exists(root.resolve("ledger.sqlite3")));
+    }
+
+    @Test
+    void queuedReceiptRequiresExactRequestAndOriginalPhysicalTarget() throws Exception {
+        var contract = FinancialSyncConfiguration.contract("income");
+        var target = spy(new Memory());
+        var owner =
+                new FinancialSyncOwner(
+                        contract,
+                        target,
+                        source(() -> List.of(row(contract, "20260820", 1))),
+                        root.resolve("queue-owner.sqlite3"));
+        var plan =
+                owner.plan(
+                        List.of("600000.SH"),
+                        List.of(PERIOD),
+                        DAY,
+                        SyncJobDefinition.Mode.INCREMENTAL);
+        String id = "financial-income-queue-test";
+        assertFalse(owner.queuedVerified(plan, id));
+        var result = owner.runQueued(plan, id, Duration.ofMinutes(1), "fixture-financial-target");
+        assertEquals(id, result.runId());
+        assertTrue(owner.queuedVerified(plan, id));
+        var changed =
+                owner.plan(
+                        List.of("600000.SH"),
+                        List.of(PERIOD),
+                        DAY.plusDays(1),
+                        SyncJobDefinition.Mode.INCREMENTAL);
+        assertThrows(IllegalStateException.class, () -> owner.queuedVerified(changed, id));
+        doReturn("recreated-target").when(target).targetId();
+        assertThrows(IllegalStateException.class, () -> owner.queuedVerified(plan, id));
+    }
+
+    @Test
+    void queuedFailureCanOnlyAdvanceAfterExplicitOriginalOwnerResume() throws Exception {
+        var contract = FinancialSyncConfiguration.contract("forecast");
+        var raw = new ArrayList<Map<String, JsonNode>>();
+        for (int i = 0; i < 100; i++) raw.add(row(contract, "20260820", 1));
+        var owner =
+                new FinancialSyncOwner(
+                        contract,
+                        new Memory(),
+                        source(() -> List.copyOf(raw)),
+                        root.resolve("queue-resume.sqlite3"));
+        var plan =
+                owner.plan(
+                        List.of("600000.SH"),
+                        List.of(PERIOD),
+                        DAY,
+                        SyncJobDefinition.Mode.INCREMENTAL);
+        String id = "financial-forecast-queue-test";
+        owner.runQueued(plan, id, Duration.ofMinutes(1), "fixture-financial-target");
+        assertFalse(owner.queuedVerified(plan, id));
+        raw.clear();
+        raw.add(row(contract, "20260820", 1));
+        assertEquals(SyncRunState.VERIFIED, owner.resume(id).state());
+        assertTrue(owner.queuedVerified(plan, id));
     }
 
     @Test
