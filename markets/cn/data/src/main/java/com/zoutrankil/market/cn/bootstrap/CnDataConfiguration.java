@@ -3,6 +3,7 @@ package com.zoutrankil.market.cn.bootstrap;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.config.TushareProperties;
 import com.zoutrankil.market.cn.chips.config.CyqPerfConfiguration;
+import com.zoutrankil.market.cn.futures.config.FuturesDayConfiguration;
 import com.zoutrankil.market.cn.macro.config.MacroObservationConfiguration;
 import com.zoutrankil.market.cn.rates.config.InterestObservationConfiguration;
 
@@ -19,7 +20,8 @@ import java.util.Map;
 @Import({
     MacroObservationConfiguration.class,
     InterestObservationConfiguration.class,
-    CyqPerfConfiguration.class
+    CyqPerfConfiguration.class,
+    FuturesDayConfiguration.class
 })
 @EnableConfigurationProperties({TushareProperties.class, QuestDbProperties.class})
 public class CnDataConfiguration {
