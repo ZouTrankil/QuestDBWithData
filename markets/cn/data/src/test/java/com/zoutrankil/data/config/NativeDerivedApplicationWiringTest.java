@@ -14,6 +14,7 @@ import com.zoutrankil.data.derived.port.MarketSentimentDailySourceReadPort;
 import com.zoutrankil.data.derived.port.MarketSentimentDailyTarget;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.service.DatasetRegistry;
 import com.zoutrankil.data.service.ReadBindingCatalog;
 import com.zoutrankil.data.service.SyncJobRegistry;
@@ -28,6 +29,7 @@ import org.springframework.core.env.MapPropertySource;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -92,19 +94,32 @@ class NativeDerivedApplicationWiringTest {
                     RegimeFeaturesMonitorDailyJobService.SOURCES.contains("cn_bond_yield_curve"));
             var datasets = context.getBean(DatasetRegistry.class);
             assertEquals(
-                    55,
+                    61,
                     datasets.definitions().stream()
                             .filter(
                                     value ->
                                             value.capabilities()
                                                     .contains(DatasetDefinition.Capability.READ))
                             .count());
-            assertEquals(55, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
-            // 五项公告/利率只增加读取契约，不接管来源写入。
-            for (var id : Set.of("stk_shock", "stk_high_shock", "shibor", "hibor", "shibor_lpr"))
+            assertEquals(61, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            // 公告仍只读；利率由新接入的唯一正式 owner 提供读写契约。
+            for (var id : Set.of("stk_shock", "stk_high_shock"))
                 assertEquals(
                         Set.of(DatasetDefinition.Capability.READ),
                         datasets.require(id).definition().capabilities());
+            for (var id : List.of("shibor", "hibor", "shibor_lpr")) {
+                assertEquals(
+                        Set.of(
+                                DatasetDefinition.Capability.READ,
+                                DatasetDefinition.Capability.WRITE),
+                        datasets.require(id).definition().capabilities());
+                assertEquals(
+                        1,
+                        context.getBeansOfType(SyncJobOwner.class).values().stream()
+                                .filter(owner -> owner.datasetId().equals(id))
+                                .count(),
+                        id);
+            }
             verifyNoInteractions(source);
             assertFalse(Files.exists(ledger));
         }

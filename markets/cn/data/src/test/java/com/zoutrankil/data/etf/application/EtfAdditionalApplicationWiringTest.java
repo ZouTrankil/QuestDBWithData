@@ -164,14 +164,27 @@ class EtfAdditionalApplicationWiringTest {
             var jobs = context.getBean(SyncJobRegistry.class);
             var datasets = context.getBean(DatasetRegistry.class);
             var bindings = context.getBean(ReadBindingCatalog.class).bind(datasets);
-            assertEquals(55, bindings.size());
-            // 新增的公告与利率契约只读，不能因此多出正式写入方。
-            for (var id : List.of("stk_shock", "stk_high_shock", "shibor", "hibor", "shibor_lpr"))
+            assertEquals(61, bindings.size());
+            // 公告仍只读；利率由新接入的唯一正式 owner 提供读写契约。
+            for (var id : List.of("stk_shock", "stk_high_shock"))
                 assertEquals(
                         Set.of(DatasetDefinition.Capability.READ),
                         datasets.require(id).definition().capabilities());
+            for (var id : List.of("shibor", "hibor", "shibor_lpr")) {
+                assertEquals(
+                        Set.of(
+                                DatasetDefinition.Capability.READ,
+                                DatasetDefinition.Capability.WRITE),
+                        datasets.require(id).definition().capabilities());
+                assertEquals(
+                        1,
+                        context.getBeansOfType(SyncJobOwner.class).values().stream()
+                                .filter(owner -> owner.datasetId().equals(id))
+                                .count(),
+                        id);
+            }
             assertEquals(
-                    55,
+                    61,
                     datasets.definitions().stream()
                             .filter(
                                     d ->

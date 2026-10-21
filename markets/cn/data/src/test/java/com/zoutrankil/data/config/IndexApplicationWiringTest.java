@@ -183,14 +183,14 @@ class IndexApplicationWiringTest {
                     "java_d023_dc_index_wiring", context.getBean(DcIndexTarget.class).tableName());
             var datasets = context.getBean(DatasetRegistry.class);
             assertEquals(
-                    55,
+                    61,
                     datasets.definitions().stream()
                             .filter(
                                     value ->
                                             value.capabilities()
                                                     .contains(DatasetDefinition.Capability.READ))
                             .count());
-            assertEquals(55, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            assertEquals(61, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
             assertFalse(context.getBeanFactory().containsSingleton("questDbClient"));
             verify(dataSource, never()).getConnection();
             verify(dataSource, never()).getConnection(anyString(), anyString());

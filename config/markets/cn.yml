@@ -1,6 +1,11 @@
 # A 股共用设置；只有 market-cn profile 会加载。
 spring.config.activate.on-profile: market-cn
 app:
+  materialized-views:
+    etf-overview:
+      # 新版单独保存输出；原正式 MV 和原刷新凭证不改。
+      layout-version: 1
+      v2-output-table: java_etf_overview_v2_current
   sync:
     # 新任务和读取使用同版；旧请求按原账本恢复，正式迁移另验收。
     etf-adj-schema-version: 1

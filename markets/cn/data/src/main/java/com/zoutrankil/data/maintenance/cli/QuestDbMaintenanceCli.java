@@ -1,11 +1,13 @@
 package com.zoutrankil.data.maintenance.cli;
 
+import com.zoutrankil.data.config.EtfOverviewLayoutConfiguration;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.maintenance.application.CnReferenceDateReadInspection;
 import com.zoutrankil.data.maintenance.application.CnTimeColumnRehearsal;
 import com.zoutrankil.data.maintenance.application.EtfOverviewMaintenance;
 import com.zoutrankil.data.maintenance.application.LegacySyncMetadataRetirement;
+import com.zoutrankil.data.maintenance.storage.EtfOverviewRefreshJournal;
 import com.zoutrankil.market.cn.time.CnMarketTime;
 import com.zoutrankil.runtime.ProjectConfiguration;
 import com.zoutrankil.runtime.ProjectLogging;
@@ -34,16 +36,23 @@ public final class QuestDbMaintenanceCli {
                         && Set.of("rehearse-cn-time-columns", "inspect-cn-reference-dates")
                                 .contains(args[0])
                         && args[1].equals("--output");
-        if ((args.length != 1 && !withReport)
+        boolean reconcile =
+                args.length == 4
+                        && args[0].equals("reconcile-etf-overview")
+                        && args[1].equals("--run-id")
+                        && args[3].equals("--original-sender-stopped");
+        if ((args.length != 1 && !withReport && !reconcile)
+                || (args.length > 0 && args[0].equals("reconcile-etf-overview") && !reconcile)
                 || !Set.of(
                                 "status",
                                 "refresh-etf-overview",
+                                "reconcile-etf-overview",
                                 "retire-sync-metadata",
                                 "rehearse-cn-time-columns",
                                 "inspect-cn-reference-dates")
                         .contains(args[0])) {
             throw new IllegalArgumentException(
-                    "维护命令：status|refresh-etf-overview|retire-sync-metadata|rehearse-cn-time-columns|inspect-cn-reference-dates [--output 新文件]");
+                    "维护命令：status|refresh-etf-overview|reconcile-etf-overview --run-id 原意图ID --original-sender-stopped|retire-sync-metadata|rehearse-cn-time-columns|inspect-cn-reference-dates [--output 新文件]");
         }
         Path reportPath = withReport ? Path.of(args[2]).toAbsolutePath().normalize() : null;
         if (reportPath != null && Files.exists(reportPath))
@@ -67,13 +76,17 @@ public final class QuestDbMaintenanceCli {
                             env.getProperty(
                                     "app.materialized-views.etf-overview.refresh-timeout",
                                     Duration.class,
-                                    Duration.ofMinutes(2)));
+                                    Duration.ofMinutes(2)),
+                            EtfOverviewLayoutConfiguration.resolve(env));
             Object result =
                     switch (args[0]) {
                         case "status" ->
                                 Map.of(
                                         "materializedViews",
                                         jdbc.queryForList("SELECT * FROM materialized_views()"),
+                                        "pendingEtfRefreshes",
+                                        new EtfOverviewRefreshJournal(Path.of(ledger))
+                                                .pendingOperations(),
                                         "legacyTables",
                                         jdbc.queryForList(
                                                 "SELECT table_name FROM tables() WHERE table_name IN ('"
@@ -88,8 +101,17 @@ public final class QuestDbMaintenanceCli {
                                     .inspect(day.minusYears(1), day.plusDays(1));
                         }
                         case "refresh-etf-overview" -> maintenance.refresh();
+                        case "reconcile-etf-overview" -> maintenance.reconcile(args[2], true);
                         case "retire-sync-metadata" -> {
-                            var refresh = maintenance.refresh();
+                            var refresh =
+                                    new EtfOverviewMaintenance(
+                                                    jdbc,
+                                                    ledger,
+                                                    env.getProperty(
+                                                            "app.materialized-views.etf-overview.refresh-timeout",
+                                                            Duration.class,
+                                                            Duration.ofMinutes(2)))
+                                            .refresh();
                             var retirement =
                                     new LegacySyncMetadataRetirement(
                                                     jdbc,

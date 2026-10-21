@@ -7,10 +7,11 @@ import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyView;
-import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyViewDataset;
 import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyViewKey;
+import com.zoutrankil.data.domain.fund.EtfOverviewScope;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -24,15 +25,23 @@ public class EtfMarketOverviewDailyViewReadRepository implements DatasetImplemen
     public static final int MAX_WINDOW_DAYS = 31;
     public static final int MAX_PAGE_SIZE = 31;
     private final QuestDbBoundedReader reader;
+    private final EtfOverviewScope scope;
     private final EtfMarketOverviewDailyViewMapper mapper = new EtfMarketOverviewDailyViewMapper();
 
     public EtfMarketOverviewDailyViewReadRepository(QuestDbBoundedReader reader) {
+        this(reader, EtfOverviewScope.LEGACY);
+    }
+
+    @Autowired
+    public EtfMarketOverviewDailyViewReadRepository(
+            QuestDbBoundedReader reader, EtfOverviewScope scope) {
         this.reader = Objects.requireNonNull(reader);
+        this.scope = Objects.requireNonNull(scope);
     }
 
     @Override
     public DatasetDefinition definition() {
-        return EtfMarketOverviewDailyViewDataset.DEFINITION;
+        return scope.definition();
     }
 
     public DatasetReadPage<EtfMarketOverviewDailyView> findPage(DatasetReadQuery query) {

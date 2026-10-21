@@ -1,6 +1,7 @@
 package com.zoutrankil.data.config;
 
 import com.zoutrankil.data.domain.DatasetImplementation;
+import com.zoutrankil.data.domain.fund.EtfOverviewScope;
 import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.domain.stock.reference.StockShockDatasets;
 import com.zoutrankil.data.repository.CnBondYieldCurveWritePort;
@@ -46,6 +47,7 @@ public class ReadGroupConfiguration {
     @Bean
     ReadBindingCatalog readBindingCatalog(
             ObjectProvider<ReadBindingCatalog.Registration<?>> extensions,
+            ObjectProvider<EtfOverviewScope> etfOverviewScopes,
             @Value("${app.sync.etf-adj-schema-version:1}") int etfAdjVersion,
             @Value("${app.sync.etf-daily-schema-version:1}") int etfDailyVersion,
             @Value("${app.sync.etf-share-schema-version:1}") int etfShareVersion,
@@ -60,7 +62,15 @@ public class ReadGroupConfiguration {
                                 etfShareVersion,
                                 stDailyVersion,
                                 suspendVersion,
-                                l2DailyVersion));
+                                l2DailyVersion,
+                                etfOverviewScopes
+                                                        .getIfAvailable(
+                                                                () -> EtfOverviewScope.LEGACY)
+                                                        .legacy()
+                                                && etfShareVersion == 1
+                                                && etfDailyVersion == 1
+                                        ? 1
+                                        : 2));
         extensions.orderedStream().forEach(registrations::add);
         return new ReadBindingCatalog(registrations);
     }

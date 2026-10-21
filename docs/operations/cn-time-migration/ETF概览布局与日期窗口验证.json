@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "结论": "ETF概览已接显式双来源布局、受保护读取、持久刷新意图和独立日期窗口证明；正式表与生产默认未切换。",
+  "问题": [
+    "原维护及读取写死两个timestamp来源和原MV名，单表新布局与概览不一致。",
+    "原JDBC Timestamp.toInstant转换在上海默认时区把业务日期前移，首轮漏掉最后一天。",
+    "旧刷新回执没有证明修正后的完整日期窗口；响应未决时也没有持久阻断自动重发。"
+  ],
+  "实现": [
+    "两侧分别冻结实际对象和1/2日期布局，逻辑依赖保留etf_share/etf_daily，物理名在完整字段映射中声明。原v1 SQL逐字不改，算法、单位、NULL及旧记录保留。",
+    "业务日期范围和核验键读取明确微秒纪元，不按JVM时区当事件转换；日线保留纳秒存储和边界。完整键、日期、数值及前后稳定版本共同验收，不凭行数独立通过。",
+    "旧证书保留。完整日期回读独立追加business-date-utc-carrier-v2证明，不重签旧verified_at；缺证明拒绝读取，缓存命中补证明时不做Native REFRESH。",
+    "新旧布局后续刷新先落原scope/定义JSON/SQL/双方版本/原输出身份意图，未决保留；显式reconcile须确认原发送者停止，按原scope只读核验。源版本已变则拒绝，不自动换新数据或解锁。",
+    "公共仓库、读取绑定和原生guard使用canonical契约，泛型伪造不能绕过。配置layout-version默认1，新输出只用独立命名空间。"
+  ],
+  "真实范围": "同版私有QuestDB10.0.1/JDK25，五个全新私有根，各2个人工ETF、2个日期桶。包括旧三表同名v1夹具以及新作用域的四布局；没有行情来源网络请求或正式实例改动。",
+  "独立期望": "初始股份合计100万份、价格10，规模0.1亿元；右表改价11后旧日0.11，最终改价12后0.12；第二日20万份、价格12，规模0.024亿元。INNER JOIN缺价格时不生成第二日桶；计数2与1。",
+  "实库矩阵": [
+    {
+      "组合": "scope2-s1-d1",
+      "状态": "VERIFIED_AND_CLEANED",
+      "验收": {
+        "path": "var/cn-etf-overview-layout2-live/7c919539a13f426b9f5430cb209e91e3/report.json",
+        "SHA256": "dc5390862075b49f03f7618035ef0ac9b963479b4f8e45dd62ed9cd5b433d8fd"
+      },
+      "JUnit": {
+        "path": "var/cn-etf-overview-layout2-live/7c919539a13f426b9f5430cb209e91e3/native-test.xml",
+        "SHA256": "3ad4a22dd9b250a20e0b4ded4c4ed8b95f6a51f3a96c16a9a344f7c68c64cd97"
+      },
+      "原未决输入": {
+        "path": "var/cn-etf-overview-layout2-live/7c919539a13f426b9f5430cb209e91e3/original-operation.json",
+        "SHA256": "4e5222934e5255bb13d445f3dfeab2418c993b3d9db69a5d629d33f85d30c4d8"
+      },
+      "停止": {
+        "path": "var/cn-etf-overview-layout2-live/7c919539a13f426b9f5430cb209e91e3/stopped.json",
+        "SHA256": "b0e2a6219237d41728ce3d4463177ca259b737d2b0935fda9acef9c758fb99b7"
+      },
+      "独立日期证明": [
+        [
+          1,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          1,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          2,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          2,
+          "business-date-utc-carrier-v2"
+        ]
+      ]
+    },
+    {
+      "组合": "scope2-s1-d2",
+      "状态": "VERIFIED_AND_CLEANED",
+      "验收": {
+        "path": "var/cn-etf-overview-layout2-live/a1b4e30cd4c24aa888027acbef9de9b5/report.json",
+        "SHA256": "d4649add9fb8f614b4122aa969975d4cd08b0929a0ce64cfa04be9c31b188079"
+      },
+      "JUnit": {
+        "path": "var/cn-etf-overview-layout2-live/a1b4e30cd4c24aa888027acbef9de9b5/native-test.xml",
+        "SHA256": "cd86162f731b6e084b52889e917658a9ad10bb3306400c7440234ee3a3d01966"
+      },
+      "原未决输入": {
+        "path": "var/cn-etf-overview-layout2-live/a1b4e30cd4c24aa888027acbef9de9b5/original-operation.json",
+        "SHA256": "664b41d0ae34b70b7c0b2c8cf734b33f796078da7bebfdfccf5b2d98e14e8d31"
+      },
+      "停止": {
+        "path": "var/cn-etf-overview-layout2-live/a1b4e30cd4c24aa888027acbef9de9b5/stopped.json",
+        "SHA256": "caae3b97e9dccda46917241b1d2d4ca620c1d350849a507db9f5e4427d78f218"
+      },
+      "独立日期证明": [
+        [
+          1,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          1,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          2,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          2,
+          "business-date-utc-carrier-v2"
+        ]
+      ]
+    },
+    {
+      "组合": "scope2-s2-d1",
+      "状态": "VERIFIED_AND_CLEANED",
+      "验收": {
+        "path": "var/cn-etf-overview-layout2-live/3b98b2397c8c4c259adad8dd6880aed0/report.json",
+        "SHA256": "5810b3ad2a88acd20fbaab238efba72c3f3c2cead88790c9e0ced2d886fce9c3"
+      },
+      "JUnit": {
+        "path": "var/cn-etf-overview-layout2-live/3b98b2397c8c4c259adad8dd6880aed0/native-test.xml",
+        "SHA256": "9be08ff4615f4b2cbc63a07ca215ce6f12d40ecdcefd4e7666cd7c22f6437ccc"
+      },
+      "原未决输入": {
+        "path": "var/cn-etf-overview-layout2-live/3b98b2397c8c4c259adad8dd6880aed0/original-operation.json",
+        "SHA256": "cfd40dae867a8671fc6842ec9c99d37a6e975e8f74b8bf2a21eaf76db8cc14b8"
+      },
+      "停止": {
+        "path": "var/cn-etf-overview-layout2-live/3b98b2397c8c4c259adad8dd6880aed0/stopped.json",
+        "SHA256": "a6e67ba857b26926c714a6ae11af601c994f3478c7ece7b8907ec94105a93a7a"
+      },
+      "独立日期证明": [
+        [
+          1,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          1,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          2,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          2,
+          "business-date-utc-carrier-v2"
+        ]
+      ]
+    },
+    {
+      "组合": "scope2-s2-d2",
+      "状态": "VERIFIED_AND_CLEANED",
+      "验收": {
+        "path": "var/cn-etf-overview-layout2-live/efaae287c49f4296b136e7e77cbebea6/report.json",
+        "SHA256": "b04a881bd2a2de165d5bb2471efa677f20bfa36577f42a70a652fa0898f215a5"
+      },
+      "JUnit": {
+        "path": "var/cn-etf-overview-layout2-live/efaae287c49f4296b136e7e77cbebea6/native-test.xml",
+        "SHA256": "f12ca5cf4cb32ccbfbfd41947f9826bbe0da591ccbf403e3f8912ef2169014a6"
+      },
+      "原未决输入": {
+        "path": "var/cn-etf-overview-layout2-live/efaae287c49f4296b136e7e77cbebea6/original-operation.json",
+        "SHA256": "632f871f79d980bf287515471347e3ea8332ca93d87e2ed299386a397963060f"
+      },
+      "停止": {
+        "path": "var/cn-etf-overview-layout2-live/efaae287c49f4296b136e7e77cbebea6/stopped.json",
+        "SHA256": "d33b29964bc1097c6e40888535f2e8f91984e1aa45c98cd05c4190fc984113ce"
+      },
+      "独立日期证明": [
+        [
+          1,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          1,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          2,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          2,
+          "business-date-utc-carrier-v2"
+        ]
+      ]
+    },
+    {
+      "组合": "legacy-s1-d1",
+      "状态": "VERIFIED_AND_CLEANED",
+      "验收": {
+        "path": "var/cn-etf-overview-layout2-live/adc2a0bf3c9146a78284131dfbc4fff4/report.json",
+        "SHA256": "07d8b76b923171099e69fc36c61b0766135069106ba2e72454689235e45fab5e"
+      },
+      "JUnit": {
+        "path": "var/cn-etf-overview-layout2-live/adc2a0bf3c9146a78284131dfbc4fff4/native-test.xml",
+        "SHA256": "0e0b162391d316baffb37f72be85c7cfc86ffee71a0ce6ac361260a488e1795e"
+      },
+      "原未决输入": {
+        "path": "var/cn-etf-overview-layout2-live/adc2a0bf3c9146a78284131dfbc4fff4/original-operation.json",
+        "SHA256": "b68a20434beaa3fd6614dd0fa6c72103ea36f69eaaf411e182e50562ad52bf2c"
+      },
+      "停止": {
+        "path": "var/cn-etf-overview-layout2-live/adc2a0bf3c9146a78284131dfbc4fff4/stopped.json",
+        "SHA256": "7a622bf47f719318fc28261e8acc0b11304cae67166ca6bc9e67ee9f7906ae65"
+      },
+      "独立日期证明": [
+        [
+          1,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          1,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          2,
+          "business-date-utc-carrier-v2"
+        ],
+        [
+          2,
+          "business-date-utc-carrier-v2"
+        ]
+      ]
+    }
+  ],
+  "证明边界": "真实创建/增量或已追平核验/右侧修订FULL/重放/真实REFRESH后注入丢确认/当前默认切v1后的原作用域只读恢复/类型化分页1+1。原输入JSON/SQL不改，未决普通刷新被拒绝；每次所有表清理后确认原进程退出143和端口释放。不是正式来源覆盖、非零纳秒历史或模型批准验收。",
+  "早期证据": [
+    {
+      "状态": "NOT_ACCEPTED_DATE_WINDOW_OFFSET",
+      "否定说明": {
+        "path": "var/cn-etf-overview-layout2-live/aed8256c97974edabdd3365b9a8e5f86/rejected-acceptance.json",
+        "SHA256": "5b178ed954fcc68083b2588f6d347a083b8acdf0c5c141250821bd8bab85a134"
+      },
+      "原报告": {
+        "path": "var/cn-etf-overview-layout2-live/aed8256c97974edabdd3365b9a8e5f86/report.json",
+        "SHA256": "14c4dc5b4631f5a613090779db3ff65a2a1713fe574f402edf30c67f49303dc9"
+      },
+      "说明": "首轮JUnit绿但日期核验范围弱，first仅0行、最终2桶只验1桶；报告不重写，明确不作为有效验收。"
+    },
+    {
+      "状态": "DATE_WINDOW_FIXED_PARTIAL_PROTOCOL_EVIDENCE",
+      "说明": "日期修正后先前1项实库已过，随后补强独立日期证明和全布局持久意图，以最终五矩阵为准。"
+    },
+    {
+      "状态": "ABORTED_ADMISSION_BEFORE_SQL",
+      "原件": {
+        "path": "var/cn-etf-overview-layout2-live/758e496bdf2b48cb8796f3576308ded6/before-sql-abort.json",
+        "SHA256": "06dbd84795b4728bc2230b4bf636a195408579b1b4dc11599ef82c8c1c568bd9"
+      },
+      "说明": "早于监听就绪被真实进程探针拒绝，无SQL/账本/业务表，原进程已结束。"
+    },
+    {
+      "状态": "NOT_EXECUTED_GRADLE_UP_TO_DATE",
+      "原件": {
+        "path": "var/cn-etf-overview-layout2-live/69031e23f2bb4fbc8cb8db6b7714917b/not-executed.json",
+        "SHA256": "742a49dcd5e21b9b4e1f711b4db449a57e8b76ca8af907c46ff203155a04cf3c"
+      },
+      "说明": "仅环境变化不会使Gradle Test过期，成功退出未产生报告，因此未记通过；最终其余矩阵强制执行并逐项验原件。"
+    }
+  ],
+  "验证": {
+    "原108f基线": "全模块4965项零失败、4项跳过；2068 Java格式/import/字面量通过；架构/边界/依赖/驱动及四ZIP通过。外部Live及retained-parity排除。",
+    "合并基线": "9f975a28；与本批交集仅主规范和ReadGroupConfiguration。1处import冲突保留新利率绑定移除并加ETF scope，不改对方业务。",
+    "合并后格式": "2121 Java格式/import/字面量通过。",
+    "合并后全回归": {
+      "tests": 5034,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4,
+      "exitCode": 0,
+      "failuresByCase": []
+    },
+    "合并后构建": "architectureTest、verifyModuleBoundaries、verifyDependencyVersionCompatibility、verifyBatchDistributionDatabaseDrivers及CN数据/主策略/US/BTC四个distZip通过。",
+    "集成测试修复": "六项宏观注册使完整READ集合从55变61；八个装配用例同步预期数，并明确三项利率由唯一正式owner提供READ/WRITE、两项公告仍READ。没有改采集行为。",
+    "最终测试格式": "最终8个测试文件格式与完整CN数据测试import检查通过；并行编译曾使一次只读import检查遇到临时缺失class，未改源，构建结束重查通过。",
+    "公开配置": "当前跟踪文件及四个发行ZIP公开配置检查通过，未打印私密值。"
+  },
+  "剩余": "主策略批准模型/完整来源/正式迁移和消费者验收仍缺；Backtest MV、市场情绪/Regime与每日评估的ST/停牌读取尚待继续贯通；三项退役表缺原部署停写/账本/lease归属，未删。",
+  "证据": {
+    "directory": "var/cn-etf-overview-verification-20261021",
+    "archiveSHA256": "1b0df73a727ac99deb9aceb05317e5ff5dff756c2fe6b45e4ebc888a54409420"
+  }
+}

@@ -17,6 +17,7 @@ import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetStorageValues;
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
+import com.zoutrankil.data.domain.fund.EtfOverviewScope;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
@@ -162,11 +163,8 @@ public class QuestDbBoundedReader {
     /** 日期条件限制输出桶范围；LIMIT 本身不能证明原生 JOIN 只扫描这些源行。 */
     private static void validateEtfAggregateQuery(
             DatasetDefinition definition, DatasetReadQuery query) {
-        if (!GUARDED_ETF_AGGREGATE_VIEW.equals(definition.objectName())) return;
-        if (definition.objectKind() != ObjectKind.MATERIALIZED_VIEW
-                || !definition.dependencies().equals(GUARDED_ETF_AGGREGATE_SOURCES))
-            throw new IllegalStateException(
-                    "ETF aggregate requires its registered native MV and exact two-source contract");
+        if (!isEtfOverview(definition)) return;
+        EtfOverviewScope.fromDefinition(definition);
         if (query.columns().size() != ETF_AGGREGATE_COLUMNS.size()
                 || !new HashSet<>(query.columns()).equals(ETF_AGGREGATE_COLUMNS)
                 || query.pageSize() > 31)
@@ -190,6 +188,12 @@ public class QuestDbBoundedReader {
         }
     }
 
+    private static boolean isEtfOverview(DatasetDefinition definition) {
+        return GUARDED_ETF_AGGREGATE_VIEW.equals(definition.datasetId())
+                || GUARDED_ETF_AGGREGATE_VIEW.equals(definition.objectName())
+                || definition.objectName().startsWith(EtfOverviewScope.V2_OUTPUT_PREFIX);
+    }
+
     private String guardedSourceVersion(DatasetDefinition definition) {
         if (BacktestDailyMaterializationReadGuard.applies(definition))
             return BacktestDailyMaterializationReadGuard.version(jdbc, definition);
@@ -197,8 +201,9 @@ public class QuestDbBoundedReader {
             return DerivedMonthlyReadGuards.versionEquityStyle(jdbc, definition);
         if (DerivedMonthlyReadGuards.appliesMacroCore(definition))
             return DerivedMonthlyReadGuards.versionMacroCore(jdbc, definition);
-        if (GUARDED_ETF_AGGREGATE_VIEW.equals(definition.objectName()))
-            return EtfMarketOverviewMaterializedViewReadGuard.versionIfActivated(jdbc, ledgerPath);
+        if (isEtfOverview(definition))
+            return EtfMarketOverviewMaterializedViewReadGuard.versionIfActivated(
+                    jdbc, ledgerPath, EtfOverviewScope.fromDefinition(definition));
         if (definition.objectKind() == ObjectKind.MATERIALIZED_VIEW)
             return requireCurrentMaterializedView(definition).sourceVersion();
         return null;

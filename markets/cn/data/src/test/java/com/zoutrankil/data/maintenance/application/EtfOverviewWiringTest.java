@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 
 import ch.qos.logback.core.FileAppender;
 
+import com.zoutrankil.data.config.EtfOverviewLayoutConfiguration;
 import com.zoutrankil.data.config.EtfOverviewRefreshConfiguration;
 
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,9 @@ class EtfOverviewWiringTest {
         var source = mock(DataSource.class);
         var application =
                 new SpringApplication(
-                        EtfOverviewMaintenance.class, EtfOverviewRefreshConfiguration.class);
+                        EtfOverviewMaintenance.class,
+                        EtfOverviewRefreshConfiguration.class,
+                        EtfOverviewLayoutConfiguration.class);
         application.setWebApplicationType(WebApplicationType.NONE);
         application.setAdditionalProfiles("data");
         application.addInitializers(

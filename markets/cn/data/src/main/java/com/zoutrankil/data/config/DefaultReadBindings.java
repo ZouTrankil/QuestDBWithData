@@ -167,6 +167,25 @@ final class DefaultReadBindings {
             int stDailyVersion,
             int suspendVersion,
             int l2DailyVersion) {
+        return registrations(
+                etfAdjVersion,
+                etfDailyVersion,
+                etfShareVersion,
+                stDailyVersion,
+                suspendVersion,
+                l2DailyVersion,
+                etfShareVersion == 1 && etfDailyVersion == 1 ? 1 : 2);
+    }
+
+    static List<ReadBindingCatalog.Registration<?>> registrations(
+            int etfAdjVersion,
+            int etfDailyVersion,
+            int etfShareVersion,
+            int stDailyVersion,
+            int suspendVersion,
+            int l2DailyVersion,
+            int etfOverviewVersion) {
+        CnTradeDateLayout.fromVersion(etfOverviewVersion);
         var l2Layout = CnTradeDateLayout.fromVersion(l2DailyVersion);
         var l2Mapper = new L2DailyFeaturesMapper();
         int suspend = CnTradeDateLayout.fromVersion(suspendVersion).schemaVersion();
@@ -193,6 +212,13 @@ final class DefaultReadBindings {
                                                             values ->
                                                                     l2Mapper.fromValues(
                                                                             values, l2Layout));
+                                    case "mv_etf_market_overview_daily" ->
+                                            typed(
+                                                    "mv_etf_market_overview_daily",
+                                                    etfOverviewVersion,
+                                                    EtfMarketOverviewDailyView.class,
+                                                    new EtfMarketOverviewDailyViewMapper()
+                                                            ::fromValues);
                                     case "mv_retail_sentiment_daily" ->
                                             l2Layout == CnTradeDateLayout.LEGACY_V1
                                                     ? registration

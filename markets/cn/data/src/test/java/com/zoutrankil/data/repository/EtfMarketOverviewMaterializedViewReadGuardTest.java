@@ -75,15 +75,17 @@ class EtfMarketOverviewMaterializedViewReadGuardTest {
             view.put("refresh_base_table_txn", 7L);
             view.put("base_table_txn", 7L);
             view.put("last_refresh_finish_timestamp", "refresh-1");
-            new MaterializedViewCheckpoints(ledger)
-                    .save(
-                            OUTPUT + "@fixture-db",
-                            new MaterializedViewCheckpoints.Checkpoint(
-                                    EtfMarketOverviewMaterializedViewReadGuard.definitionHash(),
-                                    version("etf_share"),
-                                    version("etf_daily"),
-                                    version(OUTPUT),
-                                    "refresh-1"));
+            var checkpoints = new MaterializedViewCheckpoints(ledger);
+            var certificate =
+                    new MaterializedViewCheckpoints.Checkpoint(
+                            EtfMarketOverviewMaterializedViewReadGuard.definitionHash(),
+                            version("etf_share"),
+                            version("etf_daily"),
+                            version(OUTPUT),
+                            "refresh-1");
+            checkpoints.save(OUTPUT + "@fixture-db", certificate);
+            // 本夹具显式代表已经按新日期协议完整核验的输入，不把旧刷新回执当新证明。
+            checkpoints.saveDateVerification(OUTPUT + "@fixture-db", certificate, 1);
             when(jdbc.queryForList(anyString()))
                     .thenAnswer(
                             call -> {
