@@ -365,7 +365,7 @@ class BacktestDailyLayoutLiveAcceptanceTest {
                 st);
     }
 
-    private static String sourceDdl(DatasetDefinition d) {
+    static String sourceDdl(DatasetDefinition d) {
         return "CREATE TABLE "
                 + d.objectName()
                 + " ("
@@ -393,7 +393,7 @@ class BacktestDailyLayoutLiveAcceptanceTest {
                 JobDefinitionJson.mapper().writeValueAsString(report));
     }
 
-    private static final class Sources {
+    static final class Sources {
         final JdbcTemplate jdbc;
         final BacktestDailyScope scope;
         final PrivateQuestDbInstanceAttestor attestor;

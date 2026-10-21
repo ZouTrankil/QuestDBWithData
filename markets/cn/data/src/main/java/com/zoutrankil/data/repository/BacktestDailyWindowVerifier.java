@@ -1,17 +1,23 @@
 package com.zoutrankil.data.repository;
 
 import com.zoutrankil.data.domain.DatasetReadQuery;
+import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.derived.BacktestDailyScope;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
+import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CancellationException;
 
 /** 水位追平不能证明 ASOF 历史沿用值已重算；按原始 SQL 逐月核对完整键值。 */
 public final class BacktestDailyWindowVerifier {
@@ -66,24 +72,7 @@ public final class BacktestDailyWindowVerifier {
         synchronized (verified) {
             if (verified.containsKey(proof)) return before;
         }
-        String query =
-                BacktestDailyMaterializedViewPort.querySql(
-                        BacktestDailyMaterializedViewPort.createSql(scope));
-        if (!query.contains(DRIVING_DATES)) throw new IllegalStateException("原始回测 SQL 缺少明确日期驱动边界");
-        String raw =
-                query.replace(
-                        DRIVING_DATES,
-                        "SELECT DISTINCT trade_date FROM stk_limit WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP) ORDER BY trade_date");
-        String columns =
-                String.join(
-                        ",",
-                        scope.definition().columns().stream()
-                                .map(
-                                        c ->
-                                                c.storageName().equals("trade_date")
-                                                        ? "cast(trade_date AS long) AS trade_date"
-                                                        : c.storageName())
-                                .toList());
+        String raw = rawSql(scope), columns = projectedColumns(scope);
         for (LocalDate lower = from; lower.isBefore(to); ) {
             LocalDate upper = lower.withDayOfMonth(1).plusMonths(1);
             if (upper.isAfter(to)) upper = to;
@@ -108,8 +97,8 @@ public final class BacktestDailyWindowVerifier {
                                     + (MAX_MONTH_ROWS + 1),
                             micros(lower),
                             micros(upper));
-            requireRows(expected, lower, upper);
-            requireRows(actual, lower, upper);
+            requireRows(expected, lower, upper, scope);
+            requireRows(actual, lower, upper, scope);
             if (!expected.equals(actual))
                 throw new BacktestDailyMaterializationReadGuard.NotReadyException(
                         BacktestDailyMaterializationReadGuard.NotReadyException.Reason
@@ -130,7 +119,92 @@ public final class BacktestDailyWindowVerifier {
         return before;
     }
 
-    private static void requireRows(List<Map<String, Object>> rows, LocalDate from, LocalDate to) {
+    public record RowDigest(long rows, String sha256) {}
+
+    /** 发送维护意图前，调用方须前后固定原输入版本；此方法不把摘要当来源覆盖证明。 */
+    public RowDigest expectedDigest(BacktestDailyScope scope, LocalDate from, LocalDate to) {
+        return digest(scope, from, to, true);
+    }
+
+    public RowDigest outputDigest(BacktestDailyScope scope, LocalDate from, LocalDate to) {
+        return digest(scope, from, to, false);
+    }
+
+    private RowDigest digest(BacktestDailyScope scope, LocalDate from, LocalDate to, boolean raw) {
+        if (from == null
+                || to == null
+                || !from.isBefore(to)
+                || ChronoUnit.DAYS.between(from, to) > 36_600)
+            throw new IllegalArgumentException("回测摘要须使用非空、最多36600天的日期范围");
+        try {
+            var hash = MessageDigest.getInstance("SHA-256");
+            hash.update("backtest-canonical-13-v1\n".getBytes(StandardCharsets.UTF_8));
+            long count = 0;
+            String columns = projectedColumns(scope);
+            for (LocalDate lower = from; lower.isBefore(to); ) {
+                if (Thread.currentThread().isInterrupted())
+                    throw new CancellationException("回测摘要已中断");
+                LocalDate upper = lower.withDayOfMonth(1).plusMonths(1);
+                if (upper.isAfter(to)) upper = to;
+                String sql =
+                        raw
+                                ? "SELECT "
+                                        + columns
+                                        + " FROM ("
+                                        + rawSql(scope)
+                                        + ") ORDER BY trade_date,ts_code LIMIT "
+                                        + (MAX_MONTH_ROWS + 1)
+                                : "SELECT "
+                                        + columns
+                                        + " FROM "
+                                        + scope.outputTable()
+                                        + " WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP) ORDER BY trade_date,ts_code LIMIT "
+                                        + (MAX_MONTH_ROWS + 1);
+                var rows = jdbc.queryForList(sql, micros(lower), micros(upper));
+                requireRows(rows, lower, upper, scope);
+                for (var row : rows) {
+                    byte[] bytes = JobDefinitionJson.canonicalMapper().writeValueAsBytes(row);
+                    hash.update(ByteBuffer.allocate(4).putInt(bytes.length).array());
+                    hash.update(bytes);
+                    count++;
+                }
+                lower = upper;
+            }
+            return new RowDigest(count, HexFormat.of().formatHex(hash.digest()));
+        } catch (RuntimeException failure) {
+            throw failure;
+        } catch (Exception failure) {
+            throw new IllegalStateException("回测完整行摘要生成失败", failure);
+        }
+    }
+
+    private static String rawSql(BacktestDailyScope scope) {
+        String query =
+                BacktestDailyMaterializedViewPort.querySql(
+                        BacktestDailyMaterializedViewPort.createSql(scope));
+        if (!query.contains(DRIVING_DATES)) throw new IllegalStateException("原始回测 SQL 缺少明确日期驱动边界");
+        return query.replace(
+                DRIVING_DATES,
+                "SELECT DISTINCT trade_date FROM stk_limit WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP) ORDER BY trade_date");
+    }
+
+    private static String projectedColumns(BacktestDailyScope scope) {
+        return String.join(
+                ",",
+                scope.definition().columns().stream()
+                        .map(
+                                c ->
+                                        c.storageName().equals("trade_date")
+                                                ? "cast(trade_date AS long) AS trade_date"
+                                                : c.storageName())
+                        .toList());
+    }
+
+    private static void requireRows(
+            List<Map<String, Object>> rows,
+            LocalDate from,
+            LocalDate to,
+            BacktestDailyScope scope) {
         if (rows.size() > MAX_MONTH_ROWS) throw new IllegalStateException("回测月窗超过 200000 行核验预算");
         var keys = new HashSet<List<Object>>();
         for (var row : rows) {
@@ -142,6 +216,21 @@ public final class BacktestDailyWindowVerifier {
                     || code.isBlank()
                     || !keys.add(List.of(day, code)))
                 throw new IllegalStateException("回测核验缺少唯一完整交易日/证券键");
+            if (!row.keySet().equals(new HashSet<>(scope.definition().storageColumns())))
+                throw new IllegalStateException("回测核验必须包含完整13列");
+            for (var column : scope.definition().columns()) {
+                Object value = row.get(column.storageName());
+                if (value == null) {
+                    if (!column.nullable())
+                        throw new IllegalStateException("回测必填字段为空：" + column.storageName());
+                } else if (!(switch (column.storageType()) {
+                    case TIMESTAMP, LONG -> value instanceof Long;
+                    case SYMBOL -> value instanceof String;
+                    case INT -> value instanceof Integer;
+                    case DOUBLE -> value instanceof Double number && Double.isFinite(number);
+                    default -> false;
+                })) throw new IllegalStateException("回测值类型与完整契约不符：" + column.storageName());
+            }
         }
     }
 

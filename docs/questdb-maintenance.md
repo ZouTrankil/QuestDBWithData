@@ -28,6 +28,34 @@ ETF MV 以 `etf_share` 为基表，还关联 `etf_daily`。左侧新增由即时
 
 证书保存在 `app.sync.ledger-path` 指定的 SQLite `native_mv_checkpoints`，并绑定数据库身份。读取时只检查证书，过期或缺失就拒绝使用，不暗中刷新，也不退回旧状态表。未变化时可以复用原证书。
 
+## 回测 MV 的显式维护
+
+先只读查看：
+
+```sh
+./gradlew questdbMaintenance --args='plan-backtest-refresh'
+```
+
+确认原来源已停写、原账本及未决归属后，才运行：
+
+```sh
+./gradlew questdbMaintenance --args='refresh-backtest --sources-stopped'
+```
+
+停写参数是操作人的声明，不能替代原部署证据。命令不建表、不切换日期布局，只维护当前配置指向的既有原生 MV。`app.materialized-views.backtest.refresh-timeout` 默认 `2m`，可通过标准配置覆盖。
+
+计划不写 SQLite 或 QuestDB。需要 FULL 时，先将原定义、来源物理版本、完整窗口和预期行摘要存入 `app.sync.ledger-path` 的 `native_backtest_refresh_ops`，再发送一次。完成须核对原生刷新、完整历史键值、原摘要、WAL 和稳定版本；不证明上游来源覆盖完整。
+
+超时、断连或输入变化均保留 `IN_DOUBT`，普通调用不能重发。确认原提交者已停止后，只读核对原请求：
+
+```sh
+./gradlew questdbMaintenance --args='reconcile-backtest --run-id 原运行编号 --original-sender-stopped'
+```
+
+核对不向 QuestDB 写入，成功后只更新原 SQLite 结果。原输入或物理代际改变时继续保留未决，不换用当前配置重签。`status` 可查看未决项。
+
+本轮仅相关本地测试通过；新增实库测试未执行，正式刷新及迁移未执行。缺失材料见[逐表推进记录](operations/cn-time-migration/逐表推进.md)。
+
 ## 旧 meta 表为什么能删
 
 退休命令只处理这六个登记名称：

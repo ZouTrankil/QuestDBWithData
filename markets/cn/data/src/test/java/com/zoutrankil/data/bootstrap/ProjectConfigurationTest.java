@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -407,6 +408,14 @@ class ProjectConfigurationTest {
         assertEquals(
                 "java_backtest_v2_current",
                 env.getRequiredProperty("app.materialized-views.backtest.v2-output-table"));
+        assertEquals(
+                "2m", env.getRequiredProperty("app.materialized-views.backtest.refresh-timeout"));
+        variables.put("APP_MATERIALIZED_VIEWS_BACKTEST_REFRESH_TIMEOUT", "7m");
+        assertEquals(
+                Duration.ofMinutes(7),
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty(
+                                "app.materialized-views.backtest.refresh-timeout", Duration.class));
         variables.put("APP_MATERIALIZED_VIEWS_BACKTEST_LAYOUT_VERSION", "2");
         variables.put("APP_MATERIALIZED_VIEWS_BACKTEST_SUSPEND_LAYOUT_VERSION", "2");
         env = ProjectConfiguration.load(profile, variables);

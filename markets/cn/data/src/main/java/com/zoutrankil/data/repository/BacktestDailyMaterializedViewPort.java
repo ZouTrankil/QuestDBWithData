@@ -188,6 +188,15 @@ public final class BacktestDailyMaterializedViewPort {
     }
 
     public State sourceState() {
+        return observe(true);
+    }
+
+    /** 仅供显式维护冻结输入；关联来源晚提交可进入计划，结构、WAL和原生刷新仍须就绪。 */
+    public State refreshAdmissionState() {
+        return observe(false);
+    }
+
+    private State observe(boolean requireSourceFreshness) {
         var before = clocks();
         var view = view();
         requireSchema();
@@ -228,7 +237,9 @@ public final class BacktestDailyMaterializedViewPort {
                     || number(tx.getFirst(), "sequencerTxn")
                             != number(before.get(name), "sequencerTxn"))
                 throw pending("Backtest raw source transaction changed: " + name);
-            if (!BASE.equals(name) && number(tx.getFirst(), "committed") > number(view, "started"))
+            if (requireSourceFreshness
+                    && !BASE.equals(name)
+                    && number(tx.getFirst(), "committed") > number(view, "started"))
                 throw new BacktestDailyMaterializationReadGuard.NotReadyException(
                         BacktestDailyMaterializationReadGuard.NotReadyException.Reason
                                 .SOURCES_CHANGED,
