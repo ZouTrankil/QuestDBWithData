@@ -1,5 +1,6 @@
 package com.zoutrankil.data.factor.application;
 
+import com.zoutrankil.data.domain.derived.BacktestDailyScope;
 import com.zoutrankil.data.factor.engine.DailyFactorFeatures;
 import com.zoutrankil.data.factor.engine.DailyFactorPanel;
 import com.zoutrankil.data.factor.engine.DailyMarketRiskFeatures;
@@ -54,6 +55,8 @@ import com.zoutrankil.data.factor.storage.QuestDbFinancialStatements;
 import com.zoutrankil.data.factor.storage.QuestDbL2FactorPanel;
 import com.zoutrankil.data.factor.storage.QuestDbMarginFactors;
 import com.zoutrankil.data.factor.storage.QuestDbStockMembership;
+import com.zoutrankil.data.repository.BacktestDailyMaterializedViewPort;
+import com.zoutrankil.data.repository.BacktestDailyWindowVerifier;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -90,6 +93,9 @@ public final class FactorComputationIdentity {
                         QuestDbFinancialStatements.class,
                         NativeDailyObservations.class,
                         BacktestFactorSource.class,
+                        BacktestDailyWindowVerifier.class,
+                        BacktestDailyMaterializedViewPort.class,
+                        BacktestDailyScope.class,
                         GlobalFactorObservations.class,
                         NativePoolFactors.class,
                         StockPublicationScope.class,

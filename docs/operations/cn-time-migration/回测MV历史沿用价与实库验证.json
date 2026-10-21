@@ -1,0 +1,255 @@
+{
+  "日期": "2026-10-21",
+  "基线": "54160f2bbb9aaa038cf32a02002ed179db04474e",
+  "结论": "阻断历史 ASOF 沿用价过期读取；五组私有完整字段验收通过，正式来源与迁移未验收",
+  "问题复现": "14 日价格由 20 修订为 21 后再写当日涨跌停，原生水位追平，但15/16日停牌沿用价仍20；读取保护不能只用水位。",
+  "修改": [
+    "原 SQL 分月重算与 MV 完整键值比较，保留窗口前 ASOF 历史、13列、原单位与null",
+    "按当前作用域/窗口/完整State缓存正值核验，失败不缓存；缓存仅当前实例",
+    "公开日期查询前后、因子月窗、主策略输入及旧评分/阶段再验证接入",
+    "旧SQL/定义及原版本戳编码保留；因子执行代码身份包含核验器依赖",
+    "生产读取不建表、不刷新，不重签原证据；私有测试 FULL 明确记录原意图并只发送一次"
+  ],
+  "全项目离线": {
+    "tests": 5059,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 4,
+    "exitCode": 0,
+    "failuresByCase": []
+  },
+  "离线原报告": ".gradle/offline-checks/20261021T020827526715Z",
+  "离线归档": "var/cn-backtest-values-verification-20261021/offline-reports.tar.gz",
+  "归档SHA256": "d773c21c197f33de607ab954715bc4356594680b4e207a48a20f2c622aa69d00",
+  "格式": {
+    "全项目Java数": 2127,
+    "import排版与字面量核对": "通过",
+    "两文件最终补查": "全局整理后修改的错误提示与FULL轮询已单独检查实际编译classpath的import及最终格式；未改其余源码",
+    "首次补查失败说明": "导出的 main classpath 不含本模块输出，子集检查找不到同包类；补入已编译本模块输出后通过，非源码错误。"
+  },
+  "架构及发行": {
+    "architectureTest": "通过",
+    "verifyModuleBoundaries": "通过",
+    "verifyDependencyVersionCompatibility": "通过",
+    "verifyBatchDistributionDatabaseDrivers": "通过",
+    "CN数据与主策略distZip": "通过",
+    "两份ZIP公开配置扫描": "通过"
+  },
+  "私有实库": [
+    {
+      "组合": "scope2-s1-st1",
+      "原件": "/Users/Apple/zq/fun/QuestDBWithData/var/cn-backtest-layout-live/df0ff59f3ad4462c88c15714edc71248",
+      "报告SHA256": "9294e7c2fcf0800f1f73112e17702ab6428335a35bd57928a774ffee5a9e03f6",
+      "各阶段完整核对行数": [
+        4,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "每阶段字段数": 13,
+      "拒绝原因": [
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED",
+        "VALUES_CHANGED",
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED"
+      ],
+      "最终分页": [
+        3,
+        3,
+        1
+      ],
+      "旧游标拒绝": true,
+      "私有夹具显式FULL": true,
+      "进程退出码": 143,
+      "对象清理及端口释放": true
+    },
+    {
+      "组合": "scope2-s1-st2",
+      "原件": "/Users/Apple/zq/fun/QuestDBWithData/var/cn-backtest-layout-live/0b92b7e42b7c47999379980e8f1e1bf6",
+      "报告SHA256": "4a05cb48b0b24590af01beaf2236af156e10080713ee0d59946e05634b0f37da",
+      "各阶段完整核对行数": [
+        4,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "每阶段字段数": 13,
+      "拒绝原因": [
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED",
+        "VALUES_CHANGED",
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED"
+      ],
+      "最终分页": [
+        3,
+        3,
+        1
+      ],
+      "旧游标拒绝": true,
+      "私有夹具显式FULL": true,
+      "进程退出码": 143,
+      "对象清理及端口释放": true
+    },
+    {
+      "组合": "scope2-s2-st1",
+      "原件": "/Users/Apple/zq/fun/QuestDBWithData/var/cn-backtest-layout-live/d7bf335225684292bcdfc4a089e6baa8",
+      "报告SHA256": "5abfbe00eb1a8c2ae7b6cd979d350b1a166eb22f15c715fb2de4ef2c8239f551",
+      "各阶段完整核对行数": [
+        4,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "每阶段字段数": 13,
+      "拒绝原因": [
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED",
+        "VALUES_CHANGED",
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED"
+      ],
+      "最终分页": [
+        3,
+        3,
+        1
+      ],
+      "旧游标拒绝": true,
+      "私有夹具显式FULL": true,
+      "进程退出码": 143,
+      "对象清理及端口释放": true
+    },
+    {
+      "组合": "scope2-s2-st2",
+      "原件": "/Users/Apple/zq/fun/QuestDBWithData/var/cn-backtest-layout-live/ff47ff40b7ba4656ae7f1fd3cf4f7a49",
+      "报告SHA256": "e3c8f46831e8b335439c080b5d1ec558133a181ac1c99d98303698808485794b",
+      "各阶段完整核对行数": [
+        4,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "每阶段字段数": 13,
+      "拒绝原因": [
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED",
+        "VALUES_CHANGED",
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED"
+      ],
+      "最终分页": [
+        3,
+        3,
+        1
+      ],
+      "旧游标拒绝": true,
+      "私有夹具显式FULL": true,
+      "进程退出码": 143,
+      "对象清理及端口释放": true
+    },
+    {
+      "组合": "legacy-s1-st1",
+      "原件": "/Users/Apple/zq/fun/QuestDBWithData/var/cn-backtest-layout-live/a9087e2106ce452c86de627e309b55a9",
+      "报告SHA256": "5b94b32349cfc90a360e837cf849737c2b58034d3c0abf252c78b1fbe95576d5",
+      "各阶段完整核对行数": [
+        4,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "每阶段字段数": 13,
+      "拒绝原因": [
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED",
+        "VALUES_CHANGED",
+        "SOURCES_CHANGED",
+        "SOURCES_CHANGED"
+      ],
+      "最终分页": [
+        3,
+        3,
+        1
+      ],
+      "旧游标拒绝": true,
+      "私有夹具显式FULL": true,
+      "进程退出码": 143,
+      "对象清理及端口释放": true
+    }
+  ],
+  "早期尝试": [
+    {
+      "目录": "var/cn-backtest-layout-live/491ce8d3474d49ea8fe8a9fb23d713dd",
+      "状态": "历史沿用价过期，否定验收",
+      "原件": "var/cn-backtest-layout-live/491ce8d3474d49ea8fe8a9fb23d713dd/failed-attempt.json",
+      "原报告SHA256": "1f374cbe7a3578c2b69d686051de9d4d2b85c6cd5784093a954687fadf61ab49",
+      "进程已不存在且端口释放": true,
+      "数据库文件保留": true,
+      "正常退出码未观察": true,
+      "原测试源码仅在修改测试前另存，不冒充运行时冻结": true
+    },
+    {
+      "目录": "var/cn-backtest-layout-live/cfe3b8a223cb4df5aaf32e5636b545a5",
+      "状态": "中间通过，不计最终矩阵",
+      "原件": "var/cn-backtest-layout-live/cfe3b8a223cb4df5aaf32e5636b545a5/superseded-acceptance.json"
+    },
+    {
+      "目录": "var/cn-backtest-layout-live/3471e709af684e41aa154b233bae0047",
+      "状态": "FULL 暂时无行时旧测试轮询报错；未重发FULL",
+      "原报告SHA256": "56b44b16364a1e015d208afe0492cee725a81b61bf9fa127099194d5483b2d4a",
+      "随后只读核对完整7行13列和4来源，完整State前后一致": "var/cn-backtest-layout-live/3471e709af684e41aa154b233bae0047/readonly-full-completion.json",
+      "原进程退出": 143,
+      "数据库文件保留": true,
+      "计入通过": false
+    }
+  ],
+  "改动JavaSHA256": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/factor/application/FactorComputationIdentity.java": "0d9b46f242bca77c6b9ba9cc27e190f0c43ad199341e906fe094a59a1646c66d",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/factor/storage/BacktestFactorSource.java": "17e3a080246fbcd6866acab8ee771c970ffd2025b44ad9a4cc47cf882e9beb50",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/factor/storage/QuestDbDailyFactorPanel.java": "904ec765ca0933759571318e13f543370dae53c4e8b44267817b6ff4e340eb56",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/factor/storage/QuestDbFactorInputs.java": "fa1eead15aa1862088d13d35785dd42b6ea409b8e0b7800c40f9cf5035e5cf61",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/repository/BacktestDailyMaterializationReadGuard.java": "3f9748872c584e49a42ca7adc7e87f39d70cf24759f63e6d10f4b8de1f2516a1",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/repository/BacktestDailyMaterializedViewPort.java": "90670c8bf0c122d84ce1e48631f40f725a62bb03501e6a4a516a895de1240550",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/repository/BacktestDailyWindowVerifier.java": "cb6495c847b32d8d01c7710da474873967e5628e31aa62270cadbd32a25558b8",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java": "617720cb14229cf56b9ea63369214d10ef3682cc2f27d356b3d86d3dd463468f",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/repository/BacktestDailyLayoutLiveAcceptanceTest.java": "3cd90d5ca76e2f7a335e4346350ea6965d931b3456127727131f641636444ce1",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/repository/BacktestDailyWindowVerifierTest.java": "7e97ad50abde6d7561aacc5da73b351b86009cb660d16fa9622305477490c9fa",
+    "markets/cn/main-strategy-runtime/src/main/java/com/zoutrankil/data/service/MainStrategyDailyPipeline.java": "7b6cff7abd1348e2afc5802b782ed92630c59f11899eae56c9c1425f0e2ad827",
+    "markets/cn/main-strategy-runtime/src/main/java/com/zoutrankil/data/strategy/application/MainStrategyDataService.java": "707a59a32c8f4f1828fd8d4897fc068e8d6e8a833caed1687ac369e4062e712a",
+    "markets/cn/main-strategy-runtime/src/main/java/com/zoutrankil/data/strategy/input/QuestDbStrategyInputs.java": "2fc83698c2c8424aa4c8c51bb139283f7b0e6890c4bb0f9b5fc37e3d07cd9494"
+  },
+  "发行包SHA256": {
+    "build/modules/markets/cn/data-app/_output/distributions/cn-data-0.1.0.zip": "bd81fa32b3a9217a1f97f13cf3fe90edf7b06fb34d85ef54ab9aea070be67369",
+    "build/modules/markets/cn/main-strategy-runtime/_output/distributions/main-strategy-0.1.0.zip": "abd72bc9db676bd5741682f1b22f9ec109f43dac9b8bc799683659119790a6e7"
+  },
+  "原SQL": {
+    "路径": "markets/cn/data/src/main/resources/sql/mv_backtest_daily.sql",
+    "SHA256": "18c5c20b1da904d8a2bf3cfb1814974c71deb77315fff4d0777ed8cc45c858ba",
+    "与基线逐字一致": true
+  },
+  "nativeQuestDbExecuted": true,
+  "formalQuestDbWritten": false,
+  "formalSourceCoverageVerified": false,
+  "formalPhysicalMigrationExecuted": false,
+  "剩余": [
+    "日期布局的直接消费者及原冻结作用域贯通",
+    "完整真实来源、生产批准模型及L2历史原件",
+    "正式协调迁移与原部署/账本/锁归属",
+    "三张退役正式表删除尚未执行"
+  ]
+}

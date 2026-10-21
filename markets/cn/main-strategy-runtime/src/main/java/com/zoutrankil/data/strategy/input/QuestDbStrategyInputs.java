@@ -3,7 +3,9 @@ package com.zoutrankil.data.strategy.input;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.derived.storage.BseLegacyFactorAliases;
+import com.zoutrankil.data.domain.derived.BacktestDailyScope;
 import com.zoutrankil.data.repository.BacktestDailyMaterializedViewPort;
+import com.zoutrankil.data.repository.BacktestDailyWindowVerifier;
 import com.zoutrankil.data.strategy.score.FrozenScalarValues;
 import com.zoutrankil.data.strategy.score.L2StockScoreProducer;
 
@@ -571,6 +573,8 @@ public final class QuestDbStrategyInputs {
         // preserving the complete ordered date range and the original total row limit.
         var rows = new ArrayList<Map<String, Object>>();
         for (var range : monthRanges(from, to)) {
+            if (name.equals("stock_daily"))
+                verifyBacktestValues(range.from(), range.exclusiveEnd());
             rows.addAll(
                     readSql(
                             sql,
@@ -641,6 +645,12 @@ public final class QuestDbStrategyInputs {
 
     public void revalidateCoverage() throws Exception {
         new StrategySourceCoverage(coverageFile, coverageSha256);
+    }
+
+    /** 使用原产物证明中的窗口；不重标原证明或改变当前来源。 */
+    public void verifyBacktestValues(LocalDate from, LocalDate exclusiveTo) {
+        new BacktestDailyWindowVerifier(jdbc)
+                .verifyRange(BacktestDailyScope.LEGACY, from, exclusiveTo);
     }
 
     public Object backtestState() {

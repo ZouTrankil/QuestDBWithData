@@ -16,6 +16,7 @@ import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetStorageValues;
 import com.zoutrankil.data.domain.DatasetValues;
+import com.zoutrankil.data.domain.derived.BacktestDailyScope;
 import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
 import com.zoutrankil.data.domain.fund.EtfOverviewScope;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
@@ -80,6 +81,7 @@ public class QuestDbBoundedReader {
             Set.of("trade_date", "etf_count", "total_share", "total_size_yi");
     private final JdbcTemplate jdbc;
     private final Path ledgerPath;
+    private BacktestDailyWindowVerifier backtestVerifier;
 
     public QuestDbBoundedReader(JdbcTemplate jdbc) {
         this(jdbc, System.getProperty("app.sync.ledger-path", "var/sync-ledger.sqlite3"));
@@ -102,7 +104,7 @@ public class QuestDbBoundedReader {
         DerivedMonthlyReadGuards.validateEquityStyle(definition, query);
         DerivedMonthlyReadGuards.validateMacroCore(definition, query);
         // 将本页绑定到读取前的来源版本；读取后再次核验，拒绝跨版本混合结果。
-        String guardedBefore = guardedSourceVersion(definition);
+        String guardedBefore = guardedSourceVersion(definition, query);
         String effectiveSourceVersion = guardedBefore == null ? sourceVersion : guardedBefore;
         var prepared = prepare(definition, query, effectiveSourceVersion);
         var columns = columns(definition);
@@ -148,7 +150,8 @@ public class QuestDbBoundedReader {
                                     .toList(),
                             effectiveSourceVersion);
         }
-        if (guardedBefore != null && !guardedBefore.equals(guardedSourceVersion(definition))) {
+        if (guardedBefore != null
+                && !guardedBefore.equals(guardedSourceVersion(definition, query))) {
             throw new IllegalStateException("Guarded source changed during bounded read");
         }
         return new DatasetReadPage<>(
@@ -194,9 +197,16 @@ public class QuestDbBoundedReader {
                 || definition.objectName().startsWith(EtfOverviewScope.V2_OUTPUT_PREFIX);
     }
 
-    private String guardedSourceVersion(DatasetDefinition definition) {
-        if (BacktestDailyMaterializationReadGuard.applies(definition))
-            return BacktestDailyMaterializationReadGuard.version(jdbc, definition);
+    private String guardedSourceVersion(DatasetDefinition definition, DatasetReadQuery query) {
+        if (BacktestDailyMaterializationReadGuard.applies(definition)) {
+            var scope = BacktestDailyScope.fromDefinition(definition);
+            // 正值缓存只属于当前 reader；每页仍核对原生来源版本。
+            synchronized (this) {
+                if (backtestVerifier == null)
+                    backtestVerifier = new BacktestDailyWindowVerifier(jdbc);
+            }
+            return backtestVerifier.version(scope, query);
+        }
         if (DerivedMonthlyReadGuards.appliesEquityStyle(definition))
             return DerivedMonthlyReadGuards.versionEquityStyle(jdbc, definition);
         if (DerivedMonthlyReadGuards.appliesMacroCore(definition))

@@ -438,6 +438,9 @@ public final class MainStrategyDataService {
                         .equals(mapper.writeValueAsString(reader.backtestState())))
             throw new IllegalStateException(
                     "Current daily score source identity, schema, values frontier or backtest result changed after publication");
+        reader.verifyBacktestValues(
+                LocalDate.parse(proof.path("warmupStart").asText()),
+                LocalDate.parse(proof.path("end").asText()).plusDays(1));
     }
 
     public List<Path> scoreEvidence(Publication p) throws Exception {

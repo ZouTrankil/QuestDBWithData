@@ -12,7 +12,8 @@ public final class BacktestDailyMaterializationReadGuard {
     public static final class NotReadyException extends IllegalStateException {
         public enum Reason {
             REFRESH_PENDING,
-            SOURCES_CHANGED
+            SOURCES_CHANGED,
+            VALUES_CHANGED
         }
 
         private final Reason reason;

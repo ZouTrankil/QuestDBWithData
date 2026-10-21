@@ -182,6 +182,8 @@ public final class QuestDbDailyFactorPanel {
         for (LocalDate start = historyFrom; !start.isAfter(through); ) {
             LocalDate end = start.withDayOfMonth(1).plusMonths(1);
             if (end.isAfter(through.plusDays(1))) end = through.plusDays(1);
+            if (table.equals("mv_backtest_daily"))
+                BacktestFactorSource.verifyWindow(jdbc, start, end);
             var normalized =
                     aliases.normalize(
                             readSource(
@@ -266,6 +268,7 @@ public final class QuestDbDailyFactorPanel {
             LocalDate end = start.withDayOfMonth(1).plusMonths(1);
             if (end.isAfter(through.plusDays(1))) end = through.plusDays(1);
             String filter = "trade_date>='" + start + "' AND trade_date<'" + end + "'";
+            BacktestFactorSource.verifyWindow(jdbc, start, end);
             var market =
                     aliases.normalize(
                             readSource("mv_backtest_daily", MARKET, filter, maxRows, sourceRows, 0),

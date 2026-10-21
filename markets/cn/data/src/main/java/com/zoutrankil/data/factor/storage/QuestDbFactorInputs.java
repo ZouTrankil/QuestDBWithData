@@ -98,6 +98,8 @@ public class QuestDbFactorInputs {
         for (LocalDate start = from; !start.isAfter(through); ) {
             LocalDate end = start.withDayOfMonth(1).plusMonths(1);
             if (end.isAfter(through.plusDays(1))) end = through.plusDays(1);
+            if (table.equals("mv_backtest_daily"))
+                BacktestFactorSource.verifyWindow(jdbc, start, end);
             rows.addAll(
                     jdbc.queryForList(
                             "SELECT trade_date,"

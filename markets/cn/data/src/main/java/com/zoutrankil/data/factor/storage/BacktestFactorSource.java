@@ -1,11 +1,14 @@
 package com.zoutrankil.data.factor.storage;
 
 import com.zoutrankil.data.domain.JobDefinitionJson;
+import com.zoutrankil.data.domain.derived.BacktestDailyScope;
 import com.zoutrankil.data.repository.BacktestDailyMaterializedViewPort;
+import com.zoutrankil.data.repository.BacktestDailyWindowVerifier;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +19,11 @@ public final class BacktestFactorSource {
     public static final String VERSION_KEY = "backtestSourceVersion";
 
     private BacktestFactorSource() {}
+
+    /** 按实际读取月窗验证完整结果；原版本戳仍只表示来源身份，不冒充数值证明。 */
+    public static void verifyWindow(JdbcTemplate jdbc, LocalDate from, LocalDate to) {
+        new BacktestDailyWindowVerifier(jdbc).verifyRange(BacktestDailyScope.LEGACY, from, to);
+    }
 
     public static String version(JdbcTemplate jdbc) {
         var state = new BacktestDailyMaterializedViewPort(jdbc).sourceState();

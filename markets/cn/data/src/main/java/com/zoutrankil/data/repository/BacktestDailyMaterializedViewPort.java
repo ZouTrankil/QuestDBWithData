@@ -258,6 +258,10 @@ public final class BacktestDailyMaterializedViewPort {
     }
 
     public String sourceVersion() {
+        return fingerprint(sourceState());
+    }
+
+    String fingerprint(State state) {
         try {
             return "questdb-mv:"
                     + scope.outputTable()
@@ -267,7 +271,7 @@ public final class BacktestDailyMaterializedViewPort {
                                     MessageDigest.getInstance("SHA-256")
                                             .digest(
                                                     JobDefinitionJson.mapper()
-                                                            .writeValueAsBytes(sourceState())));
+                                                            .writeValueAsBytes(state)));
         } catch (IllegalStateException e) {
             throw e;
         } catch (Exception e) {

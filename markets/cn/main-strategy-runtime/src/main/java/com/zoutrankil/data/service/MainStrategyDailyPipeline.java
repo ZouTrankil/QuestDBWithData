@@ -19,6 +19,7 @@ import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
+import com.zoutrankil.data.domain.derived.BacktestDailyScope;
 import com.zoutrankil.data.domain.temporal.MarketId;
 import com.zoutrankil.data.etf.application.EtfAdjJobService;
 import com.zoutrankil.data.etf.application.EtfDailyJobService;
@@ -30,6 +31,7 @@ import com.zoutrankil.data.l2.application.FormalL2DailyFeaturesIngestion;
 import com.zoutrankil.data.margin.application.MarginDetailJobService;
 import com.zoutrankil.data.repository.BacktestDailyMaterializationReadGuard;
 import com.zoutrankil.data.repository.BacktestDailyMaterializedViewPort;
+import com.zoutrankil.data.repository.BacktestDailyWindowVerifier;
 import com.zoutrankil.data.repository.ReferencePublicationJournal;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.stock.application.DailyBasicJobService;
@@ -2043,6 +2045,8 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         finiteRow("regime_features_monitor_daily", target, REGIME_REQUIRED);
         var port = new BacktestDailyMaterializedViewPort(jdbc);
         var state = port.sourceState();
+        new BacktestDailyWindowVerifier(jdbc)
+                .verifyRange(BacktestDailyScope.LEGACY, target, target.plusDays(1));
         requireContains("mv_backtest_daily", "trade_date", "stk_factor", "trade_date", target);
         for (String field :
                 List.of(
@@ -2371,6 +2375,14 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         keys.forEach(DatasetDefinition::identifier);
         if (ChronoUnit.DAYS.between(from, to) < 0 || ChronoUnit.DAYS.between(from, to) > 30)
             throw new Gate(BusinessState.BLOCKED, "Snapshot must cover at most 31 natural days");
+        if (table.equals("mv_backtest_daily")) {
+            try {
+                new BacktestDailyWindowVerifier(jdbc)
+                        .verifyRange(BacktestDailyScope.LEGACY, from, to.plusDays(1));
+            } catch (BacktestDailyMaterializationReadGuard.NotReadyException waiting) {
+                throw new Gate(BusinessState.WAITING_SOURCE, waiting.getMessage());
+            }
+        }
         var before = clock(table);
         var cols = columns(table);
         var names = cols.stream().map(c -> Objects.toString(c.get("column"))).toList();
