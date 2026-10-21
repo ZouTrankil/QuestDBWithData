@@ -62,6 +62,8 @@ import java.util.function.BooleanSupplier;
 
 /** 复用正式同步账本及未决锁协议；外部市场负责来源规则，本类只负责有界写入和逐字段回读。 */
 public final class VerifiedMarketDataStore {
+    // 大年分区的WAL应用可能超过两分钟；只延长有界核验，不放宽值、版本或取消门槛。
+    private static final Duration PUBLICATION_VISIBILITY_TIMEOUT = Duration.ofMinutes(5);
     private static final ObjectMapper JSON = new ObjectMapper();
 
     public record PublicationPage(int rows, int bytes) {
@@ -477,7 +479,7 @@ public final class VerifiedMarketDataStore {
                     }
 
                     public Duration visibilityTimeout() {
-                        return Duration.ofMinutes(2);
+                        return PUBLICATION_VISIBILITY_TIMEOUT;
                     }
                 };
         var ledger = new SyncRunLedger(ledgerPath);
@@ -1385,7 +1387,7 @@ public final class VerifiedMarketDataStore {
                                 capacity,
                                 page.bytes(),
                                 Math.min(100000 / capacity, tail.size()),
-                                Duration.ofMinutes(2),
+                                PUBLICATION_VISIBILITY_TIMEOUT,
                                 Duration.ofMillis(100));
                 var result =
                         new VerifiedBatchExecutor<>(policy, codec, port).execute(tail.iterator());
