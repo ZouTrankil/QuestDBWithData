@@ -15,6 +15,58 @@ import java.time.LocalDate;
 import java.util.zip.GZIPOutputStream;
 
 class NasdaqItchMapperTest {
+    @Test
+    void explicitLateScanDoesNotRelaxTheLegacyLimitOrTheOutputLimit() throws Exception {
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        NasdaqItchMapper.messages(
+                                new ByteArrayInputStream(sample()),
+                                LocalDate.of(2026, 6, 12),
+                                5_000_001,
+                                1,
+                                "sha",
+                                Instant.EPOCH));
+        assertThrows(
+                EOFException.class,
+                () ->
+                        NasdaqItchMapper.messages(
+                                new ByteArrayInputStream(sample()),
+                                LocalDate.of(2026, 6, 12),
+                                5_000_001,
+                                1,
+                                "sha",
+                                Instant.EPOCH,
+                                5_000_001));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        NasdaqItchMapper.messages(
+                                new ByteArrayInputStream(sample()),
+                                LocalDate.of(2026, 6, 12),
+                                2,
+                                100001,
+                                "sha",
+                                Instant.EPOCH,
+                                100_000_000));
+        assertEquals(
+                NasdaqItchMapper.messages(
+                        new ByteArrayInputStream(sample()),
+                        LocalDate.of(2026, 6, 12),
+                        2,
+                        1,
+                        "sha",
+                        Instant.EPOCH),
+                NasdaqItchMapper.messages(
+                        new ByteArrayInputStream(sample()),
+                        LocalDate.of(2026, 6, 12),
+                        2,
+                        1,
+                        "sha",
+                        Instant.EPOCH,
+                        100_000_000));
+    }
+
     private byte[] sample() throws Exception {
         var bytes = new ByteArrayOutputStream();
         try (var gzip = new GZIPOutputStream(bytes);

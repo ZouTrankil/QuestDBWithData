@@ -14,6 +14,18 @@ app.market-data:
   cboe-requests-per-day: 8
   cboe-monthly-bytes: 67108864
   cboe-request-spacing-ms: 60000
+  # 官方 ITCH 仅续取明确前缀；这些是本地保守预算，不代表供应商或其他客户端余量。
+  itch-source-url: https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/S061226-v50.txt.gz
+  itch-file-date: "2026-06-12"
+  itch-sample-local-time: "09:31"
+  itch-sample-message-count: 100000
+  itch-range-bytes: 8388608
+  itch-prefix-limit-bytes: 1073741824
+  itch-maximum-scan-messages: 100000000
+  itch-requests-per-hour: 240
+  itch-requests-per-day: 1000
+  itch-monthly-bytes: 4294967296
+  itch-request-spacing-ms: 2000
   history-start: 2006-01-01
   minute-start: 2026-01-01
   benchmark-symbols: [SPY, QQQ, IWM, TLT, GLD, USO]

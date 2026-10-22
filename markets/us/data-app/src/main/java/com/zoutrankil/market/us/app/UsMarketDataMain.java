@@ -15,7 +15,6 @@ import com.zoutrankil.market.us.marketdata.UsSecurityIdentifiers;
 import com.zoutrankil.market.us.marketdata.UsUniverseSnapshot;
 import com.zoutrankil.runtime.ProjectConfiguration;
 
-import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -180,38 +179,54 @@ public final class UsMarketDataMain {
                                         "scope",
                                         "发行人当前股票持仓；不是官方历史指数成分")));
             }
+            case "fetch-itch-prefix" -> {
+                if (!options.isEmpty()) throw new IllegalArgumentException("ITCH 前缀参数通过根配置及标准覆盖设置");
+                print(new UsItchPrefixCollector(env, root).run());
+            }
             case "import-itch" -> {
-                if (!Set.of("source", "metadata", "first-message", "message-count")
+                if (!Set.of(
+                                "source",
+                                "metadata",
+                                "first-message",
+                                "message-count",
+                                "maximum-first-message")
                         .containsAll(options.keySet()))
                     throw new IllegalArgumentException("未知 ITCH 参数");
                 Path raw = Path.of(required(options, "source")),
                         metadata = Path.of(required(options, "metadata"));
-                byte[] bytes = Files.readAllBytes(raw);
                 var card = JSON.readTree(Files.readAllBytes(metadata));
-                String sha = VerifiedMarketDataStore.sha(bytes);
+                String sha = UsItchPrefixCollector.sha(raw);
                 if (!sha.equals(card.path("compressedSha256").asText())
                         || card.path("sourceComplete").asBoolean(true)
-                        || card.path("compressedPrefixBytes").asLong() != bytes.length)
+                        || card.path("compressedPrefixBytes").asLong() != Files.size(raw))
                     throw new IllegalArgumentException("ITCH 前缀元数据或摘要不符");
                 long first = Long.parseLong(required(options, "first-message"));
                 int count = Integer.parseInt(required(options, "message-count"));
                 Instant observed =
                         Instant.parse(card.path("observedAt").asText())
                                 .truncatedTo(ChronoUnit.MICROS);
-                var rows =
-                        NasdaqItchMapper.messages(
-                                new ByteArrayInputStream(bytes),
-                                LocalDate.parse(card.path("fileDate").asText()),
-                                first,
-                                count,
-                                sha,
-                                observed);
-                print(
-                        store.publish(
-                                NasdaqItchDataset.MESSAGES,
-                                rows,
-                                raw,
-                                sha,
+                long scanLimit =
+                        options.containsKey("maximum-first-message")
+                                ? Long.parseLong(options.get("maximum-first-message"))
+                                : 5_000_000L;
+                if (options.containsKey("maximum-first-message")
+                        && scanLimit > UsItchPrefixCollector.settings(env).maximumMessages())
+                    throw new IllegalArgumentException("ITCH 扫描不能超过根配置上限");
+                List<Map<String, Object>> rows;
+                // 较大原件只按流扫描；旧调用仍使用原五百万条范围和原十六列。
+                try (var input = Files.newInputStream(raw)) {
+                    rows =
+                            NasdaqItchMapper.messages(
+                                    input,
+                                    LocalDate.parse(card.path("fileDate").asText()),
+                                    first,
+                                    count,
+                                    sha,
+                                    observed,
+                                    scanLimit);
+                }
+                var evidence =
+                        new LinkedHashMap<String, Object>(
                                 Map.of(
                                         "sourceMetadata",
                                         card,
@@ -222,7 +237,10 @@ public final class UsMarketDataMain {
                                         "messageCount",
                                         count,
                                         "sourceComplete",
-                                        false)));
+                                        false));
+                if (options.containsKey("maximum-first-message"))
+                    evidence.put("maximumFirstMessage", scanLimit);
+                print(store.publish(NasdaqItchDataset.MESSAGES, rows, raw, sha, evidence));
             }
             case "reconcile-undelivered" -> {
                 if (!Set.of("run", "prepared-sha256", "stopped-evidence")

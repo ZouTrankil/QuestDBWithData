@@ -27,8 +27,25 @@ public final class NasdaqItchMapper {
             String sha,
             Instant observed)
             throws Exception {
-        if (first < 1 || first > 5_000_000 || count < 1 || count > 100000)
-            throw new IllegalArgumentException("ITCH 解析范围须明确且有界");
+        return messages(compressed, date, first, count, sha, observed, 5_000_000L);
+    }
+
+    /** 较晚时段须显式给出扫描上限；单次产物仍最多十万条，旧入口保持原五百万条边界。 */
+    public static List<Map<String, Object>> messages(
+            InputStream compressed,
+            LocalDate date,
+            long first,
+            int count,
+            String sha,
+            Instant observed,
+            long maximumFirstMessage)
+            throws Exception {
+        if (maximumFirstMessage < 1
+                || maximumFirstMessage > 100_000_000L
+                || first < 1
+                || first > maximumFirstMessage
+                || count < 1
+                || count > 100000) throw new IllegalArgumentException("ITCH 解析范围须明确且有界");
         var names = new HashMap<Integer, String>();
         var rows = new ArrayList<Map<String, Object>>();
         long offset = 0;

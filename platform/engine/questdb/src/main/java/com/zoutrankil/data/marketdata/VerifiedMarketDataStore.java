@@ -345,8 +345,7 @@ public final class VerifiedMarketDataStore {
             throw new IllegalArgumentException("来源必须明确非空且不超过十万行");
         if ((source.size() + page.rows() - 1) / page.rows() > 100)
             throw new IllegalArgumentException("发布分页超过冻结的一百页预算");
-        if (!sha(Files.readAllBytes(raw)).equals(expectedSha))
-            throw new IllegalStateException("冻结的来源响应摘要已改变");
+        if (!shaFile(raw).equals(expectedSha)) throw new IllegalStateException("冻结的来源响应摘要已改变");
         var rows = source.stream().map(row -> normalize(d, row)).toList();
         var codec = codec(d);
         var wanted = new LinkedHashMap<String, Map<String, Object>>();
@@ -470,7 +469,7 @@ public final class VerifiedMarketDataStore {
                     public void preflight() throws Exception {
                         if (!identity(d).equals(target)
                                 || !sha(Files.readAllBytes(prepared)).equals(preparedSha)
-                                || !sha(Files.readAllBytes(raw)).equals(expectedSha))
+                                || !shaFile(raw).equals(expectedSha))
                             throw new IllegalStateException("物理目标或冻结来源发生变化，停止发布");
                         requireSchema(d);
                         if (!settled(d.objectName()))
@@ -900,8 +899,7 @@ public final class VerifiedMarketDataStore {
             throw new IllegalArgumentException("零投递核对入口仅接受单批一千行以内");
         var raw = Path.of(document.path("raw").asText());
         String sourceSha = document.path("sourceSha256").asText();
-        if (!sha(Files.readAllBytes(raw)).equals(sourceSha)
-                || !identity(d).equals(card.path("targetId").asText()))
+        if (!shaFile(raw).equals(sourceSha) || !identity(d).equals(card.path("targetId").asText()))
             throw new IllegalStateException("来源或原物理目标变化");
         requireSchema(d);
         var ledger = SyncRunLedger.openExisting(ledgerPath);
@@ -1102,8 +1100,7 @@ public final class VerifiedMarketDataStore {
                 throw new IllegalArgumentException("此显式恢复只支持首个切片阶段中断且总量不超过一万行");
             var raw = Path.of(document.path("raw").asText());
             String sourceSha = document.path("sourceSha256").asText();
-            if (!sha(Files.readAllBytes(raw)).equals(sourceSha))
-                throw new IllegalStateException("原来源文件变化");
+            if (!shaFile(raw).equals(sourceSha)) throw new IllegalStateException("原来源文件变化");
             requireSchema(d);
             var ledger = SyncRunLedger.openExisting(ledgerPath);
             var original = ledger.getRun(run);
@@ -1172,7 +1169,7 @@ public final class VerifiedMarketDataStore {
                 if (latest.missing().isEmpty()) continue;
                 if (!settled(d.objectName())
                         || !sha(Files.readAllBytes(prepared)).equals(preparedSha)
-                        || !sha(Files.readAllBytes(raw)).equals(sourceSha))
+                        || !shaFile(raw).equals(sourceSha))
                     throw new IllegalStateException("补缺前来源或 WAL 变化");
                 // 少量缺键的显式修复也保留原事务模式；旧修复的两分钟上限保持。
                 sendRows(d, latest.missing(), run, publicationPolicy);
@@ -1648,7 +1645,7 @@ public final class VerifiedMarketDataStore {
         if (!frontier.equals(reconciliationFrontier(d))
                 || !original.targetId().equals(identity(d))
                 || !preparedSha.equals(sha(Files.readAllBytes(prepared)))
-                || !sourceSha.equals(sha(Files.readAllBytes(raw)))
+                || !sourceSha.equals(shaFile(raw))
                 || !entries.equals(ledger.entries(run, null, 1000)))
             throw new IllegalStateException("核对期间来源、账本或 WAL 版本变化");
         Path folder = root.resolve("reconciliations/" + run + "-" + UUID.randomUUID());
@@ -1705,8 +1702,7 @@ public final class VerifiedMarketDataStore {
                 || !original.targetId().equals(identity(d))
                 || !entries.equals(ledger.entries(run, null, 1000))
                 || !preparedSha.equals(sha(Files.readAllBytes(prepared)))
-                || !sourceSha.equals(sha(Files.readAllBytes(raw))))
-            throw new IllegalStateException("推进检查点前版本变化");
+                || !sourceSha.equals(shaFile(raw))) throw new IllegalStateException("推进检查点前版本变化");
         for (var slice : slices)
             if (slice.entry().state() != SyncRunState.VERIFIED)
                 ledger.transition(
@@ -1790,8 +1786,7 @@ public final class VerifiedMarketDataStore {
             rows.add(normalize(d, JSON.convertValue(row, Map.class)));
         Path raw = Path.of(document.path("raw").asText());
         String sourceSha = document.path("sourceSha256").asText();
-        if (!sha(Files.readAllBytes(raw)).equals(sourceSha))
-            throw new IllegalStateException("原来源文件变化");
+        if (!shaFile(raw).equals(sourceSha)) throw new IllegalStateException("原来源文件变化");
         requireSchema(d);
         var ledger = SyncRunLedger.openExisting(ledgerPath);
         var original = ledger.getRun(run);
@@ -2083,7 +2078,7 @@ public final class VerifiedMarketDataStore {
             if (ledger.get(run).state() != SyncRunState.VERIFIED
                     || !original.targetId().equals(identity(d))
                     || !request.path("parameters").path("source_sha256").asText().equals(sourceSha)
-                    || !sha(Files.readAllBytes(raw)).equals(sourceSha))
+                    || !shaFile(raw).equals(sourceSha))
                 throw new IllegalStateException("原运行或冻结来源尚未验收");
             var normalized = expected.stream().map(r -> normalize(d, r)).toList();
             var result = compareExisting(d, normalized, original.targetId());
@@ -2181,6 +2176,17 @@ public final class VerifiedMarketDataStore {
                 }
             }
         };
+    }
+
+    /** 大来源逐块核对摘要，仍在原校验时机检查同一原件，不增加内存中的整份副本。 */
+    static String shaFile(Path path) throws Exception {
+        var digest = MessageDigest.getInstance("SHA-256");
+        try (var input = Files.newInputStream(path)) {
+            byte[] bytes = new byte[65536];
+            int count;
+            while ((count = input.read(bytes)) >= 0) if (count > 0) digest.update(bytes, 0, count);
+        }
+        return HexFormat.of().formatHex(digest.digest());
     }
 
     public static String sha(byte[] bytes) {
