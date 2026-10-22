@@ -3,11 +3,13 @@ package com.zoutrankil.market.us.app;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.zoutrankil.data.marketdata.PersistentMarketApiBudget;
 import com.zoutrankil.runtime.ProjectConfiguration;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 class UsMarketDataConfigurationTest {
     @Test
@@ -28,5 +30,20 @@ class UsMarketDataConfigurationTest {
                 new UsBroadSourceRetry.Policy(3, 5000), UsBroadSourceRetry.policy(environment));
         assertTrue(environment.getProperty("app.market-data.broad-annual-enabled", Boolean.class));
         assertEquals(128, UsBroadDailyCollector.annualSymbols(environment));
+    }
+
+    @Test
+    void loadsCboeBudgetAndAllowsStandardEnvironmentOverride() {
+        var environment = ProjectConfiguration.load("us-data", Map.of());
+        assertEquals(
+                new PersistentMarketApiBudget.Policy(2, 8, 1, 67108864, 60000),
+                CboeIndexCollector.policy(environment));
+        assertEquals("cdn-api.cboe.com", CboeIndexCollector.sourceUri(environment).getHost());
+        var override =
+                ProjectConfiguration.load(
+                        "us-data", Map.of("APP_MARKET_DATA_CBOE_REQUESTS_PER_DAY", "4"));
+        assertEquals(
+                new PersistentMarketApiBudget.Policy(2, 4, 1, 67108864, 60000),
+                CboeIndexCollector.policy(override));
     }
 }

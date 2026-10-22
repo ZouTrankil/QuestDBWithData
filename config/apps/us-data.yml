@@ -8,6 +8,12 @@ app.market-data:
   fred-proxy-url: ""
   # 仅为已验证的接口请求头兼容值，正式采集和写入均由 Java 执行。
   fred-user-agent: python-requests/2.32.5
+  # 官方 VIX 公开日收盘 CSV，按小时限频，独立于 FRED 和股票日线。
+  cboe-vix-url: https://cdn-api.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv
+  cboe-requests-per-hour: 2
+  cboe-requests-per-day: 8
+  cboe-monthly-bytes: 67108864
+  cboe-request-spacing-ms: 60000
   history-start: 2006-01-01
   minute-start: 2026-01-01
   benchmark-symbols: [SPY, QQQ, IWM, TLT, GLD, USO]

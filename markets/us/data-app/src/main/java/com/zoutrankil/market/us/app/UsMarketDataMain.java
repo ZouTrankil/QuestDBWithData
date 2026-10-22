@@ -2,6 +2,7 @@ package com.zoutrankil.market.us.app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.marketdata.VerifiedMarketDataStore;
+import com.zoutrankil.market.us.marketdata.CboeIndexDaily;
 import com.zoutrankil.market.us.marketdata.FredMarketDaily;
 import com.zoutrankil.market.us.marketdata.NasdaqItchDataset;
 import com.zoutrankil.market.us.marketdata.NasdaqItchMapper;
@@ -37,7 +38,7 @@ public final class UsMarketDataMain {
     public static void main(String[] args) throws Exception {
         if (args.length == 0)
             throw new IllegalArgumentException(
-                    "命令：definitions|status|collect-core|import-tiingo-daily|import-tiingo-minute");
+                    "命令：definitions|status|collect-core|import-tiingo-daily|import-tiingo-minute|collect-cboe-vix|import-cboe-vix");
         var options = new LinkedHashMap<String, String>();
         for (int i = 1; i < args.length; i += 2)
             if (!args[i].startsWith("--")
@@ -54,6 +55,19 @@ public final class UsMarketDataMain {
                         env.getProperty("app.questdb.password", ""),
                         root);
         switch (args[0]) {
+            case "collect-cboe-vix", "import-cboe-vix" -> {
+                boolean imported = args[0].equals("import-cboe-vix");
+                if (!(imported ? Set.of("through", "source") : Set.of("through"))
+                        .containsAll(options.keySet()))
+                    throw new IllegalArgumentException("未知 CBOE 参数");
+                print(
+                        CboeIndexCollector.collect(
+                                env,
+                                root,
+                                store,
+                                LocalDate.parse(required(options, "through")),
+                                imported ? Path.of(required(options, "source")) : null));
+            }
             case "create-regular-view" -> {
                 if (!Set.of("calendar-source", "hours-source").containsAll(options.keySet()))
                     throw new IllegalArgumentException("未知交易日历参数");
@@ -259,10 +273,15 @@ public final class UsMarketDataMain {
                                     UsSecurityIdentifiers.IDENTIFIERS,
                                     UsFundHoldings.EQUITIES,
                                     NasdaqItchDataset.MESSAGES,
+                                    CboeIndexDaily.DEFINITION,
                                     FredMarketDaily.DEFINITION));
             case "status" -> {
                 var result = new ArrayList<Object>();
-                for (var d : List.of(UsMarketDatasets.DAILY, UsMarketDatasets.MINUTE)) {
+                for (var d :
+                        List.of(
+                                UsMarketDatasets.DAILY,
+                                UsMarketDatasets.MINUTE,
+                                CboeIndexDaily.DEFINITION)) {
                     var exists =
                             store.query(
                                     "SELECT table_name FROM tables() WHERE table_name="

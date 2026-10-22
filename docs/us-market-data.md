@@ -16,6 +16,7 @@
 | `us_etf_equity_holdings` | `asof_date,fund,symbol` | 发行人持仓日期，UTC 零点编码 | SPY/QQQ 发行人的股票及 ADR 持仓，标记 `ETF_HOLDINGS_PROXY` |
 | `us_nasdaq_itch_messages` | `ts,source_sha256,message_index` | 真实 UTC 纳秒 | 部分文件中完整消息、源字节偏移和原始十六进制 payload |
 | `us_market_daily` | `ts_code,trade_date` | FRED 观测日期用 UTC 零点 | NASDAQCOM、SP500、VIXCLS 收盘点位；兼容既有六列，只补缺失键 |
+| `us_index_daily` | `trade_date,symbol,provider` | 来源纽约业务日期编码为 UTC 零点 | CBOE VIX 收盘点位、单位、完整原件摘要及取得时刻；不覆盖 FRED |
 | `crypto_ohlcv` | `ts,exchange,symbol,instrument,interval_minutes` | UTC 小时或日线起点 | Binance、Bybit 的 BTC/ETH 现货、USDT 永续；通常由齐备小时线合成日线，官方停市月份另核对原生日线 |
 | `crypto_data_gap_events` | `ts,exchange,symbol,instrument,interval_minutes` | 缺失小时及官方停市区间，真实 UTC | 归档、REST 空记录、官方事实和原生日线核对证据；不生成价格 K 线 |
 
@@ -91,6 +92,8 @@ QuestDB 10 的正式发送使用 QWP，保留 INT 和纳秒时间类型。发送
 IEX 实测在 2026-07-03 等休市日返回整日零量平价记录；这些是供应商补齐值，不能计作真实交易时段。原文及原表全部保留，研究读取 `us_equity_intraday_regular`。日历资源在 `markets/us/src/main/resources/market-us/calendars/us-equities-2026.json`，保留官方 URL、原文摘要、休市及半日市日期。创建视图时再核对完整官方原文与资源事实；未知同名视图不覆盖。视图按纽约夏令时筛选实际开闭市时刻，只投影原值，不补造缺失分钟。当前版本只覆盖 2026 年，不能拿它推算下一年。
 
 FRED 沿用正式 `us_market_daily` 的结构。请求先固定完整观测数量，`.` 作为来源缺值统计。补缺前保存旧行快照，实际发送前再次拒绝任何已存在的业务键；补缺后核对全部旧行未变、新行完整可见及 WAL。已有未决运行时停止，不重新抓取后覆盖原任务。SP500 的来源窗口较短时，旧表中更早的日期仍保留。
+
+CBOE VIX 使用独立 `us_index_daily`，只映射官方历史 CSV 的 `CLOSE`，单位为 `INDEX_POINTS`。纽约来源日期不套用股票交易日历，`observed_at` 也不表示历史当时已可用。Java 命令 `collect-cboe-vix --through <已结束日期>` 按根配置预算抓取；`import-cboe-vix --through <日期> --source <原来源回执>` 复用原取得时刻和摘要，不再请求网络。回执须含 `retrieved=true`、`symbol=VIX`、`provider=CBOE`、官方 `url`、`raw`、`sha256` 和 `observedAt`。只补缺失键；旧收盘修订、日期消失或未决运行均停止，不自动覆盖。幂等回读仍检查完整旧值、原物理表和 WAL。配置与真实范围见[CBOE 收盘参照验收](decisions/2026-10-22-CBOE官方VIX收盘参照.md)，分列查询见[SQL](../tools/sql/us-vix-official-source-reference.sql)。
 
 2026-10-20 实际补入 NASDAQCOM 2676 条、SP500 21 条、VIXCLS 2678 条，原有 7691 条记录全部逐字段保持不变；同一截止日重跑三组均为零新增，WAL 已结清。NASDAQCOM 来源最后有效值为 2026-10-15，16 日缺值未填造；另两组有效至 16 日。FRED 默认 HTTP/2 和应用 UA 在本机实测出现重置或超时，入口只对该来源使用已验证的 HTTP/1.1 兼容请求头。
 
