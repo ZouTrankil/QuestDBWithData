@@ -19,6 +19,100 @@ class TiingoPriceMapperTest {
         return text.getBytes(StandardCharsets.UTF_8);
     }
 
+    private static byte[] distribution(String date, double amount, double split) {
+        return bytes(
+                """
+                [{"date":"%sT00:00:00Z","open":32,"high":33,"low":31,"close":32.5,"volume":100,
+                  "adjOpen":22,"adjHigh":23,"adjLow":21,"adjClose":22.5,"adjVolume":100,"divCash":%s,"splitFactor":%s}]
+                """
+                        .formatted(date, amount, split));
+    }
+
+    @Test
+    void separatesVerifiedStockDistributionFromCashAndKeepsOriginalEvidence() throws Exception {
+        var mapped =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2014-04-07", 9.52618, 1),
+                        "US000000086368",
+                        "a".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2022, 10, 31));
+        var row = mapped.rows().getFirst();
+        assertEquals(0.0, row.get("dividend"));
+        assertEquals(1.0, row.get("split_factor"));
+        assertEquals(32.5, row.get("close"));
+        assertEquals(22.5, row.get("adj_close"));
+        assertEquals(new HashSet<>(UsMarketDatasets.DAILY.storageColumns()), row.keySet());
+        var evidence = mapped.nonCashDistributions().getFirst();
+        assertEquals(9.52618, evidence.get("sourceDivCash"));
+        assertEquals(0.0, evidence.get("cashDividend"));
+        assertEquals(0.300795, evidence.get("sharesPerShare"));
+        assertEquals("2014-04-04", evidence.get("distributionDate"));
+        assertEquals("2014-04-07", evidence.get("sourceAdjustmentDate"));
+        assertEquals("NON_CASH_SPIN_OFF", evidence.get("eventType"));
+    }
+
+    @Test
+    void rejectsRevisedSourceAmountRatherThanGuessingAnotherCashValue() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        TiingoPriceMapper.daily(
+                                distribution("2014-04-07", 9.52619, 1),
+                                "US000000086368",
+                                "a".repeat(64),
+                                OBSERVED,
+                                LocalDate.of(2022, 10, 31)));
+    }
+
+    @Test
+    void rejectsConflictingQuantitySplitOnVerifiedStockDistribution() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        TiingoPriceMapper.daily(
+                                distribution("2014-04-07", 9.52618, 2),
+                                "US000000086368",
+                                "a".repeat(64),
+                                OBSERVED,
+                                LocalDate.of(2022, 10, 31)));
+    }
+
+    @Test
+    void doesNotApplyOldCommonShareRuleToReusedTickerOrAnotherBusinessDate() throws Exception {
+        var etf =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2014-04-07", 9.52618, 1),
+                        "SHLD",
+                        "a".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2026, 10, 16));
+        assertEquals(9.52618, etf.rows().getFirst().get("dividend"));
+        assertEquals(0, etf.nonCashDistributions().size());
+        var otherDay =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2014-04-08", 0.5, 1),
+                        "US000000086368",
+                        "a".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2022, 10, 31));
+        assertEquals(0.5, otherDay.rows().getFirst().get("dividend"));
+        assertEquals(0, otherDay.nonCashDistributions().size());
+    }
+
+    @Test
+    void ignoresUnrequestedFutureEventBeforeApplyingDividendPolicy() throws Exception {
+        var mapped =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2014-04-07", 9.52619, 2),
+                        "US000000086368",
+                        "a".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2014, 4, 6));
+        assertEquals(0, mapped.rows().size());
+        assertEquals(0, mapped.nonCashDistributions().size());
+    }
+
     @Test
     void preservesUnadjustedPricesAndCorporateActionInsteadOfReplacingThemWithAdjustedPrices()
             throws Exception {

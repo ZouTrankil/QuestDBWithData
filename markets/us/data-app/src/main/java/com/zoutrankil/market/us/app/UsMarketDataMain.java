@@ -343,15 +343,20 @@ public final class UsMarketDataMain {
                                 through.toString(),
                                 "coverageScope",
                                 "仅核验冻结来源的完整业务键和值，不证明全市场覆盖");
-                if (args[0].equals("import-tiingo-daily"))
+                if (args[0].equals("import-tiingo-daily")) {
+                    var mapped =
+                            TiingoPriceMapper.dailyMapping(bytes, symbol, sha, observed, through);
+                    var dailyEvidence = new LinkedHashMap<>(evidence);
+                    dailyEvidence.put("cashDividendPolicy", TiingoPriceMapper.CASH_DIVIDEND_POLICY);
+                    dailyEvidence.put("nonCashDistributions", mapped.nonCashDistributions());
                     print(
                             store.publish(
                                     UsMarketDatasets.DAILY,
-                                    TiingoPriceMapper.daily(bytes, symbol, sha, observed, through),
+                                    mapped.rows(),
                                     raw,
                                     sha,
-                                    evidence));
-                else {
+                                    dailyEvidence));
+                } else {
                     LocalDate from = LocalDate.parse(required(options, "from"));
                     var minute =
                             TiingoPriceMapper.minute(bytes, symbol, sha, observed, from, through);
