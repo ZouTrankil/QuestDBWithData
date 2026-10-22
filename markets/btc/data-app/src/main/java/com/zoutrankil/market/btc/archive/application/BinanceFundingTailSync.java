@@ -247,7 +247,7 @@ public final class BinanceFundingTailSync {
         }
     }
 
-    private static void markArchiveFallback(
+    static void markArchiveFallback(
             Connection db, LocalDate from, LocalDate through, String run, String apiTask)
             throws Exception {
         try (var s = db.createStatement();

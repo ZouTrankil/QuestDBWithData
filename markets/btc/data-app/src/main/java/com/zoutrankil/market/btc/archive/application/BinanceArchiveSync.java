@@ -171,18 +171,32 @@ public final class BinanceArchiveSync {
                     s.execute(
                             "CREATE TABLE IF NOT EXISTS archive_source_retries(task TEXT NOT NULL,previous_reason TEXT,requested_at TEXT NOT NULL)");
                 }
+                boolean hasTails;
+                try (var s = db.createStatement();
+                        var r =
+                                s.executeQuery(
+                                        "SELECT name FROM sqlite_master WHERE name='funding_api_tails'")) {
+                    hasTails = r.next();
+                }
+                // 月包曾由 API 补过时仍要重取月包；原 API 成功运行始终留在独立表。
+                String retryable =
+                        hasTails
+                                ? " AND phase='SKIPPED_SOURCE' AND (run_id IS NULL OR (dataset='funding' AND run_id IN (SELECT run_id FROM funding_api_tails WHERE phase='VERIFIED')))"
+                                : " AND phase='SKIPPED_SOURCE' AND run_id IS NULL";
                 for (var window : windows) {
                     db.setAutoCommit(false);
                     try {
                         try (var q =
                                 db.prepareStatement(
-                                        "INSERT INTO archive_source_retries SELECT id,reason,? FROM archive_tasks WHERE id=? AND phase='SKIPPED_SOURCE' AND run_id IS NULL")) {
+                                        "INSERT INTO archive_source_retries SELECT id,reason,? FROM archive_tasks WHERE id=?"
+                                                + retryable)) {
                             q.setString(1, Instant.now().toString());
                             q.setString(2, window.id());
                             if (q.executeUpdate() == 1) {
                                 try (var u =
                                         db.prepareStatement(
-                                                "UPDATE archive_tasks SET phase='RETRY_SOURCE',reason='显式重试来源，原原因在 archive_source_retries',updated_at=? WHERE id=? AND phase='SKIPPED_SOURCE' AND run_id IS NULL")) {
+                                                "UPDATE archive_tasks SET phase='RETRY_SOURCE',reason='显式重试来源，原原因在 archive_source_retries',updated_at=? WHERE id=?"
+                                                        + retryable)) {
                                     u.setString(1, Instant.now().toString());
                                     u.setString(2, window.id());
                                     u.executeUpdate();

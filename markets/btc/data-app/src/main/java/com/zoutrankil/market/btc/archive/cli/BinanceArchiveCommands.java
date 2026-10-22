@@ -5,6 +5,7 @@ import com.zoutrankil.data.marketdata.FrozenHttpSource;
 import com.zoutrankil.data.marketdata.PersistentMarketApiBudget;
 import com.zoutrankil.data.marketdata.VerifiedMarketDataStore;
 import com.zoutrankil.market.btc.archive.BinanceArchiveDataset;
+import com.zoutrankil.market.btc.archive.application.BinanceArchiveIncremental;
 import com.zoutrankil.market.btc.archive.application.BinanceArchiveProbe;
 import com.zoutrankil.market.btc.archive.application.BinanceArchiveRecovery;
 import com.zoutrankil.market.btc.archive.application.BinanceArchiveRevisionApply;
@@ -118,16 +119,40 @@ public final class BinanceArchiveCommands {
                         "--through",
                         through
                     });
-            execute(
-                    new String[] {
-                        "funding-binance-tail",
-                        "--dataset",
-                        "funding",
-                        "--from",
-                        LocalDate.parse(through).withDayOfMonth(1).toString(),
-                        "--through",
-                        through
-                    });
+            var root =
+                    Path.of(env.getRequiredProperty("app.crypto-data.root"))
+                            .resolve("binance-vision");
+            var from =
+                    LocalDate.parse(
+                            env.getRequiredProperty("app.crypto-data.archive-history-start"));
+            var end = LocalDate.parse(through);
+            var windows =
+                    BinanceArchiveSync.plan(
+                            Arrays.asList(BinanceArchiveDataset.values()), from, end);
+            for (var day : BinanceArchiveIncremental.fallbackDays(root, windows)) {
+                execute(
+                        new String[] {
+                            "retry-binance-source",
+                            "--dataset",
+                            day.dataset().id(),
+                            "--from",
+                            day.from().toString(),
+                            "--through",
+                            day.through().toString()
+                        });
+            }
+            for (var window : BinanceArchiveIncremental.fundingWindows(root, from, end)) {
+                execute(
+                        new String[] {
+                            "funding-binance-tail",
+                            "--dataset",
+                            "funding",
+                            "--from",
+                            window.from().toString(),
+                            "--through",
+                            window.through().toString()
+                        });
+            }
             return true;
         }
         if (args.length == 0

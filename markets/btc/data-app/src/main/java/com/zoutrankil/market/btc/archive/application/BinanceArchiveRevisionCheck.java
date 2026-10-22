@@ -5,6 +5,7 @@ import com.zoutrankil.data.marketdata.VerifiedMarketDataStore;
 import com.zoutrankil.market.btc.archive.BinanceArchiveDataset;
 import com.zoutrankil.market.btc.archive.client.BinanceArchiveSource;
 
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -25,6 +26,21 @@ public final class BinanceArchiveRevisionCheck {
     private BinanceArchiveRevisionCheck() {}
 
     public static Path run(
+            Path root, BinanceArchiveSource source, List<BinanceArchiveSync.Window> windows)
+            throws Exception {
+        Files.createDirectories(root);
+        try (var channel =
+                        FileChannel.open(
+                                root.resolve("archive-queue.lock"),
+                                StandardOpenOption.CREATE,
+                                StandardOpenOption.WRITE);
+                var lock = channel.tryLock()) {
+            if (lock == null) throw new IllegalStateException("归档采集或备份仍在运行，稍后探测修订");
+            return runLocked(root, source, windows);
+        }
+    }
+
+    private static Path runLocked(
             Path root, BinanceArchiveSource source, List<BinanceArchiveSync.Window> windows)
             throws Exception {
         var results = new ArrayList<Object>();

@@ -145,4 +145,41 @@ class BinanceArchiveQueueTest {
             assertTrue(rows.getString(1).contains("首次来源不可用"));
         }
     }
+
+    @Test
+    void apiFallbackDoesNotPermanentlyDisableMonthlyArchiveRetry() throws Exception {
+        var source = mock(BinanceArchiveSource.class);
+        var store = mock(VerifiedMarketDataStore.class);
+        var windows =
+                BinanceArchiveSync.plan(
+                        List.of(BinanceArchiveDataset.FUNDING),
+                        LocalDate.of(2026, 9, 1),
+                        LocalDate.of(2026, 9, 30));
+        when(source.fetch(any(), anyBoolean())).thenThrow(new IllegalStateException("来源 HTTP 404"));
+        var sync = new BinanceArchiveSync(root, source, store);
+        sync.run(windows, true);
+        try (var db =
+                        DriverManager.getConnection(
+                                "jdbc:sqlite:" + root.resolve("archive-queue.sqlite3"));
+                var q = db.createStatement()) {
+            q.execute("CREATE TABLE funding_api_tails(run_id TEXT,phase TEXT)");
+            q.execute("INSERT INTO funding_api_tails VALUES('original-api','VERIFIED')");
+            q.execute("UPDATE archive_tasks SET run_id='original-api'");
+        }
+        sync.retrySource(windows);
+        sync.run(windows, true);
+        sync.retrySource(windows);
+        sync.run(windows, true);
+        verify(source, times(3)).fetch(any(), anyBoolean());
+        verifyNoInteractions(store);
+        try (var db =
+                        DriverManager.getConnection(
+                                "jdbc:sqlite:" + root.resolve("archive-queue.sqlite3"));
+                var q = db.createStatement();
+                var r = q.executeQuery("SELECT run_id,phase FROM archive_tasks")) {
+            assertTrue(r.next());
+            assertEquals("original-api", r.getString(1));
+            assertEquals("SKIPPED_SOURCE", r.getString(2));
+        }
+    }
 }
