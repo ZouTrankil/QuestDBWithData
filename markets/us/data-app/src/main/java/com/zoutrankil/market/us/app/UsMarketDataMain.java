@@ -349,6 +349,7 @@ public final class UsMarketDataMain {
                     var dailyEvidence = new LinkedHashMap<>(evidence);
                     dailyEvidence.put("cashDividendPolicy", TiingoPriceMapper.CASH_DIVIDEND_POLICY);
                     dailyEvidence.put("nonCashDistributions", mapped.nonCashDistributions());
+                    dailyEvidence.put("cashDividendCorrections", mapped.cashDividendCorrections());
                     print(
                             store.publish(
                                     UsMarketDatasets.DAILY,

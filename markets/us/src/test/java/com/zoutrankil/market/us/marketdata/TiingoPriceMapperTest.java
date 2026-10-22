@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 class TiingoPriceMapperTest {
     private static final Instant OBSERVED = Instant.parse("2026-10-19T16:33:00Z");
@@ -26,6 +27,130 @@ class TiingoPriceMapperTest {
                   "adjOpen":22,"adjHigh":23,"adjLow":21,"adjClose":22.5,"adjVolume":100,"divCash":%s,"splitFactor":%s}]
                 """
                         .formatted(date, amount, split));
+    }
+
+    @Test
+    void restoresDeclaredFractionalCashWithoutChangingSourcePricesOrQuantity() throws Exception {
+        var down =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2007-12-13", 0.07, 1),
+                        "US000000009458",
+                        "b".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2013, 1, 7));
+        var up =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2008-12-08", 0.08, 1),
+                        "US000000009458",
+                        "b".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2013, 1, 7));
+        for (var mapped : List.of(down, up)) {
+            var row = mapped.rows().getFirst();
+            assertEquals(0.075, row.get("dividend"));
+            assertEquals(1.0, row.get("split_factor"));
+            assertEquals(32.5, row.get("close"));
+            assertEquals(22.5, row.get("adj_close"));
+            assertEquals(100.0, row.get("volume"));
+            assertEquals("b".repeat(64), row.get("source_sha256"));
+            assertEquals(OBSERVED.toString(), row.get("observed_at"));
+            assertEquals(new HashSet<>(UsMarketDatasets.DAILY.storageColumns()), row.keySet());
+            assertEquals(0, mapped.nonCashDistributions().size());
+            assertEquals(
+                    "VERIFIED_CASH_AMOUNT",
+                    mapped.cashDividendCorrections().getFirst().get("eventType"));
+        }
+        assertEquals(0.07, down.cashDividendCorrections().getFirst().get("sourceDivCash"));
+        assertEquals(0.08, up.cashDividendCorrections().getFirst().get("sourceDivCash"));
+        assertEquals(0.075, down.cashDividendCorrections().getFirst().get("cashDividend"));
+    }
+
+    @Test
+    void separatesDeclaredSpecialCashFromSourceAdjustmentAmount() throws Exception {
+        var mapped =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2013-06-10", 1.49, 1),
+                        "US000000041341",
+                        "b".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2013, 11, 5));
+        assertEquals(1.5, mapped.rows().getFirst().get("dividend"));
+        var evidence = mapped.cashDividendCorrections().getFirst();
+        assertEquals(1.49, evidence.get("sourceDivCash"));
+        assertEquals("2013-06-10", evidence.get("sourceAdjustmentDate"));
+        assertEquals(
+                "https://www.sec.gov/Archives/edgar/data/12978/000119312513203859/d533500dex991.htm",
+                evidence.get("primarySourceUrl"));
+    }
+
+    @Test
+    void restoresOnlyVerifiedOrdinaryCashAndRetainsItsOriginalAmount() throws Exception {
+        var mapped =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2007-06-27", 0.16, 1),
+                        "US000000041341",
+                        "b".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2013, 11, 5));
+        assertEquals(0.15, mapped.rows().getFirst().get("dividend"));
+        assertEquals(0.16, mapped.cashDividendCorrections().getFirst().get("sourceDivCash"));
+    }
+
+    @Test
+    void rejectsCashSourceRevisionsAndConflictingSplitsBeforePublication() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        TiingoPriceMapper.daily(
+                                distribution("2007-12-13", 0.075, 1),
+                                "US000000009458",
+                                "b".repeat(64),
+                                OBSERVED,
+                                LocalDate.of(2013, 1, 7)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        TiingoPriceMapper.daily(
+                                distribution("2013-06-10", 1.49, 2),
+                                "US000000041341",
+                                "b".repeat(64),
+                                OBSERVED,
+                                LocalDate.of(2013, 11, 5)));
+    }
+
+    @Test
+    void doesNotTransferVerifiedCashToReusableSymbolsOrUnlistedEventDates() throws Exception {
+        var other =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2013-06-10", 1.49, 1),
+                        "OMX",
+                        "b".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2013, 11, 5));
+        var unknown =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2011-06-09", 0.07, 1),
+                        "US000000009458",
+                        "b".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2013, 1, 7));
+        assertEquals(1.49, other.rows().getFirst().get("dividend"));
+        assertEquals(0.07, unknown.rows().getFirst().get("dividend"));
+        assertEquals(0, other.cashDividendCorrections().size());
+        assertEquals(0, unknown.cashDividendCorrections().size());
+    }
+
+    @Test
+    void skipsFutureCashCorrectionBeforeInspectingItsRevisedSourceFields() throws Exception {
+        var mapped =
+                TiingoPriceMapper.dailyMapping(
+                        distribution("2013-06-10", 2, 2),
+                        "US000000041341",
+                        "b".repeat(64),
+                        OBSERVED,
+                        LocalDate.of(2013, 6, 9));
+        assertEquals(0, mapped.rows().size());
+        assertEquals(0, mapped.cashDividendCorrections().size());
     }
 
     @Test

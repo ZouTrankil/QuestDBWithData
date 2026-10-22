@@ -294,6 +294,8 @@ final class UsCoreCollector {
                             dailyProof.put(
                                     "cashDividendPolicy", TiingoPriceMapper.CASH_DIVIDEND_POLICY);
                             dailyProof.put("nonCashDistributions", mapped.nonCashDistributions());
+                            dailyProof.put(
+                                    "cashDividendCorrections", mapped.cashDividendCorrections());
                             update(db, task, "PUBLISHING", response, response.sourceUrl());
                             var result =
                                     store.publish(
