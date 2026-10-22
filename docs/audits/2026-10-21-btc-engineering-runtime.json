@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-21",
+  "scheduledRun": {
+    "runId": "20261021T100634Z-b884c10346294c338c0381c904ab64db",
+    "through": "2026-10-20",
+    "state": "REQUIRES_ATTENTION",
+    "error": "ValueError: 来源延迟，保留旧批次：perp_1h",
+    "reportSha256": "aaf1508e47afd8a1ff4a02fd868b1b762311e9fe06e3f369b3746261e599cd86",
+    "unresolvedLocks": 0,
+    "revisionReports": [
+      {
+        "file": "/Users/Apple/zq/fun/QuestDBWithData/var/crypto-market-data/binance-vision/revision-checks/589598fd-7a23-4c74-9329-6d65bec1eeb5.json",
+        "incomplete": 0,
+        "requiresReview": 0,
+        "sha256": "56aabfb7dcacf476b6b6bfebe29ad08590a62d9c54e4c0b520c6df2ea3d69628"
+      }
+    ],
+    "retainedBatchId": "db7037bd1571ccf133b5bdfa9bacc8df7c892712d9a02d245ab52bb5ab29c185"
+  },
+  "unpublishedSource": [
+    {
+      "dataset": "perp_1h",
+      "phase": "SKIPPED_SOURCE",
+      "reason": "SourceStatusException: 来源 HTTP 404：https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2026-10-20.zip.CHECKSUM",
+      "runId": null,
+      "task": "0ed591bdc8c9b23ee046554697e0bd300eef72b3f4c2d031d2732986ec2ccd15",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2026-10-20.zip"
+    }
+  ],
+  "observedPartialRangeThrough": "2026-10-20",
+  "observedPartialRangeRows": {
+    "funding": 7455,
+    "index_1h": 59328,
+    "mark_1h": 59424,
+    "perp_1h": 59616,
+    "spot_1d": 2485,
+    "spot_1h": 59608
+  },
+  "partialBatchId": "96b140ef9bb9bf297751c7c06d06f1e01f40e53ba7e1646760afe156a27fbf21",
+  "finalVerifiedBatchId": "06e750f2249d36e07c8e2301309b145662942e3c8eaf37bb254e68932d24deb7",
+  "scheduler": {
+    "type": "macOS LaunchAgent",
+    "label": "com.zoutrankil.btc-data",
+    "localTime": "09:00",
+    "utcTime": "01:00",
+    "manualTriggerVerified": true,
+    "sevenDailyCyclesVerified": false
+  },
+  "backup": {
+    "path": "var/btc-backups/2026-10-21-btc-engineering",
+    "files": 3895,
+    "manifestSha256": "540d162deb469b757c992e5fafdab117659f9eb716785882b7c021a1acb03a0e",
+    "readOnlyVerificationPassed": true
+  },
+  "tests": {
+    "javaMarket": 10,
+    "javaApp": 30,
+    "python": 24,
+    "architectureAndBoundaries": true,
+    "installDist": true,
+    "engineRecoveryAndWriteGuards": 20
+  },
+  "historicalPit": false,
+  "initialManualRun": {
+    "runId": "20261021T095440Z-9d94586b01394721b385aaf179fda0e2",
+    "reportSha256": "d20aca3602a87fb8a8b298d2513d75e06df55b141a5c5651973e79fd02707bb9",
+    "revisionReports": [
+      {
+        "file": "/Users/Apple/zq/fun/QuestDBWithData/var/crypto-market-data/binance-vision/revision-checks/c94aaf32-3d68-4772-a200-86f2401c9d11.json",
+        "requiresReview": 0,
+        "sha256": "f15fe792d60c1682e1d7b37cf8193e1b422995c12b8a61c12943aca0f590546b"
+      },
+      {
+        "file": "/Users/Apple/zq/fun/QuestDBWithData/var/crypto-market-data/binance-vision/revision-checks/c136b3f5-c62f-4a0c-8008-1891d89d20cc.json",
+        "requiresReview": 0,
+        "sha256": "330e6c53b614052538e9e454f759aa324d74c0c62f66efee18dce6e2d812a898"
+      }
+    ]
+  }
+}

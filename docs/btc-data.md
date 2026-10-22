@@ -88,7 +88,7 @@ print(connection.sql("SELECT min(open_time), max(open_time), count(*) FROM spot"
 
 月份完整后优先计划月包；如果官方尚未发布，记录来源缺失，后续重试。原日包和月包的原文及正式运行都保留，不删旧证据。历史已验收月包是否修订，另跑 `check-binance-revisions`，不会在增量里默默覆盖。
 
-定时部署尚未安排。部署时用同一个工作目录和原队列，每天 UTC 01:00 后运行此有限命令即可，不能复制账本另开第二个 writer。
+日更编排和当前用户的 macOS 定时入口已提供，统一使用原工作目录和队列。部署、停止、备份与故障边界见 [BTC 日更](../deploy/btc-data/README.md)。本机安装与真实执行结果见 [收尾验收](audits/2026-10-21-btc-工程收尾.md)，七个日更周期尚待观察。
 
 ## 资金费率尾部与恢复
 
@@ -103,7 +103,7 @@ API 没有历史结算间隔，所以 `btc_funding` 的读取定义 v2 只把 `f
 ./gradlew :markets:btc:data-app:run --args='reconcile-binance --run RUN_ID --repair-missing'
 ```
 
-恢复会检查原 PID 和启动时刻，原进程仍在运行就拒绝。原归档、CHECKSUM、prepared、原物理表、已有字段值和 WAL 都须一致；不会换新请求或解锁重发。目前沿用引擎的“首切片中断、总量不超过一万行”恢复范围，其他情况先跳过。
+恢复会检查原 PID 和启动时刻，原进程仍在运行就拒绝。原归档、CHECKSUM、prepared、原物理表、已有字段值和 WAL 都须一致；不会换新请求或解锁重发。部分发送补缺沿用引擎的“首切片中断、总量不超过一万行”范围。冻结资金费率 API 也支持原运行重算、核对与状态收拢；原值冲突和超出能力的故障继续保留原锁。
 
 官方 API 字段依据见 [Binance 市场数据文档](https://developers.binance.com/en/docs/catalog/core-trading-derivatives-trading-usd-s-m-futures/api/rest-api/market-data)。月包与 API 的真实重叠核对见[记录](audits/2026-10-21-btc-funding-overlap-probe.json)。
 
@@ -112,3 +112,62 @@ API 没有历史结算间隔，所以 `btc_funding` 的读取定义 v2 只把 `f
 导出前后还会核对原物理表和 WAL 版本。原发布账本在本机时，也检查运行中及未决锁；版本变化或仍有锁就保留旧导出，不能把稳定的 WAL 单独当成正式发布完成。跨机器读不到原账本时，读取只证明库内快照稳定，不证明来源完整。
 
 月包接替日包前比较重叠业务值；只换来源摘要不算数据冲突，月包可以补上 API 未提供的间隔。价格、数量、费率或已有间隔不一致时保留旧值，并在 `overlap-conflicts/` 留报告，交显式修订处理。
+
+## 固定研究批次与质量读取
+
+```bash
+uv run --script tools/btc_research_data.py publish-batch --from 2020-01-01 --through 2026-10-19 --output var/crypto-market-data/research
+```
+
+`publish-batch` 保留旧 `export` 和单表清单，新增 `objects/`、`batches/<batch_id>/manifest.json`、`quality.json` 和唯一 `current.json` 指针。批次清单 schema 为 1，质量规则为 3；质量规则 1、2 的固定批次仍可读取，不能冒认新版同步关联能力。跨表检查只读取候选文件，文件摘要、UTC 范围和质量报告绑定后才切换指针。
+
+`dataVerified` 只表示已导出记录逐字段匹配原正式成功运行及当前物理目标；来源完整性、质量问题与历史 PIT 分开说明。原始 `IN_DOUBT` 回执必须同时存在独立成功恢复证明。跨机器缺原账本时可以生成未认证批次，严格读取默认拒绝认证不足；不能据此称全部历史齐全。
+
+```python
+from pathlib import Path
+from datetime import datetime, timezone
+from tools.btc_research_data import read_batch
+
+root = Path("var/crypto-market-data/research")
+result = read_batch(
+    root, "spot_1d", columns=["open_time", "close"],
+    lower=datetime(2021, 1, 21, tzinfo=timezone.utc),
+    until=datetime(2021, 1, 22, tzinfo=timezone.utc),
+)
+fixed_batch = result["batchId"]
+# 后续传 batch_id=fixed_batch，不受 current.json 更新影响。
+print(result["table"])
+```
+
+读取范围为 UTC 左闭右开。`mode="strict"` 默认要求正式证明，缺小时、非完整 K 线和所需字段冲突会返回问题 ID 并拒绝；`mode="explore"` 返回原记录及 `issues`，不静默删行，`excludedRows` 为 0。四天成交字段冲突只约束实际差异字段，不自动否定 OHLC。未知资金费率间隔不妨碍仅取费率，但不允许严格读取未知间隔字段。
+
+DuckDB 可以 `connection.register("spot", result["table"])` 后查询；不通过文件通配符混合不同批次。`commonCompleteHourlyOhlc` 给出当前批次中小时数据集的共同完整价格区间，不替代原来源证明。
+
+`funding_with_prices(..., mode="synchronous")` 要求四侧均来自事件前一个完整小时，以 `prices_complete` 说明联合结果；缺任一侧不能计算完整同步价差。原 `mode="carry"` 保留兼容沿用价，最大年龄由 `app.crypto-data.research-price-max-age-seconds` 控制，默认 7200 秒，并返回每侧时间、年龄和是否沿用。最终结算费率不能无证据当作结算前已知信号。
+
+## 修订待办、空结果与持续观察
+
+修订探测和来源重叠冲突进入 `binance-vision/revision-review.sqlite3`。新一轮未检查某旧月或返回 `UNCHANGED` 都不解除待办；原报告丢失或变化会拒绝放行。普通 ZIP 修订须由相同任务、原运行、新 ZIP、原物理目标的 Java 成功证明解除；跨来源冲突继续显式复核。
+
+当前批次严格读取检查相关待办；显式 `batch_id` 仍可用于研究原历史版本，结果附 `pendingRevisions`。标准目录可自动找到本机原审查记录；自定义目录可传 `writer_root`。跨机器不可取得审查材料时 `revisionReviewAvailable=False`，不表示官方没有修订。
+
+```python
+result = read_batch(root, "funding", batch_id=fixed_batch,
+                    columns=["funding_time", "funding_rate"],
+                    purpose="funding_synchronous")
+print(result["associations"])
+```
+
+质量 v3 逐事件保存四侧前一完整小时的价格与来源摘要。缺价、非完整小时、范围前置数据不在批次内等原因分别记录；同步用途还检查四侧文件摘要及 Schema。严格同步用途拒绝不完整事件；探索模式返回原因；默认 `purpose="raw"` 不因缺价否定资金费率本身。
+
+空查询保留实际表的列和 UTC 类型，空范围读取返回 `EMPTY_RESULT`；零行导出标记 `EMPTY_OBSERVED`，不能证明合法空来源。未取得实际 Schema 时明确拒绝。
+
+```bash
+uv run --script tools/btc_daily.py scheduled
+uv run --script tools/btc_daily.py observations
+uv run --script tools/btc_remaining_acceptance.py --check-empty-source --output var/crypto-market-data/research/acceptance.json
+```
+
+`scheduled` 按根配置有界续跑，成功后当天不再写。`observations` 每个真实运行日只计一次，历史补跑、同日重跑和失败周期不计成功；同时检查固定批次原件及当前目标覆盖。观察未完成时退出码为 2，不是要求重发数据。每轮日更自动刷新 `daily-observations.json`。
+
+截至 2026-10-21，本轮已补齐 10 月 20 日永续 24 根，六组共同批次推进到该日；七日观察为 1/7。具体证据见[剩余任务验收](audits/2026-10-21-btc-剩余任务验收.md)。

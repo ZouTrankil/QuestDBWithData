@@ -1,0 +1,35 @@
+{
+  "batchId": "06e750f2249d36e07c8e2301309b145662942e3c8eaf37bb254e68932d24deb7",
+  "from": "2020-01-01T00:00:00+00:00",
+  "until": "2026-10-20T00:00:00+00:00",
+  "dataVerified": true,
+  "rows": {
+    "funding": 7452,
+    "index_1h": 59304,
+    "mark_1h": 59400,
+    "perp_1h": 59616,
+    "spot_1d": 2484,
+    "spot_1h": 59584
+  },
+  "issueCounts": {
+    "unknown_interval": 57,
+    "missing_bar": 560,
+    "daily_hourly_conflict": 8,
+    "shortened_bar": 7
+  },
+  "commonCompleteHourlyOhlc": 59145,
+  "strictConflictRefused": true,
+  "unaffectedCloseReadable": true,
+  "unknownIntervalRefused": true,
+  "fundingRateReadable": true,
+  "duckdbRows": 1,
+  "historicalPit": false,
+  "expectedSourceKeys": {
+    "funding": 7452,
+    "index_1h": 59304,
+    "mark_1h": 59400,
+    "perp_1h": 59616,
+    "spot_1d": 2484,
+    "spot_1h": 59584
+  }
+}

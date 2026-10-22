@@ -1,0 +1,201 @@
+{
+  "observedAt": "2026-10-21T11:22:01.518103+00:00",
+  "goalComplete": false,
+  "implemented": [
+    "persistent_revision_guard",
+    "missing_success_evidence_rejected",
+    "fixed_batch_funding_associations",
+    "typed_empty_results",
+    "bounded_same_day_schedule",
+    "real_day_observation_gate"
+  ],
+  "latestRun": {
+    "runId": "20261021T110315Z-7c0d1c85c5f74e879297c77575c0b31f",
+    "trigger": "scheduled",
+    "through": "2026-10-20",
+    "state": "PARTIAL_AVAILABLE",
+    "finishedAt": "2026-10-21T11:07:51.274627+00:00",
+    "dataVerified": true,
+    "previousBatch": "ffb0099fa341571a9f4507afb72e441ae66d7a42a1f540a2f2ea8468e97749c2",
+    "currentBatch": "ca88377d6a66909cd384335843ee5c49e7f95bfe31a70a7c92dc58a1c6f6f4d2",
+    "revisionGuardClear": true,
+    "observationError": null
+  },
+  "latestRunReportSha256": "324f30437605fd371f6c30a7f7400a039903cd35f8a62d67842098104633404e",
+  "batchId": "ca88377d6a66909cd384335843ee5c49e7f95bfe31a70a7c92dc58a1c6f6f4d2",
+  "ruleVersion": 3,
+  "rows": {
+    "funding": 7455,
+    "index_1h": 59328,
+    "mark_1h": 59424,
+    "perp_1h": 59640,
+    "spot_1d": 2485,
+    "spot_1h": 59608
+  },
+  "expectedSourceKeys": {
+    "funding": 7455,
+    "index_1h": 59328,
+    "mark_1h": 59424,
+    "perp_1h": 59640,
+    "spot_1d": 2485,
+    "spot_1h": 59608
+  },
+  "issues": {
+    "funding_price_missing": 59,
+    "unknown_interval": 60,
+    "missing_bar": 560,
+    "daily_hourly_conflict": 8,
+    "shortened_bar": 7
+  },
+  "fundingAssociationCounts": {
+    "completeEvents": 7396,
+    "incompleteEvents": 59
+  },
+  "revisionRegistry": {
+    "reports": 7,
+    "findings": 0
+  },
+  "repeatScheduledResult": {
+    "state": "ALREADY_AVAILABLE",
+    "through": "2026-10-20",
+    "batch": {
+      "batchId": "ca88377d6a66909cd384335843ee5c49e7f95bfe31a70a7c92dc58a1c6f6f4d2",
+      "dataVerified": true,
+      "issues": 694
+    }
+  },
+  "sameDayRepeatCreatedNoRun": true,
+  "sameDayRepeatRunCounts": [
+    63,
+    63
+  ],
+  "sameDayRepeatReportCounts": [
+    5,
+    5
+  ],
+  "schedule": {
+    "label": "com.zoutrankil.btc-data",
+    "command": "scheduled",
+    "localCalendar": [
+      {
+        "Hour": 9,
+        "Minute": 0
+      },
+      {
+        "Hour": 12,
+        "Minute": 0
+      },
+      {
+        "Hour": 15,
+        "Minute": 0
+      },
+      {
+        "Hour": 18,
+        "Minute": 0
+      },
+      {
+        "Hour": 21,
+        "Minute": 0
+      },
+      {
+        "Hour": 0,
+        "Minute": 0
+      },
+      {
+        "Hour": 3,
+        "Minute": 0
+      },
+      {
+        "Hour": 6,
+        "Minute": 0
+      }
+    ],
+    "plistSha256": "26f2078ca8eecbbdab01ff78c4736661d563228aaedd2f869549ddac1ff900a9",
+    "utcHours": [
+      1,
+      4,
+      7,
+      10,
+      13,
+      16,
+      19,
+      22
+    ]
+  },
+  "observations": {
+    "acceptedCycles": {
+      "2026-10-20": {
+        "batchId": "ca88377d6a66909cd384335843ee5c49e7f95bfe31a70a7c92dc58a1c6f6f4d2",
+        "reportSha256": "324f30437605fd371f6c30a7f7400a039903cd35f8a62d67842098104633404e",
+        "runId": "20261021T110315Z-7c0d1c85c5f74e879297c77575c0b31f"
+      }
+    },
+    "acceptedDays": 1,
+    "attemptsByDate": {
+      "2026-10-20": 5
+    },
+    "currentBatch": "ca88377d6a66909cd384335843ee5c49e7f95bfe31a70a7c92dc58a1c6f6f4d2",
+    "currentBatchValid": true,
+    "currentError": null,
+    "missingDates": [
+      "2026-10-14",
+      "2026-10-15",
+      "2026-10-16",
+      "2026-10-17",
+      "2026-10-18",
+      "2026-10-19"
+    ],
+    "observedAt": "2026-10-21T11:27:10.237977+00:00",
+    "pendingRevisions": [],
+    "ready": false,
+    "rejectedCycles": [
+      {
+        "reason": "缺少新版日更验收标记",
+        "runId": "20261021T095440Z-9d94586b01394721b385aaf179fda0e2",
+        "through": "2026-10-20"
+      },
+      {
+        "reason": "缺少新版日更验收标记",
+        "runId": "20261021T100634Z-b884c10346294c338c0381c904ab64db",
+        "through": "2026-10-20"
+      },
+      {
+        "reason": "来源、认证或修订检查未通过",
+        "runId": "20261021T103838Z-adfcc50bc34b4859b6b0ab03a980a130",
+        "through": "2026-10-20"
+      },
+      {
+        "reason": "来源、认证或修订检查未通过",
+        "runId": "20261021T104921Z-eb5f056506ce43ff983e7c19dc2a0331",
+        "through": "2026-10-20"
+      }
+    ],
+    "requiredDays": 7,
+    "schemaVersion": 1,
+    "through": "2026-10-20",
+    "unresolvedLocks": []
+  },
+  "backup": {
+    "path": "var/btc-backups/2026-10-21-btc-remaining-accepted",
+    "files": 4169,
+    "manifestSha256": "13edae97c0fa2ae2da65a1c1550cc2d389c1a3b9cd1d237c5152a6883a48ed8d",
+    "isolatedVerificationPassed": true
+  },
+  "tests": {
+    "python": 42,
+    "javaApp": 30,
+    "distributionBuilt": true,
+    "javaFormatChecked": true
+  },
+  "remaining": [
+    "six_more_distinct_successful_utc_daily_cycles"
+  ],
+  "historicalPit": false,
+  "validationImplementationSha256": {
+    "tools/btc_research_data.py": "cdb13a8dae6f3af09b12811ef6963b269c14a33d2dd378f06e9ccd023a3d6352",
+    "tools/btc_daily.py": "7b6d0c8f7c00940b10c4a300d1d4c9f3fbb484a43c11879b61f338a0a8564dd6",
+    "tools/btc_remaining_acceptance.py": "3d42b4f20bf2ae52f44a4324f5d9efe3212779f3b44bf248d5b998942dc57258",
+    "config/apps/btc-data.yml": "f847c53e74ea1a77fc7e647815e81838492fdeccf0be2ad38132b1dab43f3b08",
+    "deploy/btc-data/install.py": "977310f2d533d3d5388b9319857a6830d2a81fd6f387b65397ee961102207736"
+  }
+}
