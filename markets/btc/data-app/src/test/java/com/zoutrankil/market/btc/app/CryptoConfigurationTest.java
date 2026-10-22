@@ -23,6 +23,38 @@ class CryptoConfigurationTest {
                 "2020-01-01", env.getRequiredProperty("app.crypto-data.archive-history-start"));
         assertEquals(
                 400L, env.getRequiredProperty("app.crypto-data.request-spacing-ms", Long.class));
+        assertEquals(
+                7200,
+                env.getRequiredProperty(
+                        "app.crypto-data.research-price-max-age-seconds", Integer.class));
+        assertEquals(
+                2, env.getRequiredProperty("app.crypto-data.daily-source-attempts", Integer.class));
+        assertEquals(
+                3600,
+                env.getRequiredProperty("app.crypto-data.daily-timeout-seconds", Integer.class));
+        assertEquals(
+                30,
+                env.getRequiredProperty("app.crypto-data.daily-log-retention-days", Integer.class));
+        assertEquals(
+                10737418240L,
+                env.getRequiredProperty("app.crypto-data.daily-max-root-bytes", Long.class));
+        assertEquals(
+                1073741824L,
+                env.getRequiredProperty("app.crypto-data.daily-min-free-bytes", Long.class));
+        assertEquals(
+                1, env.getRequiredProperty("app.crypto-data.daily-max-lag-days", Integer.class));
+        assertEquals(
+                2,
+                env.getRequiredProperty("app.crypto-data.revision-recent-months", Integer.class));
+        assertEquals(
+                18, env.getRequiredProperty("app.crypto-data.revision-max-files", Integer.class));
+        assertEquals(
+                1,
+                env.getRequiredProperty("app.crypto-data.schedule-start-utc-hour", Integer.class));
+        assertEquals(
+                3, env.getRequiredProperty("app.crypto-data.schedule-retry-hours", Integer.class));
+        assertEquals(
+                8, env.getRequiredProperty("app.crypto-data.schedule-max-attempts", Integer.class));
         var closures =
                 Binder.get(env)
                         .bind(

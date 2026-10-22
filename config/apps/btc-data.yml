@@ -17,3 +17,19 @@ app.crypto-data:
       from: "2023-03-24T11:27:00Z"
       until: "2023-03-24T14:00:00Z"
       evidence-url: https://www.binance.com/en/blog/from-our-ceo/6789340645608890113
+  # 沿用价兼容模式的最大年龄；同步小时模式仍要求前一完整小时。
+  research-price-max-age-seconds: 7200
+  # 日更只调用原 Java writer；每轮固定截止日，来源失败最多尝试两轮。
+  daily-source-attempts: 2
+  daily-timeout-seconds: 3600
+  daily-log-retention-days: 30
+  daily-max-root-bytes: 10737418240
+  daily-min-free-bytes: 1073741824
+  daily-max-lag-days: 1
+  # 每日两个完整月；每周最多再轮查一个旧月，共不超过十八个文件。
+  revision-recent-months: 2
+  revision-max-files: 18
+  # 同一 UTC 日首次 01:00，失败每三小时续跑，最多八次；成功后当天停止重试。
+  schedule-start-utc-hour: 1
+  schedule-retry-hours: 3
+  schedule-max-attempts: 8
