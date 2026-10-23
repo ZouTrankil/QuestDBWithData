@@ -24,6 +24,10 @@ class CryptoConfigurationTest {
         assertEquals(
                 400L, env.getRequiredProperty("app.crypto-data.request-spacing-ms", Long.class));
         assertEquals(
+                180,
+                env.getRequiredProperty(
+                        "app.crypto-data.quality-trade-download-timeout-seconds", Integer.class));
+        assertEquals(
                 7200,
                 env.getRequiredProperty(
                         "app.crypto-data.research-price-max-age-seconds", Integer.class));

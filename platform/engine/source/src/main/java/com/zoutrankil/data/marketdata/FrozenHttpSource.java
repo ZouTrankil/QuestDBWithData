@@ -82,6 +82,33 @@ public final class FrozenHttpSource implements AutoCloseable {
             int maximumBytes,
             HttpClient.Version version)
             throws Exception {
+        return get(
+                provider,
+                account,
+                symbol,
+                uri,
+                headers,
+                maximumBytes,
+                version,
+                Duration.ofSeconds(60));
+    }
+
+    /** 大归档可显式延长请求和读流时限；旧调用仍用 60 秒，最长只允许五分钟。 */
+    public Response get(
+            String provider,
+            String account,
+            String symbol,
+            URI uri,
+            Map<String, String> headers,
+            int maximumBytes,
+            HttpClient.Version version,
+            Duration timeout)
+            throws Exception {
+        if (timeout == null
+                || timeout.isNegative()
+                || timeout.isZero()
+                || timeout.compareTo(Duration.ofMinutes(5)) > 0)
+            throw new IllegalArgumentException("来源请求时限须大于零且不超过五分钟");
         if (!Set.of("https", "http").contains(uri.getScheme())
                 || uri.getUserInfo() != null
                 || maximumBytes < 1
@@ -95,7 +122,7 @@ public final class FrozenHttpSource implements AutoCloseable {
             throw new IllegalArgumentException("来源预算返回了非法请求标识");
         var request =
                 HttpRequest.newBuilder(uri)
-                        .timeout(Duration.ofSeconds(60))
+                        .timeout(timeout)
                         .header("User-Agent", "QuestDBWithData/market-data")
                         .GET();
         if (version != null) request.version(version);
@@ -112,8 +139,8 @@ public final class FrozenHttpSource implements AutoCloseable {
                                     } catch (Exception ignored) {
                                     }
                                 },
-                                60,
-                                TimeUnit.SECONDS);
+                                Math.max(1, timeout.toMillis()),
+                                TimeUnit.MILLISECONDS);
                 try {
                     bytes = input.readNBytes(maximumBytes + 1);
                 } finally {

@@ -10,6 +10,8 @@ app.crypto-data:
   requests-per-day: 20000
   request-spacing-ms: 400
   bytes-per-31-days: 5368709120
+  # 仅聚合成交大包使用，最长 300 秒；其他来源仍沿用原时限。
+  quality-trade-download-timeout-seconds: 180
   # 官方说明 11:27 停市、14:00 恢复；归档和 REST 都没有 13:00 的小时线。
   venue-closures:
     - exchange: BINANCE

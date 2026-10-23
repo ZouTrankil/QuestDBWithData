@@ -76,6 +76,21 @@ public final class BinanceArchiveSync {
     }
 
     public void run(List<Window> windows, boolean downloadOnly) throws Exception {
+        run(windows, downloadOnly, Map.of());
+    }
+
+    /** 显式质量修复绑定已核对的来源摘要；重试下载不能偷偷换成另一个版本。 */
+    public void run(List<Window> windows, boolean downloadOnly, Map<String, String> reviewedHashes)
+            throws Exception {
+        if (!reviewedHashes.isEmpty()
+                && (reviewedHashes.size() != windows.size()
+                        || windows.stream()
+                                .anyMatch(
+                                        w ->
+                                                !reviewedHashes
+                                                        .getOrDefault(w.id(), "")
+                                                        .matches("[a-f0-9]{64}"))))
+            throw new IllegalArgumentException("补齐来源摘要必须逐任务绑定");
         Files.createDirectories(root);
         try (var channel =
                         FileChannel.open(
@@ -123,7 +138,7 @@ public final class BinanceArchiveSync {
                             .add(window);
                 for (var group : groups.values()) {
                     if (Files.exists(root.resolve("stop.request"))) break;
-                    processGroup(db, group, downloadOnly);
+                    processGroup(db, group, downloadOnly, reviewedHashes);
                 }
                 var status = new ArrayList<Object>();
                 try (var s = db.createStatement();
@@ -220,7 +235,11 @@ public final class BinanceArchiveSync {
             BinanceArchiveSource.Archive archive,
             BinanceArchiveMapper.Coverage coverage) {}
 
-    private void processGroup(Connection db, List<Window> group, boolean downloadOnly)
+    private void processGroup(
+            Connection db,
+            List<Window> group,
+            boolean downloadOnly,
+            Map<String, String> reviewedHashes)
             throws Exception {
         try (var q =
                 db.prepareStatement(
@@ -253,6 +272,9 @@ public final class BinanceArchiveSync {
             }
             try {
                 var archive = source.fetch(window.uri(), phase.equals("RETRY_SOURCE"));
+                if (reviewedHashes.containsKey(window.id())
+                        && !reviewedHashes.get(window.id()).equals(archive.sha256()))
+                    throw new IllegalStateException("重试来源版本与原质量核对摘要不符，保留待核对");
                 var coverage =
                         BinanceArchiveMapper.inspect(
                                 window.dataset(),
@@ -343,7 +365,7 @@ public final class BinanceArchiveSync {
                 update(
                         db,
                         item.window(),
-                        "SKIPPED_SOURCE",
+                        "BLOCKED_TARGET",
                         null,
                         e.getClass().getSimpleName() + ": " + e.getMessage());
             return;

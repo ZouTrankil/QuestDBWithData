@@ -27,7 +27,9 @@ import org.junit.jupiter.api.io.TempDir;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 class BinanceArchiveSourceTest {
@@ -71,6 +73,56 @@ class BinanceArchiveSourceTest {
         assertThrows(IllegalStateException.class, () -> source.fetch(uri, false));
         verify(http, times(2))
                 .get(anyString(), anyString(), anyString(), any(), anyMap(), anyInt());
+    }
+
+    @Test
+    void aggregateTradesUseBoundedDownloadAndRetainChecksumEvidence() throws Exception {
+        var http = mock(FrozenHttpSource.class);
+        var day = LocalDate.of(2021, 1, 21);
+        var uri =
+                URI.create(
+                        "https://data.binance.vision/data/spot/daily/aggTrades/BTCUSDT/BTCUSDT-aggTrades-2021-01-21.zip");
+        var raw = response(root.resolve("trades.zip"), "trade bytes", uri.toString());
+        var checksum =
+                response(
+                        root.resolve("checksum"),
+                        raw.sha256() + "  BTCUSDT-aggTrades-2021-01-21.zip\n",
+                        uri + ".CHECKSUM");
+        when(http.get(
+                        eq("binance"),
+                        eq("public"),
+                        eq("BTCUSDT"),
+                        eq(URI.create(uri + ".CHECKSUM")),
+                        anyMap(),
+                        eq(2048)))
+                .thenReturn(checksum);
+        when(http.get(
+                        eq("binance"),
+                        eq("public"),
+                        eq("BTCUSDT"),
+                        eq(uri),
+                        anyMap(),
+                        eq(64 * 1024 * 1024),
+                        any(),
+                        eq(Duration.ofSeconds(180))))
+                .thenReturn(raw);
+        var source = new BinanceArchiveSource(http, root, Duration.ofSeconds(180));
+        assertEquals(raw.sha256(), source.fetchAggregateTrades(day).sha256());
+        assertEquals(checksum.sha256(), source.fetchAggregateTrades(day).checksumSha256());
+        verify(http, times(1))
+                .get(anyString(), anyString(), anyString(), any(), anyMap(), anyInt());
+        verify(http, times(1))
+                .get(
+                        anyString(),
+                        anyString(),
+                        anyString(),
+                        any(),
+                        anyMap(),
+                        anyInt(),
+                        any(),
+                        eq(Duration.ofSeconds(180)));
+        Files.writeString(raw.path(), "corrupted");
+        assertThrows(IllegalStateException.class, () -> source.fetchAggregateTrades(day));
     }
 
     @Test

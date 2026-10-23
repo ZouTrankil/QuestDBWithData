@@ -13,12 +13,15 @@ import com.zoutrankil.market.btc.archive.application.BinanceArchiveRevisionCheck
 import com.zoutrankil.market.btc.archive.application.BinanceArchiveStatus;
 import com.zoutrankil.market.btc.archive.application.BinanceArchiveSync;
 import com.zoutrankil.market.btc.archive.application.BinanceFundingTailSync;
+import com.zoutrankil.market.btc.archive.application.BinanceQualityGapRepair;
+import com.zoutrankil.market.btc.archive.application.BinanceQualitySourceReview;
 import com.zoutrankil.market.btc.archive.client.BinanceArchiveSource;
 import com.zoutrankil.runtime.ProjectConfiguration;
 
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.Arrays;
@@ -157,6 +160,8 @@ public final class BinanceArchiveCommands {
         }
         if (args.length == 0
                 || !List.of(
+                                "repair-binance-quality",
+                                "audit-binance-quality",
                                 "probe-binance",
                                 "collect-binance",
                                 "status-binance",
@@ -184,6 +189,8 @@ public final class BinanceArchiveCommands {
             return true;
         }
         boolean probe = args[0].equals("probe-binance");
+        boolean review = args[0].equals("audit-binance-quality");
+        boolean repair = args[0].equals("repair-binance-quality");
         var options = new LinkedHashMap<String, String>();
         boolean download = false;
         for (int i = 1; i < args.length; i++) {
@@ -191,14 +198,20 @@ public final class BinanceArchiveCommands {
                 download = true;
                 continue;
             }
-            if (!List.of("--dataset", "--from", "--through").contains(args[i])
+            if (!((review || repair)
+                                    ? List.of("--plan")
+                                    : List.of("--dataset", "--from", "--through"))
+                            .contains(args[i])
                     || i + 1 == args.length
                     || options.put(args[i], args[++i]) != null)
                 throw new IllegalArgumentException(
                         "命令：collect-binance --dataset all|spot_1d|spot_1h|perp_1h|funding|mark_1h|index_1h --from YYYY-MM-DD --through YYYY-MM-DD [--download-only]");
         }
-        if (probe && (download || !options.isEmpty()) || !probe && options.size() != 3)
-            throw new IllegalArgumentException("probe-binance 不带参数；collect-binance 必须指定数据集和起止日期");
+        if (probe && (download || !options.isEmpty())
+                || (review || repair) && (download || options.size() != 1)
+                || !probe && !review && !repair && options.size() != 3)
+            throw new IllegalArgumentException(
+                    "probe-binance 不带参数；audit-binance-quality --plan PLAN.json；collect-binance 必须指定数据集和起止日期");
         var env = ProjectConfiguration.load("btc-data");
         var base = Path.of(env.getRequiredProperty("app.crypto-data.root"));
         var root = base.resolve("binance-vision");
@@ -219,9 +232,29 @@ public final class BinanceArchiveCommands {
                 var http =
                         new FrozenHttpSource(
                                 root, budget, env.getProperty("app.crypto-data.proxy-url", ""))) {
-            var source = new BinanceArchiveSource(http, root);
-            if (probe) BinanceArchiveProbe.run(source, root);
-            else {
+            var source =
+                    new BinanceArchiveSource(
+                            http,
+                            root,
+                            Duration.ofSeconds(
+                                    env.getRequiredProperty(
+                                            "app.crypto-data.quality-trade-download-timeout-seconds",
+                                            Integer.class)));
+            if (review)
+                System.out.println(
+                        BinanceQualitySourceReview.run(
+                                root, source, Path.of(options.get("--plan"))));
+            else if (probe) BinanceArchiveProbe.run(source, root);
+            else if (repair) {
+                var store =
+                        new VerifiedMarketDataStore(
+                                URI.create(env.getRequiredProperty("app.questdb.http-url")),
+                                env.getProperty("app.questdb.http-authorization", ""),
+                                env.getProperty("app.questdb.username", "admin"),
+                                env.getProperty("app.questdb.password", ""),
+                                base);
+                BinanceQualityGapRepair.run(root, source, store, Path.of(options.get("--plan")));
+            } else {
                 List<BinanceArchiveDataset> datasets =
                         options.get("--dataset").equals("all")
                                 ? Arrays.asList(BinanceArchiveDataset.values())

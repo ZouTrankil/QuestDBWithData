@@ -27,6 +27,7 @@ import com.zoutrankil.market.btc.archive.client.BinanceArchiveSource;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mockito;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -36,6 +37,7 @@ import java.sql.DriverManager;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -52,6 +54,79 @@ class BinanceArchiveQueueTest {
             out.closeEntry();
         }
         return bytes.toByteArray();
+    }
+
+    @Test
+    void reviewedSourceChangeStopsBeforeAnyDatabaseAccess() throws Exception {
+        var source = mock(BinanceArchiveSource.class);
+        var store = mock(VerifiedMarketDataStore.class);
+        var window =
+                BinanceArchiveSync.plan(
+                                List.of(BinanceArchiveDataset.SPOT_1D),
+                                LocalDate.of(2020, 1, 1),
+                                LocalDate.of(2020, 1, 1))
+                        .getFirst();
+        byte[] bytes = archive();
+        Path raw = root.resolve("raw.zip");
+        Files.write(raw, bytes);
+        when(source.fetch(any(), anyBoolean()))
+                .thenReturn(
+                        new BinanceArchiveSource.Archive(
+                                window.uri().toString(),
+                                raw,
+                                VerifiedMarketDataStore.sha(bytes),
+                                Instant.parse("2026-10-20T00:00:00Z"),
+                                root.resolve("checksum"),
+                                "a".repeat(64)));
+        new BinanceArchiveSync(root, source, store)
+                .run(List.of(window), false, Map.of(window.id(), "b".repeat(64)));
+        verifyNoInteractions(store);
+        try (var db =
+                        DriverManager.getConnection(
+                                "jdbc:sqlite:" + root.resolve("archive-queue.sqlite3"));
+                var q = db.createStatement();
+                var rows = q.executeQuery("SELECT phase,run_id FROM archive_tasks")) {
+            assertTrue(rows.next());
+            assertEquals("SKIPPED_SOURCE", rows.getString(1));
+            assertEquals(null, rows.getString(2));
+        }
+    }
+
+    @Test
+    void databasePreflightFailureIsNotClassifiedAsSourceFailure() throws Exception {
+        var source = mock(BinanceArchiveSource.class);
+        var store = mock(VerifiedMarketDataStore.class);
+        var window =
+                BinanceArchiveSync.plan(
+                                List.of(BinanceArchiveDataset.SPOT_1D),
+                                LocalDate.of(2020, 1, 1),
+                                LocalDate.of(2020, 1, 1))
+                        .getFirst();
+        byte[] bytes = archive();
+        Path raw = root.resolve("raw.zip");
+        Files.write(raw, bytes);
+        when(source.fetch(any(), anyBoolean()))
+                .thenReturn(
+                        new BinanceArchiveSource.Archive(
+                                window.uri().toString(),
+                                raw,
+                                VerifiedMarketDataStore.sha(bytes),
+                                Instant.parse("2026-10-20T00:00:00Z"),
+                                root.resolve("checksum"),
+                                "a".repeat(64)));
+        Mockito.doThrow(new IllegalStateException("测试目标连接失败"))
+                .when(store)
+                .requireNoUnresolved(anyString());
+        new BinanceArchiveSync(root, source, store).run(List.of(window), false);
+        try (var db =
+                        DriverManager.getConnection(
+                                "jdbc:sqlite:" + root.resolve("archive-queue.sqlite3"));
+                var q = db.createStatement();
+                var rows = q.executeQuery("SELECT phase,run_id FROM archive_tasks")) {
+            assertTrue(rows.next());
+            assertEquals("BLOCKED_TARGET", rows.getString(1));
+            assertEquals(null, rows.getString(2));
+        }
     }
 
     @Test

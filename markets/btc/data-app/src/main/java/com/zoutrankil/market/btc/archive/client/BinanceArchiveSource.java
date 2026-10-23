@@ -13,7 +13,9 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /** 复用原 HTTP 预算和不可变响应；清单只表示文件校验成功，不代表行情已入库。 */
@@ -21,6 +23,7 @@ public final class BinanceArchiveSource {
     private static final ObjectMapper JSON = new ObjectMapper();
     private final FrozenHttpSource http;
     private final Path root;
+    private final Duration aggregateTradesTimeout;
 
     public record Archive(
             String url,
@@ -31,11 +34,36 @@ public final class BinanceArchiveSource {
             String checksumSha256) {}
 
     public BinanceArchiveSource(FrozenHttpSource http, Path root) {
+        this(http, root, Duration.ofSeconds(60));
+    }
+
+    public BinanceArchiveSource(FrozenHttpSource http, Path root, Duration aggregateTradesTimeout) {
         this.http = http;
         this.root = root.toAbsolutePath().normalize();
+        if (aggregateTradesTimeout == null
+                || aggregateTradesTimeout.isNegative()
+                || aggregateTradesTimeout.isZero()
+                || aggregateTradesTimeout.compareTo(Duration.ofMinutes(5)) > 0)
+            throw new IllegalArgumentException("聚合成交下载时限须大于零且不超过五分钟");
+        this.aggregateTradesTimeout = aggregateTradesTimeout;
     }
 
     public Archive fetch(URI uri, boolean refresh) throws Exception {
+        return fetch(uri, refresh, 4 * 1024 * 1024);
+    }
+
+    /** 聚合成交日包只用于缺口取证；较大响应仍受原持久带宽预算约束。 */
+    public Archive fetchAggregateTrades(LocalDate day) throws Exception {
+        return fetch(
+                URI.create(
+                        "https://data.binance.vision/data/spot/daily/aggTrades/BTCUSDT/BTCUSDT-aggTrades-"
+                                + day
+                                + ".zip"),
+                false,
+                64 * 1024 * 1024);
+    }
+
+    private Archive fetch(URI uri, boolean refresh, int maximumBytes) throws Exception {
         if (!uri.getHost().equals("data.binance.vision")
                 || !uri.getPath().endsWith(".zip")
                 || uri.getQuery() != null)
@@ -64,7 +92,7 @@ public final class BinanceArchiveSource {
                 || !fields[0].matches("[a-fA-F0-9]{64}")
                 || !fields[1].replaceFirst("^\\*", "").equals(filename))
             throw new IllegalArgumentException("官方 CHECKSUM 内容或文件名不符");
-        var raw = get(uri, 4 * 1024 * 1024);
+        var raw = get(uri, maximumBytes);
         if (!fields[0].equalsIgnoreCase(raw.sha256()))
             throw new IllegalStateException("ZIP 与官方 CHECKSUM 不符");
         var result =
@@ -103,9 +131,39 @@ public final class BinanceArchiveSource {
         return result;
     }
 
+    /** 质量复核只访问公开 K 线接口，仍使用原预算和不可变响应目录。 */
+    public FrozenHttpSource.Response fetchKlines(URI uri) throws Exception {
+        boolean spot =
+                "data-api.binance.vision".equals(uri.getHost())
+                        && "/api/v3/klines".equals(uri.getPath());
+        boolean future =
+                "fapi.binance.com".equals(uri.getHost())
+                        && Set.of(
+                                        "/fapi/v1/klines",
+                                        "/fapi/v1/markPriceKlines",
+                                        "/fapi/v1/indexPriceKlines")
+                                .contains(uri.getPath());
+        if (!"https".equals(uri.getScheme())
+                || uri.getUserInfo() != null
+                || uri.getPort() != -1
+                || uri.getFragment() != null
+                || !(spot || future)) throw new IllegalArgumentException("质量复核只接受官方公开 K 线接口");
+        return get(uri, 1024 * 1024);
+    }
+
     private FrozenHttpSource.Response get(URI uri, int max) throws Exception {
         while (true) {
             try {
+                if (max > 4 * 1024 * 1024)
+                    return http.get(
+                            "binance",
+                            "public",
+                            "BTCUSDT",
+                            uri,
+                            Map.of(),
+                            max,
+                            null,
+                            aggregateTradesTimeout);
                 return http.get("binance", "public", "BTCUSDT", uri, Map.of(), max);
             } catch (PersistentMarketApiBudget.Exhausted wait) {
                 long delay = Duration.between(Instant.now(), wait.nextAllowed).toMillis();
