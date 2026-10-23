@@ -171,3 +171,29 @@ uv run --script tools/btc_remaining_acceptance.py --check-empty-source --output 
 `scheduled` 按根配置有界续跑，成功后当天不再写。`observations` 每个真实运行日只计一次，历史补跑、同日重跑和失败周期不计成功；同时检查固定批次原件及当前目标覆盖。观察未完成时退出码为 2，不是要求重发数据。每轮日更自动刷新 `daily-observations.json`。
 
 截至 2026-10-21，本轮已补齐 10 月 20 日永续 24 根，六组共同批次推进到该日；七日观察为 1/7。具体证据见[剩余任务验收](audits/2026-10-21-btc-剩余任务验收.md)。
+
+
+## 历史缺口逐段核对
+
+```bash
+# 从当前固定研究批次生成有限计划，由 Java 冻结月包、日包和 REST 原件：
+uv run --script tools/btc_quality_review.py run
+# 只重算本地证据，不重新访问来源：
+uv run --script tools/btc_quality_review.py summarize --plan PLAN.json --report REPORT.json
+# 显式补齐完整缺日，并在原队列全部核验后发布同截止日研究批次：
+uv run --script tools/btc_quality_review.py repair --plan PLAN.json --report REPORT.json
+```
+
+每轮最多 64 个数据集日期；共用原预算、来源目录、归档锁和日更锁。Python 不下载来源，不写 QuestDB。月包可复用已校验冻结版本；REST 原 JSON 与官方 ZIP 分开保存，投影不增加原时间精度。四个冲突日额外核对分钟归档，分钟不完整时不生成完整日汇总。
+
+现货小时请求可在计划中设置 `minuteCheck: true` 和 `aggregateTradesCheck: true`，分别保存官方分钟日包和聚合成交日包。聚合成交单包最多 64 MiB，仍沿用官方 CHECKSUM、原持久预算和不可变原文目录；下载成功只表示原件已保存，不自动重建或覆盖 K 线。聚合成交证据保存在来源报告的 `aggregateTrades` 中。
+
+首笔资金费率需要起始日前一小时价格时，来源核对计划可设置 `fundingBoundaryDependency: true`。仅允许 `2019-12-31` 的四类小时价格，不允许同时取分钟或聚合成交。这只保存边界原件，不扩大正式同步范围，也不自动改变研究批次。
+
+聚合成交大包的请求和读流时限由根配置 `app.crypto-data.quality-trade-download-timeout-seconds` 控制，默认 180 秒，最多 300 秒；可通过 `APP_CRYPTO_DATA_QUALITY_TRADE_DOWNLOAD_TIMEOUT_SECONDS` 覆盖。其他来源仍沿用原 60 秒时限。失败项可生成有限重试计划，已冻结原件直接复用，重试继续计入原预算。
+
+当前补齐入口只接受标记价、指数价的完整缺日，要求日包和 REST 完整且业务值一致。Java 命令为 `audit-binance-quality --plan PLAN.json` 和 `repair-binance-quality --plan REPAIR_PLAN.json`；后者接受工具生成的绑定来源摘要的修复计划，不把普通核对计划直接作为写入依据。正式未决仍走原恢复入口；同键改价和分钟重建不在此入口范围。
+
+修复保留原截止日，不计作新一天的日更。旧批次计划不能覆盖后来发布的新鲜版本；连接恢复后先核对当前指针。显式修复不由现有日更自动接管。最新结果见[缺口核对与补齐](audits/2026-10-22-btc-缺口核对与补齐.md)。
+
+只读查询故障会记录阶段、表、查询指纹、超时与耗时、异常类型和调用位置，便于区分来源等待和数据库故障；不复制 SQL、连接地址或凭据。正式写入前的目标核对失败状态为 `BLOCKED_TARGET`，来源失败仍为 `SKIPPED_SOURCE`，`PUBLISHING` 仍须原运行恢复。

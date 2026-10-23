@@ -1,0 +1,87 @@
+{
+  "checkedAt": "2026-10-22T01:33:03.423439+00:00",
+  "goalComplete": false,
+  "latestRun": {
+    "runId": "20261022T010004Z-14d4c85c0dcb4515a78625d510dccc5d",
+    "through": "2026-10-21",
+    "state": "REQUIRES_ATTENTION",
+    "startedAt": "2026-10-22T01:00:04.028111+00:00",
+    "finishedAt": "2026-10-22T01:05:03.378388+00:00",
+    "error": "TimeoutError: timed out",
+    "previousBatch": "ca88377d6a66909cd384335843ee5c49e7f95bfe31a70a7c92dc58a1c6f6f4d2",
+    "currentBatch": "ca88377d6a66909cd384335843ee5c49e7f95bfe31a70a7c92dc58a1c6f6f4d2",
+    "dataVerified": false
+  },
+  "unresolvedLocks": 0,
+  "fundingIssues": 0,
+  "revisionReports": [
+    {
+      "file": "/Users/Apple/zq/fun/QuestDBWithData/var/crypto-market-data/binance-vision/revision-checks/d3ab35c1-b02d-415d-972d-e827337d8953.json",
+      "incomplete": 0,
+      "requiresReview": 0,
+      "sha256": "65b2f0081e8ad4ba99cdc209e47b24d50d220fa28e914d18c5bc1560dee9ed63"
+    }
+  ],
+  "currentQuestDbProbe": {
+    "ok": true,
+    "seconds": 0.573,
+    "scope": "SELECT 1，仅证明当前连接响应，不证明数据完整"
+  },
+  "sourceChecks": [
+    {
+      "dataset": "spot_1d",
+      "url": "https://data.binance.vision/data/spot/daily/klines/BTCUSDT/1d/BTCUSDT-1d-2026-10-21.zip.CHECKSUM",
+      "status": 404,
+      "errorType": "HTTPError"
+    },
+    {
+      "dataset": "spot_1h",
+      "url": "https://data.binance.vision/data/spot/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2026-10-21.zip.CHECKSUM",
+      "status": 404,
+      "errorType": "HTTPError"
+    },
+    {
+      "dataset": "perp_1h",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2026-10-21.zip.CHECKSUM",
+      "status": 404,
+      "errorType": "HTTPError"
+    },
+    {
+      "dataset": "mark_1h",
+      "url": "https://data.binance.vision/data/futures/um/daily/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-10-21.zip.CHECKSUM",
+      "status": 404,
+      "errorType": "HTTPError"
+    },
+    {
+      "dataset": "index_1h",
+      "url": "https://data.binance.vision/data/futures/um/daily/indexPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-10-21.zip.CHECKSUM",
+      "status": 404,
+      "errorType": "HTTPError"
+    }
+  ],
+  "observations": {
+    "ready": false,
+    "through": "2026-10-21",
+    "acceptedDays": 1,
+    "requiredDays": 7,
+    "missingDates": [
+      "2026-10-15",
+      "2026-10-16",
+      "2026-10-17",
+      "2026-10-18",
+      "2026-10-19",
+      "2026-10-21"
+    ],
+    "currentBatchValid": false,
+    "currentError": "当前批次尚未覆盖最近目标日或缺少新版认证"
+  },
+  "scheduledRecheck": {
+    "state": "NOT_DUE",
+    "through": "2026-10-21",
+    "nextAttemptUtc": "2026-10-22T04:00:00Z"
+  },
+  "remaining": [
+    "等待来源发布 2026-10-21 归档并通过正式回读与研究批次核验",
+    "完成七个不同真实 UTC 日更周期"
+  ]
+}

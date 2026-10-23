@@ -1,0 +1,264 @@
+{
+  "resumeProbe": {
+    "checkedAtUtc": "2026-10-22T15:27:38Z",
+    "automationDisabled": true,
+    "tcp": {
+      "status": "failed",
+      "port": 8812,
+      "timeoutSeconds": 5,
+      "error": "TimeoutError"
+    },
+    "select1": {
+      "status": "failed",
+      "query": "SELECT 1",
+      "timeoutSeconds": 10,
+      "error": "URLError"
+    },
+    "stoppedAtConnectionGate": true,
+    "repairExecuted": false,
+    "formalWritesAttempted": false,
+    "researchPointerChangedByAttempt": false,
+    "additionalSourceIndex": {
+      "path": "var/crypto-market-data/binance-vision/quality-source-reviews/20261022-additional-source-index.json",
+      "existed": true,
+      "entries": 9,
+      "newSourcesAdded": false
+    }
+  },
+  "checkedAt": "2026-10-22T02:12:37.363956+00:00",
+  "formalRepairComplete": false,
+  "plan": {
+    "file": "var/crypto-market-data/binance-vision/quality-review-plans/cf379211d7a541e7b7939c17d2997ec4.json",
+    "sha256": "81f65389a6542fae8d342cbf405871e4a2a1be9c76599263bc0dba4d939510e5"
+  },
+  "sourceReport": {
+    "file": "var/crypto-market-data/binance-vision/quality-source-reviews/90ee2cfa-7408-49ac-948c-cd236dad7cb8.json",
+    "sha256": "3e4f3c140b8c0842ec38417f9bc2e17cbb03eddcfcdc7d9338bbbfdd4186cc75"
+  },
+  "summarySha256": "e33ed93f5f7067124e56f900659eb1a6f539c1230b46eb3d2c2e16a98120a405",
+  "batchId": "ca88377d6a66909cd384335843ee5c49e7f95bfe31a70a7c92dc58a1c6f6f4d2",
+  "reviewedDatasetDays": 45,
+  "findingCounts": {
+    "CANDIDATE_REQUIRES_FORMAL_REVIEW": 528,
+    "NO_COMPLETE_SOURCE": 39
+  },
+  "findingsByDataset": {
+    "spot_1h": {
+      "NO_COMPLETE_SOURCE": 39
+    },
+    "mark_1h": {
+      "CANDIDATE_REQUIRES_FORMAL_REVIEW": 216
+    },
+    "index_1h": {
+      "CANDIDATE_REQUIRES_FORMAL_REVIEW": 312
+    }
+  },
+  "sourceStatuses": {
+    "daily/PARSED": 45,
+    "monthly/PARSED": 45,
+    "rest/PARSED": 45
+  },
+  "knownClosureEvidence": [
+    {
+      "closureFrom": "2023-03-24T11:27:00Z",
+      "closureUntil": "2023-03-24T14:00:00Z",
+      "evidenceUrl": "https://www.binance.com/en/blog/from-our-ceo/6789340645608890113",
+      "issueId": "a133e7946b7050c623d7b5032676dedaffc9329dd14229a6220c5a1f9b08cb41",
+      "note": "落在已有官方停市说明范围，仍保留缺口或提前结束，不补造价格",
+      "time": "2023-03-24T12:00:00+00:00"
+    },
+    {
+      "closureFrom": "2023-03-24T11:27:00Z",
+      "closureUntil": "2023-03-24T14:00:00Z",
+      "evidenceUrl": "https://www.binance.com/en/blog/from-our-ceo/6789340645608890113",
+      "issueId": "0cee31b751bc8849c5df34906e3dc9cfc0f0147ec71488a16f2231d982946dae",
+      "note": "落在已有官方停市说明范围，仍保留缺口或提前结束，不补造价格",
+      "time": "2023-03-24T13:00:00+00:00"
+    }
+  ],
+  "dailyHourlyConflicts": [
+    {
+      "day": "2021-01-21",
+      "hourlyTradeMatches": {
+        "quote_volume": true,
+        "taker_buy_quote_volume": true,
+        "taker_buy_volume": true,
+        "trade_count": true,
+        "volume": true
+      },
+      "minutes": {
+        "complete": true,
+        "rows": 1440,
+        "values": {
+          "close": "30850.13000000",
+          "high": "35600.00000000",
+          "low": "30071.00000000",
+          "open": "35468.23000000",
+          "quote_volume": "4386783586.50422555",
+          "taker_buy_quote_volume": "2057240516.61919266",
+          "taker_buy_volume": "63256.21044800",
+          "trade_count": "2881505",
+          "volume": "135004.07665800"
+        }
+      },
+      "nativeMatches": {
+        "close": true,
+        "high": true,
+        "low": true,
+        "open": true,
+        "quote_volume": false,
+        "taker_buy_quote_volume": false,
+        "taker_buy_volume": false,
+        "trade_count": false,
+        "volume": false
+      },
+      "sourceSha256": "5f7f937fdb0be4b9b0cca613dffdf6bef4f03f37db3f4e28a5093f2f29ed84a1"
+    },
+    {
+      "day": "2021-04-23",
+      "hourlyTradeMatches": {
+        "quote_volume": false,
+        "taker_buy_quote_volume": false,
+        "taker_buy_volume": false,
+        "trade_count": false,
+        "volume": false
+      },
+      "minutes": {
+        "complete": true,
+        "rows": 1440,
+        "values": {
+          "close": "51125.14000000",
+          "high": "52131.85000000",
+          "low": "47500.00000000",
+          "open": "51690.95000000",
+          "quote_volume": "6571097317.46791836",
+          "taker_buy_quote_volume": "3170392794.05488430",
+          "taker_buy_volume": "63769.62125300",
+          "trade_count": "2888237",
+          "volume": "132230.78071900"
+        }
+      },
+      "nativeMatches": {
+        "close": true,
+        "high": true,
+        "low": true,
+        "open": true,
+        "quote_volume": true,
+        "taker_buy_quote_volume": true,
+        "taker_buy_volume": true,
+        "trade_count": true,
+        "volume": true
+      },
+      "sourceSha256": "3950336b09961d1b30c1fbdc6315c7ae3e5a4bd2651d47f43046ef604fb47c2a"
+    },
+    {
+      "day": "2021-12-24",
+      "minutes": {
+        "complete": false,
+        "reason": "分钟时间网格或结束边界不完整",
+        "row": 299
+      },
+      "sourceSha256": "d4bcb804d36c8464fb248b7f03bdfb82001b4db8e796d7ba51c5081f0c3216aa"
+    },
+    {
+      "day": "2022-04-13",
+      "hourlyTradeMatches": {
+        "quote_volume": false,
+        "taker_buy_quote_volume": false,
+        "taker_buy_volume": false,
+        "trade_count": false,
+        "volume": false
+      },
+      "minutes": {
+        "complete": true,
+        "rows": 1440,
+        "values": {
+          "close": "41147.79000000",
+          "high": "41561.31000000",
+          "low": "39588.54000000",
+          "open": "40074.95000000",
+          "quote_volume": "1677171454.09107910",
+          "taker_buy_quote_volume": "832653378.51149360",
+          "taker_buy_volume": "20522.54699000",
+          "trade_count": "948061",
+          "volume": "41342.27254000"
+        }
+      },
+      "nativeMatches": {
+        "close": true,
+        "high": true,
+        "low": true,
+        "open": true,
+        "quote_volume": true,
+        "taker_buy_quote_volume": true,
+        "taker_buy_volume": true,
+        "trade_count": true,
+        "volume": true
+      },
+      "sourceSha256": "690a8de5fe743386ac115fa0719bf01f9c3952ac5cf2e70e88e2b9d46744f17b"
+    }
+  ],
+  "remainingFundingIssues": {
+    "funding_price_missing": 59,
+    "unknown_interval": 60
+  },
+  "repairDatasetDays": 22,
+  "repairQueue": {
+    "index_1h/SKIPPED_SOURCE": 13,
+    "mark_1h/SKIPPED_SOURCE": 9
+  },
+  "newFormalRunsForRepair": 0,
+  "unresolvedLocks": [],
+  "attempts": [
+    {
+      "file": "var/crypto-market-data/binance-vision/quality-review-plans/repair-attempts/5408349633954dcaa53c42d1961469ba.json",
+      "sha256": "4d6f0e4dc676038747d09adf2965083c169a03a629ae344f7b437fe72f1f4ca1",
+      "currentBatch": "ca88377d6a66909cd384335843ee5c49e7f95bfe31a70a7c92dc58a1c6f6f4d2",
+      "error": "RuntimeError: Java 作业失败，退出码 1",
+      "errorDetails": {},
+      "finishedAt": "2026-10-22T02:10:21.049845+00:00",
+      "plan": "/Users/Apple/zq/fun/QuestDBWithData/var/crypto-market-data/binance-vision/quality-review-plans/cf379211d7a541e7b7939c17d2997ec4.repair.json",
+      "planSha256": "fe066d89453c38894e888161fd874bacd83d7d3e165332249c7382816da70521",
+      "startedAt": "2026-10-22T02:10:09.902694+00:00",
+      "state": "REQUIRES_ATTENTION",
+      "unresolvedLocks": []
+    }
+  ],
+  "currentResearchPointer": {
+    "batchId": "ca88377d6a66909cd384335843ee5c49e7f95bfe31a70a7c92dc58a1c6f6f4d2",
+    "schemaVersion": 1
+  },
+  "javaTests": {
+    "tests": 37,
+    "failures": 0
+  },
+  "pythonTests": 49,
+  "remaining": [
+    "恢复 QuestDB 连接后按原冻结计划完成正式补齐和原键值核验",
+    "发布同截止日研究批次后重新计算资金费率关联",
+    "现货 32 个缺口、7 根提前结束、4 个成交字段冲突日继续核对",
+    "历史资金费率间隔和七个真实日更周期仍待验收"
+  ],
+  "backup": {
+    "directory": "var/btc-backups/2026-10-22-btc-quality-review",
+    "files": 4635,
+    "verified": true,
+    "restoreReadOnly": true
+  },
+  "implementationSha256": {
+    "tools/btc_quality_review.py": "8b3a1f527d8e960ae1f5db80e410b133312ca44dfa9fd764cacc51713ba4ff2f",
+    "tools/btc_research_data.py": "1c2a7fe5894e687fec184b1b2369c50850301f0bb6284d0c93280b8f14601fe7",
+    "tools/btc_daily.py": "eea12e7c6c5469ec80e1a4cf025a93607687f036521b81fc7acd20cf9d65256d",
+    "markets/btc/data-app/src/main/java/com/zoutrankil/market/btc/archive/application/BinanceQualitySourceReview.java": "d6c27b471a3d0f24af823054af119238aca4a58943d758fb0d2dc0e20ea37577",
+    "markets/btc/data-app/src/main/java/com/zoutrankil/market/btc/archive/application/BinanceQualityGapRepair.java": "c945b3ddfe173a17cf03c92fba12b5444a432afdf57affd02c7218ce1b25c245",
+    "markets/btc/data-app/src/main/java/com/zoutrankil/market/btc/archive/application/BinanceArchiveSync.java": "2daef8b4efd7a4ed3f35a2062214f277aef6e2beda6c34954055547831aca89c"
+  },
+  "validation": {
+    "pythonTests": 49,
+    "javaTests": 37,
+    "architectureTest": true,
+    "verifyModuleBoundaries": true,
+    "installDist": true,
+    "javaFormatting": "2158 个文件已整理，字面量核对通过"
+  }
+}
