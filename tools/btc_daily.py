@@ -15,6 +15,7 @@ import shutil
 import sqlite3
 import subprocess
 import uuid
+import traceback
 import btc_research_data as btc
 
 UTC = timezone.utc
@@ -101,18 +102,21 @@ def daily(through, binary, *, check_revisions=True, trigger="manual"):
         target = logs/(run_id+'.json'); log = logs/(run_id+'.log')
         btc._atomic_json(target, report)
         try:
+            report['stage']='disk_check'
             usage = sum(p.stat().st_size for p in base.rglob('*') if p.is_file())
             if usage > setting('daily-max-root-bytes', 10737418240) or shutil.disk_usage(base).free < setting('daily-min-free-bytes', 1073741824):
                 raise RuntimeError("磁盘容量门槛未通过，未启动采集")
             timeout = setting('daily-timeout-seconds', 3600)
             start = date.fromisoformat(str(btc.configured_crypto_value('archive-history-start','2020-01-01')))
             attempts = setting('daily-source-attempts', 2)
+            report['stage']='source_sync'
             for attempt in range(attempts):
                 run_command(binary, ['sync-binance','--through',str(through)], log, timeout)
             report['sourceAttempts'] = attempts
             cursor_path = base/'binance-vision/revision-schedule.json'
             cursor = json.loads(cursor_path.read_text()) if cursor_path.exists() else {}
             revision_reports = []
+            report['stage']='revision_check'
             if check_revisions:
                 for first,last,kind in revision_ranges(start, through, cursor, datetime.now(UTC).date(), setting('revision-recent-months',2), setting('revision-max-files',18)):
                     folder = base/'binance-vision/revision-checks'
@@ -127,6 +131,7 @@ def daily(through, binary, *, check_revisions=True, trigger="manual"):
                         cursor={'cursor':str(month_shift(first,1)), 'scannedAt':str(datetime.now(UTC).date())}
                         btc._atomic_json(cursor_path,cursor)
             report['revisionReports']=revision_reports
+            report['stage']='revision_guard'
             report['pendingRevisions']=btc.pending_revisions(base)
             if report['pendingRevisions']:
                 raise RuntimeError("存在跨期待核对修订，保留旧研究批次")
@@ -138,7 +143,9 @@ def daily(through, binary, *, check_revisions=True, trigger="manual"):
             if any(r['requiresReview'] for r in revision_reports):
                 raise RuntimeError("发现历史修订，先显式核对处理，保留旧研究批次")
             endpoint, auth = btc.configured_endpoint()
+            report['stage']='research_publish'
             result = btc.publish_batch(btc.BtcReader(endpoint,auth,base), start,through,base/'research',max_lag_days=setting('daily-max-lag-days',1),require_verified=True)
+            report['stage']='coverage_check'
             report['revisionGuardClear']=True
             report['batch']=result
             report['dataVerified']=result['dataVerified']
@@ -154,6 +161,8 @@ def daily(through, binary, *, check_revisions=True, trigger="manual"):
         except Exception as error:
             report['state']='REQUIRES_ATTENTION'
             report['error']=type(error).__name__+': '+str(error)
+            report['errorDetails']=getattr(error,'diagnostics',{})
+            report['errorFrames']=[{'file':Path(f.filename).name,'function':f.name,'line':f.lineno} for f in traceback.extract_tb(error.__traceback__)]
             report['queue']=queue_summary(base)
         finally:
             report['finishedAt']=datetime.now(UTC).isoformat()

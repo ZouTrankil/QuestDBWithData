@@ -92,6 +92,13 @@ def _arrow_table(dataset, columns, values):
     return pa.Table.from_arrays(arrays, schema=pa.schema(schema))
 
 
+class BtcQueryError(RuntimeError):
+    """只保留定位所需元数据，不把连接地址、凭据和完整查询写进报告。"""
+    def __init__(self, diagnostics):
+        self.diagnostics = diagnostics
+        super().__init__('QuestDB 只读查询失败：' + json.dumps(diagnostics, ensure_ascii=False))
+
+
 class BtcReader:
     def __init__(self, endpoint: str, authorization: str = "", writer_root: Path | None = None):
         parsed = urllib.parse.urlsplit(endpoint)
@@ -109,8 +116,18 @@ class BtcReader:
             raise ValueError("研究读取只接受 SELECT")
         headers = {"Authorization": self.authorization} if self.authorization else {}
         request = urllib.request.Request(self.endpoint + "/exec?" + urllib.parse.urlencode({"query": sql, "limit": "0,5001"}), headers=headers)
-        with self.opener.open(request, timeout=60) as response:
-            data = json.load(response)
+        import time
+        started = time.monotonic()
+        try:
+            with self.opener.open(request, timeout=60) as response:
+                data = json.load(response)
+        except Exception as error:
+            # 查询指纹用于关联同类故障；不记录 SQL、服务器地址或异常里的响应正文。
+            tables = [table for table, *_ in DATASETS.values() if "'" + table + "'" in sql or '"' + table + '"' in sql]
+            raise BtcQueryError({"operation":"snapshot" if 'wal_tables()' in sql else "read", "tables":tables,
+                                 "querySha256":hashlib.sha256(sql.encode()).hexdigest(), "timeoutSeconds":60,
+                                 "elapsedSeconds":round(time.monotonic()-started,3), "causeType":type(error).__name__,
+                                 "rootCauseType":type(getattr(error,"reason",error)).__name__, "httpStatus":getattr(error,"code",None)}) from error
         if "error" in data:
             raise ValueError("QuestDB 只读查询失败")
         if len(data.get("dataset", [])) > 5000:
