@@ -1,5 +1,7 @@
 package com.zoutrankil.batch.source;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,17 @@ final class CnSourceQuality {
                     case "fina_mainbz" -> List.of("ts_code", "end_date", "bz_item", "bz_code");
                     case "fina_audit" -> List.of("ts_code", "ann_date", "end_date");
                     case "dividend" -> List.of("ts_code", "end_date", "ann_date");
+                    case "stk_holdertrade" ->
+                            List.of("ts_code", "ann_date", "holder_name", "in_de");
+                    case "stk_shock", "stk_high_shock" ->
+                            List.of("ts_code", "trade_date", "reason", "period");
+                    case "sge_daily" -> List.of("ts_code", "trade_date");
+                    case "cyq_chips" -> List.of("ts_code", "trade_date", "price", "percent");
+                    case "stk_alert" -> List.of("ts_code", "start_date", "type");
+                    case "broker_recommend" -> List.of("month", "broker", "ts_code");
+                    case "pledge_stat" -> List.of("ts_code", "end_date", "pledge_count");
+                    case "stk_holdernumber" ->
+                            List.of("ts_code", "ann_date", "end_date", "holder_num");
                     case "share_float" -> List.of("ts_code", "ann_date", "float_date");
                     case "shibor" -> List.of("timestamp");
                     case "shibor_lpr" -> List.of("date");
@@ -144,6 +157,77 @@ final class CnSourceQuality {
                 if (number(row, "m_ratio") != null && number(row, "m_ratio") < 0)
                     failures.add("domain:m_ratio");
             }
+            if (dataset.equals("cyq_chips")) {
+                if (number(row, "price") != null && number(row, "price") <= 0)
+                    failures.add("domain:price");
+                if (number(row, "percent") != null
+                        && (number(row, "percent") < 0 || number(row, "percent") > 100))
+                    failures.add("domain:percent");
+            }
+            // 截止日允许未知，但已给出的日期不能早于生效日；不把可修订截止日塞进身份键。
+            if (dataset.equals("stk_alert")
+                    && row.get("end_date") != null
+                    && !row.get("end_date").toString().isBlank()) {
+                try {
+                    var end =
+                            LocalDate.parse(
+                                    row.get("end_date").toString(),
+                                    DateTimeFormatter.BASIC_ISO_DATE);
+                    if (end.isBefore(LocalDate.parse(row.get("start_date").toString())))
+                        failures.add("domain:alert_interval");
+                } catch (RuntimeException badDate) {
+                    failures.add("format:end_date");
+                }
+            }
+            if (dataset.equals("broker_recommend")
+                    && !Objects.toString(row.get("ts_code"), "").matches("[0-9]{6}\\.(SH|SZ|BJ)"))
+                failures.add("format:ts_code");
+            // 统计期不能晚于公告；增减持方向和区间按来源原值核对，不补造事件。
+            if (dataset.equals("stk_holdernumber")) {
+                try {
+                    var end =
+                            LocalDate.parse(
+                                    Objects.toString(row.get("end_date"), ""),
+                                    DateTimeFormatter.BASIC_ISO_DATE);
+                    if (end.isAfter(LocalDate.parse(row.get("ann_date").toString())))
+                        failures.add("domain:end_date");
+                } catch (RuntimeException badDate) {
+                    failures.add("format:end_date");
+                }
+            }
+            if (dataset.equals("stk_holdertrade")) {
+                if (!Set.of("IN", "DE").contains(Objects.toString(row.get("in_de"), "")))
+                    failures.add("domain:in_de");
+                if (row.get("holder_type") != null
+                        && !Set.of("C", "P", "G").contains(row.get("holder_type")))
+                    failures.add("domain:holder_type");
+                try {
+                    LocalDate begin = null, close = null;
+                    if (row.get("begin_date") != null
+                            && !row.get("begin_date").toString().isBlank())
+                        begin =
+                                LocalDate.parse(
+                                        row.get("begin_date").toString(),
+                                        DateTimeFormatter.BASIC_ISO_DATE);
+                    if (row.get("close_date") != null
+                            && !row.get("close_date").toString().isBlank())
+                        close =
+                                LocalDate.parse(
+                                        row.get("close_date").toString(),
+                                        DateTimeFormatter.BASIC_ISO_DATE);
+                    if (begin != null && close != null && begin.isAfter(close))
+                        failures.add("domain:holding_interval");
+                } catch (RuntimeException badDate) {
+                    failures.add("format:holding_interval");
+                }
+            }
+            // 数量次数保留 LONG；未知值不填零，负数直接拒绝。
+            if (dataset.equals("pledge_stat")
+                    && number(row, "pledge_count") != null
+                    && number(row, "pledge_count") < 0) failures.add("domain:pledge_count");
+            if (dataset.equals("stk_holdernumber")
+                    && number(row, "holder_num") != null
+                    && number(row, "holder_num") < 0) failures.add("domain:holder_num");
             if (dataset.equals("fut_holding"))
                 for (String field :
                         List.of("vol", "vol_chg", "long_hld", "long_chg", "short_hld", "short_chg"))

@@ -1,0 +1,95 @@
+{
+  "dataset": "stk_holdertrade",
+  "version": "stk_holdertrade-v1",
+  "endpoint": "stk_holdertrade",
+  "dateParameter": "ann_date",
+  "sourceDate": "ann_date",
+  "timestampColumn": "ann_date",
+  "pageSize": 3000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 3000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=175; 单证券和明确公告日期；达到单次上限拒绝完整；同物理键多事件阻断，不按空响应推断交易日覆盖",
+  "partitionBy": "YEAR",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "ann_date",
+      "target": "ann_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "holder_name",
+      "target": "holder_name",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "source": "holder_type",
+      "target": "holder_type",
+      "type": "SYMBOL",
+      "key": false
+    },
+    {
+      "source": "in_de",
+      "target": "in_de",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "change_vol",
+      "target": "change_vol",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "change_ratio",
+      "target": "change_ratio",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "after_share",
+      "target": "after_share",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "after_ratio",
+      "target": "after_ratio",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "avg_price",
+      "target": "avg_price",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "total_share",
+      "target": "total_share",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "begin_date",
+      "target": "begin_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "close_date",
+      "target": "close_date",
+      "type": "STRING",
+      "key": false
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "dataset": "broker_recommend",
+  "version": "broker_recommend-v1",
+  "endpoint": "broker_recommend",
+  "dateParameter": "month",
+  "sourceDate": "month",
+  "timestampColumn": "month",
+  "pageSize": 1000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 1000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=267; 单个月份 YYYYMM；完整键 month/broker/ts_code；未证明 limit/offset 分页，达到 1000 行拒绝完整；正式表须先显式修复去重键",
+  "partitionBy": "YEAR",
+  "columns": [
+    {
+      "source": "month",
+      "target": "month",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "broker",
+      "target": "broker",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "name",
+      "target": "name",
+      "type": "STRING",
+      "key": false
+    }
+  ]
+}

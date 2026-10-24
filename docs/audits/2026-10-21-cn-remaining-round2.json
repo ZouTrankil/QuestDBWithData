@@ -1,0 +1,337 @@
+{
+  "schema": "cn.remaining.round2.v1",
+  "checkedAt": "2026-10-21T11:11:41.590702+00:00",
+  "scope": "五张有限owner、只读旧键计划、真实来源、原生数组私有发布；不代表正式接管或持续更新",
+  "productionWritten": false,
+  "formalCompleted": 0,
+  "counts": {
+    "newOwnersThisPhase": 5,
+    "newOwnersSince19DevelopmentItems": 17,
+    "totalCodeConnected": 42,
+    "remainingDevelopmentOrDesign": 2,
+    "alreadyRegisteredPendingTableAudit": 24,
+    "fileRetirementOrLegacyOwnershipPending": 7,
+    "totalTracked": 75
+  },
+  "checks": [
+    {
+      "dataset": "broker_recommend",
+      "stage": "只读旧键修复计划",
+      "status": "KEY_CHANGE_AND_BACKFILL_REQUIRED",
+      "targetId": "static-v2-6f90cc1873e2401e5052f94b2c8096395e61b268ebb896a0a30a5374baafef34",
+      "actualKeys": [
+        "ts_code",
+        "month"
+      ],
+      "requiredKeys": [
+        "month",
+        "broker",
+        "ts_code"
+      ],
+      "invalidKeyRows": 0,
+      "collisionSampleGroups": 0,
+      "collisionSampleLimit": 101,
+      "sourceScopes": 79,
+      "evidence": {
+        "path": "var/cn-remaining-round2/broker_recommend-key-plan.json",
+        "sha256": "f26881d6055441ba455bbb3a631ca173b74b91e65a06276b1fcaa51a5fd975b9"
+      },
+      "productionWritten": false
+    },
+    {
+      "dataset": "stk_alert",
+      "stage": "只读旧键修复计划",
+      "status": "KEY_CHANGE_AND_BACKFILL_REQUIRED",
+      "targetId": "static-v2-496c444ebb15dd3595bd6d542fb01a330d9c30f4f0fa01d398e19fa45061a5e2",
+      "actualKeys": [
+        "type",
+        "end_date",
+        "ts_code",
+        "start_date"
+      ],
+      "requiredKeys": [
+        "ts_code",
+        "start_date",
+        "type"
+      ],
+      "invalidKeyRows": 0,
+      "collisionSampleGroups": 0,
+      "collisionSampleLimit": 101,
+      "sourceScopes": 233,
+      "evidence": {
+        "path": "var/cn-remaining-round2/stk_alert-key-plan.json",
+        "sha256": "3737ed98ecf015483d48ada196c439e1e59c778ff61ef64ed6983afcbbf79591"
+      },
+      "productionWritten": false
+    },
+    {
+      "dataset": "sge_daily",
+      "stage": "只读旧键修复计划",
+      "status": "REBUILD_REQUIRED",
+      "targetId": "static-v2-dc13b6e49850dee854573492f8422fc13a24e5e3619bc3d9bf4a0cdb0ab7f7bd",
+      "actualKeys": [],
+      "requiredKeys": [
+        "ts_code",
+        "trade_date"
+      ],
+      "invalidKeyRows": 0,
+      "collisionSampleGroups": 101,
+      "collisionSampleLimit": 101,
+      "sourceScopes": 167,
+      "evidence": {
+        "path": "var/cn-remaining-round2/sge_daily-key-plan.json",
+        "sha256": "020dfde99057f767a86495f921617dc98fad9b499001bba5a94ba06420184334"
+      },
+      "productionWritten": false
+    },
+    {
+      "dataset": "cyq_chips",
+      "stage": "真实非空来源及原表结构/WAL预检",
+      "result": {
+        "questdbWritten": false,
+        "dataset": "cyq_chips",
+        "rows": 1,
+        "sourceCoverageVerified": true,
+        "targetId": "static-v2-900851057d576a212554b60fb7e531e24be111cb9f5e02b133b0c1e5130177aa",
+        "code": "000001.SZ",
+        "manifest": "file:///Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/sync-evidence/contract-table-source-5c051e9d-152a-4f0f-b5e6-9b2cb6100a3b/completion.json",
+        "targetDataVerified": false
+      },
+      "evidence": {
+        "path": "var/cn-remaining-round2/cyq_chips-owner-source.log",
+        "sha256": "9811113d323036987e160521a703372a17ab5ba15dd320228e19862687191ea9"
+      }
+    },
+    {
+      "dataset": "fut_holding",
+      "stage": "真实非空来源及原表结构/WAL预检",
+      "result": {
+        "manifest": "file:///Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/sync-evidence/contract-table-source-37ada247-4fcf-4812-bc34-a5fd658c0248/completion.json",
+        "targetDataVerified": false,
+        "questdbWritten": false,
+        "dataset": "fut_holding",
+        "rows": 27,
+        "sourceCoverageVerified": true,
+        "targetId": "static-v2-37ef5b4448b5e0dc511db33ab58648e1f797e5c0bb3cc5a4a43819e8f3cf8ff7",
+        "code": "IM2612"
+      },
+      "evidence": {
+        "path": "var/cn-remaining-round2/fut_holding-owner-source.log",
+        "sha256": "24577f009ec075cfb0280ecf7b41a5508d34856329c420a8e30bd48baa4a290d"
+      }
+    }
+  ],
+  "sourceProbeEvidence": [
+    {
+      "path": "var/cn-remaining-round2/results.json",
+      "sha256": "b98aedfc1370cb74ac4dbae1a896dae7c00e7ceb7bdb3000e627e3f9d2304b88"
+    },
+    {
+      "path": "var/cn-remaining-round2/stk-alert-raw.json",
+      "sha256": "c3743ca4d2734d2c2da05de6f65a83f13467c6d3988603ceb6270e50c5b77a86"
+    },
+    {
+      "path": "var/cn-remaining-round2/chips-array-source.json",
+      "sha256": "c0e40c5a38272ed833aaaa2f64a25469dc9a97aeb1c2d46d9eaf1043ab145f6a"
+    },
+    {
+      "path": "var/cn-remaining-round2/holding-contract-raw.json",
+      "sha256": "75185d851dd4a18043185e8448684409648003d31e6a0590815bf20349ed105b"
+    },
+    {
+      "path": "var/cn-remaining-round2/snapshot-probes.json",
+      "sha256": "c833b83148ff719b6bd4579f62e6786b748822fee08c666c76f9d92dc3f7fe8a"
+    },
+    {
+      "path": "var/cn-remaining-round2/repurchase-snapshot-raw.json",
+      "sha256": "d2f2df5695fe59fb6845f5736d6a62e3921e0b27c2e1917d76634313005632e4"
+    },
+    {
+      "path": "var/cn-remaining-round2/block_trade-snapshot-raw.json",
+      "sha256": "6c74eab0bd26b570fc44aa83fbd3e56fadbbe85b670844e08972e0cc7b56c195"
+    }
+  ],
+  "nativeArrayPrivateAcceptance": {
+    "evidence": {
+      "path": "var/cn-remaining-round2/private-array-f8e78bac1fce448fb755f8a6775680b2/acceptance.json",
+      "sha256": "efa9ab420ac83a26b1574b59a36912de0b9a44bdb3c33eea05187c20ecf9731e"
+    },
+    "serverStopped": {
+      "path": "var/cn-remaining-round2/private-array-f8e78bac1fce448fb755f8a6775680b2/server-stopped.json",
+      "sha256": "e45e679a3243c58dafefa2060e2fdedd34ca7c598f42ade6c3705d6fed4e5406"
+    },
+    "sourceRows": 103,
+    "physicalRows": 1,
+    "firstState": "VERIFIED",
+    "revisionState": "VERIFIED",
+    "emptySourceRejected": true,
+    "revisionIsFixture": true,
+    "productionWritten": false
+  },
+  "tests": [
+    {
+      "module": "markets/cn/data",
+      "tests": 118,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reports": [
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.data.financial.FinancialSyncTest.xml",
+          "sha256": "e9633304b5b32033fe518ae73e0bd91d391a413193dc89d583f1c17e45c9bf6f"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.data.financial.FinancialQueueStatusCliTest.xml",
+          "sha256": "bbdc433224124c8e1e4f6b9be2d16530da6874f2f5bcd61d27995197c111b37c"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.market.cn.observation.ContractKeyRepairPlanTest.xml",
+          "sha256": "875aa2183045178cb173d930e2d6fb5761004c89bafe03e60346ecb8afccf6a5"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.data.financial.BalanceTechnicalTimeTest.xml",
+          "sha256": "dae0616e631b26de771148cc4d35db0c7684ea0a840119673077e8dfed3f66ef"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.data.financial.FinancialSchedulingAdmissionTest.xml",
+          "sha256": "6f10a4e07ab8a04fec4568e91f201b4e5c517f9fa2325d8cea5798f5a43937fb"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.data.financial.FinancialDailyQueueTest.xml",
+          "sha256": "a5faaa37388bd66531686e533f744d25b108063abe3ac35dfa00d26b8f416f7c"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.data.financial.FinancialDailyBudgetTest.xml",
+          "sha256": "491f4d9346ba6862d480157edaa8ffa75108b4c10655163c02308c3c9ab7d143"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.market.cn.observation.ContractTableSyncTest.xml",
+          "sha256": "e27ddeb17fef788a0d2040728dfc468abeb5bd28e89e4be4bc6955774f28118d"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.market.cn.observation.ContractTableTargetTest.xml",
+          "sha256": "43a9b9f86cfcabb006986855220152276fc137df656ebf0d6b52fb9c83afd99b"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.market.cn.observation.ContractTableConfigurationTest.xml",
+          "sha256": "08f0ca8e7f5203b40b647698127ad13e190006828105b4deb3cd8574f3296de8"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.market.cn.observation.CyqChipsSyncTest.xml",
+          "sha256": "4789ddf7a3e8d7443463bdbf94e581cb0fcec767ebb59bec9708cde9833f3451"
+        },
+        {
+          "path": "build/modules/markets/cn/data/_output/test-results/test/TEST-com.zoutrankil.market.cn.observation.ReferenceKeyRevisionTest.xml",
+          "sha256": "30a5657da5dd2218837973567bc2405cd3a90e3d383f9c484b8bcaf30eb1361b"
+        }
+      ]
+    },
+    {
+      "module": "markets/cn/batch",
+      "tests": 2044,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reports": [
+        {
+          "path": "build/modules/markets/cn/batch/_output/test-results/test/TEST-com.zoutrankil.batch.source.SourceStrategiesTest.xml",
+          "sha256": "d80891e98629a1f58489c85a6708a74f15086b3932835591df883dc7f4ce2f9e"
+        },
+        {
+          "path": "build/modules/markets/cn/batch/_output/test-results/test/TEST-com.zoutrankil.batch.source.SourceStrategyCompatibilityTest.xml",
+          "sha256": "a62115a436a3b8b0e9312f53a058a4fad21452061c7d5b0f95a98b2f3dd12dc4"
+        },
+        {
+          "path": "build/modules/markets/cn/batch/_output/test-results/test/TEST-com.zoutrankil.batch.source.DailySourceContractAdapterTest.xml",
+          "sha256": "2eb1c976e5d4d33b8c1d232024234dffdc3faafd19f71bc6c69b2eac1ddc3390"
+        },
+        {
+          "path": "build/modules/markets/cn/batch/_output/test-results/test/TEST-com.zoutrankil.batch.source.NativeSourceTest.xml",
+          "sha256": "848b5627b395b9328cb61d5fb41f84669ebe079b3e8d8477885a6e0350fb8342"
+        }
+      ]
+    },
+    {
+      "module": "platform/core",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reports": [
+        {
+          "path": "build/modules/platform/core/_output/test-results/test/TEST-com.zoutrankil.data.domain.DoubleArrayValuesTest.xml",
+          "sha256": "f8013d45980ffcb3e4641829c4df957172b3001ecbbcc1c176c8666f2deffbd1"
+        }
+      ]
+    },
+    {
+      "module": "platform/engine/questdb",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reports": [
+        {
+          "path": "build/modules/platform/engine/questdb/_output/test-results/test/TEST-com.zoutrankil.data.repository.QuestDbArrayValuesTest.xml",
+          "sha256": "c58dab5ae067b5e6664b40491322d35b753d471d500dd7c85ab9956b1c218dd3"
+        }
+      ]
+    }
+  ],
+  "otherChecks": {
+    "architectureTest": "通过",
+    "verifyModuleBoundaries": "通过",
+    "cnDataDistZip": "通过",
+    "publicConfigurationAndCredentials": "通过",
+    "changedJavaFormatImportsLiterals": "52个Java文件通过",
+    "publicReaderRegression": "14项通过",
+    "logs": [
+      {
+        "path": "var/cn-remaining-round2/validation/cn-round2-final-checks.log",
+        "sha256": "c6bec931e10be513b7a4dc53df3dbcbe6b177375a7fa39220ff2b8601e8c5cae"
+      },
+      {
+        "path": "var/cn-remaining-round2/validation/cn-round2-data-final.log",
+        "sha256": "d3053a588bfcae9723f93ba8ce7ed19e52a7f63e107aca4f32304ff826958aee"
+      },
+      {
+        "path": "var/cn-remaining-round2/validation/cn-array-reader-regression.log",
+        "sha256": "a7a18151b9ae520104fc7fc7ee8c59bcefd9bdc709c179c8c77a37da3b6234b4"
+      },
+      {
+        "path": "var/cn-remaining-round2/validation/cn-round2-format-final.log",
+        "sha256": "5dd33babcebd8c28fba3aacc5da2e706fa1f990aeec529fe94dbef40f20e706d"
+      },
+      {
+        "path": "var/cn-remaining-round2/validation/cn-round2-public-config.log",
+        "sha256": "8d7cae6a90bde5726da0ebe5bb306f140d8cde57d3655bea20d73f13aea46ba3"
+      }
+    ]
+  },
+  "remaining": [
+    {
+      "tables": [
+        "repurchase",
+        "block_trade"
+      ],
+      "reason": "真实来源已分别取得18行及4行，缺无损多重记录整范围替换与恢复owner；不归为来源不可得"
+    },
+    {
+      "tables": [
+        "broker_recommend",
+        "stk_alert"
+      ],
+      "reason": "候选改键SQL未执行；旧范围须重新补数，新增范围须另行批准来源证据"
+    },
+    {
+      "tables": [
+        "sge_daily"
+      ],
+      "reason": "旧表新键有重复，计划要求显式重建；有限owner预检拒绝旧无键结构"
+    },
+    {
+      "scope": "全部正式运行",
+      "reason": "原AI目录已复制配置与证据；只读账本缺原同步运行/锁和生产唯一writer绑定，日批及消费者验收仍未完成"
+    }
+  ]
+}

@@ -1,0 +1,398 @@
+{
+  "schema": "cn.remaining.contract.tables.v1",
+  "checkedAt": "2026-10-21T10:20:36.140094+00:00",
+  "scope": "有限来源、原表预检和本地回归；未执行正式写入、日批或后续消费者验收",
+  "questdbWritten": false,
+  "formalAcceptance": false,
+  "counts": {
+    "newOwners": 12,
+    "nonemptySourceAndTargetPreflight": 9,
+    "sourceKeyChecksBlocked": 3,
+    "remainingDevelopmentOrDesign": 7,
+    "totalCodeConnected": 37,
+    "formalCompleted": 0,
+    "totalTrackedTables": 75
+  },
+  "checks": [
+    {
+      "dataset": "fut_basic",
+      "questdbWritten": false,
+      "code": "CFFEX",
+      "sourceDate": "2026-10-21",
+      "result": {
+        "code": "CFFEX",
+        "targetId": "static-v2-65fe2e2ab0082478559dedf69fdeab56c24d321f6be136fbfde779ccfc77feef",
+        "sourceCoverageVerified": true,
+        "rows": 696,
+        "dataset": "fut_basic",
+        "questdbWritten": false,
+        "targetDataVerified": false,
+        "manifest": "var/sync-evidence/contract-table-source-243a2813-62cc-4227-8081-f559fb19ce5e/completion.json"
+      },
+      "evidence": {
+        "completion": {
+          "path": "var/sync-evidence/contract-table-source-243a2813-62cc-4227-8081-f559fb19ce5e/completion.json",
+          "sha256": "b37ebda450a97755567da23a1ab5baa0b000f24611d64d81d7cff908ba2f6c84"
+        },
+        "sourceManifest": {
+          "path": "var/sync-evidence/contract-table-source-243a2813-62cc-4227-8081-f559fb19ce5e/source-manifest.json",
+          "sha256": "33ddc9eaa6594a095c4c197200741b205f043d4c3500a438ee9df7d92d58fc2d"
+        },
+        "sourceArtifact": {
+          "path": "var/sync-evidence/contract-table-source-243a2813-62cc-4227-8081-f559fb19ce5e/sources/566f6a25327d88d8c79c5b821d64c3ac853be7cb10976b446d84bfbbb62bfb65.json",
+          "sha256": "566f6a25327d88d8c79c5b821d64c3ac853be7cb10976b446d84bfbbb62bfb65"
+        },
+        "retainedLegacyKeys": 36
+      },
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "disclosure_date",
+      "questdbWritten": false,
+      "code": "ALL",
+      "sourceDate": "2026-09-30",
+      "result": {
+        "manifest": "var/sync-evidence/contract-table-source-682a1f20-12ac-4da2-984b-1c4de7a78894/completion.json",
+        "code": "ALL",
+        "targetId": "static-v2-2bc59edef5214e489b1426773cbd03b6e3c33f91270ba21dd9f12c34c76b379c",
+        "sourceCoverageVerified": true,
+        "rows": 5583,
+        "dataset": "disclosure_date",
+        "questdbWritten": false,
+        "targetDataVerified": false
+      },
+      "evidence": {
+        "completion": {
+          "path": "var/sync-evidence/contract-table-source-682a1f20-12ac-4da2-984b-1c4de7a78894/completion.json",
+          "sha256": "b6babed79afe9dceaf441015523008ffbe8991a34d543842169e4de4d156a8bd"
+        },
+        "sourceManifest": {
+          "path": "var/sync-evidence/contract-table-source-682a1f20-12ac-4da2-984b-1c4de7a78894/source-manifest.json",
+          "sha256": "7480e7b397efe97075fac6dc1ee5ea68cacf0faab8908f715cfc524149595bed"
+        },
+        "sourceArtifact": {
+          "path": "var/sync-evidence/contract-table-source-682a1f20-12ac-4da2-984b-1c4de7a78894/sources/3ed3962ef0e37514598da379911250188dd0d82a7714020e8ad8e18c1cb3219f.json",
+          "sha256": "3ed3962ef0e37514598da379911250188dd0d82a7714020e8ad8e18c1cb3219f"
+        },
+        "retainedLegacyKeys": 63
+      },
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "share_float",
+      "questdbWritten": false,
+      "code": "000601.SZ",
+      "sourceDate": "2026-09-19",
+      "result": {
+        "code": "000601.SZ",
+        "targetId": "static-v2-6cea2658e01850894c5d5c90cbb4dbb8553fc072ab836bc7e319cad792ff33a5",
+        "sourceCoverageVerified": true,
+        "rows": 6,
+        "dataset": "share_float",
+        "questdbWritten": false,
+        "targetDataVerified": false,
+        "manifest": "var/sync-evidence/contract-table-source-ce60b279-630b-4995-9334-32fc458af366/completion.json"
+      },
+      "evidence": {
+        "completion": {
+          "path": "var/sync-evidence/contract-table-source-ce60b279-630b-4995-9334-32fc458af366/completion.json",
+          "sha256": "533e9ad0ce12e18e6f99c88ca478973cd8e3fb1570bb0e0b8cc7b8921c4b1b74"
+        },
+        "sourceManifest": {
+          "path": "var/sync-evidence/contract-table-source-ce60b279-630b-4995-9334-32fc458af366/source-manifest.json",
+          "sha256": "081519f55c49695ac12ff80a52863438dfcd92b15325ce38f952593d25862cee"
+        },
+        "sourceArtifact": {
+          "path": "var/sync-evidence/contract-table-source-ce60b279-630b-4995-9334-32fc458af366/sources/a05c4acdd9d6196dc45c7708fc61705205c5f103365e6fcae666a1acfdb71790.json",
+          "sha256": "a05c4acdd9d6196dc45c7708fc61705205c5f103365e6fcae666a1acfdb71790"
+        },
+        "retainedLegacyKeys": 0
+      },
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "dividend",
+      "questdbWritten": false,
+      "code": "601877.SH",
+      "sourceDate": "2026-09-05",
+      "errorType": "com.zoutrankil.data.service.PageExecutor$Incomplete",
+      "error": "Duplicate business key within/across pages",
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "fina_audit",
+      "questdbWritten": false,
+      "code": "920083.BJ",
+      "sourceDate": "2026-05-29",
+      "result": {
+        "code": "920083.BJ",
+        "targetId": "static-v2-42a876995451a11d3071e92a4acaed210b06eecd52743baecff2ecd5151f7590",
+        "sourceCoverageVerified": true,
+        "rows": 3,
+        "dataset": "fina_audit",
+        "questdbWritten": false,
+        "targetDataVerified": false,
+        "manifest": "var/sync-evidence/contract-table-source-401c071b-b4d7-418c-bb75-6cc9221aa70d/completion.json"
+      },
+      "evidence": {
+        "completion": {
+          "path": "var/sync-evidence/contract-table-source-401c071b-b4d7-418c-bb75-6cc9221aa70d/completion.json",
+          "sha256": "a18e923584fb1ee36d5f857e218dfc6ff7eb7bf6668e5f553ff964137e4e9a89"
+        },
+        "sourceManifest": {
+          "path": "var/sync-evidence/contract-table-source-401c071b-b4d7-418c-bb75-6cc9221aa70d/source-manifest.json",
+          "sha256": "a46bd6407a43194d3c254d1f0cfc5a4f47b010b5277d39bc5c4bea72f9b5c77e"
+        },
+        "sourceArtifact": {
+          "path": "var/sync-evidence/contract-table-source-401c071b-b4d7-418c-bb75-6cc9221aa70d/sources/c570b077e53cbc316b5914c1968cb9efc3b01dd015963686d2775a2a501256d6.json",
+          "sha256": "c570b077e53cbc316b5914c1968cb9efc3b01dd015963686d2775a2a501256d6"
+        },
+        "retainedLegacyKeys": 0
+      },
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "fina_mainbz",
+      "questdbWritten": false,
+      "code": "874382.BJ",
+      "sourceDate": "2026-06-30",
+      "errorType": "java.lang.IllegalArgumentException",
+      "error": "P/D categories collide under the registered fina_mainbz business key",
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "pledge_stat",
+      "questdbWritten": false,
+      "code": "601091.SH",
+      "sourceDate": "2026-09-18",
+      "result": {
+        "code": "601091.SH",
+        "targetId": "static-v2-d820faf3040d79a840757e2062d22fc775dbe900f2691ab65910cf76343f29e9",
+        "sourceCoverageVerified": true,
+        "rows": 1,
+        "dataset": "pledge_stat",
+        "questdbWritten": false,
+        "targetDataVerified": false,
+        "manifest": "var/sync-evidence/contract-table-source-6d4b6137-ebed-41ae-996f-74376310202b/completion.json"
+      },
+      "evidence": {
+        "completion": {
+          "path": "var/sync-evidence/contract-table-source-6d4b6137-ebed-41ae-996f-74376310202b/completion.json",
+          "sha256": "bc3f197aeb03ee7ede54ec9d97e71bbfd51be1eba46308bf83f984581a62f448"
+        },
+        "sourceManifest": {
+          "path": "var/sync-evidence/contract-table-source-6d4b6137-ebed-41ae-996f-74376310202b/source-manifest.json",
+          "sha256": "b80de3e05de676b7750c546fc31eb0f8c7a099aaae85e4bbf8bdc01d3949f3a7"
+        },
+        "sourceArtifact": {
+          "path": "var/sync-evidence/contract-table-source-6d4b6137-ebed-41ae-996f-74376310202b/sources/3ceae7c8296301431e58ff152210e797e990feb88917941a42a67265aa3e8b64.json",
+          "sha256": "3ceae7c8296301431e58ff152210e797e990feb88917941a42a67265aa3e8b64"
+        },
+        "retainedLegacyKeys": 0
+      },
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "stk_holdernumber",
+      "questdbWritten": false,
+      "code": "301525.SZ",
+      "sourceDate": "2026-09-20",
+      "result": {
+        "code": "301525.SZ",
+        "targetId": "static-v2-1b1be81c166d69daaf384454124b85d955ef300404b6dbc3a04040680dfb9006",
+        "sourceCoverageVerified": true,
+        "rows": 1,
+        "dataset": "stk_holdernumber",
+        "questdbWritten": false,
+        "targetDataVerified": false,
+        "manifest": "var/sync-evidence/contract-table-source-91d1b0e4-c727-4a8b-8e77-3d635f4424e1/completion.json"
+      },
+      "evidence": {
+        "completion": {
+          "path": "var/sync-evidence/contract-table-source-91d1b0e4-c727-4a8b-8e77-3d635f4424e1/completion.json",
+          "sha256": "46d94b7d5be81025106fa7df4dae0988852df140fc414e271bffd323fbae152f"
+        },
+        "sourceManifest": {
+          "path": "var/sync-evidence/contract-table-source-91d1b0e4-c727-4a8b-8e77-3d635f4424e1/source-manifest.json",
+          "sha256": "885661dfcbcf4166630f1a80974c10e701b8efa1fb88b953a2052ce9a165c61b"
+        },
+        "sourceArtifact": {
+          "path": "var/sync-evidence/contract-table-source-91d1b0e4-c727-4a8b-8e77-3d635f4424e1/sources/ba901c9e677c0c9a562aa3f5897e23e586bd15e1681a1c088ceeff9c1a4ee169.json",
+          "sha256": "ba901c9e677c0c9a562aa3f5897e23e586bd15e1681a1c088ceeff9c1a4ee169"
+        },
+        "retainedLegacyKeys": 0
+      },
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "stk_holdertrade",
+      "questdbWritten": false,
+      "code": "920081.BJ",
+      "sourceDate": "2026-09-19",
+      "errorType": "java.lang.IllegalStateException",
+      "error": "来源范围缺少原目标键，需核查修订或移除原因",
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "stk_shock",
+      "questdbWritten": false,
+      "code": "002836.SZ",
+      "sourceDate": "2026-09-18",
+      "result": {
+        "code": "002836.SZ",
+        "targetId": "static-v2-d2c925e5c12fec150c35c600d95ce9f43b40e0d4da60ae2fb6e27f4fc88062a1",
+        "sourceCoverageVerified": true,
+        "rows": 1,
+        "dataset": "stk_shock",
+        "questdbWritten": false,
+        "targetDataVerified": false,
+        "manifest": "var/sync-evidence/contract-table-source-68fdcf2c-295a-4587-bcac-b8a7671298c2/completion.json"
+      },
+      "evidence": {
+        "completion": {
+          "path": "var/sync-evidence/contract-table-source-68fdcf2c-295a-4587-bcac-b8a7671298c2/completion.json",
+          "sha256": "ddb7991562b9be59be7faab046db539bda37e11b32768f4c316d8bcfc6f0be87"
+        },
+        "sourceManifest": {
+          "path": "var/sync-evidence/contract-table-source-68fdcf2c-295a-4587-bcac-b8a7671298c2/source-manifest.json",
+          "sha256": "ff6479e77d7328cbf23c1e462906b70f8d9f79b6c9a13b20bc7e0e9eae83128f"
+        },
+        "sourceArtifact": {
+          "path": "var/sync-evidence/contract-table-source-68fdcf2c-295a-4587-bcac-b8a7671298c2/sources/5bf6e710699e84a508ec8ce984ca41d1ff731056df1e8586340d25b5977c8a6d.json",
+          "sha256": "5bf6e710699e84a508ec8ce984ca41d1ff731056df1e8586340d25b5977c8a6d"
+        },
+        "retainedLegacyKeys": 0
+      },
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "stk_high_shock",
+      "questdbWritten": false,
+      "code": "000993.SZ",
+      "sourceDate": "2026-09-22",
+      "result": {
+        "code": "000993.SZ",
+        "targetId": "static-v2-dbb414febfd0aeb6892c786778b3b31bac4adb1cdcdd44295be902c40226775a",
+        "sourceCoverageVerified": true,
+        "rows": 1,
+        "dataset": "stk_high_shock",
+        "questdbWritten": false,
+        "targetDataVerified": false,
+        "manifest": "var/sync-evidence/contract-table-source-32d4f6fa-10dc-4cc3-8fab-a617052d985d/completion.json"
+      },
+      "evidence": {
+        "completion": {
+          "path": "var/sync-evidence/contract-table-source-32d4f6fa-10dc-4cc3-8fab-a617052d985d/completion.json",
+          "sha256": "21bed009ff6ebd3498ba5c4db7bdcde0656863bd7c647e0acff5b46f52d2f4ed"
+        },
+        "sourceManifest": {
+          "path": "var/sync-evidence/contract-table-source-32d4f6fa-10dc-4cc3-8fab-a617052d985d/source-manifest.json",
+          "sha256": "e12ce31493067311888e52bfbeeef7bb2ec8b1f60e56409564eedd1184ccdc04"
+        },
+        "sourceArtifact": {
+          "path": "var/sync-evidence/contract-table-source-32d4f6fa-10dc-4cc3-8fab-a617052d985d/sources/16d71f34d4b9bdb5fcd048ccae47c2ae8bd3443a219ca865f0efb4ffdaf4f05b.json",
+          "sha256": "16d71f34d4b9bdb5fcd048ccae47c2ae8bd3443a219ca865f0efb4ffdaf4f05b"
+        },
+        "retainedLegacyKeys": 0
+      },
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "balance",
+      "questdbWritten": false,
+      "targetDataVerified": false,
+      "targetId": "static-v2-cc130c7c69a1f758846556ccefecc8c665d44113addcf677251902c2a5ec0f2c",
+      "walSettled": true,
+      "code": "301677.SZ",
+      "period": "2026-06-30",
+      "endpoint": "balancesheet",
+      "sourceRows": 1,
+      "physicalFields": 159,
+      "sourceFields": 158,
+      "sourceManifest": {
+        "path": "var/cn-contract-table-check-20261021/balance-source/source-9a06951e-165d-41af-ac49-4b59671b331b.json",
+        "sha256": "6f0c618e1e81c67704f3fc9b965229c8fb0d46fe9570d779cfb478ca628227d7"
+      },
+      "evidence": {
+        "path": "var/cn-contract-table-check-20261021/balance-source-result.json",
+        "sha256": "49511f6670f363684231c586818f63c1c8ed310d50729916ea6fead94f25f43f"
+      },
+      "sourceCoverageVerified": true,
+      "formalAcceptance": false
+    }
+  ],
+  "remainingDevelopmentOrDesign": [
+    "broker_recommend",
+    "repurchase",
+    "sge_daily",
+    "cyq_chips",
+    "block_trade",
+    "stk_alert",
+    "fut_holding"
+  ],
+  "validation": {
+    "tests": {
+      "cnData": {
+        "tests": 124,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cnSourceRegistry": {
+        "tests": 2040,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "architecture": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "moduleBoundaries": "通过",
+    "cnDataDistribution": "通过",
+    "dependencyVersionCompatibility": "通过",
+    "batchDistributionDatabaseDrivers": "通过",
+    "changedJavaFormatImportsAndLiterals": "通过",
+    "publicConfigAndDistribution": "通过",
+    "log": {
+      "path": "var/cn-contract-table-check-20261021/validation.log",
+      "sha256": "acd471eaa2b1a46bcf1e8c206c86dd9fe14c06c09f8b10f259c66d1e276079af"
+    }
+  },
+  "runtimeEvidence": {
+    "sourceRoot": "/Users/Apple/zq/fun/QuestDBWithData",
+    "privateConfigCopiedToIgnoredPath": true,
+    "originalLedgerSnapshot": {
+      "path": "var/original-runtime/sync-ledger.sqlite3",
+      "sha256": "e252d603a281a9de1d5c6b95f20da798fb1eedd373dafd1c5331d79b5a260b9e"
+    },
+    "originalLedgerTables": [
+      "sync_schedule_defs",
+      "sync_schedule_history",
+      "native_mv_checkpoints",
+      "retired_questdb_sync_metadata"
+    ],
+    "sourceArtifactsCopied": true,
+    "formalRunAndLockEvidenceFound": false,
+    "productionWriterTakeover": false,
+    "note": "快照不作为新正式账本；不复制锁、不推断远端已停写。"
+  },
+  "rawChecks": {
+    "path": "var/cn-contract-table-check-20261021/latest-source-probe.json",
+    "sha256": "0dfd238f4910cf1752809bdd143dcd2fdb0265a101cdd38b21a00363b51c9ffa"
+  },
+  "limitations": [
+    "9 张正向结果都是有限请求，不代表全市场或全部历史已齐",
+    "分红、主营及增减持的具体键问题仍阻断，未签完整",
+    "其他交易所、正式补数、连续更新、消费者和原运行恢复仍待验收",
+    "7 张仍是开发或设计待办，未归为全部来源不可得",
+    "未运行全量测试或 retainedParityTest"
+  ],
+  "disclosureCurrentPlansRecheck": {
+    "path": "var/cn-contract-table-check-20261021/disclosure-current-plans.log",
+    "sha256": "bd06435d67df132c2cb646cb553bbe060e37094f6805aa12c22687fbd6c87f94"
+  }
+}

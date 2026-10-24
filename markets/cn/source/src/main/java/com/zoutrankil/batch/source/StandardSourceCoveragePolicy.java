@@ -35,7 +35,8 @@ record StandardSourceCoveragePolicy(
                                 || code.matches(
                                         "[A-Z]{1,3}[0-9]{3,4}\\.(CFX|SHF|DCE|CZC|INE|GFEX)");
                 case FUTURES_CONTINUOUS -> code.matches("[A-Z]{1,3}\\.(CFX|SHF|DCE|CZC|INE|GFEX)");
-                case FUTURES_PRODUCT -> code.matches("[A-Z]{1,3}");
+                // 旧品种请求保持原样；新入口允许供应商实际返回的具体合约符号，不带交易所后缀。
+                case FUTURES_PRODUCT -> code.matches("[A-Z]{1,3}(?:[0-9]{3,4})?");
                 case FUTURES_CONTRACT ->
                         code.matches("[A-Z]{1,3}[0-9]{3,4}\\.(CFX|SHF|DCE|CZC|INE|GFEX)");
                 case ETF_PORTFOLIO -> code.matches("[0-9]{6}\\.(SH|SZ|BJ|OF)");

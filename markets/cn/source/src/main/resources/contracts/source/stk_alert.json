@@ -1,0 +1,47 @@
+{
+  "dataset": "stk_alert",
+  "version": "stk_alert-v1",
+  "endpoint": "stk_alert",
+  "dateParameter": "start_date",
+  "sourceDate": "start_date",
+  "timestampColumn": "start_date",
+  "pageSize": 1000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 1000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=453; 实测单证券返回历史提示；原始响应按 1000 行保守预算拒绝满额，不声称供应商固定上限；本地按生效起始日选择；end_date 是可修订参考截止日，不作为事件身份；正式旧键须显式迁移",
+  "partitionBy": "YEAR",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "name",
+      "target": "name",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "start_date",
+      "target": "start_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "end_date",
+      "target": "end_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "type",
+      "target": "type",
+      "type": "SYMBOL",
+      "key": true
+    }
+  ]
+}

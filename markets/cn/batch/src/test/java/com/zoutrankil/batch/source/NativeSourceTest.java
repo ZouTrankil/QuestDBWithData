@@ -1382,7 +1382,13 @@ class NativeSourceTest {
                     dataset + " rows=" + result.rows() + " coverage=" + result.completeCoverage());
             var frozen = collector.read(result.fingerprint());
             var contract = SourceContract.load(dataset);
-            if (!Set.of("fut_basic", "etf_basic", "disclosure_date", "ths_index").contains(dataset))
+            if (!Set.of(
+                            "broker_recommend",
+                            "fut_basic",
+                            "etf_basic",
+                            "disclosure_date",
+                            "ths_index")
+                    .contains(dataset))
                 assertEquals(
                         dataset.equals("fina_mainbz") || dataset.equals("cn_gdp")
                                 ? "2026-06-30"
@@ -1407,6 +1413,13 @@ class NativeSourceTest {
                                     .toList());
             String field =
                     switch (dataset) {
+                        case "sge_daily" -> "close";
+                        case "cyq_chips" -> "price";
+                        case "broker_recommend", "stk_alert" -> "name";
+                        case "pledge_stat" -> "pledge_count";
+                        case "stk_holdernumber" -> "holder_num";
+                        case "stk_holdertrade" -> "change_vol";
+                        case "stk_shock", "stk_high_shock" -> "reason";
                         case "exchange_calendar" -> "is_open";
                         case "fina_mainbz" -> "bz_sales";
                         case "fina_audit" -> "audit_fees";
@@ -1496,6 +1509,11 @@ class NativeSourceTest {
                                                                                                                                                                     dataset)
                                                                                                                                                     ? "1.0"
                                                                                                                                                     : "12.25";
+            if (dataset.equals("sge_daily")) expectedValue = "10.25";
+            if (Set.of("broker_recommend", "stk_alert").contains(dataset))
+                expectedValue = "\"测试证券\"";
+            if (Set.of("pledge_stat", "stk_holdernumber").contains(dataset)) expectedValue = "123i";
+            if (Set.of("stk_shock", "stk_high_shock").contains(dataset)) expectedValue = "\"测试证券\"";
             assertTrue(
                     new String(ilp, StandardCharsets.UTF_8)
                             .contains(
