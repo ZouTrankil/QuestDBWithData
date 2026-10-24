@@ -132,6 +132,10 @@ public final class StockDetailInfoJobService implements SyncJobOwner {
         return List.of(definition());
     }
 
+    public String tableName() {
+        return table;
+    }
+
     public String targetId() {
         return database.identify(table, database.open(table).preflight());
     }

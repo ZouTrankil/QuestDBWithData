@@ -43,5 +43,8 @@ app:
     etf-overview:
       enabled: false
   sync:
+    # 主策略消费正式停牌和ETF目录；有限data CLI继续保留隔离默认。
+    stk-suspend-table: stk_suspend
+    etf-basic-table: etf_basic
     batch:
       enabled: true

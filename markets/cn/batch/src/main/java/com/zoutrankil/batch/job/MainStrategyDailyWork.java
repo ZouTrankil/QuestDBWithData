@@ -27,6 +27,9 @@ public interface MainStrategyDailyWork {
                     "OfficialPlanData",
                     "MainStrategyAcceptance");
 
+    /** 只在没有待恢复主策略请求时准备前置资料；旧实现不增加副作用。 */
+    default void prepareReferenceData(Clock clock) throws Exception {}
+
     LocalDate resolveTarget(Clock clock, LocalTime completionCutoff) throws Exception;
 
     String inputFingerprint(LocalDate target) throws Exception;

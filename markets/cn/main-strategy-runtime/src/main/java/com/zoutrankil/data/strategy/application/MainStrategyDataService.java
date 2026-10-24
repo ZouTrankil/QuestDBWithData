@@ -163,6 +163,9 @@ public final class MainStrategyDataService {
     public Map<String, Object> status() throws Exception {
         var result = new LinkedHashMap<String, Object>();
         result.put("producer", "java.main_strategy.data");
+        // 本机未挂载目标机器的方案不是远端丢失；这些文件只在评分与计划阶段使用。
+        result.put("runtimeScope", "current-process-configured-paths");
+        result.put("sourceSynchronizationRequiresPromotedArtifacts", false);
         result.put("scoreStart", start);
         result.put("configuredInputSchema", configuredInputSchema().inputSchema());
         result.put("promotedRecipe", recipe.toString());

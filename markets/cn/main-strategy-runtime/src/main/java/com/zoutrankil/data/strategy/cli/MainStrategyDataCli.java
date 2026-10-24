@@ -106,6 +106,8 @@ public final class MainStrategyDataCli {
                         options.getOrDefault(
                                 "source-coverage-sha256",
                                 config.getProperty("app.sync.batch.source-coverage-sha256", "")));
+        // 手动构造服务时也要应用目标协议，不能让CLI静默回到v1。
+        service.configureBatchInputSchema(config.getProperty("app.sync.batch.input-schema", "v1"));
         service.configureCoverageAssembly(
                 options.getOrDefault(
                         "coverage-inputs",

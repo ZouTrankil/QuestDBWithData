@@ -194,6 +194,9 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
             try (var guard = ledger.tryLock("job:" + MainStrategyDailyWork.JOB).orElse(null)) {
                 if (guard == null) return Map.of("disposition", "already-running");
                 guard.requireAlive();
+                // 先准备真实日历，再选择交易日；原请求恢复期间保留其输入，不能换新观察。
+                if (!ledger.hasUnfinishedJob(MainStrategyDailyWork.JOB))
+                    work.prepareReferenceData(Clock.fixed(fired, ZONE));
                 LocalDate target =
                         work.resolveTarget(Clock.fixed(fired, ZONE), properties.completionCutoff());
                 if (target == null)
