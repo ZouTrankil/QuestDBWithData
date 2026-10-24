@@ -23,7 +23,7 @@ public final class QuestDbEtfBasicTarget implements EtfWriteTarget<EtfBasic, Etf
     public QuestDbEtfBasicTarget(String table, JdbcTemplate jdbc, QuestDB questdb) {
         this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb);
-        EtfBasicDataset.requireIsolatedTable(table);
+        EtfBasicDataset.requireExecutionTable(table);
         this.table = table;
     }
 
@@ -34,7 +34,7 @@ public final class QuestDbEtfBasicTarget implements EtfWriteTarget<EtfBasic, Etf
 
     @Override
     public String targetId() {
-        EtfBasicDataset.requireIsolatedTable(table);
+        EtfBasicDataset.requireExecutionTable(table);
         QuestDbWriteChecks.preflight(jdbc, table, EtfBasicDataset.definition(table));
         var rows =
                 jdbc.queryForList(

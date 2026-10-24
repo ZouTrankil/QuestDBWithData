@@ -333,11 +333,12 @@ class EtfAdditionalTargetTest {
 
     @ParameterizedTest
     @EnumSource(Family.class)
-    void onlyPortfolioAdmitsItsExactFormalNameAndInjectedNamesAreRejectedWithoutIo(Family family) {
+    void basicAndPortfolioAdmitOnlyTheirOwnFormalNamesWithoutIo(Family family) {
         var jdbc = mock(JdbcTemplate.class);
         var questdb = mock(QuestDB.class);
         for (var table : List.of("etf_basic", "etf_portfolio", "etf_share", "unrelated")) {
-            if (family == Family.PORTFOLIO && table.equals("etf_portfolio"))
+            if (family == Family.PORTFOLIO && table.equals("etf_portfolio")
+                    || family == Family.BASIC && table.equals("etf_basic"))
                 assertEquals(table, family.target(table, jdbc, questdb).tableName());
             else
                 assertThrows(

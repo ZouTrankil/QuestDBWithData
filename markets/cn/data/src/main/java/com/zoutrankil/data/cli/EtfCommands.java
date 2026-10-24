@@ -38,6 +38,7 @@ public final class EtfCommands implements CliCommandFamily {
                     "run-etf-factor-job",
                     "plan-etf-portfolio-job",
                     "run-etf-portfolio-job",
+                    "check-etf-basic-source",
                     "plan-etf-basic-job",
                     "run-etf-basic-job");
     private final EtfDailyJobService etfDailyService;
@@ -457,6 +458,14 @@ public final class EtfCommands implements CliCommandFamily {
                                         + "; run="
                                         + result.runId());
                 }
+            }
+            case "check-etf-basic-source" -> {
+                if (etfBasicService == null || !options.keySet().equals(Set.of("--logical-date")))
+                    throw new IllegalArgumentException("ETF目录核查只接受当前业务日");
+                CliOutput.printJson(
+                        etfBasicService.checkSource(LocalDate.parse(options.get("--logical-date"))),
+                        CliOutput.Profile.JOB_DEFINITION,
+                        true);
             }
             case "plan-etf-basic-job", "run-etf-basic-job" -> {
                 if (etfBasicService == null)

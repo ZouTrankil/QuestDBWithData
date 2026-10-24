@@ -8,11 +8,11 @@ import com.zoutrankil.data.domain.fund.EtfBasicDataset;
 import com.zoutrankil.data.domain.fund.EtfBasicKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.etf.mapper.EtfBasicMapper;
+import com.zoutrankil.data.etf.port.EtfBasicDirectorySession;
 import com.zoutrankil.data.repository.DatasetWritePreparation;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
-import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** Bounded typed QWP writer and full physical-row readback for the isolated D013 target. */
-public final class EtfBasicWritePort implements VerifiedWriteSession<EtfBasic, EtfBasicKey> {
+public final class EtfBasicWritePort implements EtfBasicDirectorySession {
     public static final int MAX_BATCH_ROWS = 250;
     public static final int MAX_BATCH_BYTES = 1024 * 1024;
     private static final Duration ACK_TIMEOUT = Duration.ofSeconds(10);
@@ -66,7 +66,7 @@ public final class EtfBasicWritePort implements VerifiedWriteSession<EtfBasic, E
 
     public EtfBasicWritePort(
             String table, String expectedTargetId, JdbcTemplate jdbc, QuestDB questdb) {
-        EtfBasicDataset.requireIsolatedTable(table);
+        EtfBasicDataset.requireExecutionTable(table);
         if (expectedTargetId == null || !expectedTargetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen etf_basic target identity required");
         this.table = table;
@@ -79,7 +79,7 @@ public final class EtfBasicWritePort implements VerifiedWriteSession<EtfBasic, E
 
     @Override
     public void preflight() {
-        EtfBasicDataset.requireIsolatedTable(table);
+        EtfBasicDataset.requireExecutionTable(table);
         QuestDbWriteChecks.preflight(jdbc, table, EtfBasicDataset.definition(table));
         requireExpectedTarget();
     }
@@ -213,6 +213,45 @@ public final class EtfBasicWritePort implements VerifiedWriteSession<EtfBasic, E
         return jdbc.query(sql, (rs, index) -> physical(rs), parameters.toArray());
     }
 
+    /** 发送前后都读完整目录，防止消失旧键、并发新增键或旧值变化逃过批次核验。 */
+    public List<EtfBasic> readDirectory() {
+        preflight();
+        long before = writerTxn();
+        var projection = new ArrayList<String>();
+        for (var column : EtfBasicDataset.DEFINITION.columns()) {
+            String n = column.storageName();
+            projection.add(
+                    Set.of("timestamp", "update_time").contains(n)
+                            ? "cast(\"" + n + "\" AS long) AS \"" + n + "_micros\""
+                            : "\"" + n + "\"");
+        }
+        var bounded = new JdbcTemplate(jdbc.getDataSource());
+        bounded.setQueryTimeout(30);
+        bounded.setMaxRows(30001);
+        var rows =
+                bounded.query(
+                        "SELECT "
+                                + String.join(",", projection)
+                                + " FROM \""
+                                + table
+                                + "\" ORDER BY ts_code,timestamp LIMIT 30001",
+                        (rs, i) -> physical(rs));
+        if (rows.size() > 30000) throw new IllegalStateException("ETF目录超过30000行完整回读预算");
+        var keys = new HashSet<EtfBasicKey>();
+        for (var row : rows)
+            if (!keys.add(row.key())) throw new IllegalStateException("ETF目录出现重复完整键");
+        preflight();
+        if (before != writerTxn()) throw new IllegalStateException("ETF目录回读期间WAL版本改变");
+        return List.copyOf(rows);
+    }
+
+    private long writerTxn() {
+        var rows = jdbc.queryForList("SELECT writerTxn FROM wal_tables() WHERE name=?", table);
+        if (rows.size() != 1 || !(rows.getFirst().get("writerTxn") instanceof Number n))
+            throw new IllegalStateException("ETF目录WAL版本缺失");
+        return n.longValue();
+    }
+
     private EtfBasic physical(ResultSet rs) throws SQLException {
         Object timestamp = rs.getObject("timestamp_micros");
         Object update = rs.getObject("update_time_micros");
@@ -251,7 +290,10 @@ public final class EtfBasicWritePort implements VerifiedWriteSession<EtfBasic, E
                 if (raw != null && !(raw instanceof Number))
                     throw new SQLException("Non-numeric etf_basic value: " + name);
                 Double number = raw == null ? null : ((Number) raw).doubleValue();
-                values.put(name, number == null || !Double.isFinite(number) ? null : number);
+                // QuestDB用NaN承载DOUBLE空值；无穷值不是缺失，不能悄悄改成null。
+                if (number != null && !Double.isNaN(number) && !Double.isFinite(number))
+                    throw new SQLException("ETF目录包含无穷数值：" + name);
+                values.put(name, number == null || Double.isNaN(number) ? null : number);
             } else values.put(name, rs.getString(column.storageName()));
         }
         try {
@@ -277,7 +319,7 @@ public final class EtfBasicWritePort implements VerifiedWriteSession<EtfBasic, E
     }
 
     private void requireExpectedTarget() {
-        EtfBasicDataset.requireIsolatedTable(table);
+        EtfBasicDataset.requireExecutionTable(table);
         var identity =
                 jdbc.queryForList(
                         "SELECT id,directoryName FROM tables() WHERE table_name=?", table);

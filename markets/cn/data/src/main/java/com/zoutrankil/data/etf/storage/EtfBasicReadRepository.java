@@ -32,7 +32,7 @@ public class EtfBasicReadRepository implements DatasetImplementation {
             QuestDbBoundedReader reader,
             @Value("${app.sync.etf-basic-table:java_d013_etf_basic_acceptance}") String table) {
         this.reader = Objects.requireNonNull(reader);
-        EtfBasicDataset.requireIsolatedTable(table);
+        EtfBasicDataset.requireExecutionTable(table);
         this.table = table;
     }
 
