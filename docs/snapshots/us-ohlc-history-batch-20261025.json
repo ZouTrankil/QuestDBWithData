@@ -1,0 +1,1816 @@
+{
+  "checkedAt": "2026-10-24T21:54:10.567869+00:00",
+  "bundle": "broad-50943f42-047b-47f4-b987-927d26d08897",
+  "fullSourceCount": 60,
+  "fullRequestedFrom": "2006-01-01",
+  "throughDate": "2026-10-16",
+  "fullRows": 181265,
+  "fiveYearSourceCount": 6,
+  "fiveYearRows": 7530,
+  "newRows": 188795,
+  "nativeRuns": 22,
+  "all20FieldsIndependentRawJavaPreparedNativePgwireHttpExact": true,
+  "oldNativeTypedValuesUnchanged": true,
+  "oldGroupsWindowsRetriesAndOtherTasksUnchanged": true,
+  "originalRawShaObservedAndFailuresRetained": true,
+  "cryptoControlsPhysicalAndWalUnchanged": true,
+  "coreSnapshotsAndSharedL2Unchanged": true,
+  "sourceRequests": 192,
+  "newUnknownSourceRequests": 0,
+  "receivedBytes": 24295305,
+  "sourceRequestsDuringPublication": 0,
+  "oldRequestsAndUnknownReservationsUnchanged": true,
+  "shortSources": [
+    {
+      "task": "b30ba6447670620677b0b793f4287a6352bc0550d10736294755bf8498de8ea2",
+      "symbol": "IGTA",
+      "yahooSymbol": "IGTA",
+      "rows": 1189,
+      "sourceSha256": "2da6c9a49369c1a9f04870018c5685351f4bda219772bdb5011a224fae43a7c5",
+      "observedAt": "2026-10-24T21:34:43.235536Z",
+      "independentRowsDigest": "ad24c3b395eea4ae87e32684a7686732f668011c64b7c0ac8ce563ce8c905906",
+      "firstDate": "2022-01-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 560,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "bd07a9bbacf24e2475fd923d3c2a1405fb435af7414d6963daa003fa112bbe87",
+      "symbol": "IGTAU",
+      "yahooSymbol": "IGTAU",
+      "rows": 1218,
+      "sourceSha256": "0a88204f4e14a0aed698932efea875483db7888d1b9e67d69669056ca580c885",
+      "observedAt": "2026-10-24T21:34:47.276468Z",
+      "independentRowsDigest": "4178d3f020122c6f12bf88a6dbf0c887d199bd2c97b94b9a37e631c33f97546f",
+      "firstDate": "2021-12-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1060,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2f48f1aba88b1df827b54242f5cc79505ee476567b5d74450e9b59b640fbeb37",
+      "symbol": "IHLDF",
+      "yahooSymbol": "IHLDF",
+      "rows": 1052,
+      "sourceSha256": "e7da415818f1a7b7754bdc92c17ba4ef28d0d8c5bdedec95f2fff73306d9b3f6",
+      "observedAt": "2026-10-24T21:35:21.459192Z",
+      "independentRowsDigest": "858b7327cb20bd4b599d0bed6208f22603bd35a29237af84362faf6dac53ec9d",
+      "firstDate": "2022-08-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 633,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "d22644c01f4fea878885c8e780af0232f0a84caf33a4d9ddd7d86914d7b93b57",
+      "symbol": "IHSWF",
+      "yahooSymbol": "IHSWF",
+      "rows": 173,
+      "sourceSha256": "3491828785b6989f5905acc27c429b9d35864f45f7114baa8e585ddb9380c136",
+      "observedAt": "2026-10-24T21:35:41.590153Z",
+      "independentRowsDigest": "cc48544e68b95b8c3a0ff97e115ba431f49403ffb5aa249327dbbc8d48112de6",
+      "firstDate": "2026-02-10",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 172,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ed49c330eb2c67d1f3be09ba53e812b7aa81c0a8231a8b33fdc76637c461f5d3",
+      "symbol": "IMITF",
+      "yahooSymbol": "IMITF",
+      "rows": 104,
+      "sourceSha256": "064050bd82e8ff5b5833c28fcf40d091863f8cfad8956267826a70104e56dc9a",
+      "observedAt": "2026-10-24T21:39:16.577837Z",
+      "independentRowsDigest": "693cc4cdcdfbf222103ad9b596666f5ac74deb0818b1c7303362d0dfdaed5568",
+      "firstDate": "2026-05-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 49,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "016869027fd33a5c209ad65db811488e98f6221da8782e6c555a0bc2796b7876",
+      "symbol": "IMIUY",
+      "yahooSymbol": "IMIUY",
+      "rows": 137,
+      "sourceSha256": "213a7677f25c914e185e51cb856790e59080a1a3f1a187c01095f32a103fb092",
+      "observedAt": "2026-10-24T21:39:18.611407Z",
+      "independentRowsDigest": "52c0337b8ca0d4b025519e5a3d0560b2ee726e85ccb0765e0a3b4eef059c8186",
+      "firstDate": "2026-04-02",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "fcd5aeba72ac428ebccab8f7ecb095be9b15e999aeb0413cb83150f2d00e6bf8",
+      "symbol": "IMPTF",
+      "yahooSymbol": "IMPTF",
+      "rows": 668,
+      "sourceSha256": "86569c2b657e2078ee6ae14e76683b8e5c716cd27187b9eb9d927fbf44fab3a5",
+      "observedAt": "2026-10-24T21:40:14.912887Z",
+      "independentRowsDigest": "8ef502e0da0d987fcc7625c20b541cc8ee02ca23372bb84b2570fd2f9b6a10ad",
+      "firstDate": "2024-02-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 481,
+      "dateGridMatchesStoredSpy": true
+    }
+  ],
+  "earlyEndedSources": [],
+  "zeroVolumeRows": 120969,
+  "wholeMarketComplete": false,
+  "说明": "原历史目录任务的下一有限批，不扩大固定首批清单；可用响应不代表永久证券身份或上市以来完整历史。",
+  "sourceChecks": [
+    {
+      "task": "08fe2c69d74728a42cf8e6f295e874faa30df508ee0c9498a91928fb40d47df7",
+      "symbol": "IGPG",
+      "yahooSymbol": "IGPG",
+      "rows": 5230,
+      "sourceSha256": "4ca89a5d15621ebb572ec566f13c7ce4188b4c6928bde8aa26c26800e8898cd8",
+      "observedAt": "2026-10-24T21:34:23.229394Z",
+      "independentRowsDigest": "cc785251859c77e0538f19868673e99c63a558315d2f48ab5b99364c2d34f20e",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3246,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "5b3776b4d853bf25af585064d2aa496e03fd39e83e47d97bc4ff5a9b961bfd5d",
+      "symbol": "IGPK",
+      "yahooSymbol": "IGPK",
+      "rows": 5230,
+      "sourceSha256": "09151fa4699bc1f9a38fe7a72caa77ea08d4bd31d3f708402b0ed046b0d72e84",
+      "observedAt": "2026-10-24T21:34:25.215887Z",
+      "independentRowsDigest": "78595ea463af11d77c88e1f9010ed63944d27d159792efec1fd6789137e21ea2",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1741,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6f69a7fd6e8826b4cae732fde4295fecc678b31d25e691afde24e85f3f31e0f7",
+      "symbol": "IGPYF",
+      "yahooSymbol": "IGPYF",
+      "rows": 3873,
+      "sourceSha256": "baa6171beda55ecba7e40c51398d570a568f3e654d346d6339e7f2cdb92aba27",
+      "observedAt": "2026-10-24T21:34:31.204282Z",
+      "independentRowsDigest": "34487c0ee3cc4fe0f234d360701793bca8ce68c260994be528ee3c5bb4249596",
+      "firstDate": "2011-05-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3829,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "263b052ec3a4777d6590c78943112077b644fe5981983a7871cb0e14193fe1e0",
+      "symbol": "IGRU",
+      "yahooSymbol": "IGRU",
+      "rows": 4335,
+      "sourceSha256": "14180c00331359e0f12d4c133387b3e2d19fa512a634eb440dc89cd8a06535c7",
+      "observedAt": "2026-10-24T21:34:35.281837Z",
+      "independentRowsDigest": "9c844da39a0ec9e985d9adeb3b4c759e14e01ef9a454d7c2961f219543d28292",
+      "firstDate": "2009-07-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3654,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "9fbd8694954ef7405687bc46059cca98356a1cb1790aa2f7411dd48153efb1da",
+      "symbol": "IGSC",
+      "yahooSymbol": "IGSC",
+      "rows": 2319,
+      "sourceSha256": "a6fc89d8dbbc115471557dac5f908e63c258f0c478207bb121326bca17113734",
+      "observedAt": "2026-10-24T21:34:41.287149Z",
+      "independentRowsDigest": "6e9077c5e291b612bf327e763f8c8c9b3046ab55355814c42898473fa5552c1a",
+      "firstDate": "2017-07-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2122,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b30ba6447670620677b0b793f4287a6352bc0550d10736294755bf8498de8ea2",
+      "symbol": "IGTA",
+      "yahooSymbol": "IGTA",
+      "rows": 1189,
+      "sourceSha256": "2da6c9a49369c1a9f04870018c5685351f4bda219772bdb5011a224fae43a7c5",
+      "observedAt": "2026-10-24T21:34:43.235536Z",
+      "independentRowsDigest": "ad24c3b395eea4ae87e32684a7686732f668011c64b7c0ac8ce563ce8c905906",
+      "firstDate": "2022-01-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 560,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "bd07a9bbacf24e2475fd923d3c2a1405fb435af7414d6963daa003fa112bbe87",
+      "symbol": "IGTAU",
+      "yahooSymbol": "IGTAU",
+      "rows": 1218,
+      "sourceSha256": "0a88204f4e14a0aed698932efea875483db7888d1b9e67d69669056ca580c885",
+      "observedAt": "2026-10-24T21:34:47.276468Z",
+      "independentRowsDigest": "4178d3f020122c6f12bf88a6dbf0c887d199bd2c97b94b9a37e631c33f97546f",
+      "firstDate": "2021-12-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1060,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a0455b56fde1d3173a874ecfd1f80c70739a1caeb82ff81eecce25f04152568c",
+      "symbol": "IHAI",
+      "yahooSymbol": "IHAI",
+      "rows": 3535,
+      "sourceSha256": "7429c05f06dadc7e6e5f9ed9b58d5570e601e0c3d62c76eaf3808d56a9292bce",
+      "observedAt": "2026-10-24T21:35:01.350891Z",
+      "independentRowsDigest": "3260e437f3c19ecf4d09d0a1bdb6b1b69bfc8a890ff734735a5d80298c28a04d",
+      "firstDate": "2012-09-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2170,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "132ba7b6a5e8a51ad421b6082bb65176eae18691f170b19878e68f726ba2d000",
+      "symbol": "IHCPF",
+      "yahooSymbol": "IHCPF",
+      "rows": 3368,
+      "sourceSha256": "d88ec8bdefa161c63c45c7293aaca3a518a42e588383c48da28eb75ea05b3b0e",
+      "observedAt": "2026-10-24T21:35:05.387275Z",
+      "independentRowsDigest": "c26fdbad9b8f0704b8f357386f7d85e94f330804fd8bdfd0d23fba38effbf839",
+      "firstDate": "2013-05-29",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3265,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "de5a505651f17f649d2b0577a0e0cfaa516c6c3255924a8c3b3b90c25878c826",
+      "symbol": "IHGP",
+      "yahooSymbol": "IHGP",
+      "rows": 4335,
+      "sourceSha256": "e4ce4235533c1023ffcb13ea9952f6e1150e03e60975ad16aaee601ba71504ca",
+      "observedAt": "2026-10-24T21:35:13.422378Z",
+      "independentRowsDigest": "8eb972b074bd85adc505c9858003cfc00e6a45c45c501129509dad846b249ad8",
+      "firstDate": "2009-07-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2910,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "775a668a0fd67d42bc14a2f7de77e04390628443c85d694d8c752eb6e85d8841",
+      "symbol": "IHHHF",
+      "yahooSymbol": "IHHHF",
+      "rows": 2886,
+      "sourceSha256": "a282273e6814f5b0301a492355c02cc33dd7ae98abdd52b1e95af254f773a433",
+      "observedAt": "2026-10-24T21:35:15.448382Z",
+      "independentRowsDigest": "965847f0bafc85eb08ddf24f98d033f6b862af5e82ae86af0272720dace564f0",
+      "firstDate": "2015-04-28",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2818,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6a0baa509d76d3498b3bf4076a7c445ee01d98497ed9b55a32b8a46fc2717a06",
+      "symbol": "IHICF",
+      "yahooSymbol": "IHICF",
+      "rows": 2857,
+      "sourceSha256": "e8ab363d8f2379c8e4a8dd7989a680114008960b3dafd97f71eb9d42f1968a96",
+      "observedAt": "2026-10-24T21:35:17.456894Z",
+      "independentRowsDigest": "4c21e13139972f385447c1c17eefcd3e45f82dd4fff103971eb6a150396a1368",
+      "firstDate": "2015-06-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2732,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c89d1d63de54ac95e999eae6490eef7682b254a3ce7d1a9d4ab7cd16a6a5a976",
+      "symbol": "IHICY",
+      "yahooSymbol": "IHICY",
+      "rows": 2857,
+      "sourceSha256": "c69300616c74fbf3633b66de7f379541be281c852111ea5e3b7068e222af158b",
+      "observedAt": "2026-10-24T21:35:19.454840Z",
+      "independentRowsDigest": "87d599630d313ae62408df66dd6acbc361f669549ceb2feba37432ab70879811",
+      "firstDate": "2015-06-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1572,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2f48f1aba88b1df827b54242f5cc79505ee476567b5d74450e9b59b640fbeb37",
+      "symbol": "IHLDF",
+      "yahooSymbol": "IHLDF",
+      "rows": 1052,
+      "sourceSha256": "e7da415818f1a7b7754bdc92c17ba4ef28d0d8c5bdedec95f2fff73306d9b3f6",
+      "observedAt": "2026-10-24T21:35:21.459192Z",
+      "independentRowsDigest": "858b7327cb20bd4b599d0bed6208f22603bd35a29237af84362faf6dac53ec9d",
+      "firstDate": "2022-08-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 633,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "1d6381c4116d909d80bbf3120c0244ec8f3db03c86a049118e0e75362ee708f3",
+      "symbol": "IHRTB",
+      "yahooSymbol": "IHRTB",
+      "rows": 1461,
+      "sourceSha256": "97cd477104662dd1c6a534f1a70e0ce2ddc69ba1a83b8815a0bcc8423cbda6b9",
+      "observedAt": "2026-10-24T21:35:35.514614Z",
+      "independentRowsDigest": "1e0852f3c277af6d6d1ac4c984b790cae91163f8b3b29969a5ea64cc25680589",
+      "firstDate": "2020-12-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1418,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "d22644c01f4fea878885c8e780af0232f0a84caf33a4d9ddd7d86914d7b93b57",
+      "symbol": "IHSWF",
+      "yahooSymbol": "IHSWF",
+      "rows": 173,
+      "sourceSha256": "3491828785b6989f5905acc27c429b9d35864f45f7114baa8e585ddb9380c136",
+      "observedAt": "2026-10-24T21:35:41.590153Z",
+      "independentRowsDigest": "cc48544e68b95b8c3a0ff97e115ba431f49403ffb5aa249327dbbc8d48112de6",
+      "firstDate": "2026-02-10",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 172,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "95f920228864de85396f5f269157e67600f1aecd7509848c94fb5423efc5b21f",
+      "symbol": "IHTI",
+      "yahooSymbol": "IHTI",
+      "rows": 5230,
+      "sourceSha256": "7cb65e0c7316f21127cb979df4f7ba21bd8f8188c0f1f51e4cd38f7dc6ded7fe",
+      "observedAt": "2026-10-24T21:35:43.589611Z",
+      "independentRowsDigest": "62a66a01a79bcbc074c1d4f55fa0b6d0cd4c448cde8e9d20f222ea149384babd",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4305,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "97228834d4ed65f99aaa28fe4f0cab9152baed143b6250ecac8f528fa10f4d90",
+      "symbol": "IIDDY",
+      "yahooSymbol": "IIDDY",
+      "rows": 1416,
+      "sourceSha256": "358cf7e45b92ee1b16b3363fe04b52cedb915dd3548f1b2cf09bfd264272e310",
+      "observedAt": "2026-10-24T21:36:01.665889Z",
+      "independentRowsDigest": "320a3b8489a225e147c6b4fe300db2ee8766101d3422236d54eb9d62781b49f2",
+      "firstDate": "2021-03-01",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1234,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a54c5516b3962534fe578a300c0589005fa0b348393a031430fa49d7b83ee3dc",
+      "symbol": "IIJIY",
+      "yahooSymbol": "IIJIY",
+      "rows": 1884,
+      "sourceSha256": "a8b570894697e2fa28088462d19160da36685485c69ea2177dd1201f307dfd16",
+      "observedAt": "2026-10-24T21:36:13.696382Z",
+      "independentRowsDigest": "4c539221a77414f8fc9bb40ee69119424e9558f0059873729bb24db1d6dfaefb",
+      "firstDate": "2019-04-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 870,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f58cd20130a57199f7b113623413b97cae6b6aac70dee7880467d4e8ef624cc7",
+      "symbol": "IITSF",
+      "yahooSymbol": "IITSF",
+      "rows": 4967,
+      "sourceSha256": "14dbc0740c429c704bec30c354ebde5244483b7e1838084f4724f91f6206c113",
+      "observedAt": "2026-10-24T21:36:31.805692Z",
+      "independentRowsDigest": "94eb6b3bafc72e9b953f1b80720e6141e80088d4774a1e8be5cc8ec94aa2c80c",
+      "firstDate": "2007-01-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1430,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "be02cd9d21f794d5fd89aa6a9ae62fa97b7334faf05e8a06040b227437391941",
+      "symbol": "IJJP",
+      "yahooSymbol": "IJJP",
+      "rows": 5230,
+      "sourceSha256": "b335d229689405d543ca7aebdeb5f49680d86ee3a36e9bbdfe8a5de1ac926ca8",
+      "observedAt": "2026-10-24T21:36:35.811167Z",
+      "independentRowsDigest": "602bae26893a0fa4481c1d86775d3d7ff5259ab099ec917c66c5e108b3c76965",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2276,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e0ae456a465a510e7a34fdadab1b43881dc787b4e1ec8e7039055e22e3022f48",
+      "symbol": "IKTO",
+      "yahooSymbol": "IKTO",
+      "rows": 4934,
+      "sourceSha256": "b3a76032069dee219fc5adb23c9b5389480dc941bae50ec417fafeb83325838c",
+      "observedAt": "2026-10-24T21:36:49.870920Z",
+      "independentRowsDigest": "4026a4c0c2c04886018c3c6e9723764960517b3cf008bae14b2cb4af50e30c03",
+      "firstDate": "2007-03-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3132,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a99817d88c1d62186a7a88df0fc027a080c8f07c3ad80e030bf063f8ff675d3b",
+      "symbol": "IKTSF",
+      "yahooSymbol": "IKTSF",
+      "rows": 4608,
+      "sourceSha256": "b1b66a94c4648058da4240fe34139e965df9432e0168564aeeeb0fbc392643f8",
+      "observedAt": "2026-10-24T21:36:51.934949Z",
+      "independentRowsDigest": "1e2a0e31cd27509baeb2d23007871c37f63ca76b663d427162378880b86a20c6",
+      "firstDate": "2008-06-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3602,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "25a7692458cfa4a1ce61546307c354ed6852ed09da39d7b8e05416fd60a6604f",
+      "symbol": "IKTSY",
+      "yahooSymbol": "IKTSY",
+      "rows": 3571,
+      "sourceSha256": "bd7f8fc16dd9fccc41131e080ebd51ba67aaa6c016690b3e30cd791544583880",
+      "observedAt": "2026-10-24T21:36:53.894368Z",
+      "independentRowsDigest": "8c5ef807c83563d92914afa83f936c19f20e7464aa7779dc13db9b5c4e274af1",
+      "firstDate": "2012-08-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 899,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "78315aecca9f9084e454bcc78e9c607f080189b6764792141827b0b7b6d494c4",
+      "symbol": "ILAL",
+      "yahooSymbol": "ILAL",
+      "rows": 1450,
+      "sourceSha256": "48e0ef1ed711ce299266ef64ba5670e97b166e24fe9d7ad99dc299b55451570e",
+      "observedAt": "2026-10-24T21:36:57.917484Z",
+      "independentRowsDigest": "2120e49721187ec57ce8f609b2df6cce7b5cb598fe529f8712fba02856128704",
+      "firstDate": "2021-01-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 63,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "62f78156a518cbfd0e70cb977c59b56b2d035ee7f40315970f0cad980d9e480e",
+      "symbol": "ILDO",
+      "yahooSymbol": "ILDO",
+      "rows": 4303,
+      "sourceSha256": "a58c6a814f928a4c32582d0d56573fce2c6b3a1f75507a8fc0c161684f14b224",
+      "observedAt": "2026-10-24T21:37:01.953256Z",
+      "independentRowsDigest": "adc478c1cdb5cfc5907f66b0b2bdbb515fab5864a69dbd33252434c3edbffa3f",
+      "firstDate": "2009-09-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3570,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2bd54efbf5a4b67e754295a795034f3dafa2efa265acb353f6270be6860a648b",
+      "symbol": "ILHMF",
+      "yahooSymbol": "ILHMF",
+      "rows": 3565,
+      "sourceSha256": "f18a101c1e0b84d46cccdcd0582a216ab07132e4c3deba05dca858ff520a941a",
+      "observedAt": "2026-10-24T21:37:08.000601Z",
+      "independentRowsDigest": "0022302a5f279caa79d17be78737e4cd9b582b04a368ce56ea6c74b64676b8c5",
+      "firstDate": "2012-08-13",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1363,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "215845a6010eb2112f0182668d1512368b71b75ca28fc1e81571b3cba4c304ee",
+      "symbol": "ILIKF",
+      "yahooSymbol": "ILIKF",
+      "rows": 1948,
+      "sourceSha256": "37f3cf0760eb1080bdc37b68d2f42e30b52da8f2cdd4a8328389ecf2ea518dac",
+      "observedAt": "2026-10-24T21:37:13.998878Z",
+      "independentRowsDigest": "a10ce64b1cef282460b23f1c0f0d60b53325f31da457cca0cf2d0f1f04a57783",
+      "firstDate": "2019-01-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "eb04357ef301ecdf9766c9dc759723aa36747ce3c98bffcdf491291261f73b4d",
+      "symbol": "ILIM",
+      "yahooSymbol": "ILIM",
+      "rows": 3646,
+      "sourceSha256": "65897df4028807f5313635eda17b689af9880a572bb3e69ee85945d0c21c674e",
+      "observedAt": "2026-10-24T21:37:16.013968Z",
+      "independentRowsDigest": "1ea279dbdaf78434701fac0be77cf13d5771805d830a2c645a8f69a883351040",
+      "firstDate": "2012-04-18",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1963,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "19ae5d76f3b6c95a794f1f06f14e6dfa3eada4a0a4b6f741a9c14679ef802836",
+      "symbol": "ILKAF",
+      "yahooSymbol": "ILKAF",
+      "rows": 4146,
+      "sourceSha256": "f57a5dbe6c7fd8e2f6a275a579a40f0ff9764381f324347ae5a2601c3c4a60c7",
+      "observedAt": "2026-10-24T21:37:22.047937Z",
+      "independentRowsDigest": "517ff56f63e18abdda1aad8d12a9a29acacca5b6f7fef52ecd6dbfc81dc9f45d",
+      "firstDate": "2010-04-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2933,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "61f9344db6d34be73897333b6cb1b27add99a6e5ec409847df869a4f70565023",
+      "symbol": "ILKAY",
+      "yahooSymbol": "ILKAY",
+      "rows": 3948,
+      "sourceSha256": "177979b5f72e943a71fb5688c5b3338466765dd2612230d53a3a71ddc12a5b9e",
+      "observedAt": "2026-10-24T21:37:24.086372Z",
+      "independentRowsDigest": "2c3fe7e95672f4140625bf1d26d92df57609f4c9fa3ebea33e30882aed84fa04",
+      "firstDate": "2011-02-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2671,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "91ac8e5f12efe20bc7f9f2a8c5baa4735425c008a2907a187a71e81fe5fd81d2",
+      "symbol": "ILLMF",
+      "yahooSymbol": "ILLMF",
+      "rows": 2439,
+      "sourceSha256": "bc390e377811140f61e071015af72c3c5074883fdf0e9b66152a7f4ffa15add6",
+      "observedAt": "2026-10-24T21:37:26.061726Z",
+      "independentRowsDigest": "bae95ef64c04885cd6bb66dbda2f62f185dc70bc6cadcaf75f914ff1bcbc5615",
+      "firstDate": "2017-02-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 472,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "eee0d304c980a7321e89d8b53e34f5471d212ec2f2e17fba00ded4a16f990ea3",
+      "symbol": "ILLR",
+      "yahooSymbol": "ILLR",
+      "rows": 1814,
+      "sourceSha256": "2529e7684e70de117eadf753b5ee4e79b61411ec66ce85b222c3b56f0ba8d207",
+      "observedAt": "2026-10-24T21:37:28.061342Z",
+      "independentRowsDigest": "2962b80c0cd75375e48abd141918361d459266a701e2391770fd589afa7b9359",
+      "firstDate": "2019-07-31",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 361,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f366b0c62f8a5b2a40a6619a4151189595b6756da19652ff589f88e1344a2808",
+      "symbol": "ILPMF",
+      "yahooSymbol": "ILPMF",
+      "rows": 4025,
+      "sourceSha256": "60a0c0877ed1dd19049b5cd1a0d8a82b5935adf023f403a0de7eb896c5b9cc6b",
+      "observedAt": "2026-10-24T21:37:40.131321Z",
+      "independentRowsDigest": "e22ad1e068d038862cf2e5d8da3c4da79fbf5cb404b84fc932da70178d1e589d",
+      "firstDate": "2010-10-15",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3429,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "4acd3d5b7aa6050bb8b0b6ea64b0ac92514dde00e550e4f64b21f23a7a817b1c",
+      "symbol": "ILPMY",
+      "yahooSymbol": "ILPMY",
+      "rows": 2813,
+      "sourceSha256": "f82fddd8e7ba3876a56a35b57a38e4cacda2835b3edc547f36ddb0abe1422ae4",
+      "observedAt": "2026-10-24T21:37:42.164510Z",
+      "independentRowsDigest": "25676d49cb048bcd398c5e9899db092c19d840454f6f14d97aa0b46ed152223b",
+      "firstDate": "2015-08-11",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2512,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e222222bd142aa154906037f90b99954993539ba5b72b93a23ef281dc0b96d6d",
+      "symbol": "IMAQ",
+      "yahooSymbol": "IMAQ",
+      "rows": 1298,
+      "sourceSha256": "417752e41cc406055ed44a906ac4ef7a7c79bda46f512df21d56619c59a6d70f",
+      "observedAt": "2026-10-24T21:38:02.216766Z",
+      "independentRowsDigest": "0cfad5260eb1c5c5e0fec5927ef8be88ba5ecef12aafa00e80f0e41347058adc",
+      "firstDate": "2021-08-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 308,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "290dbade676ffc3f38ed805cca3981222e6a0963129c12c9fbc2d76152ceeeda",
+      "symbol": "IMAQU",
+      "yahooSymbol": "IMAQU",
+      "rows": 1311,
+      "sourceSha256": "1ec53ef0777f016845b3a45e006989f76f8f0e875e9768b0465af2d696e3e5ea",
+      "observedAt": "2026-10-24T21:38:06.254391Z",
+      "independentRowsDigest": "45b3cfa35cb4799ca6b38e1fdf61b712f6f4f99191dec77adf35fea81543ac6f",
+      "firstDate": "2021-07-29",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1090,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "4cadc6415d55815a24414755fd86d1c4286ff1f81d0055d90993557f5c51e1cc",
+      "symbol": "IMBBF",
+      "yahooSymbol": "IMBBF",
+      "rows": 4190,
+      "sourceSha256": "0dbf3d85ea31dc40aaeba9b78de1438f62a996c60d1a4408513dacc3eb3c883f",
+      "observedAt": "2026-10-24T21:38:14.303392Z",
+      "independentRowsDigest": "68fff6904eaab04a024bb956f10ba8c7dd64f3f0e2f1e95e6a7173077b82fe14",
+      "firstDate": "2010-02-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1252,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "323b4a951fd769dbf47e1ea63094651b349877d2cc9ba34844e102aadcf4afe2",
+      "symbol": "IMBBY",
+      "yahooSymbol": "IMBBY",
+      "rows": 5230,
+      "sourceSha256": "51f72ff8c41f46c78d7e6a3387f0115d58a3f658c66233b5a3ceec648a895ddf",
+      "observedAt": "2026-10-24T21:38:16.329871Z",
+      "independentRowsDigest": "361a5290809e48e572b377cbd3f68d8845f83d7beb502fdb1f16c71dbfa90ca3",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6d7c4e083b94b124d11cc9396bf43f09418e32d3dcff74fe00f56de88aa61c55",
+      "symbol": "IMCDY",
+      "yahooSymbol": "IMCDY",
+      "rows": 1815,
+      "sourceSha256": "0071fafa44f53a851c9463e1f7aa4444c2f7ecb86f76297e94ff9bea1f3fd1b5",
+      "observedAt": "2026-10-24T21:38:24.322709Z",
+      "independentRowsDigest": "4b618f9600757a73a19d24a5aa3d61d81ba52498f424343290e642ca7b0eba40",
+      "firstDate": "2019-07-30",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 750,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "16861506f4d5f09a9072cb0c07652c4ebabb0e3b7dacd76438ccd6c07c85f7a2",
+      "symbol": "IMCI",
+      "yahooSymbol": "IMCI",
+      "rows": 5230,
+      "sourceSha256": "df6eec0cddfd8696d572897b33329e85d9e76e0ff7e85d8e3fa4677ef1303cd3",
+      "observedAt": "2026-10-24T21:38:26.400660Z",
+      "independentRowsDigest": "42e53ed2334249b49bb5b6c9ab23dbf09f32b2162aa7c5a580181d5fd0cabd6d",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2032,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2b7a9a37c2ac6f4a649d931f15391039d175cd7cd55795f6a7c48885a27c8ea2",
+      "symbol": "IMDXF",
+      "yahooSymbol": "IMDXF",
+      "rows": 3325,
+      "sourceSha256": "56ec36585f7e27faca84b717eceb27b75a96f76d4b4fd2925b7826d97c244dbc",
+      "observedAt": "2026-10-24T21:38:38.461812Z",
+      "independentRowsDigest": "0fdd316e919ebdaecd02a3529b2d5e838b47a27b65d38eadb392d8449bac8491",
+      "firstDate": "2013-07-30",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3115,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "8851019803d33304dbe928858a6024c34d7c9d03c8e6e048093e80ef98588643",
+      "symbol": "IMDZF",
+      "yahooSymbol": "IMDZF",
+      "rows": 2530,
+      "sourceSha256": "dff6d1679e29b43d965ffea39fcd09acc1135614623b4acd6e020f8a3acccb28",
+      "observedAt": "2026-10-24T21:38:42.505941Z",
+      "independentRowsDigest": "38f80c1dba21f7de315ddd0bf4dd5cf57b925b74c086ca7f570f6623a6664867",
+      "firstDate": "2016-09-23",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2389,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3dfe215d829074cf6467ab97edfc5d7c64bb810cd26f4657457d5697dd3534e2",
+      "symbol": "IMHDY",
+      "yahooSymbol": "IMHDY",
+      "rows": 1984,
+      "sourceSha256": "c3abbce08db88037ac0f6587292e56e9203d43cf4f3068cbbed6450ba8f2c0ff",
+      "observedAt": "2026-10-24T21:39:06.567456Z",
+      "independentRowsDigest": "9685caf275a3d5f3d3ca970601cd7b2ce169f30165758ffd6217103ec90e35fd",
+      "firstDate": "2018-11-23",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1964,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "9bdb78da28485a2f07908b767c6fa16f22ea975f596c0ec478c13beace0202de",
+      "symbol": "IMIAF",
+      "yahooSymbol": "IMIAF",
+      "rows": 3685,
+      "sourceSha256": "7226586e294596d162243d5c3d4075baf13913834f331929317bef17644709a1",
+      "observedAt": "2026-10-24T21:39:10.595019Z",
+      "independentRowsDigest": "f143337b8fed331a82b81bd81e39c3873a9822b31e621d9c7337cea71821f297",
+      "firstDate": "2012-02-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3123,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "060a92ae8d56b4820277c36a68955cb5af4c97488377a5a0c4aa5ec854e9b08f",
+      "symbol": "IMIMF",
+      "yahooSymbol": "IMIMF",
+      "rows": 1695,
+      "sourceSha256": "6fd83cc204cbb0b9136a1aaf67aced78279b3b4c193ab4a6d27b0ed51560651d",
+      "observedAt": "2026-10-24T21:39:14.618930Z",
+      "independentRowsDigest": "cadaa796c12fc7fce1215e6fb7f49113f82e3a367ef61903cd3009af321771e0",
+      "firstDate": "2020-01-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 460,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ed49c330eb2c67d1f3be09ba53e812b7aa81c0a8231a8b33fdc76637c461f5d3",
+      "symbol": "IMITF",
+      "yahooSymbol": "IMITF",
+      "rows": 104,
+      "sourceSha256": "064050bd82e8ff5b5833c28fcf40d091863f8cfad8956267826a70104e56dc9a",
+      "observedAt": "2026-10-24T21:39:16.577837Z",
+      "independentRowsDigest": "693cc4cdcdfbf222103ad9b596666f5ac74deb0818b1c7303362d0dfdaed5568",
+      "firstDate": "2026-05-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 49,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "016869027fd33a5c209ad65db811488e98f6221da8782e6c555a0bc2796b7876",
+      "symbol": "IMIUY",
+      "yahooSymbol": "IMIUY",
+      "rows": 137,
+      "sourceSha256": "213a7677f25c914e185e51cb856790e59080a1a3f1a187c01095f32a103fb092",
+      "observedAt": "2026-10-24T21:39:18.611407Z",
+      "independentRowsDigest": "52c0337b8ca0d4b025519e5a3d0560b2ee726e85ccb0765e0a3b4eef059c8186",
+      "firstDate": "2026-04-02",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "370e6df31b49319a791a6e704dcd14966c2273b270697fc53f10157f24f4bf65",
+      "symbol": "IMMB",
+      "yahooSymbol": "IMMB",
+      "rows": 5230,
+      "sourceSha256": "1caf1e6dd0ce387a874ca0c618d80ea14502ae3ca8069c542b9f6edade384b8f",
+      "observedAt": "2026-10-24T21:39:32.727164Z",
+      "independentRowsDigest": "33cbf05b672eec229057ecf171c749f0eb258849755407e7f96501e1209de69e",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4232,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "87080651b30d8242aa27141c00e606646f105f975a6144c2a75f6e9fddac1dcb",
+      "symbol": "IMMFF",
+      "yahooSymbol": "IMMFF",
+      "rows": 2124,
+      "sourceSha256": "e13b27b48ab5f9426f79e28e65fca40bf1817e412249ba254d8c7d856fa0a13f",
+      "observedAt": "2026-10-24T21:39:36.721399Z",
+      "independentRowsDigest": "4ef070aeabb21612bf422b150ab4df9ea5154e676637b5d26b94abd1b22c6317",
+      "firstDate": "2018-05-07",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2049,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "bc8c002392614076c921f222d1cec5a4f16ad59a0e84aeb54c818aa266156890",
+      "symbol": "IMMG",
+      "yahooSymbol": "IMMG",
+      "rows": 2790,
+      "sourceSha256": "c5e26db4b99efbd079db776d6c07308cac70dac43e23927e9413549ae49af880",
+      "observedAt": "2026-10-24T21:39:38.756325Z",
+      "independentRowsDigest": "c618415dc310921e44f597ef258ef40454ec963c5e7f55d3c8aa8a82dfbf7276",
+      "firstDate": "2015-09-14",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2497,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ebe6548f32c808b38fbe7134dcf8d647c7df9937673f118c3135cad92d061932",
+      "symbol": "IMMQF",
+      "yahooSymbol": "IMMQF",
+      "rows": 2801,
+      "sourceSha256": "33f43cd7b275344027310993f28733777add42f41029422e89c34092f95bb3ac",
+      "observedAt": "2026-10-24T21:39:42.805095Z",
+      "independentRowsDigest": "fdd034cf48f134916a0f2c1c2d0b9a1e6fd2b0ea2a4148ea4b5d1b02b43921c5",
+      "firstDate": "2015-08-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2784,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "db9fc65ccb3445983a4aa2581a8655d74e9a5ab4f1b5265833078155a3cdfbc7",
+      "symbol": "IMMVF",
+      "yahooSymbol": "IMMVF",
+      "rows": 1836,
+      "sourceSha256": "b9284b93490092657ddc729c68cf2b86bcb77f179eb70af353afe2dabf7fe68c",
+      "observedAt": "2026-10-24T21:39:48.782139Z",
+      "independentRowsDigest": "37bc58d6d0753e90ead0c89182769033fcd0c3aa820d669b53f0df4e63a3278f",
+      "firstDate": "2019-06-28",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1793,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "01094e392479e40e1b369744d3a90e1a6083ae4717fe5410e4f3711be1e9ae64",
+      "symbol": "IMPJY",
+      "yahooSymbol": "IMPJY",
+      "rows": 3445,
+      "sourceSha256": "b5d0e09e9b44d974b7590b02defb44b40d78c9d1811e7fed02ebbd790435f2ae",
+      "observedAt": "2026-10-24T21:40:04.879351Z",
+      "independentRowsDigest": "aa6922b65384c12ba276c414b36aca38caed47b8f109a3b09b598ae0140c27c0",
+      "firstDate": "2013-02-06",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2632,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "fcd5aeba72ac428ebccab8f7ecb095be9b15e999aeb0413cb83150f2d00e6bf8",
+      "symbol": "IMPTF",
+      "yahooSymbol": "IMPTF",
+      "rows": 668,
+      "sourceSha256": "86569c2b657e2078ee6ae14e76683b8e5c716cd27187b9eb9d927fbf44fab3a5",
+      "observedAt": "2026-10-24T21:40:14.912887Z",
+      "independentRowsDigest": "8ef502e0da0d987fcc7625c20b541cc8ee02ca23372bb84b2570fd2f9b6a10ad",
+      "firstDate": "2024-02-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 481,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "219fb8155187a545fedb791779c6e0a10caa47fcecf858118d2d6485c90b4595",
+      "symbol": "IMPUF",
+      "yahooSymbol": "IMPUF",
+      "rows": 5230,
+      "sourceSha256": "61c90a776199d3de57939d15fbab9d12b8cc755ac7d67df0e548651c349e0586",
+      "observedAt": "2026-10-24T21:40:16.985882Z",
+      "independentRowsDigest": "8fbb30ddbd84f5c4659a5d3b41d95a1e6b48f5ab9a235171fcbfc18f57b68b32",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4558,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "7c9b491ea54a8e9ed0bba90ef3f90b0064e4bc3b222d77d30cb93410d0437528",
+      "symbol": "IMPUY",
+      "yahooSymbol": "IMPUY",
+      "rows": 5230,
+      "sourceSha256": "e8396eefeda54014dcb1c0aeab02a4a128931494f10ddedec1efcae19850a433",
+      "observedAt": "2026-10-24T21:40:18.990229Z",
+      "independentRowsDigest": "cc4c4a1673027c71432cbcbc0f553e5336b23c02b8766d3825acdd77c4758f47",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "977876c7fd38642931a0028ddf679715fe293775832d8ba06d822a3dd8a0e11c",
+      "symbol": "IMPZY",
+      "yahooSymbol": "IMPZY",
+      "rows": 2448,
+      "sourceSha256": "1bb276a8a2753b30875dc6e941345a34df9e01c51a53dedc81f769df0382c944",
+      "observedAt": "2026-10-24T21:40:29.028925Z",
+      "independentRowsDigest": "b2c75a3df8be8fc20b089742725ae1686e72279230495e45764acdf1992a3ce8",
+      "firstDate": "2017-01-23",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2398,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ee037c560635c07c0f8e7e38fda01787d716a03e0dc1574eaeb6af4db308e9aa",
+      "symbol": "IMQCF",
+      "yahooSymbol": "IMQCF",
+      "rows": 3027,
+      "sourceSha256": "634cd2e05fa42fcca68db8a4d45c3b8f35ac691000960e2c6f4ef8d3e8a0e1bb",
+      "observedAt": "2026-10-24T21:40:31.025865Z",
+      "independentRowsDigest": "c687b7c1db2c578e7637cf07829c899b7db0217acfefea45ff45c4f799161d1a",
+      "firstDate": "2014-10-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2965,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e06d3d61161558c0419b7afe44730a74311f32caa1c499ece2d05bfb1b7a7df3",
+      "symbol": "IMRFF",
+      "yahooSymbol": "IMRFF",
+      "rows": 2047,
+      "sourceSha256": "5328324fce89998788dd3d551bdcbacfb4620745209efda2a0bf70f5875b9b52",
+      "observedAt": "2026-10-24T21:40:35.081115Z",
+      "independentRowsDigest": "a06aed06f0aa4a0aae2e979482acd91163c10351ad05b18b1cd1712743ae8032",
+      "firstDate": "2018-08-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1147,
+      "dateGridMatchesStoredSpy": true
+    }
+  ],
+  "fiveYearSources": [
+    {
+      "task": "0d8fef11183a423d1e41cc0a6be19a43b38c5906f7178d5a34f8b6d5541e5023",
+      "symbol": "ILST",
+      "yahooSymbol": "ILST",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "b4ad8742d82832fd5f4b231afcba8cb6b882f2878234a2e5b451f1c1b87b4ba6",
+      "observedAt": "2026-10-24T21:37:44.165489Z",
+      "independentRowsDigest": "c3157231661a2df01ccdb427398d89247a7196ab4830d4cc88f9a8bea526d060",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "1f9520c3fefab3929c26d9ebce658ba57972c15ae6c09b23f2b12789aaa5ca5f",
+      "symbol": "IMEXF",
+      "yahooSymbol": "IMEXF",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "3de27992c3c06c80eee4fa2cbe2831065fed6f076a1e75dfa0e7b32d9de90448",
+      "observedAt": "2026-10-24T21:38:48.479951Z",
+      "independentRowsDigest": "f9d82eef3a9cb198f4ce52388dfd4bbf4afdfe83047e5d27663c13ef3cfe2129",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "238690399e029eca1c9fe4dfaa34e0ed9482ca27cd8cb9e0b482c491c13a365a",
+      "symbol": "IGNT",
+      "yahooSymbol": "IGNT",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "d672a6f84a78ca43ce7e7b3fe14e1553d78f601d3d3b9ea1606cda609878ff8c",
+      "observedAt": "2026-10-24T21:34:13.363677Z",
+      "independentRowsDigest": "7b64f756f2bb67c039536452ec291f94b8b6ac719d053fae7ec36eeba69eb198",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "3bca5900cb9deb278e4ac73dfc3df517cb930d89424aaaee80c11523a9426353",
+      "symbol": "IMJX",
+      "yahooSymbol": "IMJX",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "765b906a01282cbff92c9000b1f49333bbd9c6b86368d21460e1d8dcb95ab965",
+      "observedAt": "2026-10-24T21:39:20.636880Z",
+      "independentRowsDigest": "cde22f30430a3fa902e91a6ff7dbef8d3474e5d8f8958e5336015ed40f7a0fe2",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "559230dcbc325379d2f0ffee8dc5c0470e984af14ae24cbf0e57e8dda3f0e6ad",
+      "symbol": "IMAHF",
+      "yahooSymbol": "IMAHF",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "fbbe387bcf9c6eae8867a97210b020d6c3abe9932ce3da314f9b88d047808a9a",
+      "observedAt": "2026-10-24T21:38:00.239427Z",
+      "independentRowsDigest": "b6d44a17a2f5fbe8fcdfa67172ce3fc20fc8772553613684e9e3294e8921ad1d",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "cda2b7fb3f3c6c50e071cc69de1b578c66c8de5e9326e75bf9b10b47ddf6b104",
+      "symbol": "IGRW",
+      "yahooSymbol": "IGRW",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "a32c427fe0ff51ca92948fa9e00c960882d9879bee376fc298f2ffbe3beb9fa3",
+      "observedAt": "2026-10-24T21:34:37.261564Z",
+      "independentRowsDigest": "4dae398729716500c6c8cd46f5b581efcecfd6a877381c1c954d4c258de3bee4",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    }
+  ],
+  "years": [
+    {
+      "year": 2006,
+      "rows": 2259,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "7f717042543f27728a03360903bc9616ea473c2218efebff174a309b203e4507",
+      "native": {
+        "runId": "market-196b0900-f3be-4691-8c8d-5a21e55c0e7a",
+        "rows": 2259,
+        "preparedSha256": "221fae33c9773fbb611e630df6468d1638c9f8b5638e310efaeb1915c2bec697",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2007,
+      "rows": 2704,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "fdc993b60050a0438fa3619d5cac33790eae6d2ad9d4f061d9af47da13b5954c",
+      "native": {
+        "runId": "market-2a493378-dc79-4c04-abe3-04fe5a743388",
+        "rows": 2704,
+        "preparedSha256": "4979d2a7bf9ee6236f24e4d33d847abd359c618444df07d970569cb206727ff2",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2008,
+      "rows": 2916,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "462bcaf8a0eafcd303e431dc9bdefc8b3c0f5dd79e8ddcbbe7e55ed74b7de7ec",
+      "native": {
+        "runId": "market-b1a9749a-7e33-4563-9e62-35183ebff179",
+        "rows": 2916,
+        "preparedSha256": "ba6672c4a1f8ef9a5ef688d66c36cee452362c66cfa417723e90949d7109d5cb",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2009,
+      "rows": 3328,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "30f782f718c9a5138e9c1ee61545394c620b1e7f37ec2784c430357312c476d3",
+      "native": {
+        "runId": "market-b91e1475-5dce-407f-a713-ba90c7e9973b",
+        "rows": 3328,
+        "preparedSha256": "b707331f2373a034cdea28f85e3ba5d86f0b1f5189f014e97c828944eeae0379",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2010,
+      "rows": 4228,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "2b3f002918d288ad9df1fb2a48e7bcdc1b27168e4d08e4d8580deede5682844f",
+      "native": {
+        "runId": "market-3472c2a9-8b6e-4e5e-ac47-2be60a9de5ba",
+        "rows": 4228,
+        "preparedSha256": "21b72bf8e7634003fa2ecbee58be8965aa67efc1122b432b13326c882f8ceb92",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2011,
+      "rows": 4919,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "8d80f6a55e8598dd80a36455bec8f54b907e76596e4032715fc4d9c43dbb0d10",
+      "native": {
+        "runId": "market-cfec1428-5695-4e1a-8ab8-fcc843d6b774",
+        "rows": 4919,
+        "preparedSha256": "6413ca34050dbd40e5c630064be0b681d8e3d9fa7355296550fbf770f482792b",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2012,
+      "rows": 5657,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "93bb2290e46c019a2b9d11b00bf021fad0781b1601c2253cc6171966ee35f798",
+      "native": {
+        "runId": "market-cc298b7a-f2e4-4634-b9e3-181f1cb98eeb",
+        "rows": 5657,
+        "preparedSha256": "7a01877fbae7b436c59f3d79e902799c6a222d6574573d2043ae78320c98e4d6",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2013,
+      "rows": 6787,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "23bb41e7e8946ec68deddc16116738dc5165521ee4ebee3fd651fe40562438f1",
+      "native": {
+        "runId": "market-5da4062b-01fd-467f-ae6a-09e05add7803",
+        "rows": 6787,
+        "preparedSha256": "cebdb3b20f80893139ebf692f21afa0fd5a22e5bd5748a04f18ebdbf87922727",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2014,
+      "rows": 7118,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "7991dfac2b799fc22d7b3dc2834302433bcac4eb9f1e73ced469f225b1692e75",
+      "native": {
+        "runId": "market-7345396c-b626-4afc-a866-c9c2e8c05966",
+        "rows": 7118,
+        "preparedSha256": "a1f9b4230fecc4090b21ab6b4dfdeed92f5d491bef6f112cb78655b4f219896d",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2015,
+      "rows": 8034,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "116df719fb9c5f9e884f50533e0e3384d3820338523cd4899b7fdd5444391d6e",
+      "native": {
+        "runId": "market-0f917203-9075-4f88-a400-82f5782261b1",
+        "rows": 8034,
+        "preparedSha256": "055b319a068b25204c7bbc9ecf29acca022f789353e72b679fbffadb6667408c",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2016,
+      "rows": 8889,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "5f995974ed2ec0ea5ff608fa61e2c5e0a15799467f18431ead3c92f0e9135443",
+      "native": {
+        "runId": "market-44c6f223-a278-42b3-bfc4-30690afe9fd5",
+        "rows": 8889,
+        "preparedSha256": "b56c88c3d7833e6f212d273b81b56e12c5202f13e5e9fd7bd670a2acc140d1d7",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2017,
+      "rows": 9612,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "6f7738d323551614bb184adc755d4c6cba7749e3e72de0f87484f12718adbac6",
+      "native": {
+        "runId": "market-5df6a259-7b73-4dfd-8129-8f80879601b1",
+        "rows": 9612,
+        "preparedSha256": "470339bbe88ff67ebbe7a6103f947db776970b0ae9424cf6fe90b21a6505ac46",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2018,
+      "rows": 10067,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "f6b6490a3226002647f9bec8b5f750b0b36761e25d6967fe3180ce692e81040c",
+      "native": {
+        "runId": "market-b6c18a0b-c6c0-4573-b00d-bf92d4f4e107",
+        "rows": 10067,
+        "preparedSha256": "0d82ca9bc95006cd3d70e66d7664a003771fb5772f951e802f1c80bc56c69edd",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2019,
+      "rows": 11346,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "082064faa7949cd8ad92e1f527ba0f4fa8701cd862f5dca6a0552ef40d2f7c60",
+      "native": {
+        "runId": "market-76dae75a-07bf-45ca-bc88-08d96b2da98b",
+        "rows": 11346,
+        "preparedSha256": "1c5688beab8e16fd113b67770a37ba15bb70752310bd83c87c03c10cec2eda11",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2020,
+      "rows": 12139,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "16f10107f136515acd0a7c096471d3729e6271b1f812b0f0c1389f6c18ee0d5f",
+      "native": {
+        "runId": "market-a13327bd-063b-423a-9ab0-20ddd3b6040c",
+        "rows": 12139,
+        "preparedSha256": "8528fc62c672d6bd84b993dd442036626f8257d07a8d47286122a126230df4bb",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2021,
+      "rows": 13031,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "70253bdd9492950df39bce6158c684b1a03405344049ce61ddaf7f0055508080",
+      "native": {
+        "runId": "market-7ae971cb-e7ed-48f9-88e0-639d8fcf2dc5",
+        "rows": 13031,
+        "preparedSha256": "dc665cc6cf4a2f5734d48564a065c97ff47e55d1fd77c76e28b99d88f3113e20",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2022,
+      "rows": 13893,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "c5444aded43ac43eeadab71054d3cf5e84ae100cea370dbfd7ded58188ef77d5",
+      "native": {
+        "runId": "market-b697dc04-f12b-4788-a826-13950145bbb5",
+        "rows": 13893,
+        "preparedSha256": "5578860c222a1beecdfa0ba2a117610125329eb14b5897324c1bbe7dec45672a",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2023,
+      "rows": 14000,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "763a02336def4b41b19873f42e73b66e2f7dd9eba41164431a5b52f87944d120",
+      "native": {
+        "runId": "market-e9e2c725-8780-46af-bbdc-1ffd1e164aa5",
+        "rows": 14000,
+        "preparedSha256": "db23a9b88c3336904343d3aaf05b81fd755f0ad85eaad5cb52de792a9cd95a41",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2024,
+      "rows": 14331,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "bc27c849fbbb973c7ea49dd8820e0ddb86c8f71f4d4572a9de8bf259a3c85bf2",
+      "native": {
+        "runId": "market-610ab317-94ef-44ea-8987-19cc6d4d45ad",
+        "rows": 14331,
+        "preparedSha256": "c89dd33fe6d25bcf3283ff0abaeed723e3aa09236a66732c23cb444e90b0ef7f",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2025,
+      "rows": 14250,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "a7e57446ee53860c1d574c71a29e5cd173e371ced688bba84d5ca1f2023062c8",
+      "native": {
+        "runId": "market-054a445c-9237-4165-a260-b59a7e7be3cb",
+        "rows": 14250,
+        "preparedSha256": "1f8d5c99ed6b21be03b4328144ecef8acb5b57620be5e171359078947dea6892",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2026,
+      "rows": 11757,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "a0b960f60763279690277b27e86230274783c696a9c4aee4ebd2831ee7c307e6",
+      "native": {
+        "runId": "market-dc30c2d9-519e-4541-9666-a18c97b664f3",
+        "rows": 11757,
+        "preparedSha256": "08e428074d1200539c29c1a1ebd715da8f2e026a81b839995bfcaa45f6799488",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    }
+  ],
+  "native": [
+    {
+      "runId": "market-196b0900-f3be-4691-8c8d-5a21e55c0e7a",
+      "rows": 2259,
+      "preparedSha256": "221fae33c9773fbb611e630df6468d1638c9f8b5638e310efaeb1915c2bec697",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-2a493378-dc79-4c04-abe3-04fe5a743388",
+      "rows": 2704,
+      "preparedSha256": "4979d2a7bf9ee6236f24e4d33d847abd359c618444df07d970569cb206727ff2",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-b1a9749a-7e33-4563-9e62-35183ebff179",
+      "rows": 2916,
+      "preparedSha256": "ba6672c4a1f8ef9a5ef688d66c36cee452362c66cfa417723e90949d7109d5cb",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-b91e1475-5dce-407f-a713-ba90c7e9973b",
+      "rows": 3328,
+      "preparedSha256": "b707331f2373a034cdea28f85e3ba5d86f0b1f5189f014e97c828944eeae0379",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-3472c2a9-8b6e-4e5e-ac47-2be60a9de5ba",
+      "rows": 4228,
+      "preparedSha256": "21b72bf8e7634003fa2ecbee58be8965aa67efc1122b432b13326c882f8ceb92",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-cfec1428-5695-4e1a-8ab8-fcc843d6b774",
+      "rows": 4919,
+      "preparedSha256": "6413ca34050dbd40e5c630064be0b681d8e3d9fa7355296550fbf770f482792b",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-cc298b7a-f2e4-4634-b9e3-181f1cb98eeb",
+      "rows": 5657,
+      "preparedSha256": "7a01877fbae7b436c59f3d79e902799c6a222d6574573d2043ae78320c98e4d6",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-5da4062b-01fd-467f-ae6a-09e05add7803",
+      "rows": 6787,
+      "preparedSha256": "cebdb3b20f80893139ebf692f21afa0fd5a22e5bd5748a04f18ebdbf87922727",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-7345396c-b626-4afc-a866-c9c2e8c05966",
+      "rows": 7118,
+      "preparedSha256": "a1f9b4230fecc4090b21ab6b4dfdeed92f5d491bef6f112cb78655b4f219896d",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-0f917203-9075-4f88-a400-82f5782261b1",
+      "rows": 8034,
+      "preparedSha256": "055b319a068b25204c7bbc9ecf29acca022f789353e72b679fbffadb6667408c",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-44c6f223-a278-42b3-bfc4-30690afe9fd5",
+      "rows": 8889,
+      "preparedSha256": "b56c88c3d7833e6f212d273b81b56e12c5202f13e5e9fd7bd670a2acc140d1d7",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-5df6a259-7b73-4dfd-8129-8f80879601b1",
+      "rows": 9612,
+      "preparedSha256": "470339bbe88ff67ebbe7a6103f947db776970b0ae9424cf6fe90b21a6505ac46",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-b6c18a0b-c6c0-4573-b00d-bf92d4f4e107",
+      "rows": 10067,
+      "preparedSha256": "0d82ca9bc95006cd3d70e66d7664a003771fb5772f951e802f1c80bc56c69edd",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-76dae75a-07bf-45ca-bc88-08d96b2da98b",
+      "rows": 11346,
+      "preparedSha256": "1c5688beab8e16fd113b67770a37ba15bb70752310bd83c87c03c10cec2eda11",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-a13327bd-063b-423a-9ab0-20ddd3b6040c",
+      "rows": 12139,
+      "preparedSha256": "8528fc62c672d6bd84b993dd442036626f8257d07a8d47286122a126230df4bb",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-7ae971cb-e7ed-48f9-88e0-639d8fcf2dc5",
+      "rows": 13031,
+      "preparedSha256": "dc665cc6cf4a2f5734d48564a065c97ff47e55d1fd77c76e28b99d88f3113e20",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-b697dc04-f12b-4788-a826-13950145bbb5",
+      "rows": 13893,
+      "preparedSha256": "5578860c222a1beecdfa0ba2a117610125329eb14b5897324c1bbe7dec45672a",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-e9e2c725-8780-46af-bbdc-1ffd1e164aa5",
+      "rows": 14000,
+      "preparedSha256": "db23a9b88c3336904343d3aaf05b81fd755f0ad85eaad5cb52de792a9cd95a41",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-610ab317-94ef-44ea-8987-19cc6d4d45ad",
+      "rows": 14331,
+      "preparedSha256": "c89dd33fe6d25bcf3283ff0abaeed723e3aa09236a66732c23cb444e90b0ef7f",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-054a445c-9237-4165-a260-b59a7e7be3cb",
+      "rows": 14250,
+      "preparedSha256": "1f8d5c99ed6b21be03b4328144ecef8acb5b57620be5e171359078947dea6892",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-dc30c2d9-519e-4541-9666-a18c97b664f3",
+      "rows": 11757,
+      "preparedSha256": "08e428074d1200539c29c1a1ebd715da8f2e026a81b839995bfcaa45f6799488",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-08fa3843-a667-467d-ba08-cc0473b68673",
+      "rows": 7530,
+      "preparedSha256": "f80d6c6e69201649378adc7b2da9975d401b6fa2573dfcff99c657d186df2bf4",
+      "slices": 2,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    }
+  ],
+  "held": [
+    {
+      "task": "f1877742a083155421c29c4eeae0d73522cfa4b521793e3ac101f4e0f79e09b8",
+      "symbol": "IGTAR",
+      "reason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW",
+      "detail": null
+    },
+    {
+      "task": "e8368b2a2616105ded2fa920c8c8b9de32faa5d8da2c2653b4be414dd96da006",
+      "symbol": "IGTAW",
+      "reason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW",
+      "detail": null
+    },
+    {
+      "task": "0b90efc26469bc9f5fe08d88843d1e9f7124c35af2a4d025de14f8d29dfd3b83",
+      "symbol": "IIPZF",
+      "reason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW",
+      "detail": null
+    },
+    {
+      "task": "1d3ee89be2caa8981c3f849cde0323cbbf6e3c788f79e7ea1996297c5d13437f",
+      "symbol": "IMAQR",
+      "reason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW",
+      "detail": null
+    },
+    {
+      "task": "589fbf2af84f8061e55c90914bdc3754e409379f49443b76806cdbf7ed72d7a4",
+      "symbol": "IMAQW",
+      "reason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW",
+      "detail": null
+    },
+    {
+      "task": "f56ac38daeb23b6005e9a07af9cbe374c537f087961c543e86db5cb8e73491d4",
+      "symbol": "IMCLF",
+      "reason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW",
+      "detail": null
+    },
+    {
+      "task": "1367d06cda201f1d8a86ba60def9a779357a8457b6b8aff36cdee6a675642f92",
+      "symbol": "IMRA",
+      "reason": "SOURCE_VALUE_OR_GRID_REQUIRES_REVIEW",
+      "detail": "AssertionError: "
+    }
+  ],
+  "heldDiagnostics": [
+    {
+      "task": "f1877742a083155421c29c4eeae0d73522cfa4b521793e3ac101f4e0f79e09b8",
+      "symbol": "IGTAR",
+      "name": "Inception Growth Acquisition Limited",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "e1dfdafec328c16151eff463a2d39e2218904e503538eca1534ad51c440d00d7",
+      "dates": 1,
+      "firstDate": "2026-06-11",
+      "lastDate": "2026-06-11",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW"
+    },
+    {
+      "task": "e8368b2a2616105ded2fa920c8c8b9de32faa5d8da2c2653b4be414dd96da006",
+      "symbol": "IGTAW",
+      "name": "Inception Growth Acquisition Limited",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "11a5b385464b4e08f53f940714b9125795ea4f627cd75c6e8018e54788feea21",
+      "dates": 1,
+      "firstDate": "2025-10-14",
+      "lastDate": "2025-10-14",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW"
+    },
+    {
+      "task": "0b90efc26469bc9f5fe08d88843d1e9f7124c35af2a4d025de14f8d29dfd3b83",
+      "symbol": "IIPZF",
+      "name": "InterRent Real Estate Investment Trust",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "b7c5d5def0ed8ac39d752fb7d2195313eff5a96c48822c4cc5403a4ee5aa3ac3",
+      "dates": 1,
+      "firstDate": "2026-07-10",
+      "lastDate": "2026-07-10",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW"
+    },
+    {
+      "task": "1d3ee89be2caa8981c3f849cde0323cbbf6e3c788f79e7ea1996297c5d13437f",
+      "symbol": "IMAQR",
+      "name": "International Media Acquisition Corp.",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "0ec127fcba596afffa615b8c232b504da9aeb0b83de7f3b1b5f9a06b86fa5ff4",
+      "dates": 1,
+      "firstDate": "2026-09-18",
+      "lastDate": "2026-09-18",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW"
+    },
+    {
+      "task": "589fbf2af84f8061e55c90914bdc3754e409379f49443b76806cdbf7ed72d7a4",
+      "symbol": "IMAQW",
+      "name": "International Media Acquisition Corp.",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "9156ce3b59753c5177f3ab359db3cccf9dc926b1ed0a84198322bc9e69a5c432",
+      "dates": 1,
+      "firstDate": "2025-10-24",
+      "lastDate": "2025-10-24",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW"
+    },
+    {
+      "task": "f56ac38daeb23b6005e9a07af9cbe374c537f087961c543e86db5cb8e73491d4",
+      "symbol": "IMCLF",
+      "name": "i-mobile Co.,Ltd.",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "d063b473fc76d87f0524e8865e244355588a3afb4454c3de86f7f7eaa8f9c5ad",
+      "dates": 1,
+      "firstDate": "2025-10-21",
+      "lastDate": "2025-10-21",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW"
+    },
+    {
+      "task": "1367d06cda201f1d8a86ba60def9a779357a8457b6b8aff36cdee6a675642f92",
+      "symbol": "IMRA",
+      "name": "Bitwise MARA Option Income Strategy ETF",
+      "currency": "USD",
+      "instrumentType": "ETF",
+      "timezone": "America/New_York",
+      "sourceSha256": "53b26440098330ebf737a58dbb8e9aa1f18326611ea74ad9310c7470ae4c07f7",
+      "dates": 1,
+      "firstDate": "2026-07-31",
+      "lastDate": "2026-07-31",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SOURCE_VALUE_OR_GRID_REQUIRES_REVIEW"
+    }
+  ],
+  "wal": [
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 594,
+      "sequencerTxn": 594,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_daily",
+      "writerTxn": 4254,
+      "sequencerTxn": 4254,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_etf_equity_holdings",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_history_catalog",
+      "writerTxn": 11,
+      "sequencerTxn": 11,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_identifiers",
+      "writerTxn": 35,
+      "sequencerTxn": 35,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_universe",
+      "writerTxn": 15,
+      "sequencerTxn": 15,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 594,
+      "sequencerTxn": 594,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_intraday",
+      "writerTxn": 507,
+      "sequencerTxn": 507,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    }
+  ],
+  "idempotence": {
+    "checkedAt": "2026-10-24T21:55:37.678235+00:00",
+    "annualRows": 181265,
+    "fiveYearRows": 7530,
+    "allOriginalNativeAndControlRowsUnchanged": true,
+    "allWalUnchanged": true,
+    "sourceRequests": 0,
+    "newNativeRuns": 0,
+    "formalWrites": 0
+  },
+  "ohlcGate": {
+    "runtime": "v62",
+    "allNewSelectedDatesPassed": true,
+    "legacyPostcheck": {
+      "checkedAt": "2026-10-24T21:56:11.816349+00:00",
+      "routes": 700,
+      "conflictingRows": 3512,
+      "httpPgwireExact": true,
+      "rowsDigest": "415bbf4df344bfa3f503ab9904bb2b7c8aeed188b99c17e64a97df96603f55cb",
+      "legacyQualitySnapshotUnchanged": true,
+      "newBatchOhlcConflicts": 0,
+      "sourceRequests": 0,
+      "formalWrites": 0,
+      "oldSevenConflictRowsAll20FieldsUnchanged": true,
+      "oldSevenRowsDigest": "99f0c2192a3d7dd160b9ee1524c5af1e9a9c12eb9c256a47bcfa42a54600f6b8"
+    }
+  },
+  "sourceHttpStatuses": {
+    "404": 103,
+    "200": 89
+  },
+  "sourceTasksFailedThisBatch": 125,
+  "queuePhaseCounts": {
+    "FAILED_SOURCE": 9634,
+    "PLANNED": 17868,
+    "SCOPE_REVIEW_REQUIRED": 1716,
+    "VERIFIED": 11320
+  },
+  "queueCountsAreNotUniqueCompanyCounts": true,
+  "sourceRequestedFrom": "2006-01-01",
+  "fiveYearFrom": "2021-10-18",
+  "referenceSql": {
+    "path": "tools/sql/us-ohlc-history-batch-20261025-reference.sql",
+    "sha256": "03e1571e6708d39b658f5ebb22715e261082ac9b7db8d8698d12fef68cd13ac4",
+    "queries": [
+      {
+        "query": 1,
+        "rows": 12951,
+        "httpPgwireExact": true,
+        "rowsDigest": "5dd172e49f1cbe99f57d45aec0288cd575e1c4f2c278b42056615e2d43adc4ff"
+      },
+      {
+        "query": 2,
+        "rows": 66,
+        "httpPgwireExact": true,
+        "rowsDigest": "7ac60039c2a5392bd3c9aec48425c8c1847899a9af23d534b8ec5d0109b8cbe4"
+      },
+      {
+        "query": 3,
+        "rows": 7530,
+        "httpPgwireExact": true,
+        "rowsDigest": "17f09d661044c05a1221529f4d46f016a586c3a19548b3251efcb00b2b99254b"
+      },
+      {
+        "query": 4,
+        "rows": 2,
+        "httpPgwireExact": true,
+        "rowsDigest": "80713e06dbcb3025fc6affdb4ac1300ec04061f5c5a7969c3fbcdfffa1a12b07"
+      }
+    ]
+  },
+  "runtime": {
+    "manifest": "F:\\repo\\engine\\data\\var\\market-data\\scope-review\\yahoo-ohlc-v62-20261025\\runtime-v62.json",
+    "sha256": "aa32412a8b2fbbaa5da4e1b3a2125ed1f7a6677e91284ee3ee17d23ebef93303",
+    "runtime": "F:\\repo\\engine\\data\\var\\market-data\\runtime\\us-data-20261025-v62-ohlc-guard",
+    "jars": 47,
+    "tests": [
+      {
+        "scope": "us",
+        "tests": 50,
+        "failures": 0
+      },
+      {
+        "scope": "app",
+        "tests": 58,
+        "failures": 0
+      },
+      {
+        "scope": "architecture",
+        "tests": 5,
+        "failures": 0
+      }
+    ],
+    "moduleBoundariesPassed": true
+  },
+  "evidence": [
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v63-20261025/source-only-verification.json",
+      "sha256": "c2fe9f296e3700e437e893a4aef7dc21777aad86492d7baba84e327749f292cd"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v63-20261025/review-independent-verification.json",
+      "sha256": "ebc01f5b2ee0ae3d398a47b84660581a5fc5fa222dd52f91c6ef1815a086b23d"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v63-20261025/held-source-diagnostics.json",
+      "sha256": "e6ad1d8c0ce0d22068724ac505a4f0a9d4ddf8c834a321bec4b704b3ad3829ce"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v63-20261025/execution-and-source-cards.json",
+      "sha256": "f854105cbeac45d1ad048e3c442390a21520362fb1cdc27219b0c1bd4cfccb2a"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v63-20261025/independent-verification.json",
+      "sha256": "90ac330d07fe2fdb31b0959006f1fcf52d99396a84d759434b392aac491626b7"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v63-20261025/annual-readonly-verification.json",
+      "sha256": "6f1eaea165dea724c2dd5d5eedd6d5336ea249bc90b7d7f3a23a9b6e11f66489"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v63-20261025/idempotence-independent-verification.json",
+      "sha256": "ea2084ed0817a6f4201b46e10834261e73032de8cd1a81d3eac28fd1e5539324"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v63-20261025/legacy-quality-postcheck.json",
+      "sha256": "0918f6f7d4c94faaaa13cdc37ec6f66c03d1e512e78685a76d36b64e50f990a8"
+    }
+  ],
+  "limitations": [
+    "历史请求边界仍截止2026-10-16；核心另有10月23日增量。",
+    "来源实际起止日逐项记录；不足五年、提前结束和零量报价不补造。",
+    "日期网格参照库存SPY/TIINGO，不代替官方历史交易日历。",
+    "来源EQUITY标签不证明永久身份或代码没有复用，调整基准按原文取得时刻。",
+    "本批7份待核缓存、125个失败任务及其他失败、未下载范围保留。",
+    "本批五年段不推进原全历史任务，原失败与原文保持。"
+  ]
+}
