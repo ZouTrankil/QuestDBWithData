@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.net.httpserver.HttpServer;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetDefinition.Capability;
@@ -287,7 +288,7 @@ class VerifiedMarketDataPublicationPageTest {
                                 json.readTree(
                                         "{\"definition\":{\"version\":3},\"parameters\":{}}")));
         var small = request.deepCopy();
-        ((com.fasterxml.jackson.databind.node.ObjectNode) small.path("parameters"))
+        ((ObjectNode) small.path("parameters"))
                 .put("publication_page_rows", 10000)
                 .put("publication_page_bytes", 8388608);
         assertThrows(
