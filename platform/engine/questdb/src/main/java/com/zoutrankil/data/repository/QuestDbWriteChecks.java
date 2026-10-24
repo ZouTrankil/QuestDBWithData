@@ -27,7 +27,7 @@ public final class QuestDbWriteChecks {
                 keys.add(column.get("column").toString());
         }
         var expected = new HashMap<String, String>();
-        definition.columns().forEach(c -> expected.put(c.storageName(), c.storageType().name()));
+        definition.columns().forEach(c -> expected.put(c.storageName(), c.storageType().sqlType()));
         if (!types.equals(expected) || !keys.equals(new HashSet<>(definition.dedupKey())))
             throw new IllegalStateException(
                     "Target columns or dedup keys differ from declared dataset");

@@ -49,6 +49,7 @@ public final class DatasetStorageValues {
                 throw new IllegalArgumentException("Unsupported instant storage");
             return epoch(c, instant);
         }
+        if (c.storageType() == StorageType.DOUBLE_ARRAY) return DoubleArrayValues.normalize(value);
         Class<?> expected =
                 switch (c.storageType()) {
                     case SYMBOL, STRING, VARCHAR, LONG256, IPV4 -> String.class;

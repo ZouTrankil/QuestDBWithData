@@ -59,6 +59,7 @@ public class QuestDbBoundedReader {
     private static final ObjectMapper JSON = new ObjectMapper();
     private static final Set<StorageType> UNORDERED_STORAGE_TYPES =
             Set.of(
+                    StorageType.DOUBLE_ARRAY,
                     StorageType.BINARY,
                     StorageType.LONG256,
                     StorageType.UUID,
@@ -400,6 +401,8 @@ public class QuestDbBoundedReader {
         var parameters = new ArrayList<Bound>();
         for (var entry : new TreeMap<>(query.equalities()).entrySet()) {
             var column = columns.get(entry.getKey());
+            if (column.storageType() == StorageType.DOUBLE_ARRAY)
+                throw new IllegalArgumentException("数组只支持完整投影，不支持标量过滤");
             if (entry.getValue() == null) {
                 if (!column.nullable())
                     throw new IllegalArgumentException("Null filter on required field");
@@ -479,7 +482,7 @@ public class QuestDbBoundedReader {
                         });
         for (var name : required) {
             var column = columns.get(name);
-            if (!column.storageType().name().equals(actual.get(column.storageName()))) {
+            if (!column.storageType().sqlType().equals(actual.get(column.storageName()))) {
                 throw new IllegalStateException(
                         "Actual QuestDB column type differs from definition: " + name);
             }
@@ -541,6 +544,7 @@ public class QuestDbBoundedReader {
                                     throw new SQLException("Invalid CHAR");
                                 yield s == null ? null : s.charAt(0);
                             }
+                            case DOUBLE_ARRAY -> QuestDbArrayValues.read(rs, c.logicalName());
                             case BINARY -> rs.getBytes(c.logicalName());
                             case BOOLEAN -> rs.getObject(c.logicalName(), Boolean.class);
                             case BYTE -> rs.getObject(c.logicalName(), Byte.class);

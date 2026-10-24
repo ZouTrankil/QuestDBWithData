@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadQuery;
+import com.zoutrankil.data.domain.DoubleArrayValues;
 import com.zoutrankil.data.domain.ReadGroupRequest;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
@@ -187,6 +188,16 @@ public final class ReadGroupJson {
                 if (!node.isNumber() || !Float.isFinite(node.floatValue()))
                     throw new IllegalArgumentException("Finite float required");
                 yield node.floatValue();
+            }
+            case DOUBLE_ARRAY -> {
+                if (!node.isArray()) throw new IllegalArgumentException("需要数值数组");
+                var values = new ArrayList<Double>();
+                for (var item : node) {
+                    if (!item.isNumber() || !Double.isFinite(item.doubleValue()))
+                        throw new IllegalArgumentException("数组元素必须为有限数值");
+                    values.add(item.doubleValue());
+                }
+                yield DoubleArrayValues.normalize(values);
             }
             case DOUBLE -> {
                 if (!node.isNumber() || !Double.isFinite(node.doubleValue()))

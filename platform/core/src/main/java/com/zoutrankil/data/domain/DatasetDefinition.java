@@ -64,7 +64,13 @@ public record DatasetDefinition(
         IPV4,
         DATE,
         TIMESTAMP,
-        TIMESTAMP_NS
+        TIMESTAMP_NS,
+        DOUBLE_ARRAY;
+
+        /** 协议名仍用枚举名；只有生成或核对物理 SQL 类型时才转成 DOUBLE[]。 */
+        public String sqlType() {
+            return this == DOUBLE_ARRAY ? "DOUBLE[]" : name();
+        }
     }
 
     public enum TemporalKind {
@@ -218,6 +224,9 @@ public record DatasetDefinition(
         validateKey(businessKey, logical, "businessKey");
         validateKey(dedupKey, physical.keySet(), "dedupKey");
         for (var c : columns) {
+            if ((businessKey.contains(c.logicalName()) || dedupKey.contains(c.storageName()))
+                    && c.storageType() == StorageType.DOUBLE_ARRAY)
+                throw new IllegalArgumentException("数组不能作为业务键或去重键");
             if ((businessKey.contains(c.logicalName()) || dedupKey.contains(c.storageName()))
                     && c.nullable()) {
                 throw new IllegalArgumentException(
