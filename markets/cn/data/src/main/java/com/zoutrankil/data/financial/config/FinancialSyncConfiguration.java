@@ -53,6 +53,20 @@ public class FinancialSyncConfiguration {
     }
 
     @Bean
+    FinancialSyncOwner balanceSync(
+            TusharePageService p,
+            JdbcTemplate j,
+            @Lazy QuestDB q,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String l) {
+        return owner("balance", p, j, q, l);
+    }
+
+    @Bean
+    Registration<DatasetValues> balanceRead() {
+        return ReadBindingCatalog.generic("balance", 1);
+    }
+
+    @Bean
     FinancialSyncOwner cashflowSync(
             TusharePageService p,
             JdbcTemplate j,
