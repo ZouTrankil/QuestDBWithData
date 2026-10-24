@@ -11,7 +11,6 @@ import com.zoutrankil.data.margin.domain.MarginAllRows;
 import com.zoutrankil.data.margin.port.MarginAllTables;
 import com.zoutrankil.data.margin.port.MarginAllWriteSession;
 import com.zoutrankil.data.repository.FileEvidenceStore;
-import com.zoutrankil.data.repository.ReferencePublicationJournal.State;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 
@@ -58,6 +57,8 @@ public final class MarginAllSyncAdapter implements SyncJobRunner.Adapter<MarginA
     public void preflight(FrozenRequest request) throws Exception {
         validateRequest(request);
         port.preflight();
+        if ("margin_all".equals(port.formalTable()) != (request.definition().version() == 2))
+            throw new IllegalArgumentException("汇总物理目标与请求版本不匹配");
         var target = tables.open(port.formalTable()).snapshot();
         String current = tables.physicalTargetId(port.formalTable(), target.identity());
         if (!current.equals(request.parameters().get("physicalTargetId"))
@@ -79,6 +80,7 @@ public final class MarginAllSyncAdapter implements SyncJobRunner.Adapter<MarginA
             check(cancelled);
             String logical = (String) request.parameters().get("targetId"),
                     physical = (String) request.parameters().get("physicalTargetId");
+            var calendar = request.definition().version() == 2 ? frozenCalendar(request) : null;
             var prepared =
                     staging.prepare(
                             port.formalTable(),
@@ -97,6 +99,8 @@ public final class MarginAllSyncAdapter implements SyncJobRunner.Adapter<MarginA
                 check(cancelled);
                 LocalDate sliceDate = from;
                 var page = source.fetch(sliceDate, cancelled);
+                if (calendar != null)
+                    MarginAllCalendar.requireCoverage(calendar, sliceDate, page.rows());
                 for (var row : page.rows())
                     if (!row.tradeDate().equals(sliceDate) || !seen.add(row.key()))
                         throw new IllegalStateException(
@@ -124,7 +128,11 @@ public final class MarginAllSyncAdapter implements SyncJobRunner.Adapter<MarginA
             Path completion = runEvidence.resolve("source-complete.json");
             var body = new LinkedHashMap<String, Object>();
             body.put("jobId", MarginAllSyncJobOwner.DEFINITION.jobId());
-            body.put("jobVersion", MarginAllSyncJobOwner.DEFINITION.version());
+            body.put("jobVersion", request.definition().version());
+            if (calendar != null) {
+                body.put("calendarDays", calendar.encoded());
+                body.put("calendarFingerprint", calendar.fingerprint());
+            }
             body.put("datasetId", "margin_all");
             body.put("mode", request.mode());
             body.put("logicalTargetId", logical);
@@ -162,16 +170,14 @@ public final class MarginAllSyncAdapter implements SyncJobRunner.Adapter<MarginA
 
     @Override
     public boolean recoveryRequired(String runId) throws Exception {
-        if (MarginAllStaging.hasStageIntent(runEvidence)) {
-            var entry = publication.findForRun(runId);
-            return entry.isEmpty() || entry.get().state() != State.VERIFIED;
-        }
-        return false;
+        // 物理发布成功之后，完成凭证或账本仍可能失败，原锁必须留给显式收尾。
+        return MarginAllStaging.hasStageIntent(runEvidence);
     }
 
     public static void validateRequest(FrozenRequest request) {
         if (request == null
-                || !request.definition().equals(MarginAllSyncJobOwner.DEFINITION)
+                || !(request.definition().equals(MarginAllSyncJobOwner.DEFINITION)
+                        || request.definition().equals(MarginAllSyncJobOwner.FORMAL_DEFINITION))
                 || request.definition().datasetVersion()
                         != MarginAllDataset.DEFINITION.schemaVersion()
                 || !Set.of(Mode.INCREMENTAL, Mode.BACKFILL, Mode.RECONCILE).contains(request.mode())
@@ -183,16 +189,12 @@ public final class MarginAllSyncAdapter implements SyncJobRunner.Adapter<MarginA
                         > MarginAllSyncJobOwner.MAX_WINDOW_DAYS)
             throw new IllegalArgumentException("Frozen bounded D028 request required");
         Map<String, Object> p = request.parameters();
-        Set<String> allowed =
-                Set.of(
-                        "targetId",
-                        "physicalTargetId",
-                        "targetFingerprint",
-                        "targetRowsBefore",
-                        "targetMinBefore",
-                        "targetMaxBefore",
-                        "checkpointAnchor",
-                        "checkpointBefore");
+        Set<String> allowed = request.definition().parameters().keySet();
+        if (request.definition().version() == 2) {
+            if (request.mode() != Mode.BACKFILL)
+                throw new IllegalArgumentException("正式汇总v2只允许有界补数");
+            frozenCalendar(request);
+        }
         if (!p.keySet()
                         .containsAll(
                                 Set.of(
@@ -243,6 +245,17 @@ public final class MarginAllSyncAdapter implements SyncJobRunner.Adapter<MarginA
         } else if (p.get("checkpointAnchor") != null || p.get("checkpointBefore") != null)
             throw new IllegalArgumentException(
                     "D028 non-incremental request cannot carry checkpoint fields");
+    }
+
+    public static MarginAllCalendar.Window frozenCalendar(FrozenRequest request) {
+        if (!MarginAllCalendar.POLICY.equals(request.parameters().get("calendarPolicy")))
+            throw new IllegalArgumentException("正式汇总日历规则未知");
+        Object raw = request.parameters().get("calendarDays"),
+                hash = request.parameters().get("calendarFingerprint");
+        if (!(raw instanceof String text) || !(hash instanceof String fingerprint))
+            throw new IllegalArgumentException("正式汇总缺冻结日历");
+        return MarginAllCalendar.validate(
+                request.from(), request.to(), List.of(text.split(",", -1)), fingerprint);
     }
 
     private static void check(BooleanSupplier cancelled) {

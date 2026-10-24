@@ -46,6 +46,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
 
 class MarginSecsContractTest {
@@ -134,10 +135,9 @@ class MarginSecsContractTest {
                 () -> new MarginSecsTradingDates(calendar).read(DAY, DAY.plusDays(1)));
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false, true})
-    void beforeKeysAreCheckedBeforeConsumerAndAckReadbackBeforeCompletion(boolean empty)
-            throws Exception {
+    @Test
+    void beforeKeysAreCheckedBeforeConsumerAndAckReadbackBeforeCompletion() throws Exception {
+        boolean empty = false;
         var pages = new Pages(empty);
         var session = mock(MarginSecsWriteSession.class);
         var calendar = mock(ExchangeCalendarReadPort.class);
@@ -188,6 +188,48 @@ class MarginSecsContractTest {
         assertEquals(1, pages.calls);
     }
 
+    @Test
+    void emptyOpenDateSourceCannotCertifyAnEmptyTarget() throws Exception {
+        var session = mock(MarginSecsWriteSession.class);
+        var adapter =
+                new MarginSecsSyncAdapter(
+                        new MarginSecsSource(new Pages(true), temp.resolve("source")),
+                        mock(ExchangeCalendarReadPort.class),
+                        session,
+                        temp);
+        assertThrows(
+                IllegalStateException.class,
+                () -> adapter.fetch(request(), p -> fail("空来源不能发送"), () -> false));
+        verifyNoInteractions(session);
+        assertFalse(adapter.recoveryRequired("run"));
+        assertFalse(Files.exists(temp.resolve("complete-window.json")));
+    }
+
+    @Test
+    void wholeDateMismatchAfterAcceptedPageKeepsRecoveryAndDurableSourceReference()
+            throws Exception {
+        var session = mock(MarginSecsWriteSession.class);
+        when(session.readDateBefore(DAY)).thenReturn(List.of());
+        when(session.readDate(DAY)).thenReturn(List.of(row("600000.SH", "并发修订")));
+        var adapter =
+                new MarginSecsSyncAdapter(
+                        new MarginSecsSource(new Pages(false), temp.resolve("source")),
+                        mock(ExchangeCalendarReadPort.class),
+                        session,
+                        temp);
+        var sent = new AtomicInteger();
+        assertThrows(
+                IllegalStateException.class,
+                () -> adapter.fetch(request(), p -> sent.incrementAndGet(), () -> false));
+        assertEquals(1, sent.get());
+        assertTrue(adapter.recoveryRequired("run"));
+        var evidence =
+                JobDefinitionJson.mapper()
+                        .readTree(temp.resolve("whole-date-in-doubt-" + DAY + ".json").toFile());
+        assertTrue(Files.isRegularFile(Path.of(evidence.path("sourceEvidence").asText())));
+        assertFalse(evidence.path("sourceFingerprint").asText().isBlank());
+    }
+
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
     void existingKeyOmissionEvenAnEmptyResponseCannotReachWrite(boolean empty) throws Exception {
@@ -201,7 +243,9 @@ class MarginSecsContractTest {
                         session,
                         temp);
         assertEquals(
-                "D030 source omitted an existing natural key; removal needs an explicit publication policy",
+                empty
+                        ? "标的名单为空、不完整或达到6000行保守上限"
+                        : "D030 source omitted an existing natural key; removal needs an explicit publication policy",
                 assertThrows(
                                 IllegalStateException.class,
                                 () ->
@@ -228,7 +272,7 @@ class MarginSecsContractTest {
                         session,
                         temp);
         assertEquals(
-                "D030 all-field date readback mismatch after ACK",
+                "标的名单逐批通过后整日完整键值不符",
                 assertThrows(
                                 IllegalStateException.class,
                                 () -> adapter.fetch(request(), consumed::add, () -> false))

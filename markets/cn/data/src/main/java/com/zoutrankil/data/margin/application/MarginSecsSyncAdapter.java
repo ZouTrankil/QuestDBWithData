@@ -29,13 +29,14 @@ import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.function.BooleanSupplier;
 
-/** D030 one-source-call-per-SSE-session adapter with full-day readback after every write slice. */
+/** 每个开市日核对完整名单，已发送但整日不符时保留未决锁。 */
 public final class MarginSecsSyncAdapter
         implements SyncJobRunner.Adapter<MarginSecs, MarginSecsKey> {
     private final MarginSecsSource source;
     private final ExchangeCalendarReadPort calendars;
     private final MarginSecsWriteSession port;
     private final Path evidenceRoot;
+    private boolean wholeDateInDoubt;
 
     public MarginSecsSyncAdapter(
             MarginSecsSource source,
@@ -86,9 +87,31 @@ public final class MarginSecsSyncAdapter
                     throw new IllegalStateException(
                             "D030 source omitted an existing natural key; removal needs an explicit publication policy");
             consumer.accept(page);
-            var actual = port.readDate(date);
-            if (!MarginSecsRows.sameRows(page.rows(), actual))
-                throw new IllegalStateException("D030 all-field date readback mismatch after ACK");
+            try {
+                var actual = port.readDate(date);
+                if (!MarginSecsRows.sameRows(page.rows(), actual))
+                    throw new IllegalStateException("标的名单逐批通过后整日完整键值不符");
+            } catch (Exception failure) {
+                // ACK和已通过批次不能证明整日完成，耐久保存原来源引用并保留锁。
+                wholeDateInDoubt = true;
+                try {
+                    Files.createDirectories(evidenceRoot);
+                    FileEvidenceStore.writeNewDurable(
+                            evidenceRoot.resolve("whole-date-in-doubt-" + date + ".json"),
+                            JobDefinitionJson.mapper()
+                                    .writeValueAsBytes(
+                                            Map.of(
+                                                    "date",
+                                                    date,
+                                                    "sourceFingerprint",
+                                                    page.sourceFingerprint(),
+                                                    "sourceEvidence",
+                                                    page.responseEvidence())));
+                } catch (Exception evidenceFailure) {
+                    failure.addSuppressed(evidenceFailure);
+                }
+                throw failure;
+            }
             receipts.add(
                     Map.of(
                             "tradeDate",
@@ -106,7 +129,8 @@ public final class MarginSecsSyncAdapter
         Path complete = evidenceRoot.resolve("complete-window.json");
         var body = new LinkedHashMap<String, Object>();
         body.put("jobId", MarginSecsSyncJobOwner.DEFINITION.jobId());
-        body.put("jobVersion", MarginSecsSyncJobOwner.DEFINITION.version());
+        body.put("jobVersion", request.definition().version());
+        if (request.definition().version() == 2) body.put("baselineScope", "DATE_WINDOW");
         body.put("datasetId", "margin_secs");
         body.put("mode", request.mode());
         body.put("targetId", request.parameters().get("targetId"));
@@ -133,6 +157,11 @@ public final class MarginSecsSyncAdapter
     }
 
     @Override
+    public boolean recoveryRequired(String runId) {
+        return wholeDateInDoubt;
+    }
+
+    @Override
     public VerifiedBatchExecutor.Codec<MarginSecs, MarginSecsKey> codec() {
         return port.codec();
     }
@@ -144,7 +173,8 @@ public final class MarginSecsSyncAdapter
 
     public static void validateRequest(FrozenRequest request) {
         if (request == null
-                || !MarginSecsSyncJobOwner.DEFINITION.equals(request.definition())
+                || !(MarginSecsSyncJobOwner.DEFINITION.equals(request.definition())
+                        || MarginSecsSyncJobOwner.FORMAL_DEFINITION.equals(request.definition()))
                 || request.definition().datasetVersion()
                         != MarginSecsDataset.DEFINITION.schemaVersion()
                 || !Set.of(Mode.INCREMENTAL, Mode.BACKFILL, Mode.RECONCILE).contains(request.mode())
@@ -156,7 +186,11 @@ public final class MarginSecsSyncAdapter
                         > MarginSecsSyncJobOwner.MAX_WINDOW_DAYS)
             throw new IllegalArgumentException("Frozen bounded D030 request required");
         var p = request.parameters();
-        Set<String> allowed = MarginSecsSyncJobOwner.DEFINITION.parameters().keySet();
+        Set<String> allowed = request.definition().parameters().keySet();
+        if (request.definition().version() == 2
+                && (request.mode() != Mode.BACKFILL
+                        || !"DATE_WINDOW".equals(p.get("baselineScope"))))
+            throw new IllegalArgumentException("正式v2需要明确日期窗补数基线");
         if (!p.keySet()
                         .containsAll(
                                 Set.of(
@@ -225,6 +259,11 @@ public final class MarginSecsSyncAdapter
         } else if (p.get("checkpointAnchor") != null || p.get("checkpointBefore") != null)
             throw new IllegalArgumentException(
                     "D030 repair request cannot carry checkpoint fields");
+        if (request.definition().version() == 2
+                && p.get("targetMinBefore") instanceof LocalDate min
+                && (min.isBefore(request.from())
+                        || ((LocalDate) p.get("targetMaxBefore")).isAfter(request.to())))
+            throw new IllegalArgumentException("正式v2基线越出冻结日期窗");
         var calendar = split(p.get("calendarDays"));
         var open = split(p.get("tradeDates"));
         MarginSecsTradingDates.validateFrozen(

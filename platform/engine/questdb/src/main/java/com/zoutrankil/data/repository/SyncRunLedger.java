@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -540,6 +541,144 @@ public final class SyncRunLedger {
                             throw new IllegalStateException("Concurrent ledger update");
                     }
                     appendEvent(c, id, expectedRevision + 1, next, payloadJson, now);
+                });
+    }
+
+    /**
+     * 显式放弃未发布的隔离写入。调用方须持有原发布锁，核实 writer 已停、原目标未变、
+     * stage 已消失并保留原租约；本方法只按耐久意图一次性取消整个原运行，不认证数据成功。
+     * 普通 transition 仍禁止取消 IN_DOUBT，也不能借此重试未决正式写入。
+     */
+    public void cancelDiscardedStageRun(String runId, Path proofPath, String proofSha256)
+            throws Exception {
+        id(runId);
+        Path root = path.getParent().resolve("sync-evidence").resolve(runId);
+        Path proof =
+                FileEvidenceStore.owned(
+                        proofPath,
+                        root,
+                        FileEvidenceStore.Ownership.DIRECT_CHILD,
+                        FileEvidenceStore.Symlinks.REJECT_LEAF,
+                        () -> new IllegalStateException("丢弃协调凭证越界"));
+        byte[] bytes =
+                FileEvidenceStore.readBounded(
+                        proof, 1024 * 1024, () -> new IllegalStateException("丢弃协调凭证超预算"));
+        if (!FileEvidenceStore.sha256(bytes).equals(proofSha256))
+            throw new IllegalStateException("丢弃协调凭证摘要变化");
+        var evidence = JSON.readTree(bytes);
+        if (!"sync.discarded-stage-reconciliation.v1".equals(evidence.path("schema").asText())
+                || !runId.equals(evidence.path("runId").asText())
+                || !evidence.path("writerStopped").asBoolean()
+                || !evidence.path("targetUnchanged").asBoolean()
+                || !evidence.path("stageAbsent").asBoolean()
+                || !evidence.path("entries").isArray())
+            throw new IllegalStateException("缺少明确的隔离stage丢弃证明");
+        var cancellation = new LinkedHashMap<String, Object>();
+        cancellation.put("discardedStage", true);
+        cancellation.put("dataVerified", false);
+        cancellation.put("proofPath", proof.toString());
+        cancellation.put("proofSha256", proofSha256);
+        String payload = JSON.writeValueAsString(cancellation);
+        transaction(
+                c -> {
+                    var run = getRun(runId);
+                    if (!run.targetId().equals(evidence.path("targetId").asText())
+                            || !SyncRequestIdentity.fingerprint(run.frozenJson(), run.targetId())
+                                    .equals(evidence.path("requestFingerprint").asText()))
+                        throw new IllegalStateException("丢弃凭证不属于原冻结请求");
+                    var expected = new LinkedHashMap<String, JsonNode>();
+                    for (var item : evidence.path("entries")) {
+                        String entryId = item.path("id").asText();
+                        if (expected.put(entryId, item) != null
+                                || !item.path("revision").isIntegralNumber())
+                            throw new IllegalStateException("丢弃凭证的子项清单不唯一");
+                    }
+                    if (!expected.containsKey(runId) || expected.size() > 1000)
+                        throw new IllegalStateException("丢弃凭证缺少原运行或超预算");
+                    try (var st =
+                            c.prepareStatement("SELECT id FROM sync_entries WHERE run_id=?")) {
+                        st.setString(1, runId);
+                        try (var rows = st.executeQuery()) {
+                            int count = 0;
+                            while (rows.next()) {
+                                if (!expected.containsKey(rows.getString(1)))
+                                    throw new IllegalStateException("原运行子项清单变化");
+                                count++;
+                            }
+                            if (count != expected.size())
+                                throw new IllegalStateException("原运行子项缺失");
+                        }
+                    }
+                    boolean alreadyCancelled = true;
+                    for (var item : expected.values()) {
+                        var entry = require(c, item.path("id").asText());
+                        if (!runId.equals(entry.runId())
+                                || !entry.kind().name().equals(item.path("kind").asText())
+                                || !Objects.equals(
+                                        entry.parentId(),
+                                        item.path("parentId").isNull()
+                                                ? null
+                                                : item.path("parentId").asText()))
+                            throw new IllegalStateException("原运行子项归属变化");
+                        if (entry.kind() != Kind.RUN) {
+                            var parent = expected.get(entry.parentId());
+                            String parentKind = entry.kind() == Kind.ATTEMPT ? "RUN" : "ATTEMPT";
+                            if (parent == null || !parentKind.equals(parent.path("kind").asText()))
+                                throw new IllegalStateException("原运行子项祖先不完整");
+                        } else if (!entry.id().equals(runId))
+                            throw new IllegalStateException("原清单出现外来运行");
+                        boolean completed =
+                                entry.state() == SyncRunState.CANCELLED
+                                        && entry.revision() == item.path("revision").asLong() + 1
+                                        && entry.payloadJson().equals(payload);
+                        if (!completed) {
+                            alreadyCancelled = false;
+                            if (entry.revision() != item.path("revision").asLong()
+                                    || !entry.state().name().equals(item.path("state").asText()))
+                                throw new IllegalStateException("原运行子项修订变化");
+                        }
+                        try (var st =
+                                c.prepareStatement(
+                                        "SELECT count(*) FROM sync_events WHERE entry_id=?")) {
+                            st.setString(1, entry.id());
+                            try (var event = st.executeQuery()) {
+                                if (!event.next() || event.getLong(1) != entry.revision() + 1)
+                                    throw new IllegalStateException("原运行事件历史不连续");
+                            }
+                        }
+                        try (var st =
+                                c.prepareStatement(
+                                        "SELECT revision,state,payload_json FROM sync_events WHERE entry_id=? ORDER BY revision DESC LIMIT 1")) {
+                            st.setString(1, entry.id());
+                            try (var event = st.executeQuery()) {
+                                if (!event.next()
+                                        || event.getLong(1) != entry.revision()
+                                        || !event.getString(2).equals(entry.state().name())
+                                        || !event.getString(3).equals(entry.payloadJson()))
+                                    throw new IllegalStateException("原运行事件与状态不一致");
+                            }
+                        }
+                    }
+                    if (alreadyCancelled) return;
+                    var original = require(c, runId);
+                    if (original.kind() != Kind.RUN || original.state() != SyncRunState.IN_DOUBT)
+                        throw new IllegalStateException("只有保留原未决状态的隔离运行可显式取消");
+                    String now = Instant.now().toString();
+                    for (var item : expected.values()) {
+                        String entryId = item.path("id").asText();
+                        long revision = item.path("revision").asLong();
+                        try (var st =
+                                c.prepareStatement(
+                                        "UPDATE sync_entries SET state='CANCELLED',revision=revision+1,payload_json=?,updated_at=? WHERE id=? AND revision=?")) {
+                            st.setString(1, payload);
+                            st.setString(2, now);
+                            st.setString(3, entryId);
+                            st.setLong(4, revision);
+                            if (st.executeUpdate() != 1)
+                                throw new IllegalStateException("原运行发生并发修改");
+                        }
+                        appendEvent(c, entryId, revision + 1, SyncRunState.CANCELLED, payload, now);
+                    }
                 });
     }
 

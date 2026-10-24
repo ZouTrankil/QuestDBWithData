@@ -72,7 +72,7 @@ public final class MarginAllWritePort implements MarginAllWriteSession {
 
     public MarginAllWritePort(
             String formalTable, String frozenTargetId, JdbcTemplate jdbc, QuestDB questdb) {
-        MarginAllDataset.requireIsolatedTable(formalTable);
+        MarginAllDataset.requireExecutionTable(formalTable);
         if (frozenTargetId == null || !frozenTargetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen D028 isolated target identity required");
         this.formalTable = formalTable;
@@ -108,7 +108,7 @@ public final class MarginAllWritePort implements MarginAllWriteSession {
     public void preflight() {
         requireWriteTarget();
         QuestDbWriteChecks.preflight(
-                jdbc, writeTable, MarginAllDataset.isolatedWriteDefinition(writeTable));
+                jdbc, writeTable, MarginAllDataset.executionWriteDefinition(writeTable));
         requireWriteTarget();
     }
 

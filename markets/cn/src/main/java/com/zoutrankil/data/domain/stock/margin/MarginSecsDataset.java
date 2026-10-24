@@ -49,6 +49,16 @@ public final class MarginSecsDataset {
 
     public static DatasetDefinition isolatedWriteDefinition(String table) {
         requireIsolatedTable(table);
+        return writeDefinition(table);
+    }
+
+    /** 正式预检只放行精确同名目标，原隔离定义和建表工具仍保持原限制。 */
+    public static DatasetDefinition executionWriteDefinition(String table) {
+        requireExecutionTable(table);
+        return writeDefinition(table);
+    }
+
+    private static DatasetDefinition writeDefinition(String table) {
         return new DatasetDefinition(
                 "margin_secs",
                 1,
@@ -101,6 +111,11 @@ public final class MarginSecsDataset {
                         false,
                         "Provider exchange label, preserved without inferred remapping",
                         null));
+    }
+
+    /** 正式准入不扩展到任意同结构表。 */
+    public static void requireExecutionTable(String table) {
+        if (!"margin_secs".equals(table)) requireIsolatedTable(table);
     }
 
     public static void requireIsolatedTable(String table) {

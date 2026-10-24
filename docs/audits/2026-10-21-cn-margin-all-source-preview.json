@@ -1,0 +1,56 @@
+{
+  "schema": "cn.margin-all.source-preview.v1",
+  "checkedAt": "2026-10-21T13:01:23.268847+00:00",
+  "productionWritten": false,
+  "targetDataVerified": false,
+  "scope": "一个开市日与相邻周末的有界来源核查，不代表全部历史或正式补数",
+  "physicalRange": [
+    {
+      "rows": 4722,
+      "min_micros": 1672704000000000,
+      "max_micros": 1773878400000000
+    }
+  ],
+  "slices": [
+    {
+      "date": "2026-09-18",
+      "sourceRows": 3,
+      "sourceExchanges": [
+        "BSE",
+        "SSE",
+        "SZSE"
+      ],
+      "oldScopeRows": 0,
+      "rawSource": {
+        "path": "var/cn-margin-all-check-20261021/source/margin-all-20260918-1a04ebf7ae5de23bff31e272f91404932957f46b3ed28bc1e689600926bb321d.json",
+        "sha256": "1a04ebf7ae5de23bff31e272f91404932957f46b3ed28bc1e689600926bb321d"
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "sourceRows": 0,
+      "sourceExchanges": [],
+      "oldScopeRows": 0,
+      "rawSource": {
+        "path": "var/cn-margin-all-check-20261021/source/margin-all-20260919-b7f0005cdf63ab451cb9ca7b3866a4803803080c92cc52afdbf3af9f0d68f51e.json",
+        "sha256": "b7f0005cdf63ab451cb9ca7b3866a4803803080c92cc52afdbf3af9f0d68f51e"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "path": "var/cn-margin-all-check-20261021/source-check.json",
+      "sha256": "0de9154c18aed5528395a2da6604d09d36fa9ed8cf2053c750326f09f9fcb463"
+    },
+    {
+      "path": "var/cn-margin-all-check-20261021/source-check.log",
+      "sha256": "1018c4793f20ae734e1da499f6c237f2611d20036aa763777fffd69f20e33114"
+    }
+  ],
+  "nextDevelopment": [
+    "精确正式目标准入，保持非DEDUP整范围stage/backup发布及原锁协议",
+    "正式作业需区分开市日完整交易所范围和休市日合法空响应，不改变原v1指纹",
+    "检查全年窗口的每日期望行数和预算，不将原366行预算当成366天三交易所覆盖",
+    "核对原正式表重复键、物理代、完整值及关联消费者；不因来源非空直接写入"
+  ]
+}

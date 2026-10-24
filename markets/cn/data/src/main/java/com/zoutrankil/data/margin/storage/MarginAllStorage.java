@@ -43,7 +43,7 @@ public final class MarginAllStorage implements MarginAllTables.Table {
     }
 
     public Identity preflight() {
-        QuestDbWriteChecks.preflight(jdbc, table, MarginAllDataset.isolatedWriteDefinition(table));
+        QuestDbWriteChecks.preflight(jdbc, table, MarginAllDataset.executionWriteDefinition(table));
         var obj =
                 jdbc.queryForList(
                         "SELECT id,directoryName FROM tables() WHERE table_name=?", table);
