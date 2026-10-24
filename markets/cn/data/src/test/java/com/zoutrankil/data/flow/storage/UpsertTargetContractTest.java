@@ -355,13 +355,16 @@ class UpsertTargetContractTest {
     }
 
     @Test
-    void formalTableAdmissionIsLimitedToMoneyflowAndDetail() {
+    void formalTableAdmissionIsLimitedToEachDeclaredCanonicalTable() {
         var jdbc = mock(JdbcTemplate.class);
         var qdb = mock(QuestDB.class);
         assertEquals("moneyflow", Family.MONEYFLOW.target("moneyflow", jdbc, qdb).table());
         assertEquals("margin_detail", Family.DETAIL.target("margin_detail", jdbc, qdb).table());
+        assertEquals("moneyflow_ths", Family.THS.target("moneyflow_ths", jdbc, qdb).table());
+        assertThrows(IllegalStateException.class, () -> Family.THS.target("moneyflow", jdbc, qdb));
         assertThrows(
-                IllegalStateException.class, () -> Family.THS.target("moneyflow_ths", jdbc, qdb));
+                IllegalStateException.class,
+                () -> MoneyflowThsDataset.createIsolatedTableSql("moneyflow_ths"));
         verifyNoInteractions(jdbc, qdb);
     }
 

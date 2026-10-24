@@ -23,6 +23,7 @@ import static org.mockito.Mockito.withSettings;
 
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.domain.DatasetReadPage;
+import com.zoutrankil.data.domain.IntervalLockStore.Scope;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
@@ -47,6 +48,7 @@ import com.zoutrankil.data.margin.port.MarginDetailTarget;
 import com.zoutrankil.data.margin.port.MarginDetailWriteSession;
 import com.zoutrankil.data.margin.storage.MarginDetailWritePort;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.service.DatasetIntervalLock;
 import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.TusharePageService;
@@ -337,6 +339,66 @@ class UpsertOwnerPortContractTest {
     }
 
     @Test
+    void formalThsBackfillDoesNotAdoptLegacyRowsOrAllowIncrementalGroupAndResume()
+            throws Exception {
+        var h = new Harness(Family.THS, temp.resolve("formal-ths.sqlite"), "moneyflow_ths");
+        h.failPreflight = false;
+        var job = (MoneyflowThsJobService) h.job;
+        for (var mode : List.of(Mode.INCREMENTAL, Mode.RECONCILE))
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> job.plan(mode, DAY, DAY, DAY.plusDays(1)));
+        assertEquals(0, h.writers.size());
+        var p = job.plan(Mode.BACKFILL, DAY, DAY, DAY.plusDays(1));
+        assertNull(p.checkpointAnchor());
+        assertNull(p.checkpointBefore());
+        assertEquals(0, p.checkedPhysicalRows());
+        assertFalse(p.bootstrap());
+        assertFalse(Files.exists(h.ledger));
+        assertThrows(IllegalArgumentException.class, () -> h.run(request(Family.THS)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> h.group("child", "parent", request(Family.THS)));
+        failed(h.ledger, request(Family.THS));
+        assertThrows(IllegalArgumentException.class, () -> h.resume("prior"));
+        assertEquals(1, h.writers.size());
+        verifyNoInteractions(h.pages);
+    }
+
+    @Test
+    void thsWholeDateMismatchKeepsTheRunnerIntervalInDoubt() throws Exception {
+        var h = new Harness(Family.THS, temp.resolve("in-doubt-ths.sqlite"), "moneyflow_ths");
+        h.failPreflight = false;
+        h.corruptThsDateAfterWrite = true;
+        var raw =
+                List.of(
+                        UpsertSourceContractTest.raw(
+                                UpsertSourceContractTest.Family.THS, "000001.SZ"));
+        var page =
+                UpsertSourceContractTest.fetch(
+                        UpsertSourceContractTest.Family.THS,
+                        new UpsertSourceContractTest.Pages(raw),
+                        temp.resolve("source"),
+                        () -> false);
+        var job = (MoneyflowThsJobService) h.job;
+        var plan = job.plan(Mode.BACKFILL, DAY, DAY, DAY.plusDays(1));
+        try (var sources =
+                mockConstruction(
+                        MoneyflowThsSource.class,
+                        (source, context) ->
+                                when(source.fetch(eq(DAY), any()))
+                                        .thenReturn((SyncJobRunner.Page) page))) {
+            var result = job.run(plan);
+            assertEquals(SyncRunState.IN_DOUBT, result.state());
+            var scope = new Scope("moneyflow_ths", DAY, DAY);
+            var lease = new DatasetIntervalLock(h.ledger).findOwned(result.runId(), scope);
+            assertTrue(lease.inDoubt());
+            assertThrows(Exception.class, () -> job.resume(result.runId()));
+            verify(h.writers.getLast()).send(anyList());
+        }
+    }
+
+    @Test
     void formalDetailWindowRejectsFifteenDaysBeforeIdentityAndKeepsStringPhysicalCount()
             throws Exception {
         var h = new Harness(Family.DETAIL, temp.resolve("formal-detail.sqlite"), "margin_detail");
@@ -399,6 +461,7 @@ class UpsertOwnerPortContractTest {
         String identity = ID;
         int identityCalls;
         boolean failPreflight = true;
+        boolean corruptThsDateAfterWrite;
         String cancelChildAtPreflight;
         int preflightCalls;
 
@@ -491,7 +554,16 @@ class UpsertOwnerPortContractTest {
                     .send(anyList());
             when(w.readback(anyList())).thenAnswer(i -> List.copyOf(stored));
             when(w.walSettled()).thenReturn(true);
-            when(((DateSliceReadPort) w).readDate(any())).thenAnswer(i -> List.copyOf(stored));
+            when(((DateSliceReadPort) w).readDate(any()))
+                    .thenAnswer(
+                            i -> {
+                                if (corruptThsDateAfterWrite && !stored.isEmpty()) {
+                                    var duplicate = new ArrayList<>(stored);
+                                    duplicate.addAll(stored);
+                                    return duplicate;
+                                }
+                                return List.copyOf(stored);
+                            });
             doAnswer(
                             i -> {
                                 if (failPreflight)

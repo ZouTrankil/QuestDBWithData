@@ -16,6 +16,7 @@ import com.zoutrankil.data.service.PageExecutor;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.TusharePageService;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -89,6 +90,22 @@ class UpsertSourceContractTest {
                                 .path("sourceComplete")
                                 .asBoolean());
             }
+        }
+    }
+
+    @Test
+    void thsEmptyWholeMarketResponseOnlyLeavesUnverifiedEvidence() throws Exception {
+        assertThrows(
+                IllegalStateException.class,
+                () -> fetch(Family.THS, new Pages(List.of()), temp, () -> false));
+        try (var files = Files.list(temp)) {
+            var evidence = files.toList();
+            assertEquals(1, evidence.size());
+            assertFalse(
+                    JobDefinitionJson.mapper()
+                            .readTree(evidence.getFirst().toFile())
+                            .path("sourceComplete")
+                            .asBoolean());
         }
     }
 

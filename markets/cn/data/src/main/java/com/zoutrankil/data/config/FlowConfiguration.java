@@ -32,7 +32,8 @@ public class FlowConfiguration {
     MoneyflowThsTarget moneyflowThsTarget(
             JdbcTemplate jdbc,
             @Lazy QuestDB questdb,
-            @Value("${app.sync.moneyflow-ths-table:java_d025_moneyflow_ths_acceptance}")
+            @Value(
+                            "${app.sync.moneyflow-ths-write-table:${app.sync.moneyflow-ths-table:java_d025_moneyflow_ths_acceptance}}")
                     String table) {
         return new QuestDbMoneyflowThsTarget(table, jdbc, questdb);
     }

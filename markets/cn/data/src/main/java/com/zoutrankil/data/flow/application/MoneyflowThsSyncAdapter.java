@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.function.BooleanSupplier;
 
-/** D025 per-date adapter; a late failed date leaves prior verified sessions resumable. */
+/** 按完整交易日核验；来源失败可恢复，已发送但整日不符则留锁。 */
 public final class MoneyflowThsSyncAdapter
         implements SyncJobRunner.Adapter<MoneyflowThs, MoneyflowThsKey> {
     private static final int MAX_COMPLETION_BYTES = 16 * 1024 * 1024;
@@ -37,6 +37,7 @@ public final class MoneyflowThsSyncAdapter
     private final ExchangeCalendarReadPort calendars;
     private final MoneyflowThsWriteSession port;
     private final Path evidenceRoot;
+    private boolean wholeDateInDoubt;
 
     public MoneyflowThsSyncAdapter(
             MoneyflowThsSource source,
@@ -124,10 +125,27 @@ public final class MoneyflowThsSyncAdapter
                     throw new IllegalStateException(
                             "D025 source omitted an existing key; stale-row removal requires explicit publication handling");
             consumer.accept(page);
-            var actual = port.readDate(date);
-            if (!MoneyflowThsCoverage.sameRows(page.rows(), actual, port.codec()))
-                throw new IllegalStateException(
-                        "D025 whole-date QuestDB readback differs after the verified page write");
+            try {
+                var actual = port.readDate(date);
+                if (!MoneyflowThsCoverage.sameRows(page.rows(), actual, port.codec()))
+                    throw new IllegalStateException("D025逐批通过后，整日完整键值仍不符");
+            } catch (Exception failure) {
+                // 已有发送，整日范围仍未决时保留原锁，不能用已通过批次认证整日。
+                wholeDateInDoubt = true;
+                Files.createDirectories(evidenceRoot);
+                FileEvidenceStore.writeNewDurable(
+                        evidenceRoot.resolve("whole-date-in-doubt-" + date + ".json"),
+                        JobDefinitionJson.mapper()
+                                .writeValueAsBytes(
+                                        Map.of(
+                                                "date",
+                                                date,
+                                                "sourceFingerprint",
+                                                page.sourceFingerprint(),
+                                                "sourceEvidence",
+                                                page.responseEvidence())));
+                throw failure;
+            }
             pageCount++;
             rowCount = Math.addExact(rowCount, page.rows().size());
             pageEvidence.add(
@@ -166,6 +184,11 @@ public final class MoneyflowThsSyncAdapter
             throw new IllegalStateException("D025 completion evidence collision", exists);
         }
         return new SyncJobRunner.SourceCompletion(pageCount, rowCount, true, complete.toString());
+    }
+
+    @Override
+    public boolean recoveryRequired(String runId) {
+        return wholeDateInDoubt;
     }
 
     @Override

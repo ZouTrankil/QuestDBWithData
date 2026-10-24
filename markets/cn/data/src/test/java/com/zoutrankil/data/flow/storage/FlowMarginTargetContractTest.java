@@ -78,9 +78,12 @@ class FlowMarginTargetContractTest {
         assertSame(a.codec(), b.codec());
         assertFalse(a.uncertainSenderStopped());
         assertFalse(b.uncertainSenderStopped());
+        assertEquals(
+                "margin_secs",
+                new QuestDbMarginSecsTarget("margin_secs", jdbc, questdb).tableName());
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new QuestDbMarginSecsTarget("margin_secs", jdbc, questdb));
+                () -> new QuestDbMarginSecsTarget("margin_detail", jdbc, questdb));
         verifyNoInteractions(ds, questdb);
     }
 

@@ -86,6 +86,11 @@ public final class MoneyflowThsDataset {
                         "Small-order net buy percentage in provider percent units"));
     }
 
+    /** 正式表仅放行原精确名称；隔离DDL仍走原前缀校验。 */
+    public static void requireExecutionTable(String table) {
+        if (!"moneyflow_ths".equals(table)) requireIsolatedTable(table);
+    }
+
     public static void requireIsolatedTable(String table) {
         DatasetDefinition.identifier(table);
         if (!table.startsWith(ISOLATED_PREFIX) || table.length() <= ISOLATED_PREFIX.length())

@@ -28,11 +28,14 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Collectors;
 
-/** D025 isolated manual planner/runner. Shared CLI and dataset/group wiring are registered separately. */
+/** D025 有界执行；正式表只补明确日期，旧隔离请求继续按原协议恢复。 */
 @Service
 public class MoneyflowThsJobService {
     public static final String ISOLATED_TABLE_PREFIX = MoneyflowThsDataset.ISOLATED_PREFIX;
@@ -84,7 +87,7 @@ public class MoneyflowThsJobService {
         this.target = Objects.requireNonNull(target);
         this.ledgerPath = ledgerPath.toAbsolutePath().normalize();
         String table = target.tableName();
-        MoneyflowThsDataset.requireIsolatedTable(table);
+        MoneyflowThsDataset.requireExecutionTable(table);
         this.table = table;
     }
 
@@ -94,6 +97,16 @@ public class MoneyflowThsJobService {
 
     public static void requireIsolatedTableName(String value) {
         MoneyflowThsDataset.requireIsolatedTable(value);
+    }
+
+    // 正式旧行没有来源覆盖凭据，不能据此建立增量检查点。
+    private boolean formalTarget() {
+        return "moneyflow_ths".equals(table);
+    }
+
+    private void requireExecutionMode(Mode mode) {
+        if (formalTarget() && mode != Mode.BACKFILL)
+            throw new IllegalArgumentException("正式同花顺资金流只允许显式有界BACKFILL，旧行不提供增量覆盖证据");
     }
 
     /** First incremental bootstrap requires an explicit bounded start. */
@@ -117,6 +130,7 @@ public class MoneyflowThsJobService {
             throw new IllegalArgumentException(
                     "D025 BACKFILL/RECONCILE require explicit --from and --to bounds");
 
+        requireExecutionMode(mode);
         LocalDate sourceCeiling =
                 DailySyncEndDate.resolve(null, ZonedDateTime.now(DailySyncEndDate.ZONE));
         LocalDate to =
@@ -133,9 +147,14 @@ public class MoneyflowThsJobService {
             throw new IllegalStateException(
                     "D025 target contains data beyond the frozen completed-source ceiling");
         MoneyflowThsCoverage.Checkpoint checkpoint =
-                MoneyflowThsCoverage.checkpoint(ledgerPath, target, calendars);
+                formalTarget()
+                        ? null
+                        : MoneyflowThsCoverage.checkpoint(ledgerPath, target, calendars);
         int checkedRows =
-                MoneyflowThsCoverage.validateExistingTarget(ledgerPath, target, calendars, port);
+                formalTarget()
+                        ? 0
+                        : MoneyflowThsCoverage.validateExistingTarget(
+                                ledgerPath, target, calendars, port);
 
         LocalDate from, anchor = null, checkpointBefore = null;
         boolean bootstrap = false;
@@ -213,6 +232,61 @@ public class MoneyflowThsJobService {
                 request, target, checkpointBefore, anchor, physical, bootstrap, checkedRows);
     }
 
+    public Map<String, Object> checkSource(LocalDate date, LocalDate logical) throws Exception {
+        if (date == null
+                || logical == null
+                || date.isAfter(logical)
+                || logical.isAfter(LocalDate.now(DailySyncEndDate.ZONE))
+                || date.isAfter(
+                        DailySyncEndDate.resolve(null, ZonedDateTime.now(DailySyncEndDate.ZONE))))
+            throw new IllegalArgumentException("需要明确已发生的来源日和业务日");
+        if (!DailyTradingSessions.read(calendars, date, date).equals(List.of(date)))
+            throw new IllegalArgumentException("核查日没有完整SSE开市日证据");
+        String identity = targetId();
+        var writer = target.newWriter(identity);
+        writer.preflight();
+        var source =
+                new MoneyflowThsSource(
+                        pages,
+                        ledgerPath
+                                .getParent()
+                                .resolve("sync-evidence")
+                                .resolve("moneyflow-ths-source-check-" + UUID.randomUUID()));
+        var page = source.fetch(date, () -> Thread.currentThread().isInterrupted());
+        var actual = writer.readDate(date);
+        var expected = page.rows().stream().map(MoneyflowThs::key).collect(Collectors.toSet());
+        long missingOld = actual.stream().filter(r -> !expected.contains(r.key())).count();
+        writer.preflight();
+        if (!identity.equals(targetId())) throw new IllegalStateException("只读来源检查期间物理目标改变");
+        return Map.of(
+                "dataset",
+                "moneyflow_ths",
+                "date",
+                date,
+                "targetId",
+                identity,
+                "sourceRows",
+                page.rows().size(),
+                "oldScopeRows",
+                actual.size(),
+                "oldKeysMissingInSource",
+                missingOld,
+                "sourceCoverageVerified",
+                true,
+                "targetDataVerified",
+                false,
+                "productionWritten",
+                false,
+                "source",
+                Map.of(
+                        "sourceFingerprint",
+                        page.sourceFingerprint(),
+                        "responseEvidence",
+                        page.responseEvidence(),
+                        "cursor",
+                        page.cursor()));
+    }
+
     public SyncJobRunner.Result run(Plan plan) throws Exception {
         return execute("moneyflow-ths-" + UUID.randomUUID(), null, null, plan);
     }
@@ -264,6 +338,7 @@ public class MoneyflowThsJobService {
                 || !plan.targetId().equals(targetId()))
             throw new IllegalStateException(
                     "Frozen D025 plan/target identity changed before execution");
+        requireExecutionMode(plan.request().mode());
         var ledger = new SyncRunLedger(ledgerPath);
         var port = this.target.newWriter(plan.targetId());
         if (priorRunId == null) {

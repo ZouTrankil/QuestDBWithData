@@ -179,6 +179,36 @@ class UpsertAdapterEvidenceContractTest {
         assertSame(port, adapter.port());
     }
 
+    @Test
+    void thsWholeDateFailureAfterConsumerRetainsRecoveryAndDurableSourceReference()
+            throws Exception {
+        var raw = List.of(raw(Family.THS, "000001.SZ"));
+        var page = fetch(Family.THS, new Pages(raw), temp.resolve("prior"), () -> false);
+        var row = (MoneyflowThs) page.rows().getFirst();
+        var port = mock(MoneyflowThsWriteSession.class);
+        when(port.codec()).thenReturn(MoneyflowThsWritePort.CODEC);
+        when(port.readDate(DAY)).thenReturn(List.of(), List.of(row, row));
+        var adapter =
+                new MoneyflowThsSyncAdapter(
+                        new MoneyflowThsSource(new Pages(raw), temp.resolve("run/source")),
+                        UpsertOwnerPortContractTest.calendar(),
+                        port,
+                        temp.resolve("run"));
+        var sent = new AtomicInteger();
+        assertThrows(
+                IllegalStateException.class,
+                () -> adapter.fetch(request(Family.THS), p -> sent.incrementAndGet(), () -> false));
+        assertEquals(1, sent.get());
+        assertTrue(adapter.recoveryRequired("run"));
+        var proof =
+                JobDefinitionJson.mapper()
+                        .readTree(
+                                temp.resolve("run/whole-date-in-doubt-" + DAY + ".json").toFile());
+        assertFalse(proof.path("sourceFingerprint").asText().isBlank());
+        assertTrue(Files.isRegularFile(Path.of(proof.path("sourceEvidence").asText())));
+        assertFalse(Files.exists(temp.resolve("run/complete-window.json")));
+    }
+
     static SyncJobDefinition.FrozenRequest request(Family f) {
         return UpsertOwnerPortContractTest.request(
                 UpsertOwnerPortContractTest.Family.valueOf(f.name()));
