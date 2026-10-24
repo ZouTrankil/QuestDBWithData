@@ -30,6 +30,16 @@ class UsMarketDataConfigurationTest {
                 new UsBroadSourceRetry.Policy(3, 5000), UsBroadSourceRetry.policy(environment));
         assertTrue(environment.getProperty("app.market-data.broad-annual-enabled", Boolean.class));
         assertEquals(128, UsBroadDailyCollector.annualSymbols(environment));
+        assertEquals(
+                2000L,
+                environment.getProperty("app.market-data.tiingo-request-spacing-ms", Long.class));
+        var spacingOverride =
+                ProjectConfiguration.load(
+                        "us-data", Map.of("APP_MARKET_DATA_TIINGO_REQUEST_SPACING_MS", "3000"));
+        assertEquals(
+                3000L,
+                spacingOverride.getProperty(
+                        "app.market-data.tiingo-request-spacing-ms", Long.class));
     }
 
     @Test

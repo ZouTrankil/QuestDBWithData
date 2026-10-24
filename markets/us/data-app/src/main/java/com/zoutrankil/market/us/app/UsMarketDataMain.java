@@ -262,8 +262,12 @@ public final class UsMarketDataMain {
                                 required(options, "prepared-sha256"),
                                 Path.of(required(options, "stopped-evidence"))));
             }
-            case "collect-core", "collect-broad" -> {
-                if (!Set.of("through", "maximum-jobs").containsAll(options.keySet()))
+            case "collect-core", "collect-broad", "collect-core-incremental" -> {
+                boolean incremental = args[0].equals("collect-core-incremental");
+                if (!(incremental
+                                ? Set.of("from", "through", "maximum-jobs")
+                                : Set.of("through", "maximum-jobs"))
+                        .containsAll(options.keySet()))
                     throw new IllegalArgumentException("未知采集参数");
                 if (args[0].equals("collect-broad") && options.containsKey("maximum-jobs"))
                     throw new IllegalArgumentException("maximum-jobs 仅适用于核心队列，不能在挂牌队列中静默忽略");
@@ -277,7 +281,11 @@ public final class UsMarketDataMain {
                 int maximum = Integer.parseInt(options.getOrDefault("maximum-jobs", "100000"));
                 if (maximum < 1 || maximum > 100000)
                     throw new IllegalArgumentException("明确的任务上限必须在 1 到 100000 之间");
-                if (args[0].equals("collect-core"))
+                if (incremental)
+                    new UsCoreCollector(env, root, store)
+                            .runIncremental(
+                                    LocalDate.parse(required(options, "from")), through, maximum);
+                else if (args[0].equals("collect-core"))
                     new UsCoreCollector(env, root, store).run(through, maximum);
                 else new UsBroadDailyCollector(env, root, store).run(through);
             }
