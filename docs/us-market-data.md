@@ -4,11 +4,13 @@
 
 当前先交付核心范围，不再等待全市场长尾。日线优先核心 16 个标的、固定 SPY/QQQ 持仓和已验收的当前挂牌候选，优先近十年；不足时保留明确的五年或实际短来源。OTC、退市股、历史成分及非核心特殊证券后续单独处理，首批不继续扩大。
 
-核心后续按日增量补齐，固定首批清单保留原截止日。当前 16 个标的的日线和今年分钟线已验收到 2026-10-23，新增范围见[核心增量清单](snapshots/us-core-incremental-20261023.json)及[查询](../tools/sql/us-core-incremental-20261023-reference.sql)。长尾、BTC 和 ITCH 暂不继续扩大。
+核心后续按日增量补齐，固定首批清单保留原截止日。当前 16 个标的的日线和今年分钟线已验收到 2026-10-23，新增范围见[核心增量清单](snapshots/us-core-incremental-20261023.json)及[查询](../tools/sql/us-core-incremental-20261023-reference.sql)。长尾和 ITCH 暂不继续扩大；BTC/ETH 仅维护既有八个核心产品的日期增量。
 
 首波核心指数另有 5 条新增：NASDAQCOM 与 CBOE VIX 至 10-23，FRED VIXCLS 至 10-22，SP500 仍至 10-21。本次 FRED 没有提供 SP500 的 22、23 日及 VIXCLS 的 23 日值，缺口保留，各来源不互填。见[指数增量清单](snapshots/us-core-macro-incremental-20261025.json)、[查询](../tools/sql/us-core-macro-incremental-20261025-reference.sql)及[验收边界](decisions/2026-10-25-核心指数增量及独立来源缺口.md)。
 
 固定 SPY/QQQ 持仓参照中的 518 个价格路由也已补至 10-23：本轮新增 2540 条，复用 10 个核心股票的 50 条，五日窗口共 2590 条。持仓参照日期仍为 10-16，原 5600 路首批清单保持原截止日；实际价格键、来源和限制见[持仓增量清单](snapshots/us-core-holdings-incremental-20261023.json)、[查询](../tools/sql/us-core-holdings-incremental-20261023-reference.sql)及[验收记录](decisions/2026-10-25-固定持仓核心日线增量验收.md)。
+
+BTC/ETH 的 Binance、Bybit 现货及 USDT 永续也已补到 UTC 10-23，新增 384 根小时线和 16 根日线，累计 369798 行。原两条官方停市小时缺口及固定首批保持，全部十三列回读、旧字段保护和幂等通过；见[币价增量清单](snapshots/crypto-core-incremental-20261023.json)、[查询](../tools/sql/crypto-core-incremental-20261023-reference.sql)及[验收](decisions/2026-10-25-核心币价两日增量验收.md)。现有每日持续任务先维护美股核心，再维护这八个既有币价产品，不扩大币种或产品。
 
 ## 首批从这里读取
 
