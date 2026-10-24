@@ -1,0 +1,310 @@
+{
+  "schema": "cn.snapshot.events.phase.v2",
+  "checkedAt": "2026-10-21T11:39:42.048887+00:00",
+  "scope": "回购/大宗显式v2有限owner、真实来源及私有发布；未正式迁移或启用调度",
+  "productionWritten": false,
+  "formalCompleted": 0,
+  "counts": {
+    "newOwnersThisPhase": 2,
+    "original19DevelopmentOwnersImplemented": 19,
+    "totalCodeConnectedCategory": 44,
+    "pendingOwnerImplementation": 0,
+    "existingTasksStillPendingAudit": 24,
+    "filesRetirementOrLegacyOwnershipPending": 7,
+    "totalTrackedTables": 75
+  },
+  "sourceChecks": [
+    {
+      "dataset": "repurchase",
+      "scope": "完整单个来源日期，非单证券过滤",
+      "sourceRows": 18,
+      "nullableEndDates": 5,
+      "legacyKeyCollisionGroups": 0,
+      "schemaVersionRead": 1,
+      "expectedFullTargetRows": 64498,
+      "targetId": "static-v2-f41087538786388356b6c27b1a65c949962bfb4c2548ce5afa57dc2339fd1bd5",
+      "sourceComplete": true,
+      "sourceCheck": {
+        "path": "var/cn-event-snapshot-check-20261021/repurchase-source-check.json",
+        "sha256": "bd0c8600b4092be76e60f1f7ef0f1393322927e4e32a95951e43a04b3148b11d"
+      },
+      "rawSource": {
+        "path": "var/sync-evidence/snapshot-event-repurchase-9f694b89-b80a-4dee-aa91-0fffe4a27905/source-raw.json",
+        "sha256": "6a52c4b8aa4961f584c2c9d1ccc96d4c7e5edcc241bc915df962461f07ffb16d"
+      },
+      "productionWritten": false
+    },
+    {
+      "dataset": "block_trade",
+      "scope": "完整单个来源日期，非单证券过滤",
+      "sourceRows": 85,
+      "nullableEndDates": null,
+      "legacyKeyCollisionGroups": 1,
+      "schemaVersionRead": 1,
+      "expectedFullTargetRows": 239986,
+      "targetId": "static-v2-24bac498ffe641e7a97d7d517854a9d3484f637f145bee6e242f04ab62130f1c",
+      "sourceComplete": true,
+      "sourceCheck": {
+        "path": "var/cn-event-snapshot-check-20261021/block_trade-source-check.json",
+        "sha256": "be28c3b4558f621d28410e72fb528497e7ef02f1870a5a280d4e8de833f00006"
+      },
+      "rawSource": {
+        "path": "var/sync-evidence/snapshot-event-block_trade-162a4e0b-bf16-4c05-a6e2-8479781faa6b/source-raw.json",
+        "sha256": "57ef4a6989a6964edbebd0191a2eb63b644c9b61628bae2a4f5378236a7874f8"
+      },
+      "productionWritten": false
+    }
+  ],
+  "privateAcceptance": {
+    "evidence": {
+      "path": "var/cn-event-snapshot-check-20261021/private-events-a2062a1d51954d96a98885b04e074784/acceptance.json",
+      "sha256": "03f5782ada0b7b660c54f186c8b70e17a922a0dcc7e1db4917e79ef8e6b6d223"
+    },
+    "serverStopped": {
+      "path": "var/cn-event-snapshot-check-20261021/private-events-a2062a1d51954d96a98885b04e074784/server-stopped.json",
+      "sha256": "df6cf506e4a770da2acdf37c3f81d87b793a0e2bbc25a28030b5e91557206823"
+    },
+    "processBinding": {
+      "path": "var/cn-event-snapshot-check-20261021/private-events-a2062a1d51954d96a98885b04e074784/server.json",
+      "sha256": "e8097f2c9507645c282098469cb67969f35fc5424ceb11da3feb5d71e19b1c21"
+    },
+    "nativeQuestdb": "10.0.1",
+    "productionWritten": false,
+    "stablePublicReadAndStaleCursorRejection": true,
+    "scenarios": [
+      {
+        "duplicateAndRevisionAreFixtures": true,
+        "revision": {
+          "runId": "snapshot-event-repurchase-46e8bfff-ff10-44b8-bbdd-d030a50461cb",
+          "state": "VERIFIED",
+          "sourceRows": 17,
+          "verifiedRows": 17,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "first": {
+          "runId": "snapshot-event-repurchase-31569034-9314-41b5-808f-a88dc2e26805",
+          "state": "VERIFIED",
+          "sourceRows": 19,
+          "verifiedRows": 19,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "sourceArtifact": "/Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/cn-remaining-round2/repurchase-snapshot-raw.json",
+        "emptySourceRejected": true,
+        "dataset": "repurchase",
+        "crash": {
+          "runId": "snapshot-event-repurchase-333a02c3-8b49-4e1c-80be-da84f6e7402c",
+          "state": "IN_DOUBT",
+          "sourceRows": 17,
+          "verifiedRows": 17,
+          "errorCode": "IllegalStateException",
+          "reusedRows": 0
+        },
+        "recoveredRows": 18,
+        "archivedSourceRows": 18,
+        "sourceSha256": "d2f2df5695fe59fb6845f5736d6a62e3921e0b27c2e1917d76634313005632e4"
+      },
+      {
+        "duplicateAndRevisionAreFixtures": true,
+        "revision": {
+          "runId": "snapshot-event-block_trade-da502ee1-c9f5-44ba-9dcc-41f130e8bd6d",
+          "state": "VERIFIED",
+          "sourceRows": 3,
+          "verifiedRows": 3,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "first": {
+          "runId": "snapshot-event-block_trade-ffd01e3c-a98d-40e5-b409-62c5a3d4b4e5",
+          "state": "VERIFIED",
+          "sourceRows": 5,
+          "verifiedRows": 5,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "sourceArtifact": "/Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/cn-remaining-round2/block_trade-snapshot-raw.json",
+        "emptySourceRejected": true,
+        "dataset": "block_trade",
+        "crash": {
+          "runId": "snapshot-event-block_trade-1d7f3359-2ec4-4ff4-90a9-a74ca01a3ac4",
+          "state": "IN_DOUBT",
+          "sourceRows": 3,
+          "verifiedRows": 3,
+          "errorCode": "IllegalStateException",
+          "reusedRows": 0
+        },
+        "recoveredRows": 4,
+        "archivedSourceRows": 4,
+        "sourceSha256": "6c74eab0bd26b570fc44aa83fbd3e56fadbbe85b670844e08972e0cc7b56c195"
+      }
+    ],
+    "scopeNote": "私有验收使用前轮回购完整单日18行、大宗单证券单日4行原文；重复、修订及重命名故障是夹具，不冒充供应商真实修订。真实全日85行来源另列。"
+  },
+  "tests": {
+    "total": 130,
+    "failures": 0,
+    "errors": 0,
+    "reports": [
+      {
+        "class": "com.zoutrankil.data.service.ReadGroupReaderTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+          "sha256": "e7edd7343bee4e8a0d8bd77729474bacb0c3137ebd09f2af597cf8a2eaecf0a9"
+        }
+      },
+      {
+        "class": "com.zoutrankil.market.cn.observation.ContractKeyRepairPlanTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.market.cn.observation.ContractKeyRepairPlanTest.xml",
+          "sha256": "34c12814e4308b25a0eabfe9b7acb2777711b8b087d67a13dc7b502b7532a09c"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.service.ReadBindingCatalogTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.data.service.ReadBindingCatalogTest.xml",
+          "sha256": "91913ba55294392a7a03d2a51c384fb43bb372b09215f3e1bfa6a1cdc4500143"
+        }
+      },
+      {
+        "class": "com.zoutrankil.market.cn.observation.ContractTableSyncTest",
+        "tests": 50,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.market.cn.observation.ContractTableSyncTest.xml",
+          "sha256": "43d7e302a3d47e8e5983ff021e634aa15a5d4dec8db7d79e064c7fe73bbe7514"
+        }
+      },
+      {
+        "class": "com.zoutrankil.market.cn.observation.ContractTableTargetTest",
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.market.cn.observation.ContractTableTargetTest.xml",
+          "sha256": "edddfbcaef034b9c4d6e0330b182aaac8ea7e70556335cf1d1f2aa083a164550"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.repository.QuestDbBoundedReaderTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+          "sha256": "caeb4aa926483e05d05f5b35d0d1ffb512dcf9609be44d6d9330889293a96898"
+        }
+      },
+      {
+        "class": "com.zoutrankil.market.cn.observation.SnapshotEventSyncTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.market.cn.observation.SnapshotEventSyncTest.xml",
+          "sha256": "710ee3031d8ef95893795289a26145c070a65be82eafa76cdebffbfb9cc63ed0"
+        }
+      },
+      {
+        "class": "com.zoutrankil.market.cn.observation.ContractTableConfigurationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.market.cn.observation.ContractTableConfigurationTest.xml",
+          "sha256": "4e14d83d65fb70436c3dd641824b3f7f8933937f2b996aaa34ef13b728774a5f"
+        }
+      },
+      {
+        "class": "com.zoutrankil.market.cn.observation.CyqChipsSyncTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.market.cn.observation.CyqChipsSyncTest.xml",
+          "sha256": "a7485b69a9f90157594427ce820d6f414786e52038abe46d3b3817df556ce6d7"
+        }
+      },
+      {
+        "class": "com.zoutrankil.market.cn.observation.ReferenceKeyRevisionTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.market.cn.observation.ReferenceKeyRevisionTest.xml",
+          "sha256": "857d1f012b6f11e4cfde64e609f8e85aa1c4dc84013d5909a384342da56a2060"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest.xml",
+          "sha256": "33c9fb16a2263f926b9d9d34d8dcafc9525308abdb2b003ea9a76717379b96be"
+        }
+      },
+      {
+        "class": "com.zoutrankil.market.cn.observation.SnapshotEventConfigurationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-event-snapshot-check-20261021/validation/TEST-com.zoutrankil.market.cn.observation.SnapshotEventConfigurationTest.xml",
+          "sha256": "fc8d2b2ed111cb5522cafa1fa6d32b72a91d776ec8d8a80b208adef31139ad20"
+        }
+      }
+    ]
+  },
+  "checks": {
+    "architectureTest": "通过",
+    "verifyModuleBoundaries": "通过",
+    "cnDataDistZip": "通过",
+    "publicConfigurationAndCredentialScan": "通过",
+    "changedJavaFormatImportsLiterals": "65个文件通过",
+    "evidence": [
+      {
+        "path": "var/cn-event-snapshot-check-20261021/validation/cn-snapshot-delivery-checks.log",
+        "sha256": "76f13218aaecce2cb7fb50c7b7d034b5bdc3a0a44ef2b653b20d93438f8c8423"
+      },
+      {
+        "path": "var/cn-event-snapshot-check-20261021/validation/cn-snapshot-format-delivery.log",
+        "sha256": "258cfcca85c321b3f75eb0958f089f8910e1e8b779c6c620118e79227cd8dcca"
+      },
+      {
+        "path": "var/cn-event-snapshot-check-20261021/validation/cn-snapshot-public-config-final.log",
+        "sha256": "8d7cae6a90bde5726da0ebe5bb306f140d8cde57d3655bea20d73f13aea46ba3"
+      }
+    ]
+  },
+  "remaining": [
+    "正式旧表仍是v1；须核对原writer、账本、锁、备份及消费者，明确选择迁移后才可切换",
+    "原19项有限owner实现完成，不代表全市场队列、日批、正式补数和持续更新完成；正式完成仍为0",
+    "部分stage未决发送没有完整页凭证时拒绝重发和解锁；当前自动核对/显式续接仅覆盖完整已验stage的重命名尾部",
+    "原AI工作目录只读账本缺原同步运行与锁、生产唯一writer绑定；不能据本机无进程推断可接管"
+  ]
+}
