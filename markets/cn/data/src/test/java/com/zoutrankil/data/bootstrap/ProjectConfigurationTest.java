@@ -469,7 +469,7 @@ class ProjectConfigurationTest {
                 ProjectConfiguration.load(profile, variables)
                         .getRequiredProperty("app.read.stk-suspend-table"));
         assertEquals(
-                "stk_suspend_d011_isolated",
+                "main-strategy".equals(profile) ? "stk_suspend" : "stk_suspend_d011_isolated",
                 ProjectConfiguration.load(profile, variables)
                         .getRequiredProperty("app.sync.stk-suspend-table"));
         variables.put("APP_READ_STK_SUSPEND_TABLE", "java_d011_stk_suspend_read_fixture");
@@ -478,7 +478,7 @@ class ProjectConfigurationTest {
                 ProjectConfiguration.load(profile, variables)
                         .getRequiredProperty("app.read.stk-suspend-table"));
         assertEquals(
-                "stk_suspend_d011_isolated",
+                "main-strategy".equals(profile) ? "stk_suspend" : "stk_suspend_d011_isolated",
                 ProjectConfiguration.load(profile, variables)
                         .getRequiredProperty("app.sync.stk-suspend-table"));
         variables.put("APP_SYNC_STK_SUSPEND_SCHEMA_VERSION", "2");
@@ -524,6 +524,142 @@ class ProjectConfigurationTest {
         assertFalse(
                 ProjectConfiguration.load("market-us", variables)
                         .containsProperty("app.sync.l2-daily-features-schema-version"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
+    void indexMarketLayoutAndPhysicalTargetUseExplicitMarketDefaults(String profile)
+            throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        var defaults = ProjectConfiguration.load(profile, variables);
+        assertEquals(
+                "1", defaults.getRequiredProperty("app.sync.index-daily-market-schema-version"));
+        assertEquals(
+                "java_d019_index_daily_market_acceptance",
+                defaults.getRequiredProperty("app.sync.index-daily-market-table"));
+        variables.put("APP_SYNC_INDEX_DAILY_MARKET_SCHEMA_VERSION", "2");
+        variables.put("APP_SYNC_INDEX_DAILY_MARKET_TABLE", "index_daily_market");
+        var selected = ProjectConfiguration.load(profile, variables);
+        assertEquals(
+                "2", selected.getRequiredProperty("app.sync.index-daily-market-schema-version"));
+        assertEquals(
+                "index_daily_market",
+                selected.getRequiredProperty("app.sync.index-daily-market-table"));
+        variables.remove("APP_SYNC_INDEX_DAILY_MARKET_SCHEMA_VERSION");
+        variables.remove("APP_SYNC_INDEX_DAILY_MARKET_TABLE");
+        assertFalse(
+                ProjectConfiguration.load("market-us", variables)
+                        .containsProperty("app.sync.index-daily-market-schema-version"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
+    void etfDirectoryTargetKeepsItsIsolatedDefaultAndSupportsExplicitFormalOverride(String profile)
+            throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        assertEquals(
+                "main-strategy".equals(profile) ? "etf_basic" : "java_d013_etf_basic_acceptance",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.etf-basic-table"));
+        variables.put("APP_SYNC_ETF_BASIC_TABLE", "etf_basic");
+        assertEquals(
+                "etf_basic",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.etf-basic-table"));
+        variables.remove("APP_SYNC_ETF_BASIC_TABLE");
+        assertFalse(
+                ProjectConfiguration.load("market-us", variables)
+                        .containsProperty("app.sync.etf-basic-table"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
+    void thsWriterDefaultAndLegacyOverrideRemainCompatible(String profile) throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        assertEquals(
+                "java_d025_moneyflow_ths_acceptance",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.moneyflow-ths-write-table"));
+        variables.put("APP_SYNC_MONEYFLOW_THS_TABLE", "java_d025_moneyflow_ths_legacy");
+        assertEquals(
+                "java_d025_moneyflow_ths_legacy",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.moneyflow-ths-write-table"));
+        variables.put("APP_SYNC_MONEYFLOW_THS_WRITE_TABLE", "moneyflow_ths");
+        assertEquals(
+                "moneyflow_ths",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.moneyflow-ths-write-table"));
+        variables.remove("APP_SYNC_MONEYFLOW_THS_TABLE");
+        variables.remove("APP_SYNC_MONEYFLOW_THS_WRITE_TABLE");
+        assertFalse(
+                ProjectConfiguration.load("market-us", variables)
+                        .containsProperty("app.sync.moneyflow-ths-write-table"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
+    void marginSecsWriterDefaultAndLegacyOverrideRemainCompatible(String profile) throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        assertEquals(
+                "java_d030_margin_secs_acceptance",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.margin-secs-write-table"));
+        variables.put("APP_SYNC_MARGIN_SECS_TABLE", "java_d030_margin_secs_legacy");
+        assertEquals(
+                "java_d030_margin_secs_legacy",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.margin-secs-write-table"));
+        variables.put("APP_SYNC_MARGIN_SECS_WRITE_TABLE", "margin_secs");
+        assertEquals(
+                "margin_secs",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.margin-secs-write-table"));
+        variables.remove("APP_SYNC_MARGIN_SECS_TABLE");
+        variables.remove("APP_SYNC_MARGIN_SECS_WRITE_TABLE");
+        assertFalse(
+                ProjectConfiguration.load("market-us", variables)
+                        .containsProperty("app.sync.margin-secs-write-table"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
+    void marginAllWriterKeepsItsDefaultAndLegacyOverride(String profile) throws Exception {
+        var file = configuration("");
+        var v = new HashMap<String, String>();
+        v.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        v.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        assertEquals(
+                "java_d028_margin_all_acceptance",
+                ProjectConfiguration.load(profile, v)
+                        .getRequiredProperty("app.sync.margin-all-write-table"));
+        v.put("APP_SYNC_MARGIN_ALL_TABLE", "java_d028_margin_all_legacy");
+        assertEquals(
+                "java_d028_margin_all_legacy",
+                ProjectConfiguration.load(profile, v)
+                        .getRequiredProperty("app.sync.margin-all-write-table"));
+        v.put("APP_SYNC_MARGIN_ALL_WRITE_TABLE", "margin_all");
+        assertEquals(
+                "margin_all",
+                ProjectConfiguration.load(profile, v)
+                        .getRequiredProperty("app.sync.margin-all-write-table"));
+        v.remove("APP_SYNC_MARGIN_ALL_WRITE_TABLE");
+        v.remove("APP_SYNC_MARGIN_ALL_TABLE");
+        assertFalse(
+                ProjectConfiguration.load("market-us", v)
+                        .containsProperty("app.sync.margin-all-write-table"));
     }
 
     @Test

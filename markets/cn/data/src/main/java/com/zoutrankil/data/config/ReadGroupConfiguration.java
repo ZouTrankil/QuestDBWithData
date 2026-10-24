@@ -4,7 +4,8 @@ import com.zoutrankil.data.domain.DatasetImplementation;
 import com.zoutrankil.data.domain.derived.BacktestDailyScope;
 import com.zoutrankil.data.domain.fund.EtfOverviewScope;
 import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
-import com.zoutrankil.data.domain.stock.reference.StockShockDatasets;
+import com.zoutrankil.data.index.application.IndexDailyMarketSyncJobOwner;
+import com.zoutrankil.data.margin.storage.MarginAllReadRepository;
 import com.zoutrankil.data.repository.CnBondYieldCurveWritePort;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import com.zoutrankil.data.service.DatasetRegistry;
@@ -34,28 +35,19 @@ public class ReadGroupConfiguration {
         return CnBondYieldCurveWritePort::definition;
     }
 
-    // 只接现有表的明确读取契约，不注册新的同步 owner 或 writer。
-    @Bean
-    DatasetImplementation stockShockDataset() {
-        return () -> StockShockDatasets.SHOCK;
-    }
-
-    @Bean
-    DatasetImplementation stockHighShockDataset() {
-        return () -> StockShockDatasets.HIGH_SHOCK;
-    }
-
     @Bean
     ReadBindingCatalog readBindingCatalog(
             ObjectProvider<ReadBindingCatalog.Registration<?>> extensions,
             ObjectProvider<EtfOverviewScope> etfOverviewScopes,
             ObjectProvider<BacktestDailyScope> backtestScopes,
+            ObjectProvider<MarginAllReadRepository> marginAllReadPorts,
             @Value("${app.sync.etf-adj-schema-version:1}") int etfAdjVersion,
             @Value("${app.sync.etf-daily-schema-version:1}") int etfDailyVersion,
             @Value("${app.sync.etf-share-schema-version:1}") int etfShareVersion,
             @Value("${app.sync.stk-st-daily-schema-version:1}") int stDailyVersion,
             @Value("${app.sync.stk-suspend-schema-version:1}") int suspendVersion,
-            @Value("${app.sync.l2-daily-features-schema-version:1}") int l2DailyVersion) {
+            @Value("${app.sync.l2-daily-features-schema-version:1}") int l2DailyVersion,
+            @Value("${app.sync.index-daily-market-schema-version:1}") int indexMarketVersion) {
         var registrations =
                 new ArrayList<>(
                         DefaultReadBindings.registrations(
@@ -78,6 +70,17 @@ public class ReadGroupConfiguration {
                                                 .legacy()
                                         ? 1
                                         : 2));
+        IndexDailyMarketSyncJobOwner.definition(indexMarketVersion);
+        var marginAllReads = marginAllReadPorts.getIfAvailable();
+        registrations.replaceAll(
+                r ->
+                        r.datasetId().equals("margin_all") && marginAllReads != null
+                                ? ReadBindingCatalog.genericStable(
+                                        "margin_all", 1, marginAllReads::sourceVersion)
+                                : r.datasetId().equals("index_daily_market")
+                                        ? ReadBindingCatalog.generic(
+                                                "index_daily_market", indexMarketVersion)
+                                        : r);
         extensions.orderedStream().forEach(registrations::add);
         return new ReadBindingCatalog(registrations);
     }

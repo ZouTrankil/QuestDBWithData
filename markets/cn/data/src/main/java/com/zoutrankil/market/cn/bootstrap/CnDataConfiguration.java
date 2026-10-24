@@ -5,6 +5,8 @@ import com.zoutrankil.data.config.TushareProperties;
 import com.zoutrankil.market.cn.chips.config.CyqPerfConfiguration;
 import com.zoutrankil.market.cn.futures.config.FuturesDayConfiguration;
 import com.zoutrankil.market.cn.macro.config.MacroObservationConfiguration;
+import com.zoutrankil.market.cn.observation.config.ContractTableConfiguration;
+import com.zoutrankil.market.cn.observation.config.SnapshotEventConfiguration;
 import com.zoutrankil.market.cn.rates.config.InterestObservationConfiguration;
 
 import org.springframework.boot.Banner.Mode;
@@ -21,7 +23,9 @@ import java.util.Map;
     MacroObservationConfiguration.class,
     InterestObservationConfiguration.class,
     CyqPerfConfiguration.class,
-    FuturesDayConfiguration.class
+    FuturesDayConfiguration.class,
+    ContractTableConfiguration.class,
+    SnapshotEventConfiguration.class
 })
 @EnableConfigurationProperties({TushareProperties.class, QuestDbProperties.class})
 public class CnDataConfiguration {

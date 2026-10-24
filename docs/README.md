@@ -53,3 +53,15 @@
 - [采集模型字段注释与导出](collected-field-documentation.md)
 
 - [BTC 官方归档采集](btc-data.md)
+
+- [有限范围的资料与公告同步](contract-table-sync.md)
+
+- [回购和大宗范围快照](snapshot-event-sync.md)：显式v2迁移、重复记录、整窗修订和原重命名恢复。
+
+- [指数日线正式v2入口](index-daily-market-sync.md)：显式布局、只读来源核查及原版本恢复。
+
+- [汇总表已发布运行的显式收尾](margin-all-run-recovery.md)：原件核验、账本认证、原锁解除和剩余分支。
+- [融资融券汇总正式范围发布](margin-all-sync.md)：完整交易所来源、非去重发布与恢复限制。
+- [融资融券标的名单正式窗口补数](margin-secs-sync.md)：正式 v2、原 v1 恢复和整日失败留锁。
+- [同花顺资金流正式有界补数](moneyflow-ths-sync.md)：逐日完整来源、旧请求兼容和整日失败留锁。
+- [ETF目录正式准入与完整回读](etf-basic-sync.md)：来源、保留旧行、观察时间与原锁保护。

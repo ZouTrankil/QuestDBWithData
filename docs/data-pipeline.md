@@ -56,3 +56,19 @@ ETF 的特定恢复方式见 [ETF 行情恢复](etf-daily-recovery.md)。Batch �
 
 
 BOOLEAN 未知值的断点看 `DatasetWritePreparation.prepareRows`、`VerifiedBatchExecutor.Codec.validateForWrite` 和两个 L2 Rows 的 `requireWritable`。BOOLEAN 不能持久保存 null，应在提交意图或 Sender 借用前失败，不能当成发送未决重试。正式摄取在 `boundedBatches` 先验完整缺口；旧不可保真数据仍按原件核对，见[准入决定](decisions/2026-10-21-QuestDB布尔空值写入准入.md)。
+
+资料与公告的有限入口见[契约表同步](contract-table-sync.md)，`balance` 沿用财务队列。来源正向样本、键冲突阻断与正式接管分别记录，不把 CLI 代码接通当作日批已运行。
+
+回购和大宗采用[显式v2范围快照](snapshot-event-sync.md)，保留重复记录；旧表迁移和日批启用分别验收，本轮没有正式写入。
+
+指数日线正式表的trade_date布局已接[显式v2执行](index-daily-market-sync.md)，默认仍保留旧隔离值。只读来源核查不替代历史凭证，非空旧表缺原来源证据时仍拒绝接管。
+
+ETF目录支持[精确同名正式目标及全目录回读](etf-basic-sync.md)，默认不切换。完整来源与保留旧行分别认证，周期更新及消费者仍待正式验收。
+
+同花顺资金流支持[显式正式有界补数](moneyflow-ths-sync.md)，默认仍隔离。旧行不提供增量覆盖证据；整日回读失败保留未决锁，已验证日期可沿原请求恢复。
+
+融资融券标的名单用[正式作业v2按日期窗补数](margin-secs-sync.md)，避免单日补数扫描整张历史表。原隔离v1、默认配置和旧请求恢复保持；正式窗口不认证范围外历史。
+
+融资融券汇总支持[正式v2非去重范围发布](margin-all-sync.md)，默认不切换。范围外多重集合原样保留；开休市来源、代际读取和物理恢复已验证，已发布分支的原运行最终认证已接通，未发布stage已支持显式取消及按原冻结请求整窗重采，正式范围队列与调度仍待验收。
+
+汇总表已有[显式原运行收尾](margin-all-run-recovery.md)，不会重发数据；凭证落盘故障留锁，最终核验和原账本认证后才解锁。私有原生实例已验证后续更新，正式生产范围仍待接管。

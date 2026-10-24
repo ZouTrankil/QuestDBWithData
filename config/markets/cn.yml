@@ -23,6 +23,15 @@ app:
     stk-st-daily-schema-version: 1
     stk-suspend-schema-version: 1
     l2-daily-features-schema-version: 1
+    # 指数正式trade_date布局显式选v2；默认保留原隔离任务及恢复。
+    index-daily-market-schema-version: 1
+    index-daily-market-table: java_d019_index_daily_market_acceptance
+    # ETF目录可显式绑定原etf_basic；默认仍保留原隔离目标。
+    etf-basic-table: java_d013_etf_basic_acceptance
+    # 写入默认仍隔离；旧moneyflow-ths-table覆盖继续有效，读取原默认不改。
+    margin-all-write-table: ${app.sync.margin-all-table:java_d028_margin_all_acceptance}
+    margin-secs-write-table: ${app.sync.margin-secs-table:java_d030_margin_secs_acceptance}
+    moneyflow-ths-write-table: ${app.sync.moneyflow-ths-table:java_d025_moneyflow_ths_acceptance}
     retail-sentiment-daily:
       # 只供 v2 隔离链路；v1 继续使用原正式 MV。
       v2-target-table: java_d098_mv_retail_sentiment_daily_v2

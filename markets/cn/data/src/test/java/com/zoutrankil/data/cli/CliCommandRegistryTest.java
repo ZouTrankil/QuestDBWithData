@@ -66,7 +66,20 @@ class CliCommandRegistryTest {
                         "reconcile-moneyflow-job",
                         "discard-moneyflow-hsgt-stage"));
         expected.removeAll(Set.of("plan-moneyflow-dc-job", "run-moneyflow-dc-job"));
-        assertEquals(166, families.stream().mapToInt(family -> family.commands().size()).sum());
+        expected.add("check-index-daily-market-source");
+        expected.add("check-etf-basic-source");
+        expected.add("check-moneyflow-ths-source");
+        expected.addAll(
+                Set.of("check-margin-secs-source", "plan-margin-secs-job", "run-margin-secs-job"));
+        expected.addAll(
+                Set.of(
+                        "check-margin-all-source",
+                        "plan-margin-all-job",
+                        "run-margin-all-job",
+                        "finish-margin-all-publication"));
+        expected.add("reconcile-margin-all-run");
+        assertEquals(177, families.stream().mapToInt(family -> family.commands().size()).sum());
+
         assertEquals(expected, new TreeSet<>(new CliCommandRegistry(families).commands()));
     }
 
