@@ -6,6 +6,8 @@
 
 核心后续按日增量补齐，固定首批清单保留原截止日。当前 16 个标的的日线和今年分钟线已验收到 2026-10-23，新增范围见[核心增量清单](snapshots/us-core-incremental-20261023.json)及[查询](../tools/sql/us-core-incremental-20261023-reference.sql)。长尾、BTC 和 ITCH 暂不继续扩大。
 
+首波核心指数另有 5 条新增：NASDAQCOM 与 CBOE VIX 至 10-23，FRED VIXCLS 至 10-22，SP500 仍至 10-21。本次 FRED 没有提供 SP500 的 22、23 日及 VIXCLS 的 23 日值，缺口保留，各来源不互填。见[指数增量清单](snapshots/us-core-macro-incremental-20261025.json)、[查询](../tools/sql/us-core-macro-incremental-20261025-reference.sql)及[验收边界](decisions/2026-10-25-核心指数增量及独立来源缺口.md)。
+
 ## 首批从这里读取
 
 | 数据 | 已验收范围 | 固定清单或查询 |
@@ -80,6 +82,9 @@ FRED 需要本机代理时，配置 `app.market-data.fred-proxy-url`；留空时
 # FRED 三个指数序列；保留所有旧行及旧值，只写已确认缺失的键。
 .\gradlew.bat usMarketData --args='collect-fred --through 2026-10-16'
 
+# 来源各自更新时，单独补已有观测的序列；不改变默认的三序列顺序。
+.\gradlew.bat usMarketData --args='collect-fred --through 2026-10-23 --series VIXCLS'
+
 # BTC 独立入口，2021-10-01 起，最后一天必须是已结束的 UTC 日。
 .\gradlew.bat cryptoMarketData --args='collect --through 2026-10-18'
 
@@ -125,6 +130,8 @@ QuestDB 10 的正式发送使用 QWP，保留 INT 和纳秒时间类型。发送
 IEX 实测在 2026-07-03 等休市日返回整日零量平价记录；这些是供应商补齐值，不能计作真实交易时段。原文及原表全部保留，研究读取 `us_equity_intraday_regular`。日历资源在 `markets/us/src/main/resources/market-us/calendars/us-equities-2026.json`，保留官方 URL、原文摘要、休市及半日市日期。创建视图时再核对完整官方原文与资源事实；未知同名视图不覆盖。视图按纽约夏令时筛选实际开闭市时刻，只投影原值，不补造缺失分钟。当前版本只覆盖 2026 年，不能拿它推算下一年。
 
 FRED 沿用正式 `us_market_daily` 的结构。请求先固定完整观测数量，`.` 作为来源缺值统计。补缺前保存旧行快照，实际发送前再次拒绝任何已存在的业务键；补缺后核对全部旧行未变、新行完整可见及 WAL。已有未决运行时停止，不重新抓取后覆盖原任务。SP500 的来源窗口较短时，旧表中更早的日期仍保留。
+
+`collect-fred` 可加 `--series NASDAQCOM`、`SP500` 或 `VIXCLS`，每次只处理明确的一条；不传时仍按原三序列顺序执行。未知代码、空串及逗号拼接在来源请求前拒绝。完整观测数量为零仍拒绝发布，不能当成尾日已齐备；单条来源失败后先检查原 Native，再独立处理其他序列。指数增量可只对子进程设置标准覆盖 `APP_MARKET_DATA_HISTORY_START=2026-10-22`，结束后恢复；不改根历史默认值，不影响核心股票回补范围。当前每日 10:00 的核心任务已包含这四条参照源的独立跟进。
 
 CBOE VIX 使用独立 `us_index_daily`，只映射官方历史 CSV 的 `CLOSE`，单位为 `INDEX_POINTS`。纽约来源日期不套用股票交易日历，`observed_at` 也不表示历史当时已可用。Java 命令 `collect-cboe-vix --through <已结束日期>` 按根配置预算抓取；`import-cboe-vix --through <日期> --source <原来源回执>` 复用原取得时刻和摘要，不再请求网络。回执须含 `retrieved=true`、`symbol=VIX`、`provider=CBOE`、官方 `url`、`raw`、`sha256` 和 `observedAt`。只补缺失键；旧收盘修订、日期消失或未决运行均停止，不自动覆盖。幂等回读仍检查完整旧值、原物理表和 WAL。配置与真实范围见[CBOE 收盘参照验收](decisions/2026-10-22-CBOE官方VIX收盘参照.md)，分列查询见[SQL](../tools/sql/us-vix-official-source-reference.sql)。
 

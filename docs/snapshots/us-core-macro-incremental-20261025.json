@@ -1,0 +1,305 @@
+{
+  "version": 1,
+  "kind": "US_CORE_MACRO_INCREMENTAL",
+  "checkedAt": "2026-10-24T17:52:05.139217+00:00",
+  "requestedFrom": "2026-10-22",
+  "requestedThrough": "2026-10-23",
+  "note": "各来源独立截止；空观测和未提供的尾日保持缺口，不跨来源填造。",
+  "newRows": 5,
+  "newFredRows": 3,
+  "newCboeRows": 2,
+  "fredRows": 13079,
+  "cboeRows": 5268,
+  "fredSeries": [
+    {
+      "ts_code": "NASDAQCOM.US",
+      "rows": 5236,
+      "firstDate": "2006-01-03T00:00:00.000000Z",
+      "lastDate": "2026-10-23T00:00:00.000000Z"
+    },
+    {
+      "ts_code": "SP500.US",
+      "rows": 2576,
+      "firstDate": "2016-07-25T00:00:00.000000Z",
+      "lastDate": "2026-10-21T00:00:00.000000Z"
+    },
+    {
+      "ts_code": "VIXCLS.US",
+      "rows": 5267,
+      "firstDate": "2006-01-03T00:00:00.000000Z",
+      "lastDate": "2026-10-22T00:00:00.000000Z"
+    }
+  ],
+  "cboeThroughDate": "2026-10-23",
+  "sourceGaps": [
+    {
+      "series": "SP500",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-10-23",
+      "sourceObservations": 0,
+      "missingDates": [
+        "2026-10-22",
+        "2026-10-23"
+      ],
+      "lastStoredDate": "2026-10-21",
+      "state": "SOURCE_NOT_AVAILABLE"
+    },
+    {
+      "series": "VIXCLS",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-10-23",
+      "sourceObservations": 1,
+      "missingDates": [
+        "2026-10-23"
+      ],
+      "lastStoredDate": "2026-10-22",
+      "state": "SOURCE_NOT_AVAILABLE"
+    }
+  ],
+  "source": [
+    {
+      "provider": "fred",
+      "series": "NASDAQCOM",
+      "requestId": "cd67ecc5-95dc-4214-9dcb-061bf5cfed1e",
+      "sourceSha256": "77948d499ef8bdaccecdee28c7b94848b343d6c47457bbe0cca2028d5300a629",
+      "sourceBytes": 472,
+      "sourceObservedAt": "2026-10-24T17:40:01.915766Z",
+      "sourceObservations": 2,
+      "validObservations": 2,
+      "sourceUrl": "https://fred.stlouisfed.org/series/NASDAQCOM",
+      "sourceWindowFrom": "2026-10-22",
+      "sourceWindowThrough": "2026-10-23"
+    },
+    {
+      "provider": "fred",
+      "series": "SP500",
+      "requestId": "81196b02-b49f-44a8-8b7b-dcb2b6b93110",
+      "sourceSha256": "9d1cb9cffaf602c0807e0a4a25e238e6fc62037c7557447d85e63c434412a8b5",
+      "sourceBytes": 275,
+      "sourceObservedAt": "2026-10-24T17:40:05.026640Z",
+      "sourceObservations": 0,
+      "validObservations": 0,
+      "sourceUrl": "https://fred.stlouisfed.org/series/SP500",
+      "sourceWindowFrom": "2026-10-22",
+      "sourceWindowThrough": "2026-10-23"
+    },
+    {
+      "provider": "cboe",
+      "series": "VIX",
+      "requestId": "b640bed0-439b-412c-b28b-33a80eba215e",
+      "sourceSha256": "f94378e505b286168d8dd466cc3a30bb12606ba34084d7ac53de953c75ba2ecd",
+      "sourceBytes": 474094,
+      "sourceObservedAt": "2026-10-24T17:41:06.588279Z",
+      "sourceObservations": 9301,
+      "validObservations": 2,
+      "sourceUrl": "https://cdn-api.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+      "sourceFirstDate": "1990-01-02",
+      "sourceLastDate": "2026-10-23"
+    },
+    {
+      "provider": "fred",
+      "series": "VIXCLS",
+      "requestId": "209b02f1-1f00-4883-89fb-8be76996a281",
+      "sourceSha256": "ddbbbe5e8fd0803a3acc085587874d80c7af8a06e676fb2f5096f38b19cc0057",
+      "sourceBytes": 370,
+      "sourceObservedAt": "2026-10-24T17:44:42.039752Z",
+      "sourceObservations": 1,
+      "validObservations": 1,
+      "sourceUrl": "https://fred.stlouisfed.org/series/VIXCLS",
+      "sourceWindowFrom": "2026-10-22",
+      "sourceWindowThrough": "2026-10-23"
+    }
+  ],
+  "native": [
+    {
+      "runId": "market-940c3652-9033-4283-bbd4-0fe7dfe20427",
+      "dataset": "us_index_daily",
+      "series": "VIX",
+      "rows": 2,
+      "sourceSha256": "f94378e505b286168d8dd466cc3a30bb12606ba34084d7ac53de953c75ba2ecd",
+      "preparedSha256": "8d5564bfea8865a140db795dd05755aeda82b957f6ae976b0e9e9c8b5a494861",
+      "sourceFieldsExact": true
+    },
+    {
+      "runId": "market-e2256d1b-b20a-4e72-b488-62e581d3b44b",
+      "dataset": "us_market_daily",
+      "series": "NASDAQCOM",
+      "rows": 2,
+      "sourceSha256": "77948d499ef8bdaccecdee28c7b94848b343d6c47457bbe0cca2028d5300a629",
+      "preparedSha256": "07855b4da883bbd655c816336870cd3aa8dbcbe76e70c32308d5657921eeb94d",
+      "sourceFieldsExact": true
+    },
+    {
+      "runId": "market-1d01ab90-1f46-40df-9dd0-dd29329dbc5a",
+      "dataset": "us_market_daily",
+      "series": "VIXCLS",
+      "rows": 1,
+      "sourceSha256": "ddbbbe5e8fd0803a3acc085587874d80c7af8a06e676fb2f5096f38b19cc0057",
+      "preparedSha256": "e16006a113e63dc416214983aee9cae4d66f1bd0efc008d91b8222b11632e9bd",
+      "sourceFieldsExact": true
+    }
+  ],
+  "verification": {
+    "fredColumns": 6,
+    "cboeColumns": 7,
+    "allRawPreparedNativeHttpPgwireFieldsExact": true,
+    "oldFred13076SixFieldsUnchanged": true,
+    "oldCboe5266SevenFieldsUnchanged": true,
+    "oldNativeTypedRowsUnchanged": true,
+    "coreAndBroadQueuesUnchanged": true,
+    "cryptoControlsAndCoreWalUnchanged": true,
+    "fixedSnapshotsAndSharedL2Unchanged": true,
+    "cboeHistoricalCloseDifferencesPreserved": [],
+    "nativeUnresolved": 0,
+    "intervalLocks": 0,
+    "proofSha256": "3a7f0594960939a3f1e7fa461a3de92ceeec84cf5a7049f7e6d915e9320b2eb1",
+    "idempotenceProofSha256": "36d874b211ffc2df8722773f5b4a11f19cc03a73b13c0bd103909e24946164d2"
+  },
+  "sourceBudget": {
+    "initialRequests": 4,
+    "initialBytes": 475211,
+    "idempotenceFredRequests": 2,
+    "idempotenceCboeRequests": 0,
+    "totalRequests": 6,
+    "totalBytes": 476053,
+    "newReservedBytes": 0,
+    "oldRequestsAndUnknownReservationsUnchanged": true
+  },
+  "idempotence": {
+    "checkedAt": "2026-10-24T17:48:35.152673+00:00",
+    "newRows": 0,
+    "newNativeRuns": 0,
+    "formalWrites": 0,
+    "allOldAndNewFieldsUnchanged": true,
+    "queuesAndNativeUnchanged": true,
+    "walTransactionsUnchanged": true,
+    "fredSourceRequests": 2,
+    "cboeSourceRequests": 0,
+    "sourceGapNotRetried": true
+  },
+  "runtime": {
+    "jars": 47,
+    "tests": 51,
+    "failures": 0,
+    "manifestSha256": "a8b37806820c2e70404240d15083515ea15507f8575f40b156579368afa702c6",
+    "targetedJavaImportsFormatAndLiteralsPassed": true,
+    "previousV55JarsUnchanged": true
+  },
+  "wal": {
+    "crypto_data_gap_events": {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "crypto_ohlcv": {
+      "name": "crypto_ohlcv",
+      "writerTxn": 582,
+      "sequencerTxn": 582,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_equity_daily": {
+      "name": "us_equity_daily",
+      "writerTxn": 4179,
+      "sequencerTxn": 4179,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_etf_equity_holdings": {
+      "name": "us_etf_equity_holdings",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_index_daily": {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_market_daily": {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_nasdaq_itch_messages": {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_security_history_catalog": {
+      "name": "us_security_history_catalog",
+      "writerTxn": 11,
+      "sequencerTxn": 11,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_security_identifiers": {
+      "name": "us_security_identifiers",
+      "writerTxn": 35,
+      "sequencerTxn": 35,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_security_universe": {
+      "name": "us_security_universe",
+      "writerTxn": 15,
+      "sequencerTxn": 15,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_equity_intraday": {
+      "name": "us_equity_intraday",
+      "writerTxn": 507,
+      "sequencerTxn": 507,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    }
+  },
+  "queries": {
+    "path": "tools/sql/us-core-macro-incremental-20261025-reference.sql",
+    "checks": [
+      {
+        "query": 1,
+        "rows": 3,
+        "allFieldsPgwireHttpExact": true,
+        "digest": "8f7e4aa01e09304aa94f7cfa6464c77efa816dfed75af2a382337ffd92a3d56c"
+      },
+      {
+        "query": 2,
+        "rows": 2,
+        "allFieldsPgwireHttpExact": true,
+        "digest": "3608e024ef525d63a44265c99f4e2bebcf48a35951555d67d99693d86a8fb8fd"
+      },
+      {
+        "query": 3,
+        "rows": 2,
+        "allFieldsPgwireHttpExact": true,
+        "digest": "c10367f78cfb3399b7e2eb007d13a559365faed9100725bc11de2e892f5a4225"
+      }
+    ]
+  },
+  "schedule": {
+    "id": "automation",
+    "status": "ACTIVE",
+    "timezone": "Asia/Shanghai",
+    "dailyTime": "10:00",
+    "scope": "先核心股票和ETF，再分别跟进四条核心指数来源",
+    "configurationSha256": "1f22539d13327d2588d500bb263b1ad14988e9f242737deb01327ad98e6e1e73"
+  },
+  "limits": [
+    "SP500的10月22、23日及FRED VIXCLS的23日，本次来源未提供，不认定缺口原因。",
+    "CBOE VIX与FRED VIXCLS为独立来源，不跨来源填补或覆盖旧值。",
+    "update_time和observed_at是本次取得时刻，不是历史当时可用时刻。",
+    "固定首批清单保持原截止日，全市场长尾、其他跨资产和完整历史身份未完成。"
+  ],
+  "wholeMarketComplete": false
+}

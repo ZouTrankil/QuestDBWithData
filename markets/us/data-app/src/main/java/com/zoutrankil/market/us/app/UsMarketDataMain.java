@@ -78,12 +78,13 @@ public final class UsMarketDataMain {
                                 Path.of(required(options, "hours-source"))));
             }
             case "collect-fred" -> {
-                if (!Set.of("through").containsAll(options.keySet()))
+                if (!Set.of("through", "series").containsAll(options.keySet()))
                     throw new IllegalArgumentException("未知 FRED 参数");
+                var selected = FredMacroCollector.selectedSeries(options.get("series"));
                 LocalDate through = LocalDate.parse(required(options, "through"));
                 if (!through.isBefore(LocalDate.now(ZoneId.of("America/New_York"))))
                     throw new IllegalArgumentException("FRED 有限回补只使用已结束的纽约日期");
-                FredMacroCollector.collect(env, root, store, through);
+                FredMacroCollector.collect(env, root, store, through, selected);
             }
             case "reconcile-stopped-submitted-frozen" -> {
                 if (!Set.of("run", "prepared-sha256", "stopped-evidence")
