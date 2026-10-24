@@ -34,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -138,6 +139,113 @@ class CompleteFrozenReconciliationTest {
             assertEquals(before, f.ledger.entries(RUN, null, 100));
             assertEquals(firstEvents, f.ledger.events("slice-0", -1, 100));
             assertEquals(0, f.writes.get());
+        }
+    }
+
+    @Test
+    void abruptlyStoppedSubmissionRequiresExplicitEntryAndNeverSends() throws Exception {
+        try (var f = new Fixture(root.resolve("abrupt-success"))) {
+            f.abruptStop();
+            var first = f.ledger.get("slice-0");
+            var priorEvents = f.ledger.events("slice-1", -1, 100);
+            var before = f.ledger.entries(RUN, null, 100);
+            assertThrows(Exception.class, f::reconcile);
+            assertEquals(before, f.ledger.entries(RUN, null, 100));
+            var result = f.reconcileStopped();
+            assertEquals("VERIFIED", result.get("state"));
+            assertEquals(10001, result.get("rows"));
+            assertEquals(0, result.get("repairedMissingRows"));
+            assertEquals(first, f.ledger.get("slice-0"));
+            assertEquals(priorEvents, f.ledger.events("slice-1", -1, 100).subList(0, 5));
+            assertEquals(
+                    SyncRunState.IN_DOUBT, f.ledger.events("slice-1", 4, 1).getFirst().state());
+            assertTrue(
+                    JSON.readTree(f.ledger.get("slice-1").payloadJson())
+                            .path("stoppedSubmissionReadback")
+                            .asBoolean());
+            assertNull(f.locks.findOwned(RUN, f.scope));
+            assertEquals(0, f.writes.get());
+            assertEquals(
+                    f.preparedSha, VerifiedMarketDataStore.sha(Files.readAllBytes(f.prepared)));
+            assertTrue(Files.notExists(f.folder.resolve("receipts/" + RUN + ".json")));
+            var completed = f.ledger.entries(RUN, null, 100);
+            f.locks.acquire(RUN, f.scope);
+            assertEquals("VERIFIED", f.reconcileStopped().get("state"));
+            assertEquals(completed, f.ledger.entries(RUN, null, 100));
+            assertEquals(0, f.writes.get());
+        }
+    }
+
+    @Test
+    void abruptlyStoppedSubmissionRejectsIncompleteOrChangingReadback() throws Exception {
+        for (String mode :
+                List.of(
+                        "missing",
+                        "changed",
+                        "duplicate",
+                        "unsettled",
+                        "moving-wal",
+                        "moving-target",
+                        "cancel-on-read")) {
+            try (var f = new Fixture(root.resolve("abrupt-" + mode))) {
+                f.abruptStop();
+                f.mode = mode;
+                var before = f.ledger.entries(RUN, null, 100);
+                var lease = f.locks.findOwned(RUN, f.scope);
+                assertThrows(Exception.class, f::reconcileStopped);
+                assertEquals(before, f.ledger.entries(RUN, null, 100));
+                assertEquals(lease, f.locks.findOwned(RUN, f.scope));
+                assertEquals(0, f.writes.get());
+            }
+        }
+    }
+
+    @Test
+    void abruptlyStoppedSubmissionKeepsOriginalSourceStopAndCancellationGates() throws Exception {
+        for (String mode :
+                List.of(
+                        "live",
+                        "stale",
+                        "source",
+                        "cancelled",
+                        "no-lock",
+                        "missing-page",
+                        "has-receipt")) {
+            try (var f = new Fixture(root.resolve("abrupt-guard-" + mode), mode.equals("live"))) {
+                f.abruptStop();
+                switch (mode) {
+                    case "stale" ->
+                            Files.writeString(
+                                    f.stopped,
+                                    JSON.writeValueAsString(
+                                            Map.of(
+                                                    "writerStopped",
+                                                    true,
+                                                    "runId",
+                                                    RUN,
+                                                    "inspectedAt",
+                                                    Instant.now().minusSeconds(301).toString(),
+                                                    "evidence",
+                                                    "原进程已退出")));
+                    case "source" -> Files.writeString(f.raw, "changed source");
+                    case "cancelled" -> f.ledger.requestCancellation(RUN);
+                    case "no-lock" -> f.locks.releaseVerified(f.locks.findOwned(RUN, f.scope));
+                    case "missing-page" -> {
+                        try (var db = DriverManager.getConnection("jdbc:sqlite:" + f.ledgerFile);
+                                var sql = db.createStatement()) {
+                            sql.executeUpdate("DELETE FROM sync_events WHERE entry_id='slice-1'");
+                            sql.executeUpdate("DELETE FROM sync_entries WHERE id='slice-1'");
+                        }
+                    }
+                    case "has-receipt" ->
+                            Files.writeString(f.folder.resolve("receipts/" + RUN + ".json"), "{}");
+                    default -> {}
+                }
+                var before = f.ledger.entries(RUN, null, 100);
+                assertThrows(Exception.class, f::reconcileStopped);
+                assertEquals(before, f.ledger.entries(RUN, null, 100));
+                assertEquals(0, f.writes.get());
+            }
         }
     }
 
@@ -723,6 +831,13 @@ class CompleteFrozenReconciliationTest {
                                                         0));
                             }
                         } else if (sql.startsWith("SELECT \"ts\"")) {
+                            if (mode.equals("cancel-on-read")) {
+                                try {
+                                    ledger.requestCancellation(RUN);
+                                } catch (SQLException failure) {
+                                    throw new IOException("测试取消登记失败", failure);
+                                }
+                            }
                             names = List.of("ts", "symbol", "price");
                             values = new ArrayList<>();
                             var matcher =
@@ -777,6 +892,36 @@ class CompleteFrozenReconciliationTest {
                             "",
                             "",
                             folder);
+        }
+
+        void abruptStop() throws Exception {
+            // 测试模拟进程在 revision 4 后退出，原失败回执和未决标记均来不及落盘。
+            Files.delete(folder.resolve("receipts/" + RUN + ".json"));
+            try (var db = DriverManager.getConnection("jdbc:sqlite:" + ledgerFile);
+                    var sql = db.createStatement()) {
+                sql.executeUpdate(
+                        "DELETE FROM sync_events WHERE entry_id='slice-1' AND revision>4");
+                sql.executeUpdate(
+                        "DELETE FROM sync_events WHERE entry_id IN ('"
+                                + RUN
+                                + "','"
+                                + ATTEMPT
+                                + "') AND revision>1");
+                sql.executeUpdate(
+                        "UPDATE sync_entries SET state='SUBMITTED',revision=4,payload_json=(SELECT payload_json FROM sync_events WHERE entry_id='slice-1' AND revision=4) WHERE id='slice-1'");
+                sql.executeUpdate(
+                        "UPDATE sync_entries SET state='RUNNING',revision=1,payload_json='{}' WHERE id IN ('"
+                                + RUN
+                                + "','"
+                                + ATTEMPT
+                                + "')");
+                sql.executeUpdate(
+                        "UPDATE sync_interval_locks SET in_doubt=0 WHERE run_id='" + RUN + "'");
+            }
+        }
+
+        Map<String, Object> reconcileStopped() throws Exception {
+            return store.reconcileStoppedSubmittedFrozen(RUN, preparedSha, stopped);
         }
 
         Map<String, Object> reconcile() throws Exception {

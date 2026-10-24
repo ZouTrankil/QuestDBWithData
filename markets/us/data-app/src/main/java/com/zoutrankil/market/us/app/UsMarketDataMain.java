@@ -85,6 +85,16 @@ public final class UsMarketDataMain {
                     throw new IllegalArgumentException("FRED 有限回补只使用已结束的纽约日期");
                 FredMacroCollector.collect(env, root, store, through);
             }
+            case "reconcile-stopped-submitted-frozen" -> {
+                if (!Set.of("run", "prepared-sha256", "stopped-evidence")
+                        .containsAll(options.keySet()))
+                    throw new IllegalArgumentException("未知突然退出只读核对参数");
+                print(
+                        store.reconcileStoppedSubmittedFrozen(
+                                required(options, "run"),
+                                required(options, "prepared-sha256"),
+                                Path.of(required(options, "stopped-evidence"))));
+            }
             case "reconcile-complete-frozen" -> {
                 if (!Set.of("run", "prepared-sha256", "stopped-evidence")
                         .containsAll(options.keySet()))
