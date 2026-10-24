@@ -5,7 +5,6 @@ import com.zoutrankil.data.domain.index.IndexDailyMarket;
 import com.zoutrankil.data.domain.index.IndexDailyMarketDataset;
 import com.zoutrankil.data.domain.index.IndexDailyMarketKey;
 import com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse;
-import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.index.domain.IndexDailyMarketTargetRange;
 import com.zoutrankil.data.index.mapper.IndexDailyMarketMapper;
@@ -64,6 +63,8 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
                     return Math.addExact(Math.multiplyExact(canonical.length, 4), 192);
                 }
             };
+    private final int version;
+    private final String dateColumn;
     private final String table;
     private final String expectedTargetId;
     private final JdbcTemplate jdbc;
@@ -73,7 +74,14 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
 
     public IndexDailyMarketWritePort(
             String table, String targetId, JdbcTemplate jdbc, QuestDB questdb) {
-        IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
+        this(table, targetId, jdbc, questdb, 1);
+    }
+
+    public IndexDailyMarketWritePort(
+            String table, String targetId, JdbcTemplate jdbc, QuestDB questdb, int version) {
+        IndexDailyMarketDataset.requireTarget(table, version);
+        this.version = version;
+        this.dateColumn = version == 1 ? "timestamp" : "trade_date";
         if (targetId == null || !targetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen D019 isolated target identity required");
         this.table = table;
@@ -85,10 +93,15 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
     }
 
     @Override
+    public int datasetVersion() {
+        return version;
+    }
+
+    @Override
     public void preflight() {
         requireExpectedTarget();
         QuestDbWriteChecks.preflight(
-                jdbc, table, IndexDailyMarketDataset.legacyIsolatedDefinition(table));
+                jdbc, table, IndexDailyMarketDataset.definition(table, version));
         requireExpectedTarget();
     }
 
@@ -99,7 +112,7 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
         preflight();
         uncertainSenderStopped = false;
         DatasetWritePreparation.prepare(
-                IndexDailyMarketDataset.legacyIsolatedDefinition(table),
+                IndexDailyMarketDataset.definition(table, version),
                 rows,
                 mapper::values,
                 new DatasetWritePreparation.Limits(MAX_BATCH_ROWS, MAX_BATCH_BYTES));
@@ -155,7 +168,7 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
         var clauses = new ArrayList<String>();
         var args = new ArrayList<Object>();
         for (var key : keys) {
-            clauses.add("(ts_code = ? AND timestamp = cast(? AS TIMESTAMP))");
+            clauses.add("(ts_code = ? AND " + dateColumn + " = cast(? AS TIMESTAMP))");
             args.add(key.tsCode());
             args.add(
                     new TemporalValues.CalendarTimestamp(key.tradeDate())
@@ -165,7 +178,9 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
                 selectColumns()
                         + " WHERE "
                         + String.join(" OR ", clauses)
-                        + " ORDER BY timestamp, ts_code LIMIT "
+                        + " ORDER BY "
+                        + dateColumn
+                        + ", ts_code LIMIT "
                         + (keys.size() + 1);
         return jdbc.query(sql, (rs, row) -> physical(rs), args.toArray());
     }
@@ -177,7 +192,9 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
         var rows =
                 jdbc.query(
                         selectColumns()
-                                + " WHERE ts_code = ? ORDER BY timestamp LIMIT "
+                                + " WHERE ts_code = ? ORDER BY "
+                                + dateColumn
+                                + " LIMIT "
                                 + (MAX_EXISTING_ROWS + 1),
                         (rs, row) -> physical(rs),
                         tsCode);
@@ -191,7 +208,11 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
         requireKnownCode(tsCode);
         requireExpectedTarget();
         String sql =
-                "SELECT cast(min(timestamp) AS long) AS min_micros, cast(max(timestamp) AS long) AS max_micros FROM \""
+                "SELECT cast(min("
+                        + dateColumn
+                        + ") AS long) AS min_micros, cast(max("
+                        + dateColumn
+                        + ") AS long) AS max_micros FROM \""
                         + table
                         + "\" WHERE ts_code = ?";
         return jdbc.query(
@@ -226,8 +247,14 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
                         .storageEpoch(TemporalValues.EpochUnit.MICROS);
         String sql =
                 selectColumns()
-                        + " WHERE ts_code = ? AND timestamp >= cast(? AS TIMESTAMP) AND timestamp < cast(? AS TIMESTAMP) "
-                        + "ORDER BY timestamp LIMIT "
+                        + " WHERE ts_code = ? AND "
+                        + dateColumn
+                        + " >= cast(? AS TIMESTAMP) AND "
+                        + dateColumn
+                        + " < cast(? AS TIMESTAMP) "
+                        + "ORDER BY "
+                        + dateColumn
+                        + " LIMIT "
                         + (MAX_EXISTING_ROWS + 1);
         var rows = jdbc.query(sql, (rs, row) -> physical(rs), tsCode, from, to);
         if (rows.size() > MAX_EXISTING_ROWS)
@@ -291,7 +318,9 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
     }
 
     private String selectColumns() {
-        return "SELECT ts_code, cast(timestamp AS long) AS trade_date_micros, close, open, high, low, pre_close, change, pct_chg, vol, amount, "
+        return "SELECT ts_code, cast("
+                + dateColumn
+                + " AS long) AS trade_date_micros, close, open, high, low, pre_close, change, pct_chg, vol, amount, "
                 + "cast(update_time AS long) AS update_time_micros FROM \""
                 + table
                 + "\"";

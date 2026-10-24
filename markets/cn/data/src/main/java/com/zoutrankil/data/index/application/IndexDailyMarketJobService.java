@@ -1,12 +1,15 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
+import com.zoutrankil.data.domain.index.IndexDailyMarketDataset;
 import com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse;
 import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.index.domain.IndexDailyMarketTargetRange;
 import com.zoutrankil.data.index.mapper.IndexDailyMarketMapper;
 import com.zoutrankil.data.index.port.IndexDailyMarketTarget;
+import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.DailySyncEndDate;
 import com.zoutrankil.data.service.FrozenRunRequest;
 import com.zoutrankil.data.service.SyncJobRegistry;
@@ -25,6 +28,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -82,7 +86,7 @@ public final class IndexDailyMarketJobService {
         this.target = Objects.requireNonNull(target);
         this.ledgerPath = ledgerPath.toAbsolutePath().normalize();
         String table = target.tableName();
-        requireIsolatedTableName(table);
+        IndexDailyMarketDataset.requireTarget(table, target.datasetVersion());
         this.table = table;
     }
 
@@ -118,7 +122,7 @@ public final class IndexDailyMarketJobService {
         LocalDate requestedLimit = requestedThrough == null ? logicalDate : requestedThrough;
         LocalDate to = DailySyncEndDate.resolve(requestedLimit, sourceNow);
         if (to.isAfter(logicalDate)) to = logicalDate;
-        var definition = IndexDailyMarketSyncJobOwner.DEFINITION;
+        var definition = IndexDailyMarketSyncJobOwner.definition(target.datasetVersion());
         Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
         if (!definition.supportedModes().contains(mode))
             throw new IllegalArgumentException("Unsupported D019 sync mode");
@@ -136,7 +140,9 @@ public final class IndexDailyMarketJobService {
         if (physical.max() != null && physical.max().isAfter(logicalDate))
             throw new IllegalStateException(
                     "D019 target contains a code date after the frozen logical date");
-        var saved = IndexDailyMarketCoverage.checkpoint(ledgerPath, target, index.tsCode());
+        var saved =
+                IndexDailyMarketCoverage.checkpoint(
+                        ledgerPath, target, index.tsCode(), this.target.datasetVersion());
         IndexDailyMarketCoverage.validateExistingTarget(ledgerPath, target, index.tsCode(), port);
 
         LocalDate resolvedFrom = from, anchor = null, checkpointBefore = null;
@@ -225,14 +231,76 @@ public final class IndexDailyMarketJobService {
                 bootstrap);
     }
 
+    /** 只核查明确来源与目标结构，不借缺失的旧检查点认证历史，也不创建运行账本。 */
+    public Map<String, Object> checkSource(
+            String code, LocalDate from, LocalDate to, LocalDate logical) throws Exception {
+        if (from == null
+                || to == null
+                || logical == null
+                || from.isAfter(to)
+                || to.isAfter(logical)
+                || logical.isAfter(LocalDate.now(DailySyncEndDate.ZONE)))
+            throw new IllegalArgumentException("来源核查需要明确已发生日期范围");
+        String identity = targetId();
+        var writer = target.newWriter(identity);
+        writer.preflight();
+        var source =
+                new IndexDailyMarketSource(
+                        pages,
+                        new IndexDailyMarketMapper(),
+                        ledgerPath
+                                .getParent()
+                                .resolve("sync-evidence")
+                                .resolve("d019-source-check-" + UUID.randomUUID()));
+        var page =
+                source.fetch(
+                        code,
+                        from,
+                        to,
+                        Instant.now().truncatedTo(ChronoUnit.MICROS),
+                        () -> Thread.currentThread().isInterrupted());
+        writer.preflight();
+        if (!identity.equals(targetId())) throw new IllegalStateException("来源核查期间原物理对象改变");
+        return Map.of(
+                "dataset",
+                "index_daily_market",
+                "schemaVersion",
+                target.datasetVersion(),
+                "targetId",
+                identity,
+                "sourceRows",
+                page.rows().size(),
+                "sourceCoverageVerified",
+                true,
+                "targetDataVerified",
+                false,
+                "productionWritten",
+                false,
+                "sourceFingerprint",
+                page.sourceFingerprint(),
+                "sourceEvidence",
+                page.responseEvidence());
+    }
+
     public SyncJobRunner.Result run(Plan plan) throws Exception {
         return execute("index-daily-market-" + UUID.randomUUID(), null, plan);
+    }
+
+    private int originalVersion(String runId) throws Exception {
+        var run = SyncRunLedger.openReadOnly(ledgerPath).getRun(runId);
+        return JobDefinitionJson.mapper()
+                .readTree(run.frozenJson())
+                .path("definition")
+                .path("datasetVersion")
+                .asInt(-1);
     }
 
     public SyncJobRunner.Result resume(String priorRunId) throws Exception {
         var restored =
                 FrozenRunRequest.restore(
-                        ledgerPath, priorRunId, IndexDailyMarketSyncJobOwner.DEFINITION);
+                        ledgerPath,
+                        priorRunId,
+                        IndexDailyMarketSyncJobOwner.definition(originalVersion(priorRunId)));
         var request = restored.request();
         var parameters = request.parameters();
         var index = IndexDailyMarketUniverse.resolve((String) parameters.get("tsCode"));
@@ -289,7 +357,11 @@ public final class IndexDailyMarketJobService {
 
     private SyncJobRunner.Result execute(String runId, String priorRunId, Plan plan)
             throws Exception {
-        if (!plan.request().definition().equals(IndexDailyMarketSyncJobOwner.DEFINITION)
+        if (!plan.request()
+                        .definition()
+                        .equals(
+                                IndexDailyMarketSyncJobOwner.definition(
+                                        plan.request().definition().datasetVersion()))
                 || !plan.targetId().equals(plan.request().parameters().get("targetId"))
                 || !plan.targetId().equals(targetId()))
             throw new IllegalStateException(
@@ -302,7 +374,10 @@ public final class IndexDailyMarketJobService {
                 plan.request(),
                 "Cannot read D019 cancellation state",
                 () -> {
-                    var port = this.target.newWriter(plan.targetId());
+                    var port =
+                            this.target
+                                    .forVersion(plan.request().definition().datasetVersion())
+                                    .newWriter(plan.targetId());
                     var evidence = ledgerPath.getParent().resolve("sync-evidence").resolve(runId);
                     return new IndexDailyMarketSyncAdapter(
                             new IndexDailyMarketSource(

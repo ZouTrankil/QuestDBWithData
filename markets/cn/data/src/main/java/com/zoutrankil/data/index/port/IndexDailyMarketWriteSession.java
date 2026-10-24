@@ -11,6 +11,10 @@ import java.util.List;
 /** One frozen physical generation and one execution attempt's writer state. */
 public interface IndexDailyMarketWriteSession
         extends VerifiedWriteSession<IndexDailyMarket, IndexDailyMarketKey> {
+    default int datasetVersion() {
+        return 1;
+    }
+
     IndexDailyMarketTargetRange readExistingRange(String code);
 
     List<IndexDailyMarket> readExistingRows(String code);

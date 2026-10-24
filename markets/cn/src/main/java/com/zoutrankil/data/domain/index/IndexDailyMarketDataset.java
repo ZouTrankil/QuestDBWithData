@@ -35,6 +35,18 @@ public final class IndexDailyMarketDataset {
     public static final DatasetDefinition LEGACY_ISOLATED_DEFINITION =
             legacyIsolatedDefinition("java_d019_index_daily_market_acceptance");
 
+    /** 版本由原请求或明确配置选择；不能根据当前列名猜旧运行的布局。 */
+    public static DatasetDefinition definition(String table, int version) {
+        requireTarget(table, version);
+        return version == 1 ? legacyIsolatedDefinition(table) : definition(table);
+    }
+
+    public static void requireTarget(String table, int version) {
+        if (version != 1 && version != 2) throw new IllegalArgumentException("指数日线只支持布局v1/v2");
+        if (version == 1 || !table.equals("index_daily_market"))
+            IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
+    }
+
     public static DatasetDefinition definition(String table) {
         DatasetDefinition.identifier(table);
         return layout(table, 2, "trade_date");

@@ -64,8 +64,9 @@ public class IndexConfiguration {
             JdbcTemplate jdbc,
             @Lazy QuestDB questdb,
             @Value("${app.sync.index-daily-market-table:java_d019_index_daily_market_acceptance}")
-                    String table) {
-        return new QuestDbIndexDailyMarketTarget(table, jdbc, questdb);
+                    String table,
+            @Value("${app.sync.index-daily-market-schema-version:1}") int version) {
+        return new QuestDbIndexDailyMarketTarget(table, jdbc, questdb, version);
     }
 
     @Bean
