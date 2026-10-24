@@ -131,6 +131,12 @@ public final class YahooPriceMapper {
                 double close = positive(quote.path("close").get(i)),
                         adjClose = positive(adjusted.get(i)),
                         ratio = adjClose / close;
+                double open = positive(quote.path("open").get(i)),
+                        high = positive(quote.path("high").get(i)),
+                        low = positive(quote.path("low").get(i));
+                // 只检查所选日期的原报价；不靠重建或容差修正冲突，调用方会保留整份失败原文。
+                if (low > Math.min(open, close) || high < Math.max(open, close))
+                    throw new IllegalArgumentException("Yahoo OHLC 超出高低价范围：" + symbol + " " + date);
                 var row = new LinkedHashMap<String, Object>();
                 row.put("trade_date", date.atStartOfDay(ZoneOffset.UTC).toInstant().toString());
                 row.put("symbol", symbol);

@@ -1,0 +1,4313 @@
+{
+  "schema_version": 1,
+  "说明": "Yahoo日线范围校验、既有冲突和实际新增尾段；不修改旧值或固定首批，不代表全市场完成。",
+  "rule": "low<=open AND low<=close AND high>=open AND high>=close",
+  "ruleAppliesOnlyToSelectedDates": true,
+  "sourceAgreementDoesNotProveOhlcConsistency": true,
+  "wholeMarketComplete": false,
+  "newRows": 25,
+  "newTailFrom": "2026-10-19",
+  "newTailThrough": "2026-10-23",
+  "newTailRoutes": [
+    {
+      "symbol": "CIG.C",
+      "yahoo": "CIG-C",
+      "task": "cfc426bbd506e59dd8cb395a3226cbd5f2fbd52f8a019aae5d41ba8e08c7976e",
+      "raw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\yahoo\\61234fad-76c8-4efc-be72-96ae7a323bd9.response",
+      "sha": "f827721538c1116b2e5383c3f2b2d83f350d6f62c3ef9b9dc52c9dadd72b1c6e",
+      "observed": "2026-10-24T20:46:50.582702Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/CIG-C?period1=1136073600&period2=1792800000&interval=1d&events=div,splits",
+      "originalHistoricalTask": "a6145ec49f21ff4813572de7135a30a1c18ffc911816f33d5127f9aea3d917e7"
+    },
+    {
+      "symbol": "SHEL",
+      "yahoo": "SHEL",
+      "task": "80c10b97f456c1a12087c88d91164340e0995cef7a8467c44a471b341b21fb13",
+      "raw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\yahoo\\18a1d652-29b5-479b-8049-e0ef6164493a.response",
+      "sha": "e14bafc53ecb836ce3a6ec1ed9bff29ad8c32a7ade7d27e6650292e3cf0cfd7f",
+      "observed": "2026-10-24T20:46:58.163477Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/SHEL?period1=1136073600&period2=1792800000&interval=1d&events=div,splits",
+      "originalHistoricalTask": "b96cac7091fe2e5ed2109ec10f3b771e18b8651ad0d63289ac5753d9aa0a7347"
+    },
+    {
+      "symbol": "SITC",
+      "yahoo": "SITC",
+      "task": "c09a31fd87394f3f2980f9ce27c7edcd4dfb37749b98ec4265da6cf4988edef7",
+      "raw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\yahoo\\42b3bf8c-036c-42e1-8f54-eb6cf09026ad.response",
+      "sha": "46ae2b3fa075630175a45a32518f31525ea420baf7c8f4a54200ec5c2fcb825c",
+      "observed": "2026-10-24T20:47:04.162435Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/SITC?period1=1136073600&period2=1792800000&interval=1d&events=div,splits",
+      "originalHistoricalTask": "38edfd761a1efc457e4a9d2df2bc615f16af40575e3c8133cdd8061f549931a9"
+    },
+    {
+      "symbol": "UA",
+      "yahoo": "UA",
+      "task": "7b06036bd687c78e439ed860384b5ce90176c97a80d868ffa5767c77742a309a",
+      "raw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\yahoo\\8b2a9083-53ab-4b35-a4f6-d2fca18536c0.response",
+      "sha": "41d50e5ca6c24e1bde651681fed35ab97b9e28e8645675be6685a13fe74dabb8",
+      "observed": "2026-10-24T20:47:08.120419Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/UA?period1=1136073600&period2=1792800000&interval=1d&events=div,splits",
+      "originalHistoricalTask": "7fc4ea4964bcbb614899b048a7f0c75c6305c8ddbc9d492834877821222aa0f5"
+    },
+    {
+      "symbol": "WLY",
+      "yahoo": "WLY",
+      "task": "e983321ba8bf4d6fc1a305610dabd20120fc1d6422fe9bbaa90f95c4c3f4fae5",
+      "raw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\yahoo\\eec0b7c6-dd77-4d7b-9298-aa0c3801d77b.response",
+      "sha": "77596cdf50266a94c2f636c076882276f45eea1aa38841e384e1027c58cfde02",
+      "observed": "2026-10-24T20:47:12.216774Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/WLY?period1=1136073600&period2=1792800000&interval=1d&events=div,splits",
+      "originalHistoricalTask": "cfa8265bd748310b3f36cb5e98c1e657bfcd573da3581e041447809765aac099"
+    }
+  ],
+  "native": {
+    "runId": "market-21b43836-a25b-4329-b660-0b56c322038b",
+    "state": "VERIFIED",
+    "sourceRows": 25,
+    "verifiedRows": 25,
+    "errorCode": null,
+    "reusedRows": 0
+  },
+  "all20NewFieldsRawJavaPreparedNativeHttpPgwireExact": true,
+  "existingRawInvalidRows": 3512,
+  "existingInvalidProviderPairs": 700,
+  "existingInvalidProviders": [
+    "YAHOO"
+  ],
+  "existingPairs": [
+    {
+      "symbol": "AABB",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "AACS",
+      "provider": "YAHOO",
+      "rows": 30
+    },
+    {
+      "symbol": "AAGRW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AAMMF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AAMTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AAPI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AAPJ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AASZF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ABILF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ABMRF",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "ABPWW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ABVG",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ABWN",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ACAI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ACAN",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ACCR",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "ACGX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ACMTA",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ACPS",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "ACTX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ACUR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ADDHY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ADFS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ADLRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ADSV",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ADTHW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ADWPF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ADXDF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AEDFF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AEFI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AEGY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AEPT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AERN",
+      "provider": "YAHOO",
+      "rows": 22
+    },
+    {
+      "symbol": "AERS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AEXAF",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "AEYGQ",
+      "provider": "YAHOO",
+      "rows": 9
+    },
+    {
+      "symbol": "AFFL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AFFN",
+      "provider": "YAHOO",
+      "rows": 7
+    },
+    {
+      "symbol": "AFFU",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "AFIIQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AFML",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AFRMF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AFTM",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AGCZ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AGDXF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "AGNMF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AGRIW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AGRS",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "AGTK",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AGXTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AGYP",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "AHFD",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AHIX",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "AHRO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AIAD",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "AIIXY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AILLN",
+      "provider": "YAHOO",
+      "rows": 11
+    },
+    {
+      "symbol": "AILQF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AIMLF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "AISSF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AITX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AIZZ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AJOY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AJXA",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AKAAF",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "AKPJS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AKPZS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AKRRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AKVA",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ALGEF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ALPE",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ALPKF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ALRTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ALSI",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "ALURD",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ALVRQ",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "AMBS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AMCF",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "AMDUF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AMEN",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AMFL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AMFN",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "AMFPF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AMGRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AMHD",
+      "provider": "YAHOO",
+      "rows": 61
+    },
+    {
+      "symbol": "AMLH",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "AMMJ",
+      "provider": "YAHOO",
+      "rows": 42
+    },
+    {
+      "symbol": "AMPGR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AMPGW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AMRU",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AMTPQ",
+      "provider": "YAHOO",
+      "rows": 12
+    },
+    {
+      "symbol": "ANAS",
+      "provider": "YAHOO",
+      "rows": 23
+    },
+    {
+      "symbol": "ANTMF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ANZGF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AOBI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AOGOW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AOLS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AOOO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AOXY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "APCFF",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "APNHF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "APRU",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AQSZF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AQUI",
+      "provider": "YAHOO",
+      "rows": 47
+    },
+    {
+      "symbol": "ARBEW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARBTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARBU",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARCUF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AREN",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARET",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ARGNF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARMC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARNI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARPC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARQQW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARRPY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARSLF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARTGF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARTM",
+      "provider": "YAHOO",
+      "rows": 15
+    },
+    {
+      "symbol": "ARTR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ARYC",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ARYMF",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "ASAZF",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "ASFZ",
+      "provider": "YAHOO",
+      "rows": 15
+    },
+    {
+      "symbol": "ASGXF",
+      "provider": "YAHOO",
+      "rows": 19
+    },
+    {
+      "symbol": "ASPR",
+      "provider": "YAHOO",
+      "rows": 35
+    },
+    {
+      "symbol": "ASPU",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ASRE",
+      "provider": "YAHOO",
+      "rows": 22
+    },
+    {
+      "symbol": "ASUUY",
+      "provider": "YAHOO",
+      "rows": 9
+    },
+    {
+      "symbol": "ATAR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ATDRF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ATHC",
+      "provider": "YAHOO",
+      "rows": 16
+    },
+    {
+      "symbol": "ATLFF",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "ATLPF",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "ATMCR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ATMCW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ATMMF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ATRX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ATTOF",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "ATWT",
+      "provider": "YAHOO",
+      "rows": 16
+    },
+    {
+      "symbol": "ATYG",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AUDYF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AUQFF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AVACF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "AVCRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AVCVF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AVEW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AVIJF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AVTBF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AVTI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AWRY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AWSL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AXCG",
+      "provider": "YAHOO",
+      "rows": 8
+    },
+    {
+      "symbol": "AXLX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AXMIF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AXXA",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AXXTF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "AZFL",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "AZIHF",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "AZLGF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "AZNVF",
+      "provider": "YAHOO",
+      "rows": 29
+    },
+    {
+      "symbol": "BANT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BAYAR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BBCMF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BBCQU",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BBLNF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BBRW",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BCAP",
+      "provider": "YAHOO",
+      "rows": 40
+    },
+    {
+      "symbol": "BCBC",
+      "provider": "YAHOO",
+      "rows": 53
+    },
+    {
+      "symbol": "BCCI",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BCDS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BCND",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BCOW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BDGR",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "BDPT",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BDYS",
+      "provider": "YAHOO",
+      "rows": 13
+    },
+    {
+      "symbol": "BERI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BEVVF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BFCH",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BFYW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BGDFF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BGMSP",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "BGTTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BHNGF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BICB",
+      "provider": "YAHOO",
+      "rows": 34
+    },
+    {
+      "symbol": "BIEL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BIGG",
+      "provider": "YAHOO",
+      "rows": 14
+    },
+    {
+      "symbol": "BIOAF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BIOM",
+      "provider": "YAHOO",
+      "rows": 30
+    },
+    {
+      "symbol": "BIQIF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BISA",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "BITCF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BITTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BKCYF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BKFG",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BKMP",
+      "provider": "YAHOO",
+      "rows": 17
+    },
+    {
+      "symbol": "BKWAF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BLDV",
+      "provider": "YAHOO",
+      "rows": 50
+    },
+    {
+      "symbol": "BLFE",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BLGVF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BLIAQ",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BLIDF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BLLYF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BLONF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BLRDF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BLSP",
+      "provider": "YAHOO",
+      "rows": 57
+    },
+    {
+      "symbol": "BLUU",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BMGP",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BMPA",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BMPSY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BMXC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BNDSF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BNGI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BNKL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BNZI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BOMO",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "BONTQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BORK",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BOTY",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "BPOL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BPOSF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BPSCF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BQCNF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BRANF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BRAV",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BRCTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BRGO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BRGX",
+      "provider": "YAHOO",
+      "rows": 72
+    },
+    {
+      "symbol": "BRKO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BRLXF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BRNHF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BRRLY",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BRRND",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BRSI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BRST",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BSAI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BSGC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BSLKW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BSMAF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BSSP",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BSTO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BTGN",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BTMCQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BTOW",
+      "provider": "YAHOO",
+      "rows": 56
+    },
+    {
+      "symbol": "BTRCF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BVERS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BVTK",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "BYOC",
+      "provider": "YAHOO",
+      "rows": 9
+    },
+    {
+      "symbol": "BYOGF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BYYLF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BZDLF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "BZTG",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CACH",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "CAGR",
+      "provider": "YAHOO",
+      "rows": 50
+    },
+    {
+      "symbol": "CALIQ",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "CALZF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CAMLF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CAMNF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CANL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CASG",
+      "provider": "YAHOO",
+      "rows": 19
+    },
+    {
+      "symbol": "CAVR",
+      "provider": "YAHOO",
+      "rows": 8
+    },
+    {
+      "symbol": "CBDL",
+      "provider": "YAHOO",
+      "rows": 13
+    },
+    {
+      "symbol": "CBDX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CBEEF",
+      "provider": "YAHOO",
+      "rows": 28
+    },
+    {
+      "symbol": "CBGI",
+      "provider": "YAHOO",
+      "rows": 7
+    },
+    {
+      "symbol": "CBGL",
+      "provider": "YAHOO",
+      "rows": 11
+    },
+    {
+      "symbol": "CBGPF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CBRJ",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "CBULF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CBUMF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CBWTD",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CBYI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CCCMF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CCGM",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CCTL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CCUR",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "CDIIQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CDIX",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "CDNO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CELUW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CELX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CEROW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CFEIY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CFGX",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "CFOR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CGBSF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "CGLO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CHAG",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CHALF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CHEAF",
+      "provider": "YAHOO",
+      "rows": 11
+    },
+    {
+      "symbol": "CHHQY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CHME",
+      "provider": "YAHOO",
+      "rows": 82
+    },
+    {
+      "symbol": "CHMP",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CHWRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CHYI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CICN",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CIFRW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CIG-C",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CIG.C",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CIIHY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CIMDF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CINGF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CIPI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CISXF",
+      "provider": "YAHOO",
+      "rows": 8
+    },
+    {
+      "symbol": "CLEUF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CLKFF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CLLKF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CLNNW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CLNXF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CMFO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CMGHF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CMGR",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "CMHZ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CMILF",
+      "provider": "YAHOO",
+      "rows": 24
+    },
+    {
+      "symbol": "CMIT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CMNT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CMPY",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "CMTX",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "CNBX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CNGFF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CNHC",
+      "provider": "YAHOO",
+      "rows": 18
+    },
+    {
+      "symbol": "CNLHO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CNNC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CNTHN",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "CNTO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CNUN",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CNVT",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "CNVVF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "CNXS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "COCXF",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "COMS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CONC",
+      "provider": "YAHOO",
+      "rows": 9
+    },
+    {
+      "symbol": "COPAF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "COSG",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "CPHOF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CPIHF",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "CPNBQ",
+      "provider": "YAHOO",
+      "rows": 28
+    },
+    {
+      "symbol": "CPQQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CQRLF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CREG",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "CREQF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CRFU",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CRICF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CRKT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CRMBQ",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "CRSXQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CSBTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CSPKF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CSTAF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CTARF",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "CTHCF",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "CTRYQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CTTAF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "CTVEF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CTVFF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CTXV",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CVHL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CVWLF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CWGYF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "CWIR",
+      "provider": "YAHOO",
+      "rows": 21
+    },
+    {
+      "symbol": "CWSRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CWTC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CYBD",
+      "provider": "YAHOO",
+      "rows": 40
+    },
+    {
+      "symbol": "CYBL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CYCA",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CYDX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CYLYF",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "CYNS",
+      "provider": "YAHOO",
+      "rows": 29
+    },
+    {
+      "symbol": "CYRNQ",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "CYTHW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CYYNF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "CZOOF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DANR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DCCPF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "DDDX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DECN",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DEER",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "DELKY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DEXSF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DFKCY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DFTC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DGEN",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "DGWPF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DHAIW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DHHXF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DIDAF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DIUXF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DKGR",
+      "provider": "YAHOO",
+      "rows": 26
+    },
+    {
+      "symbol": "DKSC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DLAD",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "DLAPQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DLEXY",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "DLMI",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "DLOC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DMAN",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "DMDD",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DMPZF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DMSI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DMXCF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DNAX",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "DNERF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DOMR",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "DPBE",
+      "provider": "YAHOO",
+      "rows": 12
+    },
+    {
+      "symbol": "DREM",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DRJG",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DRMAW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DRNK",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "DRNL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DRPRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DRWN",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "DSCR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DSDVF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DSITF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DSRLF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DTEMF",
+      "provider": "YAHOO",
+      "rows": 52
+    },
+    {
+      "symbol": "DTSL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DTZZF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DUAVF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "DVFI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EAATF",
+      "provider": "YAHOO",
+      "rows": 18
+    },
+    {
+      "symbol": "EAPH",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "EARI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EATR",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "EAWD",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EBODF",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "ECCI",
+      "provider": "YAHOO",
+      "rows": 25
+    },
+    {
+      "symbol": "ECDD",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ECEZ",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ECGI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ECGP",
+      "provider": "YAHOO",
+      "rows": 8
+    },
+    {
+      "symbol": "ECMH",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ECXJ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EDDYF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EDHD",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EDMCQ",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "EDRWY",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "EDTA",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "EDWZF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EDXC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EEGI",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "EFIR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EFOT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EGTYF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EIPC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EKWX",
+      "provider": "YAHOO",
+      "rows": 78
+    },
+    {
+      "symbol": "ELGL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ELNX",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "ELRXF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ELSSF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ELXPF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ELYS",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "EMAX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EMED",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "EMFGF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "EMGE",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EMLL",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "EMPS",
+      "provider": "YAHOO",
+      "rows": 43
+    },
+    {
+      "symbol": "EMWPF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EMYSF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ENCTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ENDV",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ENHD",
+      "provider": "YAHOO",
+      "rows": 66
+    },
+    {
+      "symbol": "ENRT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ENSV",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EOGSF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EORBF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EPOR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EPTI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EQLB",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ERAO",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ERFB",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ERGO",
+      "provider": "YAHOO",
+      "rows": 74
+    },
+    {
+      "symbol": "ESCSQ",
+      "provider": "YAHOO",
+      "rows": 20
+    },
+    {
+      "symbol": "ESHAR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ESINQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ESSI",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ESTRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ESWW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ESYL",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ETCK",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ETI-P",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ETNI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "ETST",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "ETTYF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EUBG",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EUOT",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "EUSHY",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "EVGDQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EVGOW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EVHO",
+      "provider": "YAHOO",
+      "rows": 10
+    },
+    {
+      "symbol": "EVIO",
+      "provider": "YAHOO",
+      "rows": 10
+    },
+    {
+      "symbol": "EVKIF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EVLVW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EVMNY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EVSV",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EWLL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EWRC",
+      "provider": "YAHOO",
+      "rows": 79
+    },
+    {
+      "symbol": "EXBX",
+      "provider": "YAHOO",
+      "rows": 29
+    },
+    {
+      "symbol": "EXEEL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EXEEW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EXMT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EXPL",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "EZES",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "EZTD",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FABTQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FAMDF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FBCD",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FBCE",
+      "provider": "YAHOO",
+      "rows": 7
+    },
+    {
+      "symbol": "FBDS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FBSGF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FCAFF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FCGD",
+      "provider": "YAHOO",
+      "rows": 53
+    },
+    {
+      "symbol": "FCODF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "FCUL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FDBH",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "FDEI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FDOGF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FECOF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FEEXF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FERN",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FFAIW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FFNTF",
+      "provider": "YAHOO",
+      "rows": 21
+    },
+    {
+      "symbol": "FGETF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FIBH",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FLMP",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FLOOF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FLSS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FLTLF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FLXT",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "FMCKI",
+      "provider": "YAHOO",
+      "rows": 13
+    },
+    {
+      "symbol": "FMCKL",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "FMHS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FMNJ",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "FMYR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FMZNF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FNCJF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FNMAH",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "FNMAI",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "FNMAS",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "FNMAT",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "FONU",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "FORLW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FORU",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "FORW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FOXTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FPHOY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FPTE",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FPWM",
+      "provider": "YAHOO",
+      "rows": 17
+    },
+    {
+      "symbol": "FRBKQ",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "FRCB",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "FRCHL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FRCIL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FRCJL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FRCKL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FRCML",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FREEW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FRMA",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FRQN",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "FRZT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FSHRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FSTF",
+      "provider": "YAHOO",
+      "rows": 53
+    },
+    {
+      "symbol": "FTBYF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FTCHQ",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "FTEG",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "FTIIW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FUGI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FUGRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FUNR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FUNRD",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FUTL",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "FVTI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "FWDG",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "FYGGY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GAMXF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GARB",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "GARLF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GASE",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GAWK",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GAYGQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GBEN",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "GBLBY",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "GBLX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GBRRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GCFB",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "GCHK",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GCLT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GDDFF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GDEVW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GDPEF",
+      "provider": "YAHOO",
+      "rows": 55
+    },
+    {
+      "symbol": "GDPHF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GDSI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GDVTZ",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "GEECF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GEGI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GEGP",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "GELGF",
+      "provider": "YAHOO",
+      "rows": 10
+    },
+    {
+      "symbol": "GENNQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GFAIW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GFMH",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "GGBXF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "GGII",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "GGLXD",
+      "provider": "YAHOO",
+      "rows": 17
+    },
+    {
+      "symbol": "GGOXF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GGSM",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GHIL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GIBX",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GIPL",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GIPRW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GKOR",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GLDAF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GLEC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GLFN",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "GLGLF",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "GLKIF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GLOH",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GMDP",
+      "provider": "YAHOO",
+      "rows": 42
+    },
+    {
+      "symbol": "GMEV",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GMND",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "GMNI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GMXDF",
+      "provider": "YAHOO",
+      "rows": 8
+    },
+    {
+      "symbol": "GNCP",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "GNOLF",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "GNPG",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GNRD",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GNYPF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GOCOQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GODZF",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "GOGY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GPAK",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GPCG",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GPLDQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GPOVF",
+      "provider": "YAHOO",
+      "rows": 16
+    },
+    {
+      "symbol": "GPTC",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "GRAPF",
+      "provider": "YAHOO",
+      "rows": 11
+    },
+    {
+      "symbol": "GREH",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "GRGCF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GRLF",
+      "provider": "YAHOO",
+      "rows": 10
+    },
+    {
+      "symbol": "GROO",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "GRPI",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "GRPOF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GRPS",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GRVWF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GRYEF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GSDC",
+      "provider": "YAHOO",
+      "rows": 91
+    },
+    {
+      "symbol": "GSDT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GSFD",
+      "provider": "YAHOO",
+      "rows": 6
+    },
+    {
+      "symbol": "GSMGW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GSPH",
+      "provider": "YAHOO",
+      "rows": 84
+    },
+    {
+      "symbol": "GSPI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GTCH",
+      "provider": "YAHOO",
+      "rows": 16
+    },
+    {
+      "symbol": "GTEH",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GTKP",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GTLL",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "GTRL",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "GTVH",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "GUYGF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GVFG",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GVSI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GWTI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GXXM",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "GYSLF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "GYYMF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HALFF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HALLQ",
+      "provider": "YAHOO",
+      "rows": 5
+    },
+    {
+      "symbol": "HAON",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "HAUP",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HBKRF",
+      "provider": "YAHOO",
+      "rows": 3
+    },
+    {
+      "symbol": "HBRM",
+      "provider": "YAHOO",
+      "rows": 20
+    },
+    {
+      "symbol": "HDYNQ",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HEMP",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "HGRVF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HHSE",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HIPH",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "HKBT",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HLKHF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HLLPF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HLLXF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HLRTF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HMLA",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HMNY",
+      "provider": "YAHOO",
+      "rows": 7
+    },
+    {
+      "symbol": "HMRRF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HMTXF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HNDI",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HNTIY",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HOKCF",
+      "provider": "YAHOO",
+      "rows": 9
+    },
+    {
+      "symbol": "HPAGF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HPIL",
+      "provider": "YAHOO",
+      "rows": 2
+    },
+    {
+      "symbol": "HPNN",
+      "provider": "YAHOO",
+      "rows": 66
+    },
+    {
+      "symbol": "HQGE",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HREEF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HSTC",
+      "provider": "YAHOO",
+      "rows": 91
+    },
+    {
+      "symbol": "HTDS",
+      "provider": "YAHOO",
+      "rows": 10
+    },
+    {
+      "symbol": "HTOOW",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HUBB",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "HUFAF",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "RDIB",
+      "provider": "YAHOO",
+      "rows": 7
+    },
+    {
+      "symbol": "SHEL",
+      "provider": "YAHOO",
+      "rows": 4
+    },
+    {
+      "symbol": "SITC",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "UA",
+      "provider": "YAHOO",
+      "rows": 1
+    },
+    {
+      "symbol": "WLY",
+      "provider": "YAHOO",
+      "rows": 1
+    }
+  ],
+  "firstScopeConflictRows": 7,
+  "firstScopeConflictRoutes": [
+    {
+      "symbol": "CIG.C",
+      "priceSymbol": "CIG.C",
+      "provider": "YAHOO",
+      "rows": 1,
+      "firstDate": "2021-05-05",
+      "lastDate": "2021-05-05",
+      "rowsDigest": "d44a9ba5edd9d5cb82f3ca2024e53c505ca6308342b879f60169d4b6e229f80c",
+      "examples": [
+        {
+          "trade_date": "2021-05-05T00:00:00+00:00",
+          "symbol": "CIG.C",
+          "provider": "YAHOO",
+          "venue": "US_COMPOSITE",
+          "open": 2.589999388456345,
+          "high": 2.7199992799758914,
+          "low": 2.5999990391731265,
+          "close": 2.7199992799758914,
+          "volume": 13444.970414201181,
+          "adj_open": 0.9970331911030033,
+          "adj_high": 1.0470772981643677,
+          "adj_low": 1.000882606554028,
+          "adj_close": 1.0470772981643677,
+          "adj_volume": 22722.0,
+          "dividend": 0.0,
+          "split_factor": 1.0,
+          "currency": "USD",
+          "raw_price_basis": "RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED",
+          "source_sha256": "abf64a117a0fb4dccf7532f497ba488153a4206fd77990eed39bdfe0cbf5a311",
+          "observed_at": "2026-10-20T00:02:11.179885+00:00"
+        }
+      ]
+    },
+    {
+      "symbol": "HUBB",
+      "priceSymbol": "HUBB",
+      "provider": "YAHOO",
+      "rows": 1,
+      "firstDate": "2021-05-05",
+      "lastDate": "2021-05-05",
+      "rowsDigest": "c9bf0f21fb2854a2bddd42910932e1e3ed1bec49dbb47abd28a6f5045151a42b",
+      "examples": [
+        {
+          "trade_date": "2021-05-05T00:00:00+00:00",
+          "symbol": "HUBB",
+          "provider": "YAHOO",
+          "venue": "US_COMPOSITE",
+          "open": 195.97999572753906,
+          "high": 198.63999938964844,
+          "low": 196.2100067138672,
+          "close": 198.1300048828125,
+          "volume": 127234.0,
+          "adj_open": 179.74809552314326,
+          "adj_high": 182.1877863220627,
+          "adj_low": 179.95905601729166,
+          "adj_close": 181.72003173828125,
+          "adj_volume": 127234.0,
+          "dividend": 0.0,
+          "split_factor": 1.0,
+          "currency": "USD",
+          "raw_price_basis": "RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED",
+          "source_sha256": "da61495fd2e45e8674505204bd9b4ffc67b72a4fbda1af9a50aefcd40bdedd88",
+          "observed_at": "2026-10-19T20:25:52.960766+00:00"
+        }
+      ]
+    },
+    {
+      "symbol": "SHEL",
+      "priceSymbol": "SHEL",
+      "provider": "YAHOO",
+      "rows": 2,
+      "firstDate": "2021-05-05",
+      "lastDate": "2023-01-24",
+      "rowsDigest": "6183191083125227eebaffb66e9ba265633ff08809d3e26508d3f20cad8891c2",
+      "examples": [
+        {
+          "trade_date": "2021-05-05T00:00:00+00:00",
+          "symbol": "SHEL",
+          "provider": "YAHOO",
+          "venue": "US_COMPOSITE",
+          "open": 39.060001373291016,
+          "high": 39.839900970458984,
+          "low": 39.44499969482422,
+          "close": 39.779998779296875,
+          "volume": 3225346.0,
+          "adj_open": 31.807959773828202,
+          "adj_high": 32.443059982281,
+          "adj_low": 32.121477712736755,
+          "adj_close": 32.39427947998047,
+          "adj_volume": 3225346.0,
+          "dividend": 0.0,
+          "split_factor": 1.0,
+          "currency": "USD",
+          "raw_price_basis": "RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED",
+          "source_sha256": "b6f61af761b006cf95462ebfb62c2cbc6b0979d35f80ed53e6a20d4697dcabdc",
+          "observed_at": "2026-10-20T07:45:03.696007+00:00"
+        },
+        {
+          "trade_date": "2023-01-24T00:00:00+00:00",
+          "symbol": "SHEL",
+          "provider": "YAHOO",
+          "venue": "US_COMPOSITE",
+          "open": 51.2599983215332,
+          "high": 58.400001525878906,
+          "low": 56.2599983215332,
+          "close": 57.9900016784668,
+          "volume": 3125185.0,
+          "adj_open": 44.226716832796455,
+          "adj_high": 50.38705452775898,
+          "adj_low": 48.540676868005605,
+          "adj_close": 50.03330993652344,
+          "adj_volume": 3125185.0,
+          "dividend": 0.0,
+          "split_factor": 1.0,
+          "currency": "USD",
+          "raw_price_basis": "RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED",
+          "source_sha256": "b6f61af761b006cf95462ebfb62c2cbc6b0979d35f80ed53e6a20d4697dcabdc",
+          "observed_at": "2026-10-20T07:45:03.696007+00:00"
+        }
+      ]
+    },
+    {
+      "symbol": "SITC",
+      "priceSymbol": "SITC",
+      "provider": "YAHOO",
+      "rows": 1,
+      "firstDate": "2021-05-05",
+      "lastDate": "2021-05-05",
+      "rowsDigest": "c5370a1c9528482c29eac27500c5eb96591fa7a0add0be21f8aeb4f0910c3308",
+      "examples": [
+        {
+          "trade_date": "2021-05-05T00:00:00+00:00",
+          "symbol": "SITC",
+          "provider": "YAHOO",
+          "venue": "US_COMPOSITE",
+          "open": 4.424132347106934,
+          "high": 4.382479190826416,
+          "low": 4.281322479248047,
+          "close": 4.284297466278076,
+          "volume": 3274064.0,
+          "adj_open": 4.312072308147652,
+          "adj_high": 4.2714741958733615,
+          "adj_low": 4.172879709868528,
+          "adj_close": 4.175779342651367,
+          "adj_volume": 818516.0,
+          "dividend": 0.0,
+          "split_factor": 1.0,
+          "currency": "USD",
+          "raw_price_basis": "RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED",
+          "source_sha256": "66c9ef1160b012b60eaadf745ab4c114249449357a294616782183a068573dd7",
+          "observed_at": "2026-10-20T07:46:08.853074+00:00"
+        }
+      ]
+    },
+    {
+      "symbol": "UA",
+      "priceSymbol": "UA",
+      "provider": "YAHOO",
+      "rows": 1,
+      "firstDate": "2021-05-05",
+      "lastDate": "2021-05-05",
+      "rowsDigest": "fe8d6a835280f9f23ab95e7828241a4c88d1354122686bfafe323511cc2d7692",
+      "examples": [
+        {
+          "trade_date": "2021-05-05T00:00:00+00:00",
+          "symbol": "UA",
+          "provider": "YAHOO",
+          "venue": "US_COMPOSITE",
+          "open": 20.8700008392334,
+          "high": 21.825000762939453,
+          "low": 21.0,
+          "close": 21.1299991607666,
+          "volume": 5213105.0,
+          "adj_open": 20.8700008392334,
+          "adj_high": 21.825000762939453,
+          "adj_low": 21.0,
+          "adj_close": 21.1299991607666,
+          "adj_volume": 5213105.0,
+          "dividend": 0.0,
+          "split_factor": 1.0,
+          "currency": "USD",
+          "raw_price_basis": "RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED",
+          "source_sha256": "fdbaae878930fe8cd27418503e60cf0be63db2b0920e370c1995d595333a2ac7",
+          "observed_at": "2026-10-20T09:03:56.003265+00:00"
+        }
+      ]
+    },
+    {
+      "symbol": "WLY",
+      "priceSymbol": "WLY",
+      "provider": "YAHOO",
+      "rows": 1,
+      "firstDate": "2021-05-05",
+      "lastDate": "2021-05-05",
+      "rowsDigest": "89818788b029078a969e6988c036fbfadfb394b09b12e3f11d72a6942e879018",
+      "examples": [
+        {
+          "trade_date": "2021-05-05T00:00:00+00:00",
+          "symbol": "WLY",
+          "provider": "YAHOO",
+          "venue": "US_COMPOSITE",
+          "open": 59.810001373291016,
+          "high": 61.29999923706055,
+          "low": 59.95000076293945,
+          "close": 61.20000076293945,
+          "volume": 261515.0,
+          "adj_open": 49.787092173487714,
+          "adj_high": 51.02739746154144,
+          "adj_low": 49.90363058439923,
+          "adj_close": 50.944156646728516,
+          "adj_volume": 261515.0,
+          "dividend": 0.0,
+          "split_factor": 1.0,
+          "currency": "USD",
+          "raw_price_basis": "RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED",
+          "source_sha256": "045eb4f693a16e7db1057d6543b5ce9c640923878f2a5e3ff06eded3fa7fae65",
+          "observed_at": "2026-10-20T10:47:25.703587+00:00"
+        }
+      ]
+    }
+  ],
+  "freshRecheckRequests": 13,
+  "freshRecheckReceivedBytes": 3106016,
+  "freshRecheckComparisons": [
+    {
+      "symbol": "CIG.C",
+      "day": "2021-05-05",
+      "original": {
+        "open": 1.5325440168380737,
+        "high": 1.6094670295715332,
+        "low": 1.5384609699249268,
+        "close": 1.6094670295715332,
+        "volume": 22722,
+        "adjClose": 1.0470772981643677
+      },
+      "freshFull": {
+        "open": 1.5325440168380737,
+        "high": 1.6094670295715332,
+        "low": 1.5384609699249268,
+        "close": 1.6094670295715332,
+        "volume": 22722,
+        "adjClose": 1.047076940536499
+      },
+      "freshNear": {
+        "open": 1.5325440168380737,
+        "high": 1.6094670295715332,
+        "low": 1.5384609699249268,
+        "close": 1.6094670295715332,
+        "volume": 22722,
+        "adjClose": 1.0470771789550781
+      },
+      "originalBoundsConsistent": false,
+      "freshFullBoundsConsistent": false,
+      "freshNearBoundsConsistent": false,
+      "freshFullSha256": "f827721538c1116b2e5383c3f2b2d83f350d6f62c3ef9b9dc52c9dadd72b1c6e",
+      "freshNearSha256": "caa88f2fb983a5fb8756d11ec64ae4d9b8a93faac84d6debd6f8f8a7687886e9"
+    },
+    {
+      "symbol": "HUBB",
+      "day": "2021-05-05",
+      "original": {
+        "open": 195.97999572753906,
+        "high": 198.63999938964844,
+        "low": 196.2100067138672,
+        "close": 198.1300048828125,
+        "volume": 127234,
+        "adjClose": 181.72003173828125
+      },
+      "freshFull": {
+        "open": 195.97999572753906,
+        "high": 198.63999938964844,
+        "low": 196.2100067138672,
+        "close": 198.1300048828125,
+        "volume": 127234,
+        "adjClose": 181.72003173828125
+      },
+      "freshNear": {
+        "open": 195.97999572753906,
+        "high": 198.63999938964844,
+        "low": 196.2100067138672,
+        "close": 198.1300048828125,
+        "volume": 127234,
+        "adjClose": 181.7200164794922
+      },
+      "originalBoundsConsistent": false,
+      "freshFullBoundsConsistent": false,
+      "freshNearBoundsConsistent": false,
+      "freshFullSha256": "b56b93c411b2bf87fed38257c051653e4fcb89734d98e132ef756680478a51cc",
+      "freshNearSha256": "2846e3c489abe97d5e8489426633d6bcb4dc49dc203a33ca466fc812f324c5e8"
+    },
+    {
+      "symbol": "SHEL",
+      "day": "2021-05-05",
+      "original": {
+        "open": 39.060001373291016,
+        "high": 39.839900970458984,
+        "low": 39.44499969482422,
+        "close": 39.779998779296875,
+        "volume": 3225346,
+        "adjClose": 32.39427947998047
+      },
+      "freshFull": {
+        "open": 39.060001373291016,
+        "high": 39.839900970458984,
+        "low": 39.44499969482422,
+        "close": 39.779998779296875,
+        "volume": 3225346,
+        "adjClose": 32.3942756652832
+      },
+      "freshNear": {
+        "open": 39.060001373291016,
+        "high": 39.839900970458984,
+        "low": 39.44499969482422,
+        "close": 39.779998779296875,
+        "volume": 3225346,
+        "adjClose": 32.39427947998047
+      },
+      "originalBoundsConsistent": false,
+      "freshFullBoundsConsistent": false,
+      "freshNearBoundsConsistent": false,
+      "freshFullSha256": "e14bafc53ecb836ce3a6ec1ed9bff29ad8c32a7ade7d27e6650292e3cf0cfd7f",
+      "freshNearSha256": "cc53f7673ae0cd82b06a2a57bae55a421685d80b506556ebfd5f01d5705c6033"
+    },
+    {
+      "symbol": "SHEL",
+      "day": "2023-01-24",
+      "original": {
+        "open": 51.2599983215332,
+        "high": 58.400001525878906,
+        "low": 56.2599983215332,
+        "close": 57.9900016784668,
+        "volume": 3125185,
+        "adjClose": 50.03330993652344
+      },
+      "freshFull": {
+        "open": 51.2599983215332,
+        "high": 58.400001525878906,
+        "low": 56.2599983215332,
+        "close": 57.9900016784668,
+        "volume": 3125185,
+        "adjClose": 50.03330612182617
+      },
+      "freshNear": {
+        "open": 51.2599983215332,
+        "high": 58.400001525878906,
+        "low": 56.2599983215332,
+        "close": 57.9900016784668,
+        "volume": 3125185,
+        "adjClose": 50.033302307128906
+      },
+      "originalBoundsConsistent": false,
+      "freshFullBoundsConsistent": false,
+      "freshNearBoundsConsistent": false,
+      "freshFullSha256": "e14bafc53ecb836ce3a6ec1ed9bff29ad8c32a7ade7d27e6650292e3cf0cfd7f",
+      "freshNearSha256": "e3346fa89a5c1798e340664fe6bc0455ead993782b47c2517660a6a34f08c182"
+    },
+    {
+      "symbol": "SITC",
+      "day": "2021-05-05",
+      "original": {
+        "open": 17.696529388427734,
+        "high": 17.529916763305664,
+        "low": 17.125289916992188,
+        "close": 17.137189865112305,
+        "volume": 818516,
+        "adjClose": 4.175779342651367
+      },
+      "freshFull": {
+        "open": 17.696529388427734,
+        "high": 17.529916763305664,
+        "low": 17.125289916992188,
+        "close": 17.137189865112305,
+        "volume": 818516,
+        "adjClose": 4.175778865814209
+      },
+      "freshNear": {
+        "open": 17.696529388427734,
+        "high": 17.529916763305664,
+        "low": 17.125289916992188,
+        "close": 17.137189865112305,
+        "volume": 818516,
+        "adjClose": 4.175779819488525
+      },
+      "originalBoundsConsistent": false,
+      "freshFullBoundsConsistent": false,
+      "freshNearBoundsConsistent": false,
+      "freshFullSha256": "46ae2b3fa075630175a45a32518f31525ea420baf7c8f4a54200ec5c2fcb825c",
+      "freshNearSha256": "b48c9003251b6c67c832f9cde8e832f8fe61706da3ed9256a14f58498198ac2f"
+    },
+    {
+      "symbol": "UA",
+      "day": "2021-05-05",
+      "original": {
+        "open": 20.8700008392334,
+        "high": 21.825000762939453,
+        "low": 21.0,
+        "close": 21.1299991607666,
+        "volume": 5213105,
+        "adjClose": 21.1299991607666
+      },
+      "freshFull": {
+        "open": 20.8700008392334,
+        "high": 21.825000762939453,
+        "low": 21.0,
+        "close": 21.1299991607666,
+        "volume": 5213105,
+        "adjClose": 21.1299991607666
+      },
+      "freshNear": {
+        "open": 20.8700008392334,
+        "high": 21.825000762939453,
+        "low": 21.0,
+        "close": 21.1299991607666,
+        "volume": 5213105,
+        "adjClose": 21.1299991607666
+      },
+      "originalBoundsConsistent": false,
+      "freshFullBoundsConsistent": false,
+      "freshNearBoundsConsistent": false,
+      "freshFullSha256": "41d50e5ca6c24e1bde651681fed35ab97b9e28e8645675be6685a13fe74dabb8",
+      "freshNearSha256": "8f7734b7052813d1271b8971f5d4ae8ab3ea9efd05088df29ecb85c92ca59490"
+    },
+    {
+      "symbol": "WLY",
+      "day": "2021-05-05",
+      "original": {
+        "open": 59.810001373291016,
+        "high": 61.29999923706055,
+        "low": 59.95000076293945,
+        "close": 61.20000076293945,
+        "volume": 261515,
+        "adjClose": 50.944156646728516
+      },
+      "freshFull": {
+        "open": 59.810001373291016,
+        "high": 61.29999923706055,
+        "low": 59.95000076293945,
+        "close": 61.20000076293945,
+        "volume": 261515,
+        "adjClose": 50.94414520263672
+      },
+      "freshNear": {
+        "open": 59.810001373291016,
+        "high": 61.29999923706055,
+        "low": 59.95000076293945,
+        "close": 61.20000076293945,
+        "volume": 261515,
+        "adjClose": 50.94414520263672
+      },
+      "originalBoundsConsistent": false,
+      "freshFullBoundsConsistent": false,
+      "freshNearBoundsConsistent": false,
+      "freshFullSha256": "77596cdf50266a94c2f636c076882276f45eea1aa38841e384e1027c58cfde02",
+      "freshNearSha256": "7abf274c73d5a458d837953fd6fbe950cfbb9a88549da27c53faaad3ada9b879"
+    }
+  ],
+  "existingPricesUnmodified": true,
+  "filteredSixRouteRows": 15077,
+  "cleanFiveYearRoutes": [
+    "CIG.C",
+    "HUBB",
+    "SITC",
+    "UA",
+    "WLY"
+  ],
+  "cleanFiveYearRows": 6275,
+  "cleanFiveYearFrom": "2021-10-18",
+  "cleanFiveYearThrough": "2026-10-16",
+  "shelHasUnresolved2023Conflict": true,
+  "retainedCases": 428,
+  "acceptedRetainedWindows": 372,
+  "acceptedRetainedRows": 1020812,
+  "rejectedRetainedWindows": 56,
+  "acceptedFieldDigestFormat": "YAHOO_FIELDS20_V1",
+  "all20RetainedValuesIndependentlyExact": true,
+  "retainedRowsAreNotNewRows": true,
+  "otherCoreOhlc": [
+    {
+      "table": "us_equity_intraday",
+      "invalidRows": 0,
+      "groups": [],
+      "allQueriedPriceFieldsDualReadExact": true
+    },
+    {
+      "table": "crypto_ohlcv",
+      "invalidRows": 0,
+      "groups": [],
+      "allQueriedPriceFieldsDualReadExact": true
+    }
+  ],
+  "runtimeManifest": {
+    "path": "var/market-data/scope-review/yahoo-ohlc-v62-20261025/runtime-v62.json",
+    "sha256": "aa32412a8b2fbbaa5da4e1b3a2125ed1f7a6677e91284ee3ee17d23ebef93303"
+  },
+  "runtimeJars": 47,
+  "tests": [
+    {
+      "scope": "us",
+      "tests": 50,
+      "failures": 0
+    },
+    {
+      "scope": "app",
+      "tests": 58,
+      "failures": 0
+    },
+    {
+      "scope": "architecture",
+      "tests": 5,
+      "failures": 0
+    }
+  ],
+  "moduleBoundariesPassed": true,
+  "readonlyVerification": {
+    "checkedAt": "2026-10-24T21:17:46.545887+00:00",
+    "rows": 25,
+    "sourceRequests": 0,
+    "newNativeRuns": 0,
+    "formalWrites": 0,
+    "allControlsNativeBudgetAndWalUnchanged": true
+  },
+  "oldNativeQueuesBudgetReservationsAndOtherWalUnchanged": true,
+  "sharedL2AndFixedSnapshotsUnchanged": true,
+  "referenceSql": {
+    "path": "tools/sql/us-yahoo-ohlc-quality-20261025-reference.sql",
+    "sha256": "f4d6c233d67869ea8e1f07c146f1a1a4b320104ac3c065a76f14b4b2dc009c75",
+    "queries": [
+      {
+        "query": 1,
+        "rows": 700,
+        "httpPgwireExact": true,
+        "rowsDigest": "415bbf4df344bfa3f503ab9904bb2b7c8aeed188b99c17e64a97df96603f55cb"
+      },
+      {
+        "query": 2,
+        "rows": 7,
+        "httpPgwireExact": true,
+        "rowsDigest": "99f0c2192a3d7dd160b9ee1524c5af1e9a9c12eb9c256a47bcfa42a54600f6b8"
+      },
+      {
+        "query": 3,
+        "rows": 15077,
+        "httpPgwireExact": true,
+        "rowsDigest": "e962394e8fa72fd57fadf4ffcbe13fbffa9855bc18e42ffe93286c15cfd4be03"
+      },
+      {
+        "query": 4,
+        "rows": 6275,
+        "httpPgwireExact": true,
+        "rowsDigest": "19cf625a028b33f83abf6139805d2a1c5f2b6dec4421865f922e9a9e961f5798"
+      },
+      {
+        "query": 5,
+        "rows": 25,
+        "httpPgwireExact": true,
+        "rowsDigest": "dba3f90fbc62ddef7d6acf5386777378edf12056af7347ccf247ddf539720e29"
+      },
+      {
+        "query": 6,
+        "rows": 2,
+        "httpPgwireExact": true,
+        "rowsDigest": "64394f6308961914e47f95f8836e2d17fb6af69183e62b5f92dba1ce51d0c0a0"
+      }
+    ]
+  },
+  "wal": [
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 594,
+      "sequencerTxn": 594,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_daily",
+      "writerTxn": 4231,
+      "sequencerTxn": 4231,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_etf_equity_holdings",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_history_catalog",
+      "writerTxn": 11,
+      "sequencerTxn": 11,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_identifiers",
+      "writerTxn": 35,
+      "sequencerTxn": 35,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_universe",
+      "writerTxn": 15,
+      "sequencerTxn": 15,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 594,
+      "sequencerTxn": 594,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_intraday",
+      "writerTxn": 507,
+      "sequencerTxn": 507,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    }
+  ],
+  "automation": {
+    "id": "automation",
+    "status": "ACTIVE",
+    "schedule": "每天北京时间10:00",
+    "scopeUnchanged": true,
+    "configSha256": "b51af51412a2d00f106b28440e045fb6f33c9afe87470a683aa2b9d6fb7c0aa1"
+  },
+  "evidence": [
+    {
+      "path": "var/market-data/scope-review/yahoo-ohlc-v62-20261025/runtime-v62.json",
+      "sha256": "aa32412a8b2fbbaa5da4e1b3a2125ed1f7a6677e91284ee3ee17d23ebef93303"
+    },
+    {
+      "path": "var/market-data/scope-review/yahoo-ohlc-v62-20261025/format-proof.json",
+      "sha256": "be8bc36c67fca8f192364c52747398bebc2f24ce6e8962cc84d4d5ff2d75d853"
+    },
+    {
+      "path": "var/market-data/scope-review/yahoo-ohlc-v62-20261025/existing-price-boundaries.json",
+      "sha256": "4acfa8d06c9f1f4c7039cd113450af5472a4d0a04058db452443e68ce188c5b5"
+    },
+    {
+      "path": "var/market-data/scope-review/yahoo-ohlc-v62-20261025/fresh-independent-verification.json",
+      "sha256": "05569c001974681eb0c44464e67dde3419061f0100897ff0a7249f454140c8db"
+    },
+    {
+      "path": "var/market-data/scope-review/yahoo-ohlc-v62-20261025/retained-cases.json",
+      "sha256": "0f0b0aada698b50c4ac41206eb55b4747cf2eeda9da722707f3ea6e77da791f3"
+    },
+    {
+      "path": "var/market-data/scope-review/yahoo-ohlc-v62-20261025/retained-replay.json",
+      "sha256": "c78584cef5175b0f8fbfda4d855e1d06cab6da83570ee062cbaa39dcbceab9aa"
+    },
+    {
+      "path": "var/market-data/scope-review/yahoo-ohlc-v62-20261025/other-core-ohlc-checks.json",
+      "sha256": "170fb268059d451a62aa80514af65c360c581b578413f75538745e36c6fd393e"
+    },
+    {
+      "path": "var/market-data/scope-review/yahoo-ohlc-v62-20261025/tail-and-query-verification.json",
+      "sha256": "1ac508a7873fe21330c12a68fff2ddca9734cd9fb5e58114af565997fea171bf"
+    },
+    {
+      "path": "var/market-data/scope-review/yahoo-ohlc-v62-20261025/tail-readonly-independent.json",
+      "sha256": "43727695a2d2165910e5d2ad950b8bac8bd693d8eec89b74f928e34507191d5d"
+    }
+  ],
+  "limitations": [
+    "原表保留旧冲突，按本次SQL读取并显式保留缺口；筛选不代表整段日期完整。",
+    "已有Native仍证明原字段交付，不据此反推通过后来新增的语义门槛。",
+    "零量平价报价保留，不代表当日成交。",
+    "证券身份、公司行动、调整基准和来源当时可用性仍分别核验。",
+    "历史日期参照仍为库存SPY，不代替官方历史日历。",
+    "仍有全市场未下载、来源失败和旧质量待核范围。"
+  ]
+}
