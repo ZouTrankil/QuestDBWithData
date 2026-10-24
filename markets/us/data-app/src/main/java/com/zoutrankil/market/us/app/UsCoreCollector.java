@@ -281,14 +281,21 @@ final class UsCoreCollector {
                                     "核心证券的真实来源响应，未声称全市场完成");
                     try {
                         if (task.kind().equals("DAILY")) {
-                            var rows =
-                                    TiingoPriceMapper.daily(
+                            var mapped =
+                                    TiingoPriceMapper.dailyMapping(
                                             bytes,
                                             task.symbol(),
                                             response.sha256(),
                                             response.observedAt(),
                                             task.through());
+                            var rows = mapped.rows();
                             if (rows.isEmpty()) throw new IllegalArgumentException("核心证券日线来源为空");
+                            var dailyProof = new LinkedHashMap<>(proof);
+                            dailyProof.put(
+                                    "cashDividendPolicy", TiingoPriceMapper.CASH_DIVIDEND_POLICY);
+                            dailyProof.put("nonCashDistributions", mapped.nonCashDistributions());
+                            dailyProof.put(
+                                    "cashDividendCorrections", mapped.cashDividendCorrections());
                             update(db, task, "PUBLISHING", response, response.sourceUrl());
                             var result =
                                     store.publish(
@@ -296,7 +303,7 @@ final class UsCoreCollector {
                                             rows,
                                             response.path(),
                                             response.sha256(),
-                                            proof);
+                                            dailyProof);
                             update(
                                     db,
                                     task,

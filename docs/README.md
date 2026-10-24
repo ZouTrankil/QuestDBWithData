@@ -12,6 +12,7 @@
 | 哪些正式同步已经接通、接管还缺什么 | [A 股正式同步接管清单](formal-sync-takeover.md) |
 | 三个市场怎样处理日期和时间 | [市场时间](market-time.md)、[数据集归属](dataset-markets.md) |
 | 美股、核心 ETF、BTC/ETH 和部分 ITCH 怎么采集及核验 | [美股与跨资产基础行情](us-market-data.md) |
+| 先用已验收的美股及跨资产核心数据 | [首批读取范围、截止日和限制](us-market-data.md#首批从这里读取) |
 | 给自己或 AI 扩展项目时要守哪些规则 | [项目规范](project-structure-and-standards.md)、[AI 入口](../AGENTS.md) |
 | 怎么分包，怎么检查依赖 | [分包和依赖检查](architecture-rules.md) |
 | 新增字段、模型或数据集 | [模型和新增数据集](model-schema-conventions.md) |

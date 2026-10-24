@@ -297,15 +297,17 @@ final class UsBroadDailyCollector {
                 } finally {
                     db.setAutoCommit(true);
                 }
-                if (!resumeAnnual(db, budget, through)) return;
-                if (!tasks(db, "phase='PUBLISHING'").isEmpty())
-                    throw new IllegalStateException("挂牌来源原发布未核对，禁止另起运行重发");
-                // 只有持有原队列锁且规划完成后才启动单一生产者；正式写入仍只有当前线程。
+                // 原成功前缀核验后即可预取下一组，不必等待原组所有剩余年度写完。
+                // 构造时不联网，旧来源或未决写入未通过检查时不会启动生产者。
                 boolean pipelined =
                         env.getProperty(
                                 "app.market-data.broad-prefetch-enabled", Boolean.class, true);
                 try (var prefetch =
-                        pipelined ? new UsBroadDailyPrefetch(env, root, through) : null) {
+                        pipelined ? new UsBroadDailyPrefetch(env, root, through, false) : null) {
+                    if (!resumeAnnual(db, budget, through, prefetch)) return;
+                    if (!tasks(db, "phase='PUBLISHING'").isEmpty())
+                        throw new IllegalStateException("挂牌来源原发布未核对，禁止另起运行重发");
+                    startPrefetch(prefetch);
                     while (true) {
                         if (prefetch != null) prefetch.check();
                         if (Files.exists(root.resolve("us-broad-stop.request"))) {
@@ -575,7 +577,11 @@ final class UsBroadDailyCollector {
         return publishAnnual(db, budget, parsed, raw, sha);
     }
 
-    private boolean resumeAnnual(Connection db, PersistentMarketApiBudget budget, LocalDate through)
+    private boolean resumeAnnual(
+            Connection db,
+            PersistentMarketApiBudget budget,
+            LocalDate through,
+            UsBroadDailyPrefetch prefetch)
             throws Exception {
         var pending = new ArrayList<String[]>();
         try (var s = db.createStatement();
@@ -602,7 +608,7 @@ final class UsBroadDailyCollector {
                                                     "app.market-data.history-start",
                                                     "2006-01-01"))))
                 throw new IllegalStateException("年度恢复须保持原组身份和原请求日期");
-            if (!publishAnnual(db, budget, parsed, raw, old[2])) return false;
+            if (!publishAnnual(db, budget, parsed, raw, old[2], prefetch)) return false;
         }
         return true;
     }
@@ -614,6 +620,27 @@ final class UsBroadDailyCollector {
             Path raw,
             String sha)
             throws Exception {
+        return publishAnnual(db, budget, parsed, raw, sha, null);
+    }
+
+    private void startPrefetch(UsBroadDailyPrefetch prefetch) throws Exception {
+        if (prefetch == null) return;
+        prefetch.check();
+        if (!prefetch.started()) {
+            // 成功前缀核验之外，还须拒绝没有归入原年度队列的未决写入。
+            store.requireNoUnresolved("us_equity_daily");
+            prefetch.start();
+        }
+    }
+
+    private boolean publishAnnual(
+            Connection db,
+            PersistentMarketApiBudget budget,
+            UsYahooAnnualBundle.Parsed parsed,
+            Path raw,
+            String sha,
+            UsBroadDailyPrefetch prefetch)
+            throws Exception {
         boolean completed =
                 new UsAnnualDailyPublication(root, store)
                         .publishRemaining(
@@ -622,7 +649,12 @@ final class UsBroadDailyCollector {
                                 raw,
                                 sha,
                                 () -> Files.exists(root.resolve("us-broad-stop.request")),
-                                (phase, detail) -> status(db, budget, phase, detail));
+                                (phase, detail) -> {
+                                    if (phase.equals("VERIFIED_ANNUAL_PREFIX"))
+                                        startPrefetch(prefetch);
+                                    if (prefetch != null) prefetch.check();
+                                    status(db, budget, phase, detail);
+                                });
         if (!completed) status(db, budget, "STOPPED_BETWEEN_WINDOWS", parsed.bundle());
         return completed;
     }

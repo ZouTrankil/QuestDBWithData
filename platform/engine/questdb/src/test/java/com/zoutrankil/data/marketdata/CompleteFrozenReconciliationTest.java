@@ -789,8 +789,9 @@ class CompleteFrozenReconciliationTest {
                     preparedSha,
                     stopped,
                     authorized,
-                    (definition, batch, run) -> {
+                    (definition, batch, run, policy) -> {
                         assertEquals(RUN, run);
+                        assertEquals(VerifiedMarketDataStore.PublicationPolicy.LEGACY, policy);
                         Instant tailStart = Instant.parse(rows.get(20000).get("ts").toString());
                         assertTrue(
                                 batch.stream()

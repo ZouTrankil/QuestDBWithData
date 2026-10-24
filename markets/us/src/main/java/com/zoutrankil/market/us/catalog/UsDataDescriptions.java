@@ -25,6 +25,19 @@ public final class UsDataDescriptions {
     public static List<DataObjectDescription> all() {
         return List.of(
                 new DataObjectDescription(
+                        "us_index_daily",
+                        "美国来源明确的指数收盘",
+                        "独立 provider 的指数点位参照",
+                        Set.of(DataObjectDescription.Market.US),
+                        "美国指数参照",
+                        SourceType.COLLECTED,
+                        "CBOE 官方 VIX 历史 CSV 的收盘列",
+                        List.of(),
+                        "java.market.us",
+                        "纽约业务日期载体；不含成交量，不把原 CSV OHLC 当作已验收股票 K 线，不覆盖 FRED。",
+                        "CboeIndexDaily.DEFINITION；完整原件、独立收盘投影、Native 键值回读及 WAL",
+                        Set.of(COLLECTED, DAILY, INDEX, MACRO, US)),
+                new DataObjectDescription(
                         "us_security_identifiers",
                         "美国证券永久代码映射",
                         "原市场代码、独立证券标识和已验收价格键",

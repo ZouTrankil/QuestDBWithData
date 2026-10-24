@@ -1,6 +1,8 @@
 package com.zoutrankil.data.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +30,24 @@ class VerifiedBatchExecutorTest {
     private VerifiedBatchExecutor.Policy policy() {
         return new VerifiedBatchExecutor.Policy(
                 2, 100, 3, Duration.ofMillis(15), Duration.ofMillis(1));
+    }
+
+    @Test
+    void visibilityCapacityIsFiniteAndDoesNotChangeAnExistingPolicy() {
+        assertEquals(Duration.ofMillis(15), policy().visibilityTimeout());
+        assertDoesNotThrow(
+                () ->
+                        new VerifiedBatchExecutor.Policy(
+                                1, 100, 1, Duration.ofMinutes(10), Duration.ofMillis(1)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        new VerifiedBatchExecutor.Policy(
+                                1,
+                                100,
+                                1,
+                                Duration.ofMinutes(10).plusNanos(1),
+                                Duration.ofMillis(1)));
     }
 
     private static class Port implements VerifiedBatchExecutor.Port<Row, String> {

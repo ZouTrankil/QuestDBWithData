@@ -19,6 +19,8 @@ import java.util.Objects;
 public final class VerifiedBatchExecutor<T, K> {
     // 大页只合并有界发送和等待；总行数、完整键值与 WAL 门槛仍由同一执行器核对。
     public static final int MAX_ROWS_PER_BATCH = 32768;
+    // 这里只限制可声明上限；实际等待取自适配器，并受原任务剩余时限约束。
+    public static final Duration MAX_VISIBILITY_TIMEOUT = Duration.ofMinutes(10);
 
     public record Policy(
             int maxRowsPerBatch,
@@ -36,7 +38,7 @@ public final class VerifiedBatchExecutor<T, K> {
                     || visibilityTimeout == null
                     || visibilityTimeout.isNegative()
                     || visibilityTimeout.isZero()
-                    || visibilityTimeout.compareTo(Duration.ofMinutes(5)) > 0
+                    || visibilityTimeout.compareTo(MAX_VISIBILITY_TIMEOUT) > 0
                     || pollInterval == null
                     || pollInterval.toMillis() < 1
                     || pollInterval.compareTo(visibilityTimeout) > 0
