@@ -1,0 +1,687 @@
+{
+  "schema_version": 1,
+  "说明": "原八个核心币价产品的已结束UTC单日增量，不扩大产品或币种，保留原首批及原停市缺口。",
+  "fromDate": "2026-10-24",
+  "throughDate": "2026-10-24",
+  "historyFrom": "2021-10-01",
+  "newRows": 200,
+  "newHourlyRows": 192,
+  "newDailyRows": 8,
+  "rowsAfter": 369998,
+  "sourceRequests": 16,
+  "sourceRequestsDuringPublication": 0,
+  "receivedBytes": 25483,
+  "nativeRuns": 8,
+  "sourceTasksAfter": 600,
+  "all13FieldsRawJavaPreparedNativeHttpPgwireAccepted": true,
+  "dailyIndependentFsumWithinOneUlp": [],
+  "all8NativeDailyComparisonsPassed": true,
+  "old369798RowsAll13FieldsDualReadUnchanged": true,
+  "old592TasksAndAllNativeTypedValuesUnchanged": true,
+  "oldOfficialClosureGapsUnchanged": true,
+  "oldRequestsAndUnknownReservationsUnchanged": true,
+  "usControlsPhysicalAndWalUnchanged": true,
+  "sharedL2AndFixedSnapshotsUnchanged": true,
+  "series": [
+    {
+      "exchange": "BINANCE",
+      "symbol": "BTCUSDT",
+      "instrument": "SPOT",
+      "interval_minutes": 60,
+      "rows": 44399,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T23:00:00.000000Z"
+    },
+    {
+      "exchange": "BINANCE",
+      "symbol": "BTCUSDT",
+      "instrument": "SPOT",
+      "interval_minutes": 1440,
+      "rows": 1850,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T00:00:00.000000Z"
+    },
+    {
+      "exchange": "BINANCE",
+      "symbol": "BTCUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "interval_minutes": 60,
+      "rows": 44400,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T23:00:00.000000Z"
+    },
+    {
+      "exchange": "BINANCE",
+      "symbol": "BTCUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "interval_minutes": 1440,
+      "rows": 1850,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T00:00:00.000000Z"
+    },
+    {
+      "exchange": "BINANCE",
+      "symbol": "ETHUSDT",
+      "instrument": "SPOT",
+      "interval_minutes": 60,
+      "rows": 44399,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T23:00:00.000000Z"
+    },
+    {
+      "exchange": "BINANCE",
+      "symbol": "ETHUSDT",
+      "instrument": "SPOT",
+      "interval_minutes": 1440,
+      "rows": 1850,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T00:00:00.000000Z"
+    },
+    {
+      "exchange": "BINANCE",
+      "symbol": "ETHUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "interval_minutes": 60,
+      "rows": 44400,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T23:00:00.000000Z"
+    },
+    {
+      "exchange": "BINANCE",
+      "symbol": "ETHUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "interval_minutes": 1440,
+      "rows": 1850,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T00:00:00.000000Z"
+    },
+    {
+      "exchange": "BYBIT",
+      "symbol": "BTCUSDT",
+      "instrument": "SPOT",
+      "interval_minutes": 60,
+      "rows": 44400,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T23:00:00.000000Z"
+    },
+    {
+      "exchange": "BYBIT",
+      "symbol": "BTCUSDT",
+      "instrument": "SPOT",
+      "interval_minutes": 1440,
+      "rows": 1850,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T00:00:00.000000Z"
+    },
+    {
+      "exchange": "BYBIT",
+      "symbol": "BTCUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "interval_minutes": 60,
+      "rows": 44400,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T23:00:00.000000Z"
+    },
+    {
+      "exchange": "BYBIT",
+      "symbol": "BTCUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "interval_minutes": 1440,
+      "rows": 1850,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T00:00:00.000000Z"
+    },
+    {
+      "exchange": "BYBIT",
+      "symbol": "ETHUSDT",
+      "instrument": "SPOT",
+      "interval_minutes": 60,
+      "rows": 44400,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T23:00:00.000000Z"
+    },
+    {
+      "exchange": "BYBIT",
+      "symbol": "ETHUSDT",
+      "instrument": "SPOT",
+      "interval_minutes": 1440,
+      "rows": 1850,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T00:00:00.000000Z"
+    },
+    {
+      "exchange": "BYBIT",
+      "symbol": "ETHUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "interval_minutes": 60,
+      "rows": 44400,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T23:00:00.000000Z"
+    },
+    {
+      "exchange": "BYBIT",
+      "symbol": "ETHUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "interval_minutes": 1440,
+      "rows": 1850,
+      "first_ts": "2021-10-01T00:00:00.000000Z",
+      "last_ts": "2026-10-24T00:00:00.000000Z"
+    }
+  ],
+  "sources": [
+    {
+      "task": "2073fd8d127e169adc904af7d47afaeedfa1befa297c45d3c4af6c960e2c7169",
+      "exchange": "BINANCE",
+      "symbol": "BTCUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "intervalMinutes": 60,
+      "rows": 24,
+      "sourceSha256": "b571f11f88df37d6e5b8208e7dd9b4faef04ffde0ffc0192e48fa922062d5702",
+      "observedAt": "2026-10-25T00:27:44.321479Z",
+      "sourceUrl": "https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=1h&startTime=1792800000000&endTime=1792886399999&limit=100"
+    },
+    {
+      "task": "2073fd8d127e169adc904af7d47afaeedfa1befa297c45d3c4af6c960e2c7169",
+      "exchange": "BINANCE",
+      "symbol": "BTCUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "intervalMinutes": 1440,
+      "rows": 1,
+      "sourceSha256": "3d6199b3d8b20f0c49a8e7d4a359b2f91b00e04e9b80ebfdcaacc693f3a8afe3",
+      "observedAt": "2026-10-25T00:27:44.673009Z",
+      "sourceUrl": "https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=1d&startTime=1792800000000&endTime=1792886399999&limit=100"
+    },
+    {
+      "task": "6dd2b8ef47b3f5b569907a4ffa7d3a7ad958a9a30b6214c3f90e46748db71df9",
+      "exchange": "BINANCE",
+      "symbol": "BTCUSDT",
+      "instrument": "SPOT",
+      "intervalMinutes": 60,
+      "rows": 24,
+      "sourceSha256": "0b7001cd8ccf585165fe7cf430c81c9a8b42b3f2aaf5e13908688eddf180e942",
+      "observedAt": "2026-10-25T00:27:45.506038Z",
+      "sourceUrl": "https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=1h&startTime=1792800000000&endTime=1792886399999&limit=100"
+    },
+    {
+      "task": "6dd2b8ef47b3f5b569907a4ffa7d3a7ad958a9a30b6214c3f90e46748db71df9",
+      "exchange": "BINANCE",
+      "symbol": "BTCUSDT",
+      "instrument": "SPOT",
+      "intervalMinutes": 1440,
+      "rows": 1,
+      "sourceSha256": "b21ec8cf9a9522c91626e7befa134bc32849283be8d45c19578410fa060a9886",
+      "observedAt": "2026-10-25T00:27:45.778347Z",
+      "sourceUrl": "https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=1d&startTime=1792800000000&endTime=1792886399999&limit=100"
+    },
+    {
+      "task": "8972d6c35289752548ff00279202ea06e3dc13a687e6f95b820d7412580c263b",
+      "exchange": "BYBIT",
+      "symbol": "BTCUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "intervalMinutes": 60,
+      "rows": 24,
+      "sourceSha256": "350a2bdec4aa90fafbb35b477c7a6f34a41f85ca1d68e6bd46344cbd44ed906a",
+      "observedAt": "2026-10-25T00:27:46.173850Z",
+      "sourceUrl": "https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=60&limit=1000&start=1792800000000&end=1792886399999"
+    },
+    {
+      "task": "8972d6c35289752548ff00279202ea06e3dc13a687e6f95b820d7412580c263b",
+      "exchange": "BYBIT",
+      "symbol": "BTCUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "intervalMinutes": 1440,
+      "rows": 1,
+      "sourceSha256": "4bd46264420580ca240395694dde9d621c89d1ed9eca31b2e8d89631af60cef4",
+      "observedAt": "2026-10-25T00:27:46.398911Z",
+      "sourceUrl": "https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=D&limit=1000&start=1792800000000&end=1792886399999"
+    },
+    {
+      "task": "97b531945811eaeec930b1069d68513deac103b99f5cd642dc344a4968491d48",
+      "exchange": "BYBIT",
+      "symbol": "ETHUSDT",
+      "instrument": "SPOT",
+      "intervalMinutes": 60,
+      "rows": 24,
+      "sourceSha256": "4cd1044f0c7060b7f234c815e14b2ab2ab9005abb71603b9fc6879b0ab05c5e3",
+      "observedAt": "2026-10-25T00:27:46.817521Z",
+      "sourceUrl": "https://api.bybit.com/v5/market/kline?category=spot&symbol=ETHUSDT&interval=60&limit=1000&start=1792800000000&end=1792886399999"
+    },
+    {
+      "task": "97b531945811eaeec930b1069d68513deac103b99f5cd642dc344a4968491d48",
+      "exchange": "BYBIT",
+      "symbol": "ETHUSDT",
+      "instrument": "SPOT",
+      "intervalMinutes": 1440,
+      "rows": 1,
+      "sourceSha256": "c9858d90f5f7bb1babbb4b3c034cccd438f0f4ccf24ddd23a9cdd2a749bece2f",
+      "observedAt": "2026-10-25T00:27:47.224045Z",
+      "sourceUrl": "https://api.bybit.com/v5/market/kline?category=spot&symbol=ETHUSDT&interval=D&limit=1000&start=1792800000000&end=1792886399999"
+    },
+    {
+      "task": "a5aff82a54a3bf7ca1f3eca268c66db6227894cad9dcba22542b1da0aa9a3ef7",
+      "exchange": "BYBIT",
+      "symbol": "ETHUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "intervalMinutes": 60,
+      "rows": 24,
+      "sourceSha256": "8490240db7773476a15f694a46d5314f174564cd66681ed24e1ed0868a969279",
+      "observedAt": "2026-10-25T00:27:47.640409Z",
+      "sourceUrl": "https://api.bybit.com/v5/market/kline?category=linear&symbol=ETHUSDT&interval=60&limit=1000&start=1792800000000&end=1792886399999"
+    },
+    {
+      "task": "a5aff82a54a3bf7ca1f3eca268c66db6227894cad9dcba22542b1da0aa9a3ef7",
+      "exchange": "BYBIT",
+      "symbol": "ETHUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "intervalMinutes": 1440,
+      "rows": 1,
+      "sourceSha256": "186db3b96df681ce704ee9bdc2d028dfb8f744f6a6f70287a21c08ec7adb1ef0",
+      "observedAt": "2026-10-25T00:27:48.017293Z",
+      "sourceUrl": "https://api.bybit.com/v5/market/kline?category=linear&symbol=ETHUSDT&interval=D&limit=1000&start=1792800000000&end=1792886399999"
+    },
+    {
+      "task": "db3797634beca24141c6c643868054d336b3b4179ba4df07f1dd623e960bcb19",
+      "exchange": "BINANCE",
+      "symbol": "ETHUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "intervalMinutes": 60,
+      "rows": 24,
+      "sourceSha256": "d539425471b2b8fb8dc2638c0b046345d666783c73c878c75a93b4dedee85421",
+      "observedAt": "2026-10-25T00:27:48.295879Z",
+      "sourceUrl": "https://fapi.binance.com/fapi/v1/klines?symbol=ETHUSDT&interval=1h&startTime=1792800000000&endTime=1792886399999&limit=100"
+    },
+    {
+      "task": "db3797634beca24141c6c643868054d336b3b4179ba4df07f1dd623e960bcb19",
+      "exchange": "BINANCE",
+      "symbol": "ETHUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "intervalMinutes": 1440,
+      "rows": 1,
+      "sourceSha256": "35698e3fd83d3426d1bece6155ec507c2a09b6c39b2025852b2855acbceb677b",
+      "observedAt": "2026-10-25T00:27:48.690368Z",
+      "sourceUrl": "https://fapi.binance.com/fapi/v1/klines?symbol=ETHUSDT&interval=1d&startTime=1792800000000&endTime=1792886399999&limit=100"
+    },
+    {
+      "task": "eca60ae83c3e20eb6a915fe90a358306942d0bcf0aed2d1f992f3c06d0d8eda7",
+      "exchange": "BYBIT",
+      "symbol": "BTCUSDT",
+      "instrument": "SPOT",
+      "intervalMinutes": 60,
+      "rows": 24,
+      "sourceSha256": "c88616cb9758e5efc24783b1c94499e9f08f56d4ae6d64fbf3f8320ead9430ca",
+      "observedAt": "2026-10-25T00:27:48.944615Z",
+      "sourceUrl": "https://api.bybit.com/v5/market/kline?category=spot&symbol=BTCUSDT&interval=60&limit=1000&start=1792800000000&end=1792886399999"
+    },
+    {
+      "task": "eca60ae83c3e20eb6a915fe90a358306942d0bcf0aed2d1f992f3c06d0d8eda7",
+      "exchange": "BYBIT",
+      "symbol": "BTCUSDT",
+      "instrument": "SPOT",
+      "intervalMinutes": 1440,
+      "rows": 1,
+      "sourceSha256": "c14e54e66e9809aeed7db09f2e480587215fcfdac456eff16d094ce66fce3610",
+      "observedAt": "2026-10-25T00:27:49.341502Z",
+      "sourceUrl": "https://api.bybit.com/v5/market/kline?category=spot&symbol=BTCUSDT&interval=D&limit=1000&start=1792800000000&end=1792886399999"
+    },
+    {
+      "task": "f6162d5a9bb2e0d6d9de0716e799c008ab76dcb28c26d9bb3e6fbbd600c41f68",
+      "exchange": "BINANCE",
+      "symbol": "ETHUSDT",
+      "instrument": "SPOT",
+      "intervalMinutes": 60,
+      "rows": 24,
+      "sourceSha256": "ca8b1a905c65b7a48514cfc95aef7bb6ef7ea327afb12265552b179447313601",
+      "observedAt": "2026-10-25T00:27:49.626482Z",
+      "sourceUrl": "https://data-api.binance.vision/api/v3/klines?symbol=ETHUSDT&interval=1h&startTime=1792800000000&endTime=1792886399999&limit=100"
+    },
+    {
+      "task": "f6162d5a9bb2e0d6d9de0716e799c008ab76dcb28c26d9bb3e6fbbd600c41f68",
+      "exchange": "BINANCE",
+      "symbol": "ETHUSDT",
+      "instrument": "SPOT",
+      "intervalMinutes": 1440,
+      "rows": 1,
+      "sourceSha256": "db946e030b6df267e8f6f26af26a3df9630ac372a4a33f447b3dea30c99fb673",
+      "observedAt": "2026-10-25T00:27:50.004057Z",
+      "sourceUrl": "https://data-api.binance.vision/api/v3/klines?symbol=ETHUSDT&interval=1d&startTime=1792800000000&endTime=1792886399999&limit=100"
+    }
+  ],
+  "native": [
+    {
+      "task": "2073fd8d127e169adc904af7d47afaeedfa1befa297c45d3c4af6c960e2c7169",
+      "source": "BINANCE_DAY",
+      "exchange": "BINANCE",
+      "symbol": "BTCUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "fromDate": "2026-10-24",
+      "throughDate": "2026-10-24",
+      "rows": 25,
+      "runId": "market-d1433dc0-e386-4e68-a2af-f401e676d1cb",
+      "sourceSha256": "b571f11f88df37d6e5b8208e7dd9b4faef04ffde0ffc0192e48fa922062d5702",
+      "observedAt": "2026-10-25T00:27:44.321479Z",
+      "preparedSha256": "a39afd1a51bfa7b787d2a89c963e627a6f970b01644307cc2f9ba55c4c9a86cc",
+      "all13FieldsRawJavaPreparedNativeAccepted": true
+    },
+    {
+      "task": "6dd2b8ef47b3f5b569907a4ffa7d3a7ad958a9a30b6214c3f90e46748db71df9",
+      "source": "BINANCE_DAY",
+      "exchange": "BINANCE",
+      "symbol": "BTCUSDT",
+      "instrument": "SPOT",
+      "fromDate": "2026-10-24",
+      "throughDate": "2026-10-24",
+      "rows": 25,
+      "runId": "market-0eac5d20-f854-4dd9-b1d1-43119c0fd690",
+      "sourceSha256": "0b7001cd8ccf585165fe7cf430c81c9a8b42b3f2aaf5e13908688eddf180e942",
+      "observedAt": "2026-10-25T00:27:45.506038Z",
+      "preparedSha256": "d6c3e4a7b975f8cb25ede826fb616a905e78e8512d575e1be1c048ef24b010f8",
+      "all13FieldsRawJavaPreparedNativeAccepted": true
+    },
+    {
+      "task": "8972d6c35289752548ff00279202ea06e3dc13a687e6f95b820d7412580c263b",
+      "source": "BYBIT_MONTH",
+      "exchange": "BYBIT",
+      "symbol": "BTCUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "fromDate": "2026-10-24",
+      "throughDate": "2026-10-24",
+      "rows": 25,
+      "runId": "market-d280e751-496d-4802-bfd7-d94c8d38e0da",
+      "sourceSha256": "350a2bdec4aa90fafbb35b477c7a6f34a41f85ca1d68e6bd46344cbd44ed906a",
+      "observedAt": "2026-10-25T00:27:46.173850Z",
+      "preparedSha256": "8f310179969b5e10135fcd4774018ee95d9ff032809d6cbaeaabe997e29723f4",
+      "all13FieldsRawJavaPreparedNativeAccepted": true
+    },
+    {
+      "task": "97b531945811eaeec930b1069d68513deac103b99f5cd642dc344a4968491d48",
+      "source": "BYBIT_MONTH",
+      "exchange": "BYBIT",
+      "symbol": "ETHUSDT",
+      "instrument": "SPOT",
+      "fromDate": "2026-10-24",
+      "throughDate": "2026-10-24",
+      "rows": 25,
+      "runId": "market-c6f63df9-e719-4a51-b54c-f775619e1084",
+      "sourceSha256": "4cd1044f0c7060b7f234c815e14b2ab2ab9005abb71603b9fc6879b0ab05c5e3",
+      "observedAt": "2026-10-25T00:27:46.817521Z",
+      "preparedSha256": "500bbdab9abdc2c3623d22c3676aaaf49ec54774f03bfc74f732a9d8d6b853b1",
+      "all13FieldsRawJavaPreparedNativeAccepted": true
+    },
+    {
+      "task": "a5aff82a54a3bf7ca1f3eca268c66db6227894cad9dcba22542b1da0aa9a3ef7",
+      "source": "BYBIT_MONTH",
+      "exchange": "BYBIT",
+      "symbol": "ETHUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "fromDate": "2026-10-24",
+      "throughDate": "2026-10-24",
+      "rows": 25,
+      "runId": "market-13816bd8-0d21-43d9-8246-9427d2eb917d",
+      "sourceSha256": "8490240db7773476a15f694a46d5314f174564cd66681ed24e1ed0868a969279",
+      "observedAt": "2026-10-25T00:27:47.640409Z",
+      "preparedSha256": "777f77a2fc9c3b7524d8e101d223f6825dada4a7cd3da2c3b9a33cd2a866b874",
+      "all13FieldsRawJavaPreparedNativeAccepted": true
+    },
+    {
+      "task": "db3797634beca24141c6c643868054d336b3b4179ba4df07f1dd623e960bcb19",
+      "source": "BINANCE_DAY",
+      "exchange": "BINANCE",
+      "symbol": "ETHUSDT",
+      "instrument": "USDT_PERPETUAL",
+      "fromDate": "2026-10-24",
+      "throughDate": "2026-10-24",
+      "rows": 25,
+      "runId": "market-c07d74d9-b58f-4427-895f-79f0508a8bf2",
+      "sourceSha256": "d539425471b2b8fb8dc2638c0b046345d666783c73c878c75a93b4dedee85421",
+      "observedAt": "2026-10-25T00:27:48.295879Z",
+      "preparedSha256": "b3fcf0c4821ffb5f72d358949529304a85a93956b4c6da59b925c0a8c7b2727f",
+      "all13FieldsRawJavaPreparedNativeAccepted": true
+    },
+    {
+      "task": "eca60ae83c3e20eb6a915fe90a358306942d0bcf0aed2d1f992f3c06d0d8eda7",
+      "source": "BYBIT_MONTH",
+      "exchange": "BYBIT",
+      "symbol": "BTCUSDT",
+      "instrument": "SPOT",
+      "fromDate": "2026-10-24",
+      "throughDate": "2026-10-24",
+      "rows": 25,
+      "runId": "market-88a55178-8375-4d42-ba98-84f4cf180c6d",
+      "sourceSha256": "c88616cb9758e5efc24783b1c94499e9f08f56d4ae6d64fbf3f8320ead9430ca",
+      "observedAt": "2026-10-25T00:27:48.944615Z",
+      "preparedSha256": "2aae276072b7f3cef2ccf9f275cf2e2239a459efee994dd7d1e2151d58f7c6ba",
+      "all13FieldsRawJavaPreparedNativeAccepted": true
+    },
+    {
+      "task": "f6162d5a9bb2e0d6d9de0716e799c008ab76dcb28c26d9bb3e6fbbd600c41f68",
+      "source": "BINANCE_DAY",
+      "exchange": "BINANCE",
+      "symbol": "ETHUSDT",
+      "instrument": "SPOT",
+      "fromDate": "2026-10-24",
+      "throughDate": "2026-10-24",
+      "rows": 25,
+      "runId": "market-7f0ccdcd-758d-4cc5-9057-17d6701c87cc",
+      "sourceSha256": "ca8b1a905c65b7a48514cfc95aef7bb6ef7ea327afb12265552b179447313601",
+      "observedAt": "2026-10-25T00:27:49.626482Z",
+      "preparedSha256": "2b420f5b00d18d637de7d83678d3ece148da0c692cccdd0563bf5b0dc3de0d9c",
+      "all13FieldsRawJavaPreparedNativeAccepted": true
+    }
+  ],
+  "wal": [
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 602,
+      "sequencerTxn": 602,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_daily",
+      "writerTxn": 4352,
+      "sequencerTxn": 4352,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_etf_equity_holdings",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_history_catalog",
+      "writerTxn": 11,
+      "sequencerTxn": 11,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_identifiers",
+      "writerTxn": 35,
+      "sequencerTxn": 35,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_universe",
+      "writerTxn": 15,
+      "sequencerTxn": 15,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 602,
+      "sequencerTxn": 602,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_intraday",
+      "writerTxn": 507,
+      "sequencerTxn": 507,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    }
+  ],
+  "idempotence": {
+    "checkedAt": "2026-10-25T00:30:49.104355+00:00",
+    "rows": 200,
+    "sourceRequests": 0,
+    "newNativeRuns": 0,
+    "formalWrites": 0,
+    "allQueueBudgetNativeAndWalRowsUnchanged": true,
+    "all13PriceFieldsDualReadExact": true
+  },
+  "runtime": {
+    "path": "F:\\repo\\engine\\data\\var\\crypto-market-data\\runtime\\btc-data-20261021-v6-frozen-rest",
+    "manifest": "F:\\repo\\engine\\data\\var\\crypto-market-data\\scope-review\\incremental-20261020-20261021\\runtime-v6-manifest.json",
+    "sha256": "bb8a36991e275148f1a506001579fb86a1440fac20cb779bb7559dd984ffea18",
+    "jars": 47
+  },
+  "automation": {
+    "id": "automation",
+    "status": "ACTIVE",
+    "schedule": "每天北京时间10:00，先美股核心，再维护原八个币价产品",
+    "referenceRefreshPending": false,
+    "currentReference": "docs/snapshots/crypto-core-incremental-20261024.json",
+    "scheduleUnchanged": true,
+    "scopeAndNotificationRulesPreserved": true,
+    "configSha256": "4db2b27310dccb0e79a361306c4ede1b36229945f026bdf4e8a255bfc4888799"
+  },
+  "referenceSql": {
+    "path": "tools/sql/crypto-core-incremental-20261024-reference.sql",
+    "sha256": "1526c74214f2d56b777045ab5bf8189735c123f6e2650b4acc4e77ca5d0d53ab",
+    "queries": [
+      {
+        "query": 1,
+        "rows": 200,
+        "httpPgwireExact": true,
+        "rowsDigest": "de244a861b50a3b5f2984b3560040a08436fc47e09ae7240c2d09b8ce8dcad61"
+      },
+      {
+        "query": 2,
+        "rows": 16,
+        "httpPgwireExact": true,
+        "rowsDigest": "16e1d0f031e8f3ae3661ca9db0c46077fc20bec162539f5087fa21f3062f9ae7"
+      },
+      {
+        "query": 3,
+        "rows": 2,
+        "httpPgwireExact": true,
+        "rowsDigest": "6384d50c618ce952e6008e5f13f4fb7bebde9fa9b767211a463a2e1c570dd7de"
+      },
+      {
+        "query": 4,
+        "rows": 2,
+        "httpPgwireExact": true,
+        "rowsDigest": "a61c4c8a2f292f28c9816f056109a6a5808e63b31482f5cf5c27e7247dcf482b"
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "path": "var/crypto-market-data/scope-review/core-incremental-v68-20261025/before.json",
+      "sha256": "3bd577a75bbcc3b2d0286e0f389e6abbec65669027b2a44ff99566626b911148"
+    },
+    {
+      "path": "var/crypto-market-data/scope-review/core-incremental-v68-20261025/planning-preview.json",
+      "sha256": "9204d0c304c3e222195b8c435c5f6259ad2cd923e5048738554bd72645e2025a"
+    },
+    {
+      "path": "var/crypto-market-data/scope-review/core-incremental-v68-20261025/execution-before-source.json",
+      "sha256": "1e318815ebf8cf1b6c3fabc4f09b608ae39244feb25bbdfc7a42346f8185676a"
+    },
+    {
+      "path": "var/crypto-market-data/scope-review/core-incremental-v68-20261025/independent-source-proof.json",
+      "sha256": "f0a4240cf22ea75fdfda17d01abaf6763828f3f4ff9bd3e7c6abee7f9eec8123"
+    },
+    {
+      "path": "var/crypto-market-data/scope-review/core-incremental-v68-20261025/staged-independent-proof.json",
+      "sha256": "46c061f1862041394dbc8886a611909f7c7c74b4648fc3cb3bf427f88a6d2a9a"
+    },
+    {
+      "path": "var/crypto-market-data/scope-review/core-incremental-v68-20261025/independent-verification.json",
+      "sha256": "2ebf033d58def0f3614238f08403fc0b06f90b06f5e19204b3c4f037d859ee1d"
+    },
+    {
+      "path": "var/crypto-market-data/scope-review/core-incremental-v68-20261025/idempotence-independent-verification.json",
+      "sha256": "6b06b3cf12e99a1aa7333f752a8ec44b1d3eec1122fd36481ddbed11239e4942"
+    },
+    {
+      "path": "var/crypto-market-data/scope-review/core-incremental-v68-20261025/runtime-and-automation-before-refresh.json",
+      "sha256": "568610429a8604d8e91f4672baa661ca76044c113562d979383676a7aa5695b2"
+    },
+    {
+      "path": "var/crypto-market-data/scope-review/core-incremental-v68-20261025/runtime-and-automation-proof.json",
+      "sha256": "2026a52c6a41d0f798e015fd619fbaab89c3d4539dd452b929cfafcf3d38a091"
+    }
+  ],
+  "limitations": [
+    "仅Binance、Bybit的BTCUSDT/ETHUSDT现货及USDT永续，不代表全部交易所或币种。",
+    "日线按UTC连续24小时聚合，保留小时来源摘要；原生日线只作独立数值对照。",
+    "Binance本次使用真实REST双频原文，不冒充ZIP或CHECKSUM归档。",
+    "原两条官方停市小时缺口保持，未补造价格。",
+    "不涉及独立BTC六表、资金费率、标记价或指数价。",
+    "美股全市场及历史身份仍有未完成范围。"
+  ],
+  "wholeMarketComplete": false
+}
