@@ -1,0 +1,3921 @@
+{
+  "checkedAt": "2026-10-25T03:45:42.229291+00:00",
+  "bundle": "broad-134def54-f94d-4001-a4f9-7dc74a9fa950",
+  "fullSourceCount": 114,
+  "fullRequestedFrom": "2006-01-01",
+  "throughDate": "2026-10-16",
+  "fullRows": 324440,
+  "fiveYearSourceCount": 15,
+  "fiveYearRows": 18825,
+  "newRows": 343265,
+  "nativeRuns": 22,
+  "all20FieldsIndependentRawJavaPreparedNativePgwireHttpExact": true,
+  "oldNativeTypedValuesUnchanged": true,
+  "oldGroupsWindowsRetriesAndOtherTasksUnchanged": true,
+  "originalRawShaObservedAndFailuresRetained": true,
+  "cryptoControlsPhysicalAndWalUnchanged": true,
+  "coreSnapshotsAndSharedL2Unchanged": true,
+  "sourceRequests": 384,
+  "newUnknownSourceRequests": 0,
+  "receivedBytes": 44409039,
+  "sourceRequestsDuringPublication": 0,
+  "oldRequestsAndUnknownReservationsUnchanged": true,
+  "shortSources": [
+    {
+      "task": "3b052a1dad6c638415ec19b266b7cdce9fb3892415b7e4612062b5c62b43dfd7",
+      "symbol": "LMGIF",
+      "yahooSymbol": "LMGIF",
+      "rows": 893,
+      "sourceSha256": "cfb6d4ee03cf8ae4530fd1f63947cdc441bea6200e354c056ad986cd0b418be5",
+      "observedAt": "2026-10-25T03:07:17.021007Z",
+      "independentRowsDigest": "8ef390874076649e36a8784a72eb096ecc7cfb78aefe0e91492d2f0c0f7c84d8",
+      "firstDate": "2023-03-28",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 11,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6a1e689c6c84ff1555412b1db5e66ffd5230d650208f011e5b96bfed5d8a4437",
+      "symbol": "LMMY",
+      "yahooSymbol": "LMMY",
+      "rows": 513,
+      "sourceSha256": "e4c17b917d33d9222d5f58304c53ccd7ac430cfba2e5de06590ef7b66ae40fac",
+      "observedAt": "2026-10-25T03:07:41.124063Z",
+      "independentRowsDigest": "2b1f28c1290446f61ce62c987649c9557b10c941a79ec52e915a2af201253d92",
+      "firstDate": "2024-10-01",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 320,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "86b05a1d49c17d2fbb0972c8d7837f243d6cd74029f59655f60af17c6e34227b",
+      "symbol": "LNDMY",
+      "yahooSymbol": "LNDMY",
+      "rows": 148,
+      "sourceSha256": "e98cb3afe87690c66ea3b8fd969c2b42479c2bb38399984b739143e6eeb1c14e",
+      "observedAt": "2026-10-25T03:09:19.597588Z",
+      "independentRowsDigest": "a12b5ebb9556b869a2b00997527021ef7c44df3380205b49c17b7b36c31ee359",
+      "firstDate": "2026-03-18",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 128,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2d5b4f5a285218cf45746a97db843e32fd73ebfac7b5e666e7f56bef31bca6a7",
+      "symbol": "LNGNF",
+      "yahooSymbol": "LNGNF",
+      "rows": 149,
+      "sourceSha256": "769810d1f0a6f83faf86b7bdc9b5221c2d0655fa69f31f970d5f91c584ad7842",
+      "observedAt": "2026-10-25T03:09:59.780268Z",
+      "independentRowsDigest": "77c66c3c5a7da5276e20af24f77e9f803c8d62e57836ef431fc97a82d60c945b",
+      "firstDate": "2026-03-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 109,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b3df74a19faccb340db87342d6c04503d931a43f082d5d6ef53ef421d92288ee",
+      "symbol": "LNKLF",
+      "yahooSymbol": "LNKLF",
+      "rows": 914,
+      "sourceSha256": "a7e9fbb35418d8f2f20225bc6cdf13d4b5d638445a3a455ac1de9e8e416c430a",
+      "observedAt": "2026-10-25T03:10:23.986640Z",
+      "independentRowsDigest": "fdd00e30951efd710616d8f9e37df11a1f5c8bcb8dfb0b6ba0eb6c7ca7177e0c",
+      "firstDate": "2023-02-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 909,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "03ffad19226d731d92cd564b767534c0e3152d76fd788ad4df5c8824934e5d5c",
+      "symbol": "LNRCF",
+      "yahooSymbol": "LNRCF",
+      "rows": 202,
+      "sourceSha256": "b515a7bd24532616434ce4e48a2bd75f71f98e4fd7a0d8bf7903b86f04fcdf8a",
+      "observedAt": "2026-10-25T03:10:52.103339Z",
+      "independentRowsDigest": "183c4381cbab732ef03c00ac98f21ebc928c0cb840f71f0a7c39c8f6422e8b73",
+      "firstDate": "2025-12-29",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "778c53604d98dce095f2365c1da9116beeb7f67474fefb394327941f55cd2898",
+      "symbol": "LOBLY",
+      "yahooSymbol": "LOBLY",
+      "rows": 289,
+      "sourceSha256": "5ea8a80d7dafdff04c37f4e9cd5ee1cc33cd3f1a1df7c5944eccd724baa4d2a8",
+      "observedAt": "2026-10-25T03:11:46.417861Z",
+      "independentRowsDigest": "3d115df61e1c3ea19e4c25e2b8aeeffe51b648a2eb3f5340e0663e0f29cbdd16",
+      "firstDate": "2025-08-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 166,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "1820261cdd15614eb0a720fe1cc3a0d8ec04f4559b3b304c081a6cf3cf96359f",
+      "symbol": "LOECF",
+      "yahooSymbol": "LOECF",
+      "rows": 812,
+      "sourceSha256": "331e7c7321baea856cfc1c38c1447a2763a3c2f5456b882772d6689b2a131a44",
+      "observedAt": "2026-10-25T03:12:04.536182Z",
+      "independentRowsDigest": "7ba5a3ac3d78770522a6fe2b00e32e03ebaaf860e81b35a2f305688cbe27c6e4",
+      "firstDate": "2023-07-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 217,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "07625a62bd67a36446cad8d43684f25b5fea4f780c5a957a0dba729b28ed0b1a",
+      "symbol": "LOMEF",
+      "yahooSymbol": "LOMEF",
+      "rows": 908,
+      "sourceSha256": "ef7e0cd11fc0ac439c0d3dc4616cf73510130daebd13e2744d4305c7bc2b047a",
+      "observedAt": "2026-10-25T03:12:48.767094Z",
+      "independentRowsDigest": "cc52a1cc4ff13e5b36b041f9c574008208c665d9f8c135b998d10ff4128459a6",
+      "firstDate": "2023-03-07",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 357,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "bd86e2981ebfbc369d7a97351ceb846fd3a4c6e22c848e5315e7a57157c28c75",
+      "symbol": "LOTBY",
+      "yahooSymbol": "LOTBY",
+      "rows": 1244,
+      "sourceSha256": "3720bcca29aebfcad40878634e211a9d87bc06d65688f149ca3fdb7523f587dd",
+      "observedAt": "2026-10-25T03:13:12.879469Z",
+      "independentRowsDigest": "3a114fdd72c09f894795c0d4464309950e49e146a6e298902c5f1db24a938b43",
+      "firstDate": "2021-11-02",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1196,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "8ad90b90972e1a512bfde48efd22689eb227b0f71b0030ac652a91e2247a585c",
+      "symbol": "LOTMY",
+      "yahooSymbol": "LOTMY",
+      "rows": 361,
+      "sourceSha256": "02484731b3f2acf25afc6448c70cd16fc507cb0d91c6ad94d6a9faa012723df5",
+      "observedAt": "2026-10-25T03:13:16.871751Z",
+      "independentRowsDigest": "40bd29511c42898c8e0a776b17d0f1258c2726540be51f3bc712ee1ef06a5154",
+      "firstDate": "2025-05-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3a119dbd7c531e778a9e2771e6f16efc08bf92a2652b8973d52c9a6432a8ca18",
+      "symbol": "LPGCY",
+      "yahooSymbol": "LPGCY",
+      "rows": 291,
+      "sourceSha256": "ed971c64c6e4503d3f619ac4e086e2ecd4e4a3bd870a8893345b3567e61a07cf",
+      "observedAt": "2026-10-25T03:13:59.083572Z",
+      "independentRowsDigest": "64737f3d019ec820367dc2f19dc19ab503ad94b80e59da32d99a55fa083cfe29",
+      "firstDate": "2025-08-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 117,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b22ead7e70eff780f35eab235694e0cbb2b53ef8e0324c9a56ce1651159d4245",
+      "symbol": "LPPSY",
+      "yahooSymbol": "LPPSY",
+      "rows": 65,
+      "sourceSha256": "73baceb4e76379c3933b272f528235be3d3077f680bcd8cc5829571730e16fdb",
+      "observedAt": "2026-10-25T03:14:23.150970Z",
+      "independentRowsDigest": "053bdf1daa75e3cc462d3fb4501a1a091bf1d3349668de639832e43e2e30e310",
+      "firstDate": "2026-07-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 65,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "79725e5acfb0b239700badeaa4435abe71b01a7a1e59c9a9192f6fac2ab35de7",
+      "symbol": "LQRCF",
+      "yahooSymbol": "LQRCF",
+      "rows": 65,
+      "sourceSha256": "6d5e159804c8a52e80f4c140f8b582fbfbfe6fc43f9f8cbca39fb288d1ae06fa",
+      "observedAt": "2026-10-25T03:14:59.332542Z",
+      "independentRowsDigest": "cfb932e50285eff43905ac7f19fd7be8ca36c14781fed7752184c2e3cfeedb4f",
+      "firstDate": "2026-07-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a0ce18f552dc1c1df0fb747a15743c6237bde77930c279f4b096539f24724508",
+      "symbol": "LSDIF",
+      "yahooSymbol": "LSDIF",
+      "rows": 925,
+      "sourceSha256": "bac18d441969b7c867b729014cbb77f416c6afe811fb6cd13352f47977189c42",
+      "observedAt": "2026-10-25T03:16:29.731861Z",
+      "independentRowsDigest": "a0e703970c4fbca69118de8a3d97c1381b2f3fcaaed6e534538f359165249738",
+      "firstDate": "2023-02-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 393,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e0933221266540ba44cfa3f3b3dd0adf2a0ccc2b81c222b99e4f850a29fc6b17",
+      "symbol": "LSEB",
+      "yahooSymbol": "LSEB",
+      "rows": 888,
+      "sourceSha256": "07dd15af901f759e76e767029daa4d2ed293d90fc997df24ccb4e2f90b81381a",
+      "observedAt": "2026-10-25T03:16:35.793508Z",
+      "independentRowsDigest": "9a2defde81dd7b39e9d56b38412e8c6541260536c4463f023a166c6d3a507d74",
+      "firstDate": "2023-04-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 729,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "af0e62b20dd6279b4858c3d63cd3e4d7bcdc67a8fbb6785c50a2e61069a92ab3",
+      "symbol": "LSHGF",
+      "yahooSymbol": "LSHGF",
+      "rows": 30,
+      "sourceSha256": "a2a71762c7b4cbc20b1139d8905b1dea8a9d676bfd9827738a6dd948b87b0e1b",
+      "observedAt": "2026-10-25T03:16:45.830442Z",
+      "independentRowsDigest": "e30f0b241b67306eab71a25fdaf27de0d9ae7319e4269256c7b284ef6b691808",
+      "firstDate": "2026-09-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 25,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "51ff4d75d77365e6c613da8e7d300643d2fb2274414d154ae93ea36c53e2cd2a",
+      "symbol": "LSRBF",
+      "yahooSymbol": "LSRBF",
+      "rows": 164,
+      "sourceSha256": "ceb8ae87111ea17f823bd88eb55df431a85939157723b51c29e724e057ca0377",
+      "observedAt": "2026-10-25T03:17:18.011818Z",
+      "independentRowsDigest": "2e2f1940d113c6cfee2fee958bc743765a09154f5024145fcd16ad1bf3e4000c",
+      "firstDate": "2026-02-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 157,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b04aa0f25de62ea5f82023f29cac1a77df6c8986138d80fc8e3a2a2bd173ebbe",
+      "symbol": "LTAFF",
+      "yahooSymbol": "LTAFF",
+      "rows": 38,
+      "sourceSha256": "58b1f61c8b22fe39abc94ef03ab62aacc7232200124fd4cce59d1a36bb56341a",
+      "observedAt": "2026-10-25T03:17:50.214186Z",
+      "independentRowsDigest": "0a6645e57929710869c25a934070daad8ae64ae714138203a548fb2a1fd991c3",
+      "firstDate": "2026-08-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 25,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "790ad8e214b3b2d0a891384ef1dadef5d201e3782e9430f06698cb661bc5438d",
+      "symbol": "LTCEF",
+      "yahooSymbol": "LTCEF",
+      "rows": 37,
+      "sourceSha256": "c15efe7e5a0e543c60f735462e0de44ddb722f07945e82d11483853be9fdbcf5",
+      "observedAt": "2026-10-25T03:17:52.241156Z",
+      "independentRowsDigest": "94dcb4d56848868662d54b9d4ddf364f4df41282004214a2cc06c2333cbf36fa",
+      "firstDate": "2026-08-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 6,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "60c84ff6ff18822b97033cd559054c6b2b4fac47614c23869d2a3f2c2897abde",
+      "symbol": "LTHCF",
+      "yahooSymbol": "LTHCF",
+      "rows": 1074,
+      "sourceSha256": "db42c0a9ad62e86eb70089009d2b38b0d6192947f19469a6cf435ea3b4cf5245",
+      "observedAt": "2026-10-25T03:18:28.438739Z",
+      "independentRowsDigest": "0c2e8bb4ff9f47d16aa4c36f98d15fbfa141ff0d7bae640e6d2ed39c6a3db5ee",
+      "firstDate": "2022-07-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 251,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "7fb84d1dd69c7e12f48c12dcbb571a0e9f51cd2d8efe68d8583d4094dc37fc8e",
+      "symbol": "LTMGF",
+      "yahooSymbol": "LTMGF",
+      "rows": 270,
+      "sourceSha256": "2a642f6b02af10663f65bdaef5bc7a618b4948e045283c4426d243b2ceb05e63",
+      "observedAt": "2026-10-25T03:18:52.564670Z",
+      "independentRowsDigest": "ef7aaa1d392e3c06b75164d3909a7d28e7725083aa1aa3d41f451226c024b171",
+      "firstDate": "2025-09-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 265,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "1bd602a84a25eddf16d29412f0a657091be560dc4239e3ee700d5960b1ab5cc9",
+      "symbol": "LTRBF",
+      "yahooSymbol": "LTRBF",
+      "rows": 1242,
+      "sourceSha256": "18c037f3d33f9d7da7df94a554cf0a8bd52687b7f4357dc7d589a714a303e7a4",
+      "observedAt": "2026-10-25T03:19:04.620653Z",
+      "independentRowsDigest": "f35ce9200bc3d287119dc7ae78d15b3cfb543f67c7597a304cd5c2dc81fc83fa",
+      "firstDate": "2021-11-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1101,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e173b503b72b6b6912e75c46afe935d28224aefaa375cc37c947b07ca16052a7",
+      "symbol": "LTRCF",
+      "yahooSymbol": "LTRCF",
+      "rows": 1041,
+      "sourceSha256": "908b01dc1a347e5d9da61d6f9024243ec9e9c04ded5fb1c75b7d53835d11286e",
+      "observedAt": "2026-10-25T03:19:06.633424Z",
+      "independentRowsDigest": "2a35dc35116f98fd9ab9eb219fdd1e5cc700c91b5c695537f9da6b1e84faa362",
+      "firstDate": "2022-08-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 974,
+      "dateGridMatchesStoredSpy": true
+    }
+  ],
+  "earlyEndedSources": [],
+  "zeroVolumeRows": 215534,
+  "wholeMarketComplete": false,
+  "queuePriorityAuditBeforeBatch": {
+    "checkedAt": "2026-10-25T03:06:27.393206+00:00",
+    "snapshotSha256": "0108b8db75194e7cbb29a14644650b9d709d65f5d853ec82c8405ffb898bc8bd",
+    "rows": [
+      {
+        "kind": "DAILY",
+        "priority": 0,
+        "phase": "FAILED_SOURCE",
+        "tasks": 1
+      },
+      {
+        "kind": "DAILY",
+        "priority": 0,
+        "phase": "VERIFIED",
+        "tasks": 517
+      },
+      {
+        "kind": "DAILY",
+        "priority": 10,
+        "phase": "FAILED_SOURCE",
+        "tasks": 36
+      },
+      {
+        "kind": "DAILY",
+        "priority": 10,
+        "phase": "SCOPE_REVIEW_REQUIRED",
+        "tasks": 31
+      },
+      {
+        "kind": "DAILY",
+        "priority": 10,
+        "phase": "VERIFIED",
+        "tasks": 5357
+      },
+      {
+        "kind": "HISTORY_CATALOG",
+        "priority": 10,
+        "phase": "VERIFIED",
+        "tasks": 1
+      },
+      {
+        "kind": "UNIVERSE_NASDAQ",
+        "priority": 10,
+        "phase": "VERIFIED",
+        "tasks": 1
+      },
+      {
+        "kind": "UNIVERSE_OTHER",
+        "priority": 10,
+        "phase": "VERIFIED",
+        "tasks": 1
+      },
+      {
+        "kind": "DAILY",
+        "priority": 20,
+        "phase": "FAILED_SOURCE",
+        "tasks": 11221
+      },
+      {
+        "kind": "DAILY",
+        "priority": 20,
+        "phase": "PLANNED",
+        "tasks": 15467
+      },
+      {
+        "kind": "DAILY",
+        "priority": 20,
+        "phase": "SCOPE_REVIEW_REQUIRED",
+        "tasks": 1727
+      },
+      {
+        "kind": "DAILY",
+        "priority": 20,
+        "phase": "VERIFIED",
+        "tasks": 6178
+      }
+    ],
+    "countsAreTasksNotCompanies": true,
+    "sourceRequests": 0,
+    "formalWrites": 0
+  },
+  "sourceBatchLimits": {
+    "maximumRequests": 384,
+    "maximumFetched": 128,
+    "requestSpacingMs": 2000,
+    "originalBudgetsUnchanged": true
+  },
+  "annualFiveYearCarrierProbe": {
+    "reusedVerifiedEvidence": true,
+    "sourcePath": "F:\\repo\\engine\\data\\var\\market-data\\scope-review\\broad-ohlc-history-v65-20261025\\annual-five-carrier-independent-verification.json",
+    "sourceSha256": "823a2edd51f2c9b9e61d77de11ef525ef1cbdea77b5b83d359fdc2b98b25ce13",
+    "proof": {
+      "checkedAt": "2026-10-24T22:32:46.104145+00:00",
+      "members": 18,
+      "rows": 22590,
+      "windows": 6,
+      "all20FieldsIndependentSourceJavaExact": true,
+      "rowsDigest": "7affe4da8766aff5d0a253ee7564a6eb551b7e0438017461fe8ef1c81c8ae16b",
+      "sourceSha256": "7368806e745d486d275c7536c7eb3174b9a3a4cd3339ac2e27ff14530bdc06ea",
+      "oldNativeAndWalUnchanged": true,
+      "sourceRequests": 0,
+      "formalWrites": 0,
+      "probeIsNotNewFormalData": true
+    },
+    "newSourceRequests": 0,
+    "newFormalWrites": 0,
+    "rowsAreNotNewFormalData": true
+  },
+  "failedHttp200Sources": [
+    {
+      "task": "0023873976f98983c4a04f7d6f65470aa0f619a016651561b1d691ea577c2f25",
+      "symbol": "LTDH",
+      "yahooSymbol": "LTDH",
+      "sourceSha256": "55fbb6c64291bce278073a7bc8742201c4364845bb7575d5d94f087acf2a39dc",
+      "observedAt": "2026-10-25T03:18:08.344878Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LTDH?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "055acc42940828066364b782ddb4e4782970586b7f2df68eda5ecbe5d57cb2fc",
+      "symbol": "LPUGF",
+      "yahooSymbol": "LPUGF",
+      "sourceSha256": "28469bfba319d6d3565143c1a90b20bb7f6ea55217a0ee68243437612d8ef348",
+      "observedAt": "2026-10-25T03:14:49.286820Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LPUGF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "0eb4d4259b58ee5775e2591f38d4a7c7baf73f4bf62b9520df26542b41a33e69",
+      "symbol": "LOGC",
+      "yahooSymbol": "LOGC",
+      "sourceSha256": "64c79f166f160d35b19d5053d7fd625eed40cb68cb875c41161a274029bd46f3",
+      "observedAt": "2026-10-25T03:12:06.575235Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LOGC?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "1920e6d2830e1149c23444870bf56af011eda5639a02d5b94931b804411b3e2b",
+      "symbol": "LMSC",
+      "yahooSymbol": "LMSC",
+      "sourceSha256": "a96b11d360d35d9fd8fd30fc7552ea481830e30772af80928ab0f4402d0e2fdc",
+      "observedAt": "2026-10-25T03:08:19.386303Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LMSC?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LMSC 2015-05-01",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "2bd9516d17e50790dd83b0790e7a007a8a5265aa3aa09835b33854db4e21b753",
+      "symbol": "LOGL",
+      "yahooSymbol": "LOGL",
+      "sourceSha256": "7af118fe45819c4fb9b0a62ce32ef05ffbe81a3be1758cb14776bc062d8a1921",
+      "observedAt": "2026-10-25T03:12:10.854074Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LOGL?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LOGL 2015-03-30",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "3398220611f0f40892557b1a91ee7b7703a25f2cc93c994e114ed8f8c5e0f878",
+      "symbol": "LNOES",
+      "yahooSymbol": "LNOES",
+      "sourceSha256": "5fff889cb282fe3b692dbe4e7c0ed17f7dc56aa7b533b636e7a784188e9732d3",
+      "observedAt": "2026-10-25T03:10:48.088684Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LNOES?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "38e2acda117eebfeb41719f82a6a830676cb0ef14218f97d302323e7a380aec0",
+      "symbol": "LNW",
+      "yahooSymbol": "LNW",
+      "sourceSha256": "3b5a0718a0f9695f031b8ed9d3b3561f3d75ba8577e45bcabc38662912539f63",
+      "observedAt": "2026-10-25T03:11:14.210915Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LNW?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 请求区间没有可用日线",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "3ad08a2a12fefb205251134b06c4fd86de4cc46e1451ce3b9b13a82fc1613afa",
+      "symbol": "LTPLF",
+      "yahooSymbol": "LTPLF",
+      "sourceSha256": "db6cf47aa4072d68922e758249991e664347b7d6afbd02fa22d68df215dafd27",
+      "observedAt": "2026-10-25T03:19:02.616015Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LTPLF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "3fb4e329eb37e1cf017340007ce79306f67f905a23bb9608e8524954fddf6f74",
+      "symbol": "LMGR",
+      "yahooSymbol": "LMGR",
+      "sourceSha256": "1087b3bb90ebb9a2522a2c0a49b466476b651ce7e0a29cd1fd8d08b863ae897b",
+      "observedAt": "2026-10-25T03:07:19.092188Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LMGR?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LMGR 2006-02-13",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "43a32c0f339a36216f84fa13cc15ba568e9d4c0b58189030fc21b6f6bc4f64cb",
+      "symbol": "LNNXS",
+      "yahooSymbol": "LNNXS",
+      "sourceSha256": "caed8a4698bac7df0d75a2ef75d9a2923fc1c89ba82d02e16fc0d483fd7848ef",
+      "observedAt": "2026-10-25T03:10:46.079434Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LNNXS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "4da8e466a483f63f2e07c513f843695621ff45281e3d3f6ba808eba942068325",
+      "symbol": "LQWDF",
+      "yahooSymbol": "LQWDF",
+      "sourceSha256": "c0ea4ac1ba07464507b94cd77e498fe472068e258fae2869befabf207e4ebda8",
+      "observedAt": "2026-10-25T03:15:07.487283Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LQWDF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LQWDF 2014-12-04",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "4e95c08d3ca6cdad6617ffb5b6fed4577e29ea17cfa3ce0b88bf675a630b34fc",
+      "symbol": "LNKAS",
+      "yahooSymbol": "LNKAS",
+      "sourceSha256": "0d3fd3f2753490613ca2eb0477d8bd853bc060ca2aad8478cd051f7b852f29bc",
+      "observedAt": "2026-10-25T03:10:13.917340Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LNKAS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "54681bc5303a7ad2089f91066bcc899a2cca0bd4923a12279f3dd77ee1810b17",
+      "symbol": "LTNC",
+      "yahooSymbol": "LTNC",
+      "sourceSha256": "adb503ac0ec0fcf34e5b466ba930ff6d8d0eb7f21aa09fc63316a02e87e6beb6",
+      "observedAt": "2026-10-25T03:18:58.676704Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LTNC?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LTNC 2021-11-12",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "57b3fe05b69a02478278aca9023eece4bef6806b07a8bcea494ac26c575bd166",
+      "symbol": "LOGQ",
+      "yahooSymbol": "LOGQ",
+      "sourceSha256": "89245408c24f5141bae8fd3c9a673b6004e96ab11a896a0315112bb516c578c0",
+      "observedAt": "2026-10-25T03:12:19.155337Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LOGQ?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LOGQ 2010-05-26",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "692104468b0ac1e7218e94ab5870840ce7ce262cd198a39de1b1ed5454d97f89",
+      "symbol": "LPCUF",
+      "yahooSymbol": "LPCUF",
+      "sourceSha256": "31ca32c9a6528db8390ac49637b229ce9081da5a961407c68c1ecfbde9890df6",
+      "observedAt": "2026-10-25T03:13:49.213165Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LPCUF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LPCUF 2022-02-28",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "6cd48edcb020123fe5c8c3081573e9a5f2d1ca10f831573023302f001f0ce76a",
+      "symbol": "LNTCY",
+      "yahooSymbol": "LNTCY",
+      "sourceSha256": "7c60b27a2ab58b6498157a3d15cd35be2e0ebb65e3a934820987c8870c0de00e",
+      "observedAt": "2026-10-25T03:11:00.162300Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LNTCY?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LNTCY 2026-06-04",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "75f6330bc6279bab8252ea56892d4eedb48d65e7f61af460d64c9c302eadbeec",
+      "symbol": "LMEFF",
+      "yahooSymbol": "LMEFF",
+      "sourceSha256": "2bfb8e04ffe02cca3503e57dcc31e6cccdda3d9ae5d95ef8fe586fc0afdea80f",
+      "observedAt": "2026-10-25T03:07:07.094088Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LMEFF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LMEFF 2010-02-22",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "78a5ee4262c1c5202eb9af0020539f6266cb6f41d33250bfcd1ca92f28a1058d",
+      "symbol": "LOCK",
+      "yahooSymbol": "LOCK",
+      "sourceSha256": "79b3a472d58845d78c980d57c24f76abc606698ec26dceee845ec368dac68ba4",
+      "observedAt": "2026-10-25T03:11:54.405879Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LOCK?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": null,
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "7fd0039f722cb2d66f27e02f0dd8e0d8bc39aa0dddbf310c490f2ff19f44393a",
+      "symbol": "LRVTF",
+      "yahooSymbol": "LRVTF",
+      "sourceSha256": "8e56cbf5c6f0acc19d7fd489f51cbca1fe1f54f7b637111c2bae30f832112ee2",
+      "observedAt": "2026-10-25T03:16:01.642552Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LRVTF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "8669419cf6adbb762dae43a0c7c3e8bd765b6a51bc5a749959c68ea5b901173a",
+      "symbol": "LOTT",
+      "yahooSymbol": "LOTT",
+      "sourceSha256": "2b1195044393000dbdba65a065c34c5fefe4d836563c9969308c388ab9271619",
+      "observedAt": "2026-10-25T03:13:19.135039Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LOTT?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LOTT 2020-01-09",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "8787ec85813ed96ee6abd3bce28744abe9a65e829ab9ee8625b80137522e6771",
+      "symbol": "LPTI",
+      "yahooSymbol": "LPTI",
+      "sourceSha256": "034560e2f22daf6090c5288d4088ee8fa6cfa0b745a660abca6ffbade58f3cba",
+      "observedAt": "2026-10-25T03:14:41.529144Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LPTI?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "8c4119aa2398acc0e8eeb3b9be149cb00e13d155deb0ba4793733de6684a2880",
+      "symbol": "LRDJF",
+      "yahooSymbol": "LRDJF",
+      "sourceSha256": "31e9259b4fd91bf876d123c32b3ea16476c9c72e447ec46f4fed4cb89c31a114",
+      "observedAt": "2026-10-25T03:15:23.584317Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LRDJF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LRDJF 2006-02-08",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "9b57ed80e87bca9ec6fa5acc5165495e9d7976425ab9a75234a4997251ef6a66",
+      "symbol": "LMDFF",
+      "yahooSymbol": "LMDFF",
+      "sourceSha256": "ef74cd09370f0f9e484fb47fbf0dccbffde23579498cd1e9f07bf0eee4e8fe0e",
+      "observedAt": "2026-10-25T03:06:56.891668Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LMDFF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "9e7c860091f9403f101baf2e249ecd99585dd4e05ce0f75d96e3796d0e565abe",
+      "symbol": "LTGHF",
+      "yahooSymbol": "LTGHF",
+      "sourceSha256": "039853de95a5dc85cb5dbff81e9492949c750f70f2cbfbf65d2983af18331450",
+      "observedAt": "2026-10-25T03:18:22.411647Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LTGHF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LTGHF 2013-06-03",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "a8980b86777b33e991ba507bd778811d26cd80ff2ea7d115d665a4897bc65ae6",
+      "symbol": "LPSN",
+      "yahooSymbol": "LPSN",
+      "sourceSha256": "1538164bc7190e2579a1b50f5649011a0d3dc3497976f06c4f986798464983a5",
+      "observedAt": "2026-10-25T03:14:35.211214Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LPSN?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "ae87d1f722e4e86c9e238c2c532817cf11aad11139a5055d764ea792f349361b",
+      "symbol": "LOCM",
+      "yahooSymbol": "LOCM",
+      "sourceSha256": "d4971e519e994f860bd2285b17a45169519420d3869a7afb6d9f3ff3e16b39dd",
+      "observedAt": "2026-10-25T03:11:58.689078Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LOCM?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LOCM 2015-03-30",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "afca0973b6f7d1b7801422c472e01050ea6353e41f41ea1a1fe6ea9455cb3756",
+      "symbol": "LSIIF",
+      "yahooSymbol": "LSIIF",
+      "sourceSha256": "c344bd41d2fbd0923aaf526d54de3e72958298e3fbe48c1525f302197f1feeea",
+      "observedAt": "2026-10-25T03:16:55.950298Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LSIIF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LSIIF 2013-03-26",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "c73466c1b8693b306b6f4ac0aa1c31876331715acba449942590239bad9305d0",
+      "symbol": "LSAAF",
+      "yahooSymbol": "LSAAF",
+      "sourceSha256": "d093447d9f8b64678794fba010b92268265b5b9dc152481cf8dc7728091c8de9",
+      "observedAt": "2026-10-25T03:16:03.624982Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LSAAF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "c85e28f5848e3eda3cb42fcaa860e95d709e77b2c23130bc613841166e3b331b",
+      "symbol": "LTRE",
+      "yahooSymbol": "LTRE",
+      "sourceSha256": "7baad70387c0099aca0e84ea8d8dc2db0f1b246231d9581f5dc32cc1857ba2ad",
+      "observedAt": "2026-10-25T03:19:08.751169Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LTRE?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LTRE 2011-07-13",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "cb5131ccbdfb8ee974dfd28ddad2fcd917e0d0ed716db6e99b3e8dd5eca4808d",
+      "symbol": "LNGWS",
+      "yahooSymbol": "LNGWS",
+      "sourceSha256": "afe3b7c0ccfffad98bf0a0949011118d7453a44ec5f199b5adb0f42546231c37",
+      "observedAt": "2026-10-25T03:10:09.887830Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LNGWS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "cb74641139db03f0f00326dad2b52fa5453a45d1a725a52dea7643ae8bb89199",
+      "symbol": "LMMHF",
+      "yahooSymbol": "LMMHF",
+      "sourceSha256": "c416df11eaa8ef32bd0decec19bea5d7c1201f7781b18c6518c3b5930fab1314",
+      "observedAt": "2026-10-25T03:07:37.088923Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LMMHF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "d110d18ba224bc867ffe95e773f87ea4148afe96aa4761d00105135ac556aed3",
+      "symbol": "LMMFF",
+      "yahooSymbol": "LMMFF",
+      "sourceSha256": "c93279b99183402edbf3ab451c02d5c05af98fac0b3af89f18454b2df294f68f",
+      "observedAt": "2026-10-25T03:07:35.115602Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LMMFF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "d8d2cd4249da200df27f0b6ce81c0065ce83d0e7facd4dcbb17ed5f30317bd16",
+      "symbol": "LNTEF",
+      "yahooSymbol": "LNTEF",
+      "sourceSha256": "04e35336fedf962e6c6e4f3c98e0422b40fd129f0532c3ea815ce9ba9130f816",
+      "observedAt": "2026-10-25T03:11:02.223471Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LNTEF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "de52ebb1931e6424df9b62011090742381b8e3ecc2f698499079d1a5a7f5175b",
+      "symbol": "LSEAW",
+      "yahooSymbol": "LSEAW",
+      "sourceSha256": "8c33fdcb9166be81669ad7cf92b7cc35611becaee039df5488d2e19dea12118a",
+      "observedAt": "2026-10-25T03:16:33.741051Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LSEAW?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LSEAW 2025-06-24",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e100a4ee48f6d96f00bdf002895b0aef5823932fa2e1742cbfe26daeb5b6bdd8",
+      "symbol": "LTHUQ",
+      "yahooSymbol": "LTHUQ",
+      "sourceSha256": "0fb897736cf30f5dec8401cf6326e3daf153322cf0022b5c3da0c25c2df27cf7",
+      "observedAt": "2026-10-25T03:18:38.543933Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LTHUQ?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LTHUQ 2015-03-30",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e39a48458f98fe65e738aa8f7ff64e20aacf9fb3b45a0c19c51263278e3055fd",
+      "symbol": "LSMNF",
+      "yahooSymbol": "LSMNF",
+      "sourceSha256": "2997c51be28785f11a2ae270e96908ca3745fbf9e26aea36248c43d43531f531",
+      "observedAt": "2026-10-25T03:17:07.975336Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LSMNF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LSMNF 2023-01-11",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e7c991dd98eeda59a1ecffd997facba0678a1f4a9c274516ece7910c4647674c",
+      "symbol": "LRRLF",
+      "yahooSymbol": "LRRLF",
+      "sourceSha256": "5d389841d097c2ec19fc8ad49299648cd2f4c33fcc6af7f7ddf510ff12958699",
+      "observedAt": "2026-10-25T03:15:47.622595Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LRRLF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LRRLF 2010-02-18",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e7d0c58092e4e29ad6bc092610534f94539774186fc84c819da6096998f86e96",
+      "symbol": "LTELF",
+      "yahooSymbol": "LTELF",
+      "sourceSha256": "c9b8b078ed8c26a0c29b1226b4d5ae328c4c7930f31354763e81fce24e7ddf16",
+      "observedAt": "2026-10-25T03:18:14.348184Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LTELF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "f349801c9d30a26d43c533647f3e9b958831803c60c57b172734c631dac629c9",
+      "symbol": "LOCLW",
+      "yahooSymbol": "LOCLW",
+      "sourceSha256": "af6358c254426e1eed92115c505d0fd2b6e259724cf86eab980391dbfce9928b",
+      "observedAt": "2026-10-25T03:11:56.431016Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LOCLW?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 请求区间没有可用日线",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "f46f20a7978b15924471baf60489270b274f2c6c92fc5e38330c78eab9bf899e",
+      "symbol": "LOTE",
+      "yahooSymbol": "LOTE",
+      "sourceSha256": "a8d161a13756f9d617309638b48833c1014f3aabbf64824537db0dca88266269",
+      "observedAt": "2026-10-25T03:13:15.190016Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LOTE?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：LOTE 2010-03-05",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "feb0badb29883ec823b1f9d5a702b10406bf8c503276ac34f0b956ea2ef60a2e",
+      "symbol": "LSRCF",
+      "yahooSymbol": "LSRCF",
+      "sourceSha256": "6ae21be73da53839ff81e358a80cb2b523bc18032ed5d7c46ea564ac9d67a943",
+      "observedAt": "2026-10-25T03:17:20.043768Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/LSRCF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    }
+  ],
+  "failedRawReasonGroups": {
+    "Yahoo 数值缺失或非法，不能补零": 8,
+    "Yahoo 代码、币种、市场时区或证券类型不符": 8,
+    "Yahoo OHLC 超出高低价范围": 20,
+    "Yahoo 请求区间没有可用日线": 2,
+    "Yahoo 价格或拆股因子必须为正": 3
+  },
+  "说明": "原历史目录任务的下一有限批，不扩大固定首批清单；可用响应不代表永久证券身份或上市以来完整历史。",
+  "sourceChecks": [
+    {
+      "task": "480a870e69f4eff752703a078a27ed8498966af1b373ccee403de5e06f42fa40",
+      "symbol": "LMED",
+      "yahooSymbol": "LMED",
+      "rows": 3967,
+      "sourceSha256": "814ad7bfece4fab64a5126b974a6cf42ffad95caae82e7346e25ebba6feb611c",
+      "observedAt": "2026-10-25T03:07:03.035182Z",
+      "independentRowsDigest": "5370fc062f2ed7a38383648136fafd795052e89a009854ed73fd520c25cc9011",
+      "firstDate": "2011-01-07",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3521,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "43934db4df6e1959c134b15beb855fdfe2cb9ad1dfc196bbc9d3f8e560a5e26b",
+      "symbol": "LMGHF",
+      "yahooSymbol": "LMGHF",
+      "rows": 1495,
+      "sourceSha256": "53658946a75bad8dee02a88651138606b6677a56aab0902a2c483e2a8d99d9bb",
+      "observedAt": "2026-10-25T03:07:15.029177Z",
+      "independentRowsDigest": "16174930d81b2c5de51aad9cdf6c6c3850b670472f2ed532afe883e0de1a3040",
+      "firstDate": "2020-11-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1484,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3b052a1dad6c638415ec19b266b7cdce9fb3892415b7e4612062b5c62b43dfd7",
+      "symbol": "LMGIF",
+      "yahooSymbol": "LMGIF",
+      "rows": 893,
+      "sourceSha256": "cfb6d4ee03cf8ae4530fd1f63947cdc441bea6200e354c056ad986cd0b418be5",
+      "observedAt": "2026-10-25T03:07:17.021007Z",
+      "independentRowsDigest": "8ef390874076649e36a8784a72eb096ecc7cfb78aefe0e91492d2f0c0f7c84d8",
+      "firstDate": "2023-03-28",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 11,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "bc1c250b3855b5819ddfeb8b7e04d0bb739d892dcef38e65fd6f311a56ed46e1",
+      "symbol": "LMHDF",
+      "yahooSymbol": "LMHDF",
+      "rows": 2280,
+      "sourceSha256": "1d5b5ed6634736654944ca1b9816b3be273ccad92d9ee3c6bc0929d6b13c6529",
+      "observedAt": "2026-10-25T03:07:21.051762Z",
+      "independentRowsDigest": "a78556182f1c74d49b039164594259a9a0bef2b51116227c12c6e5a1762b64f0",
+      "firstDate": "2017-09-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2268,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c9b0e59ddd5faa06873e17dc64cb07cc25de9886c5b5c9c252e316c1c2bcaeb8",
+      "symbol": "LMLLF",
+      "yahooSymbol": "LMLLF",
+      "rows": 2366,
+      "sourceSha256": "fd1d4ff0a032dc4e45f519fca29797a07325ea1666a2801321e5ad441a15d69a",
+      "observedAt": "2026-10-25T03:07:33.108792Z",
+      "independentRowsDigest": "caee79704335d28e0a67ecb45b2187062899af9ab435d80d31c98cb3411cf608",
+      "firstDate": "2017-05-19",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 948,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6a1e689c6c84ff1555412b1db5e66ffd5230d650208f011e5b96bfed5d8a4437",
+      "symbol": "LMMY",
+      "yahooSymbol": "LMMY",
+      "rows": 513,
+      "sourceSha256": "e4c17b917d33d9222d5f58304c53ccd7ac430cfba2e5de06590ef7b66ae40fac",
+      "observedAt": "2026-10-25T03:07:41.124063Z",
+      "independentRowsDigest": "2b1f28c1290446f61ce62c987649c9557b10c941a79ec52e915a2af201253d92",
+      "firstDate": "2024-10-01",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 320,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "5af87cfdd6d480271c31b96e1d2d54f958e982c5f36e3ac2cdaed876b37bd599",
+      "symbol": "LMPMF",
+      "yahooSymbol": "LMPMF",
+      "rows": 4608,
+      "sourceSha256": "af5701ecc651360b303056affd912f3e735511ad3cb548e83daa47c1f999bbe3",
+      "observedAt": "2026-10-25T03:07:57.214247Z",
+      "independentRowsDigest": "404664a7e9f1868cbb7128c174aeb0272c8161173634856be7384b8557ec83d0",
+      "firstDate": "2008-06-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4414,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3e690e3138f549d058c047090a9a51893a6a8be9cf433661ea00950be9b18163",
+      "symbol": "LMPMY",
+      "yahooSymbol": "LMPMY",
+      "rows": 4212,
+      "sourceSha256": "53a73723d1c4bc419a92d066983ddf00ba9a1cb96869ed2cefbe67b3b2de498d",
+      "observedAt": "2026-10-25T03:07:59.288880Z",
+      "independentRowsDigest": "af5754a6545b56bb4e6925460c60a351a036ef3223e08d73ac49853c1f247f1c",
+      "firstDate": "2010-01-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2913,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "fdbcbb55d15112b420f64b5db749566813f406aec98ba16b561609245c93d5e4",
+      "symbol": "LMPX",
+      "yahooSymbol": "LMPX",
+      "rows": 1725,
+      "sourceSha256": "85d8278474fe5d2d98d645ec5f68aedef5254c9bd135381a3b12e04d42e91d4f",
+      "observedAt": "2026-10-25T03:08:03.245099Z",
+      "independentRowsDigest": "0de461430139f203bbd9a3cb03351d67ee2cd38b77abf584dde9c6aea2cb4632",
+      "firstDate": "2019-12-05",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 507,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "fe12ce5535da00ed006ffca3740944f65bcc5d5e7a4fe5ea43a4f1fe5d1ecc33",
+      "symbol": "LMRXF",
+      "yahooSymbol": "LMRXF",
+      "rows": 5230,
+      "sourceSha256": "cba28432b2a63d625663ac7c9e23fe59d05e240be252561e621bc7557509f5b6",
+      "observedAt": "2026-10-25T03:08:13.353110Z",
+      "independentRowsDigest": "93d8a36a20a7b2560dd9af1d479c10828096fddb3bc940b9a8bedde84a5d7716",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 190,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "95ca33be6a3b8357f89ee1b8b0b6d957fd63033ec22c19b5b2aedae33139bfe2",
+      "symbol": "LMSQF",
+      "yahooSymbol": "LMSQF",
+      "rows": 3152,
+      "sourceSha256": "2c19c095087dbf7cda7b7388a42de4abd00b58f0004a5b6412193283246502f0",
+      "observedAt": "2026-10-25T03:08:25.378615Z",
+      "independentRowsDigest": "a68b959fa002e24c53840f79d58052dcf2ebf0be2a6b0c3c5ef5940c3431880e",
+      "firstDate": "2014-04-07",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1957,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c9b7f1f642d515c3cfcfdf93d8e876f01fc6387dd49523a1fd2d368351b03094",
+      "symbol": "LMTI",
+      "yahooSymbol": "LMTI",
+      "rows": 4887,
+      "sourceSha256": "51335b59be7f8fc6ad6f5d655c04a8057c804dcf693f86f0c9964093b73c4201",
+      "observedAt": "2026-10-25T03:08:33.490128Z",
+      "independentRowsDigest": "48d777321050c37921a94b035429aabd876bfa68231efc9e69dfc74c384f4bcc",
+      "firstDate": "2007-05-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4011,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c67cb291c8c1009b1de4944cf517749da7c92747282991125830d66abf7622ba",
+      "symbol": "LMWW",
+      "yahooSymbol": "LMWW",
+      "rows": 3475,
+      "sourceSha256": "44b9de66ae6a1952e7e2720dafb698b6b0629ab0f0b4e5515aa1f16af0814b70",
+      "observedAt": "2026-10-25T03:08:35.452732Z",
+      "independentRowsDigest": "833a81a06a94826225dfa302088d7e6897d49fb41a8c2ab6b39e51d84420bdc4",
+      "firstDate": "2012-12-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3349,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b93987f11fccbec3e92079b29c5a1397e2d555916ea584a4e29ef13e27b962c0",
+      "symbol": "LNBY",
+      "yahooSymbol": "LNBY",
+      "rows": 1399,
+      "sourceSha256": "b6a8b9ae4dbfca934921d4ff8c3ec5945661b3076dc4e42740a10902e122085b",
+      "observedAt": "2026-10-25T03:08:45.480645Z",
+      "independentRowsDigest": "d2ab927e03a664d929c581875dbfbc6a25c253e41746f2be88cd4c1acd04c8b4",
+      "firstDate": "2021-03-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1171,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f5c7b65258b037ad9be65f8e9d62d9b25412ac45b30265fcf84dbcb5cda1b0f7",
+      "symbol": "LNCLF",
+      "yahooSymbol": "LNCLF",
+      "rows": 3439,
+      "sourceSha256": "4f5c9f2c369ae88de8c1e282384f7955ff103bbd0eb29414716642322c0cbb17",
+      "observedAt": "2026-10-25T03:08:51.505341Z",
+      "independentRowsDigest": "45eaee20ca7833939227500c385fc8b388bb958e270d1a2bab8db05d8ef65c1c",
+      "firstDate": "2013-02-14",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3106,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "baf747754a92644b4a6e1bc7989c603bc1b6a87f3d656ecf51c5a4652b34cdae",
+      "symbol": "LNDAF",
+      "yahooSymbol": "LNDAF",
+      "rows": 1368,
+      "sourceSha256": "12bd8a03d22c2c5daba3c1bbfaa1fe4a2785451393eff7e05b3307d8a05e7acd",
+      "observedAt": "2026-10-25T03:08:55.501258Z",
+      "independentRowsDigest": "590b6a760a23226b133f1fb7ffee851918fbf745f893b491ba9eafde3883d43d",
+      "firstDate": "2021-05-07",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1293,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2c19d12e17921bdef1c7a42ab59c4b93b926d593b7fd5aa9a06ccd7b6ce6ee4f",
+      "symbol": "LNDLF",
+      "yahooSymbol": "LNDLF",
+      "rows": 3404,
+      "sourceSha256": "3fe1f4bcf9cac231d1d9f44aa44b974e3bb6b4a46af941db200f18eb1a24e93f",
+      "observedAt": "2026-10-25T03:09:13.607Z",
+      "independentRowsDigest": "0589abae7a2b00d42b59505ca3e14e28eb12a79c2ed48badcc253e09105872ea",
+      "firstDate": "2013-04-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3386,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "86b05a1d49c17d2fbb0972c8d7837f243d6cd74029f59655f60af17c6e34227b",
+      "symbol": "LNDMY",
+      "yahooSymbol": "LNDMY",
+      "rows": 148,
+      "sourceSha256": "e98cb3afe87690c66ea3b8fd969c2b42479c2bb38399984b739143e6eeb1c14e",
+      "observedAt": "2026-10-25T03:09:19.597588Z",
+      "independentRowsDigest": "a12b5ebb9556b869a2b00997527021ef7c44df3380205b49c17b7b36c31ee359",
+      "firstDate": "2026-03-18",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 128,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c2cfd924a19997e4928605f95e6197b2386a02923bbdb08893e59111eb96549c",
+      "symbol": "LNDNF",
+      "yahooSymbol": "LNDNF",
+      "rows": 4146,
+      "sourceSha256": "1e1d2bb35c15a8903a361c074a925beef7a9b9d15d4dd831e81be644ea7b78c7",
+      "observedAt": "2026-10-25T03:09:21.669911Z",
+      "independentRowsDigest": "90f81dfbe12281047c1b4ee6d0e88f40b909a6f0240c5cad3a25f34962ce6c80",
+      "firstDate": "2010-04-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2753,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ab2e953355c060f0d5d50f527ab6a4bab49b53a254b89ed96b25335882295900",
+      "symbol": "LNDT",
+      "yahooSymbol": "LNDT",
+      "rows": 4909,
+      "sourceSha256": "f4288e39aace275aabac164f4ae49dca1540e7202fdb34bf140ee3fa407c9312",
+      "observedAt": "2026-10-25T03:09:35.794829Z",
+      "independentRowsDigest": "7eb48600e7b7d6a3676902a4c27feeec26d1fac8f15bc99eaee24f40d0357f27",
+      "firstDate": "2007-04-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3916,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "5947ecc19ccdc5bbf46d4670d03a5b87c18034ca83b3df916481f1a5f3b3024a",
+      "symbol": "LNDZF",
+      "yahooSymbol": "LNDZF",
+      "rows": 2787,
+      "sourceSha256": "8147e2f2e0e792c44948e915c390f625340ee751974498cb0702fc5244dfcf9b",
+      "observedAt": "2026-10-25T03:09:41.723830Z",
+      "independentRowsDigest": "f66ffa709136a053d06691c148714731f5181bddb0de4b1a3cae5254f24fc59a",
+      "firstDate": "2015-09-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2320,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2d5b4f5a285218cf45746a97db843e32fd73ebfac7b5e666e7f56bef31bca6a7",
+      "symbol": "LNGNF",
+      "yahooSymbol": "LNGNF",
+      "rows": 149,
+      "sourceSha256": "769810d1f0a6f83faf86b7bdc9b5221c2d0655fa69f31f970d5f91c584ad7842",
+      "observedAt": "2026-10-25T03:09:59.780268Z",
+      "independentRowsDigest": "77c66c3c5a7da5276e20af24f77e9f803c8d62e57836ef431fc97a82d60c945b",
+      "firstDate": "2026-03-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 109,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "075cbe523036d7ad383ba0912920d3f3ff16dfef2febd0c7ca5b8627d00666a3",
+      "symbol": "LNGPF",
+      "yahooSymbol": "LNGPF",
+      "rows": 2636,
+      "sourceSha256": "b267c013f7d524385c712cfdce2f76d4895270a23a3ec39ce13238db7dc82a56",
+      "observedAt": "2026-10-25T03:10:01.892979Z",
+      "independentRowsDigest": "35f6efe375be8e7e756b1e1a7a0a79de20338487f5eb79652d53a6d8944e85c8",
+      "firstDate": "2016-04-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2425,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "cce852a6cc7d4f2cbedd38a6a4f6368ed40e074780aed7264416c8043644ae2b",
+      "symbol": "LNGT",
+      "yahooSymbol": "LNGT",
+      "rows": 4082,
+      "sourceSha256": "511c53dd07e435b9d2f700de35c6f6cba15609f939ae8c62b6793a508bbfee7d",
+      "observedAt": "2026-10-25T03:10:07.916635Z",
+      "independentRowsDigest": "25ab11a5b4ae7ec75f7de05248a0707bddd21cb201cc05c92676986ab4f1296e",
+      "firstDate": "2010-07-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2178,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b3df74a19faccb340db87342d6c04503d931a43f082d5d6ef53ef421d92288ee",
+      "symbol": "LNKLF",
+      "yahooSymbol": "LNKLF",
+      "rows": 914,
+      "sourceSha256": "a7e9fbb35418d8f2f20225bc6cdf13d4b5d638445a3a455ac1de9e8e416c430a",
+      "observedAt": "2026-10-25T03:10:23.986640Z",
+      "independentRowsDigest": "fdd00e30951efd710616d8f9e37df11a1f5c8bcb8dfb0b6ba0eb6c7ca7177e0c",
+      "firstDate": "2023-02-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 909,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "9a61c80b397908bf957a4ad6bbf6065e8f730b282c983f23a6b63114b2274002",
+      "symbol": "LNLHF",
+      "yahooSymbol": "LNLHF",
+      "rows": 2107,
+      "sourceSha256": "ccbe0600f1b029d85e462852e75095428d65fc5aed476cac20d31473bfe62438",
+      "observedAt": "2026-10-25T03:10:25.974405Z",
+      "independentRowsDigest": "0ef0dc626ae5b176191cfd43628702a5f7f69ccf2aaa37a823ab60b07b3d0d5d",
+      "firstDate": "2018-05-31",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1805,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "d0df9c50d706f8123c8e3c81e280e023f3aa857787f45303475cc3428ce46994",
+      "symbol": "LNMG",
+      "yahooSymbol": "LNMG",
+      "rows": 3608,
+      "sourceSha256": "1a69928a403936d1b558cc445872d35f0bc83087409f393f3f8d52a3207bae5f",
+      "observedAt": "2026-10-25T03:10:28.038412Z",
+      "independentRowsDigest": "5591557ef427132a4868a24d9827fdcd3ecf9bfba767e88cd791e54466c7a4e1",
+      "firstDate": "2012-06-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3327,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "bf25d1880e7d26ea1f39e9f50a7853f44a6dc7c053d86137a4dfe3c743c72388",
+      "symbol": "LNNGF",
+      "yahooSymbol": "LNNGF",
+      "rows": 4608,
+      "sourceSha256": "3b835b446661459390d68369be5965e76759684f9cb5ff997da627615dd64042",
+      "observedAt": "2026-10-25T03:10:36.152401Z",
+      "independentRowsDigest": "baf1edd676ffad09d94bb10bd84c986acc18d13c61007a11f926b09a7d2345c9",
+      "firstDate": "2008-06-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2442,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "892f06fbe60256d86210a77e14c2e3f625459f34b29508939bd4c3f9638f8005",
+      "symbol": "LNNGY",
+      "yahooSymbol": "LNNGY",
+      "rows": 3565,
+      "sourceSha256": "f60f3ba9449c84cc7b08c530896a6d3df72bbb13bb5c220c459b4f671b2e4d09",
+      "observedAt": "2026-10-25T03:10:38.164272Z",
+      "independentRowsDigest": "6f0e3da925747d5d518e330245641c6fe5722d345b20b668a86d6e771aac5bc7",
+      "firstDate": "2012-08-13",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2028,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3472d294abe2e7d1e4943f34f83efe99084a0e200faf600b5562bf878525667b",
+      "symbol": "LNNTF",
+      "yahooSymbol": "LNNTF",
+      "rows": 2205,
+      "sourceSha256": "3151205973bc86425c9e4bb75a5ef65a863e9643fd460a1df5c7ea5a38dc222d",
+      "observedAt": "2026-10-25T03:10:44.076344Z",
+      "independentRowsDigest": "86f7a0f678aa0c1043b34ea4e00082b1a96d198f13672e1eefa72441200b9306",
+      "firstDate": "2018-01-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2188,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "03ffad19226d731d92cd564b767534c0e3152d76fd788ad4df5c8824934e5d5c",
+      "symbol": "LNRCF",
+      "yahooSymbol": "LNRCF",
+      "rows": 202,
+      "sourceSha256": "b515a7bd24532616434ce4e48a2bd75f71f98e4fd7a0d8bf7903b86f04fcdf8a",
+      "observedAt": "2026-10-25T03:10:52.103339Z",
+      "independentRowsDigest": "183c4381cbab732ef03c00ac98f21ebc928c0cb840f71f0a7c39c8f6422e8b73",
+      "firstDate": "2025-12-29",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3d6f5772a3b32abc2086d30b5b46f3a0deca5c8c4fa85821082aaff176b94252",
+      "symbol": "LNSPF",
+      "yahooSymbol": "LNSPF",
+      "rows": 1450,
+      "sourceSha256": "0d0f5c7099594b5a7fcf4abc55f411a122e6ce28e5232f749ab31f4b7f29b726",
+      "observedAt": "2026-10-25T03:10:56.159442Z",
+      "independentRowsDigest": "7f5da5e8a2c3db245eab6013b03b07bd8a63a683af690b57ca8b35a787a2fbcf",
+      "firstDate": "2021-01-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1177,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ab90b903022884ee2c5be3de5cc0178711aa4d8172d4cd87dfa22b969102eab2",
+      "symbol": "LNTO",
+      "yahooSymbol": "LNTO",
+      "rows": 4156,
+      "sourceSha256": "2bddff44938da1de1dc5c3252c2f9cb9ced3048e7457500082f431cbff1919fe",
+      "observedAt": "2026-10-25T03:11:04.236486Z",
+      "independentRowsDigest": "cef9f29f3c5705d6ff0dff686ccf4c5003104ce24b09f4e17706e08edc0db51c",
+      "firstDate": "2010-04-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2907,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "8d26fe22ae214712a1cf49348d353a438a0cb97087d3859cb813e61bbee308f2",
+      "symbol": "LNVGF",
+      "yahooSymbol": "LNVGF",
+      "rows": 4446,
+      "sourceSha256": "01f2ee1ac13a5bdb1e720d480ac842ff40b6d51e17a04c8bd997883aec464ec4",
+      "observedAt": "2026-10-25T03:11:10.299754Z",
+      "independentRowsDigest": "f0b51d674e7bc583ffeb559b6006c98a760fa0add49b7f90fb06360b6c93faab",
+      "firstDate": "2009-02-13",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 577,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "cde9d2c5d7ec0da626cec1c932b5e08a66d107b2b436e21fe96d1ae59ce1b5c6",
+      "symbol": "LNVGY",
+      "yahooSymbol": "LNVGY",
+      "rows": 5230,
+      "sourceSha256": "1fd2d4fc4c112049ca341099a719fb2e843251e227dbc7ab78de93bd3d666b4b",
+      "observedAt": "2026-10-25T03:11:12.363760Z",
+      "independentRowsDigest": "c337d01e7361b8c0d4774f76762268600aaea980cea6d7b46f6ca99996760e08",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "18fcf9155a192524e7f1822d938f0f786a22f85f8c0419923f418a3240baacee",
+      "symbol": "LNWO",
+      "yahooSymbol": "LNWO",
+      "rows": 5230,
+      "sourceSha256": "6c1a5ea3eb693ec13139d91c596082c0f33fd04ebc7d7876965f04b74e8603e0",
+      "observedAt": "2026-10-25T03:11:16.427595Z",
+      "independentRowsDigest": "eeabe73e323d485bebe2db671603ba198c02eb5674d760e6f595dd4bd92086d9",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "99bb0eadb2422cbc8f6b8aa8fa121a199e6424da837d4cae3f4be186d0bbe9cb",
+      "symbol": "LNXGF",
+      "yahooSymbol": "LNXGF",
+      "rows": 5230,
+      "sourceSha256": "5449adecba6870377ad060f22328f1f1b5babb64cc212a403ad9263b9aa7fb8b",
+      "observedAt": "2026-10-25T03:11:20.487703Z",
+      "independentRowsDigest": "e89ebb5a34c10826d61d7de48de03c90ce5c47bad2f3629ac5fe10f9cb84716d",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2514,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "d07ea5f7ae75226ab46e26ec051488358bca9c3e5a594b8c35639f185d2cad20",
+      "symbol": "LNXSF",
+      "yahooSymbol": "LNXSF",
+      "rows": 3710,
+      "sourceSha256": "251321b5665739d7fa5f086b658cbcde97e6a613f8d7751970145a316f023080",
+      "observedAt": "2026-10-25T03:11:22.381442Z",
+      "independentRowsDigest": "9954e84a4a87df655c4b7f0a0f3c9feb9aa80bbb2e2152c12d53927789df5e8f",
+      "firstDate": "2012-01-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2038,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f5f865ca03cdcd7be7f62aef657f4704c6694048b9699646cc1157d0e06d1795",
+      "symbol": "LNXSY",
+      "yahooSymbol": "LNXSY",
+      "rows": 1695,
+      "sourceSha256": "aeb898d57e71d343290eb3af4256efb8ee72f514d27e5dc80bea4811d1b364a4",
+      "observedAt": "2026-10-25T03:11:24.296335Z",
+      "independentRowsDigest": "3b21d022bc9e4517eba4e64f67e733a606b7c6c0ba5ca93587b1ac9dbd6a1a0d",
+      "firstDate": "2020-01-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1240,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "cebccb2d61403a756a44688e6b45fc262cac2f14ab64c33f5e42eb714eb4efae",
+      "symbol": "LNZNF",
+      "yahooSymbol": "LNZNF",
+      "rows": 3699,
+      "sourceSha256": "e9a75e3e84665deab47e1e60522d698dc3e093581beb5a62dc908e8096c4b382",
+      "observedAt": "2026-10-25T03:11:26.386016Z",
+      "independentRowsDigest": "cbf2bef4e44e2d754376c5ec17bc05ce63470af5b6692fff4379c83fd6ea34f7",
+      "firstDate": "2012-02-01",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3454,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f9fba560c1d76e1a46917d7e5b1e97e2e1bfda29ba1120bbe559ff0d6525906e",
+      "symbol": "LOBEF",
+      "yahooSymbol": "LOBEF",
+      "rows": 1725,
+      "sourceSha256": "3078200aa50c0c6aa1c8ba183e40dd20422b40e8e67e6a55d1f6875876434798",
+      "observedAt": "2026-10-25T03:11:44.447320Z",
+      "independentRowsDigest": "e52b866cae54d8c6b1ee249d8b4eb14f1edb910ed92ca5b8f16a04228733de2d",
+      "firstDate": "2019-12-05",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 47,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "778c53604d98dce095f2365c1da9116beeb7f67474fefb394327941f55cd2898",
+      "symbol": "LOBLY",
+      "yahooSymbol": "LOBLY",
+      "rows": 289,
+      "sourceSha256": "5ea8a80d7dafdff04c37f4e9cd5ee1cc33cd3f1a1df7c5944eccd724baa4d2a8",
+      "observedAt": "2026-10-25T03:11:46.417861Z",
+      "independentRowsDigest": "3d115df61e1c3ea19e4c25e2b8aeeffe51b648a2eb3f5340e0663e0f29cbdd16",
+      "firstDate": "2025-08-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 166,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "4bdd610daaa2ebab37c66f68f770ffff4d8453c3200346a2d7bf9e0bed2f61d2",
+      "symbol": "LODFF",
+      "yahooSymbol": "LODFF",
+      "rows": 1450,
+      "sourceSha256": "148dfd08a6b020bae57919c675541f41d257a4ed3dbc17740cf31a709bd83cc8",
+      "observedAt": "2026-10-25T03:12:00.574281Z",
+      "independentRowsDigest": "acc08d1c67dc1f7d181fb979795cb92a98b7393a8120cd25c6ca1f0c7cbb0e5f",
+      "firstDate": "2021-01-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 797,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "1820261cdd15614eb0a720fe1cc3a0d8ec04f4559b3b304c081a6cf3cf96359f",
+      "symbol": "LOECF",
+      "yahooSymbol": "LOECF",
+      "rows": 812,
+      "sourceSha256": "331e7c7321baea856cfc1c38c1447a2763a3c2f5456b882772d6689b2a131a44",
+      "observedAt": "2026-10-25T03:12:04.536182Z",
+      "independentRowsDigest": "7ba5a3ac3d78770522a6fe2b00e32e03ebaaf860e81b35a2f305688cbe27c6e4",
+      "firstDate": "2023-07-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 217,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "10d9e57f6d2de0f20b059935f2485cdcfe3b15e001a6d3f781664474a5383cf9",
+      "symbol": "LOGN",
+      "yahooSymbol": "LOGN",
+      "rows": 5230,
+      "sourceSha256": "eb2f4c3b71b203276d0a4e56af4252806fefd28357a8d15a7158b11878193d10",
+      "observedAt": "2026-10-25T03:12:16.905947Z",
+      "independentRowsDigest": "5cad7a88cbc811fa3d59f5037d14db4852336c220af8e83d33a7402f91803204",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3839,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e05efb8d4c41a4af4d58bf94956901a47375dd5f062178e245e658d53344a437",
+      "symbol": "LOIMF",
+      "yahooSymbol": "LOIMF",
+      "rows": 4434,
+      "sourceSha256": "6a07cf68e6cd5abf192ebb2d1808497984d4d0f925a88829e9e1e4e266c07190",
+      "observedAt": "2026-10-25T03:12:22.925417Z",
+      "independentRowsDigest": "d763e6929573c7a6be173bf596d5e358c63ac323bbe78e0d3289e2d1db41d278",
+      "firstDate": "2009-03-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4244,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "196ceb9b3bd8cc7720fdaa25672c04cf0c5d4d2ca72242afc83c2d9ec6b0d60b",
+      "symbol": "LOIMY",
+      "yahooSymbol": "LOIMY",
+      "rows": 3421,
+      "sourceSha256": "e655894053c4fe2f78fba2f109ae89d86ac070faf33030e275c0957320448348",
+      "observedAt": "2026-10-25T03:12:24.912218Z",
+      "independentRowsDigest": "cec302316c5e97dd6e44cc1c51c6ee907bd39824ff41645ccbe97d5521a94257",
+      "firstDate": "2013-03-13",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3412,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "07625a62bd67a36446cad8d43684f25b5fea4f780c5a957a0dba729b28ed0b1a",
+      "symbol": "LOMEF",
+      "yahooSymbol": "LOMEF",
+      "rows": 908,
+      "sourceSha256": "ef7e0cd11fc0ac439c0d3dc4616cf73510130daebd13e2744d4305c7bc2b047a",
+      "observedAt": "2026-10-25T03:12:48.767094Z",
+      "independentRowsDigest": "cc52a1cc4ff13e5b36b041f9c574008208c665d9f8c135b998d10ff4128459a6",
+      "firstDate": "2023-03-07",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 357,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "95427e8f0ecd65a95d4d68772a2fa038f9aaabdc6223a8c9d1bd55d32d501f05",
+      "symbol": "LOMLF",
+      "yahooSymbol": "LOMLF",
+      "rows": 3981,
+      "sourceSha256": "c8f82064b2431f6240d0a06b288ab4e00abd0834045bccacf55d61ce930c96fc",
+      "observedAt": "2026-10-25T03:12:51.060010Z",
+      "independentRowsDigest": "9251663348f19b97b6eab9f8b000cc82ed5cb01c0f810138a08f8e7a0634a589",
+      "firstDate": "2010-12-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 815,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "bdb57492876ea4275035d661a21705e47a1647aea9c32331c02d14cea26ca71f",
+      "symbol": "LONKF",
+      "yahooSymbol": "LONKF",
+      "rows": 4608,
+      "sourceSha256": "ce19c963029af14f82b325d4c9ba792d3169b86278bbb4f45912dc15138e531e",
+      "observedAt": "2026-10-25T03:13:03.075557Z",
+      "independentRowsDigest": "36092f92efa4efc45a11b69eab05e4209509a0eda53a8309f985627cfb014422",
+      "firstDate": "2008-06-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4194,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6a3e64b0dbb35e693ef21f4cfd1ed3aa8916041a5a96509dd60064c8372e8278",
+      "symbol": "LOQPF",
+      "yahooSymbol": "LOQPF",
+      "rows": 3571,
+      "sourceSha256": "5b83b4d081ded6900a66976699558d124ad8d8bd600506ad545c33cfc93acdd9",
+      "observedAt": "2026-10-25T03:13:08.956345Z",
+      "independentRowsDigest": "6f1d0087481a745dbb1c2807a03c9d647a746fe3ded1d76bf7e178fff92d3f63",
+      "firstDate": "2012-08-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3361,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "bd86e2981ebfbc369d7a97351ceb846fd3a4c6e22c848e5315e7a57157c28c75",
+      "symbol": "LOTBY",
+      "yahooSymbol": "LOTBY",
+      "rows": 1244,
+      "sourceSha256": "3720bcca29aebfcad40878634e211a9d87bc06d65688f149ca3fdb7523f587dd",
+      "observedAt": "2026-10-25T03:13:12.879469Z",
+      "independentRowsDigest": "3a114fdd72c09f894795c0d4464309950e49e146a6e298902c5f1db24a938b43",
+      "firstDate": "2021-11-02",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1196,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "8ad90b90972e1a512bfde48efd22689eb227b0f71b0030ac652a91e2247a585c",
+      "symbol": "LOTMY",
+      "yahooSymbol": "LOTMY",
+      "rows": 361,
+      "sourceSha256": "02484731b3f2acf25afc6448c70cd16fc507cb0d91c6ad94d6a9faa012723df5",
+      "observedAt": "2026-10-25T03:13:16.871751Z",
+      "independentRowsDigest": "40bd29511c42898c8e0a776b17d0f1258c2726540be51f3bc712ee1ef06a5154",
+      "firstDate": "2025-05-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "cd3fa3e85e94db75726389421c411dbca783d23afa058c9831ed847af555f598",
+      "symbol": "LOVFF",
+      "yahooSymbol": "LOVFF",
+      "rows": 1947,
+      "sourceSha256": "f1459049c6573cfe6ed45887267689bd38a2fe905e73c32665f99ec92dba170c",
+      "observedAt": "2026-10-25T03:13:27.042448Z",
+      "independentRowsDigest": "b918776861d646772d75e8f82f715f5302d0f4617b4beae80eb3c556252247f6",
+      "firstDate": "2019-01-18",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 576,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6a9d0564b3682f8ce30b0e93c7a2d2459e84ad936212de4c6095d83f012be736",
+      "symbol": "LOWLF",
+      "yahooSymbol": "LOWLF",
+      "rows": 1877,
+      "sourceSha256": "561a0ba73b0be477e824d559b0c80a39dc614ecd5adf8430459616f9da3b753d",
+      "observedAt": "2026-10-25T03:13:37.071271Z",
+      "independentRowsDigest": "eafe1c5172c90007611ec90a9e62870c96e9345bff9004bcffbe641ce6b3b078",
+      "firstDate": "2019-05-01",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 369,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3a119dbd7c531e778a9e2771e6f16efc08bf92a2652b8973d52c9a6432a8ca18",
+      "symbol": "LPGCY",
+      "yahooSymbol": "LPGCY",
+      "rows": 291,
+      "sourceSha256": "ed971c64c6e4503d3f619ac4e086e2ecd4e4a3bd870a8893345b3567e61a07cf",
+      "observedAt": "2026-10-25T03:13:59.083572Z",
+      "independentRowsDigest": "64737f3d019ec820367dc2f19dc19ab503ad94b80e59da32d99a55fa083cfe29",
+      "firstDate": "2025-08-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 117,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "122dc2aa434644ec67edaa6c634632edec195528a440c26a7b56bc880981b905",
+      "symbol": "LPIX",
+      "yahooSymbol": "LPIX",
+      "rows": 3060,
+      "sourceSha256": "8d1ce8de80da0a589974f269e461cd686ab63eb9d4a3f77d2491a91540c051f9",
+      "observedAt": "2026-10-25T03:14:09.224250Z",
+      "independentRowsDigest": "f16f32f87eef20fd9db8e607de6ada92de1cb0edbe4448636d416fd5ea1f286a",
+      "firstDate": "2014-08-18",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2084,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "509ea968d9851d8e67cea35cb16317136f458264c8b4ab0555ba2a1c26e3f575",
+      "symbol": "LPKFF",
+      "yahooSymbol": "LPKFF",
+      "rows": 3884,
+      "sourceSha256": "4e943953ba88a2ead04effb887c288905bf2c52fe1c874b2c77ab0db746644c5",
+      "observedAt": "2026-10-25T03:14:11.397312Z",
+      "independentRowsDigest": "16837bfebb7a4c2e33adf47904f70b3910d68335d8dee25880b77c5f275fc2e2",
+      "firstDate": "2011-05-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2983,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c82f2dd3d35ce07411e5de1711ddaef2977613dec688b2700f209ac03f1d50b5",
+      "symbol": "LPKGF",
+      "yahooSymbol": "LPKGF",
+      "rows": 2047,
+      "sourceSha256": "96da43e7b12942b4c663fe4b7a2d4c7c55f4c10072ad484fc182774aaffe059f",
+      "observedAt": "2026-10-25T03:14:13.368636Z",
+      "independentRowsDigest": "0587fc2c0a5d43c2a6d005fa42086126885ca3612670aa00097dd37e331b2d12",
+      "firstDate": "2018-08-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1601,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "df9420370a97598f8b5e007533378191cef5d24dfcce0ee3a07fa46903a9c287",
+      "symbol": "LPMDF",
+      "yahooSymbol": "LPMDF",
+      "rows": 4019,
+      "sourceSha256": "7b96b2ff4a5bef8f7ad2801a370803875c643e0398e9a55e6005ec6f5992f24f",
+      "observedAt": "2026-10-25T03:14:15.367440Z",
+      "independentRowsDigest": "77d0fce058c34a47708fa5ecec09f2b0c406ed9e52a544eefe3227ca1a6a3e06",
+      "firstDate": "2010-10-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3301,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e7cbca7504ddc51478bba1e7febc536442fe149888af75f0193860cf6ac30985",
+      "symbol": "LPPI",
+      "yahooSymbol": "LPPI",
+      "rows": 5230,
+      "sourceSha256": "d7222cf476386a9aa1be3adf0c37e431e124e0d2c6cbaeedc9eea258166b54c6",
+      "observedAt": "2026-10-25T03:14:21.409687Z",
+      "independentRowsDigest": "c4eca9ea5aec4d6ca09b6b4239e66e91d188bcd9e43c2fff44dac7d0b7920090",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2127,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b22ead7e70eff780f35eab235694e0cbb2b53ef8e0324c9a56ce1651159d4245",
+      "symbol": "LPPSY",
+      "yahooSymbol": "LPPSY",
+      "rows": 65,
+      "sourceSha256": "73baceb4e76379c3933b272f528235be3d3077f680bcd8cc5829571730e16fdb",
+      "observedAt": "2026-10-25T03:14:23.150970Z",
+      "independentRowsDigest": "053bdf1daa75e3cc462d3fb4501a1a091bf1d3349668de639832e43e2e30e310",
+      "firstDate": "2026-07-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 65,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "1308b014127d21c05672e334cd0a6ea301944b722a09f276a2986a1d51f880dc",
+      "symbol": "LPSIF",
+      "yahooSymbol": "LPSIF",
+      "rows": 3436,
+      "sourceSha256": "aab18de29b7ae05b537b7e0100c9281bf61353dff44ca34bbc13d95205a400b1",
+      "observedAt": "2026-10-25T03:14:33.367115Z",
+      "independentRowsDigest": "799f6a9c557ab2e75d584a3a50f06e440f92d7d9ad64e31168c387da6022eed6",
+      "firstDate": "2013-02-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2686,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "d27f7132cc92c80ae9928e869fd038168d88313469571a1c32da985f0645a4b1",
+      "symbol": "LPTVQ",
+      "yahooSymbol": "LPTVQ",
+      "rows": 2501,
+      "sourceSha256": "32f8eb742dba7678f5392cf84612699bb5f6ebc388e68e8d7fb6b3bf1d88bcfd",
+      "observedAt": "2026-10-25T03:14:47.565905Z",
+      "independentRowsDigest": "9dddd1b587a0756549e543386d4d81eda7652340a268d4a6a9b151eb1d018b8f",
+      "firstDate": "2016-11-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 804,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "27425037931f97723d4009c679229c3439fcbe4844a294242a93ae7c9e912f77",
+      "symbol": "LQAVF",
+      "yahooSymbol": "LQAVF",
+      "rows": 1593,
+      "sourceSha256": "3849d5562b4494f66cfe2ec57f99a2b9bee6514b4072ef1a359247c71b328b5b",
+      "observedAt": "2026-10-25T03:14:53.506135Z",
+      "independentRowsDigest": "9cb6a14df45c404715e53cfb7b7b61cce0652b9d915fbb0342efbe66b9622030",
+      "firstDate": "2020-06-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 869,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "fce38fed3de6b30ad6e4442bb6980cb2c820a9957a168f8bed1e489d9b3d03c0",
+      "symbol": "LQMT",
+      "yahooSymbol": "LQMT",
+      "rows": 5230,
+      "sourceSha256": "d8f5588fbdb6dc168f49a6f50391f29d10cb8a896284b3a0dbeb32999a948250",
+      "observedAt": "2026-10-25T03:14:57.835714Z",
+      "independentRowsDigest": "6fb278bc69d1757dee506f2aef390bc4861601e332e647448cbe1435a3bb34ef",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 13,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "79725e5acfb0b239700badeaa4435abe71b01a7a1e59c9a9192f6fac2ab35de7",
+      "symbol": "LQRCF",
+      "yahooSymbol": "LQRCF",
+      "rows": 65,
+      "sourceSha256": "6d5e159804c8a52e80f4c140f8b582fbfbfe6fc43f9f8cbca39fb288d1ae06fa",
+      "observedAt": "2026-10-25T03:14:59.332542Z",
+      "independentRowsDigest": "cfb932e50285eff43905ac7f19fd7be8ca36c14781fed7752184c2e3cfeedb4f",
+      "firstDate": "2026-07-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "0f35be11d3316ea633868e3e68e9e3b3c22948b9df7aa37c8157315e59cbaa01",
+      "symbol": "LQWC",
+      "yahooSymbol": "LQWC",
+      "rows": 5230,
+      "sourceSha256": "a3e5150cf86cbab4532228f7657888ff46db9c319f97ade9fc28688bf546a2ab",
+      "observedAt": "2026-10-25T03:15:03.636092Z",
+      "independentRowsDigest": "233a89194cd283d6bf5d7254fa677baac87d2d26091f222f3eff4597093ef477",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2449,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f6034856183c86a4b9325d5e38b425f657ca0d9e8ae5e7532ec752d5f55ba5ed",
+      "symbol": "LRAXF",
+      "yahooSymbol": "LRAXF",
+      "rows": 5172,
+      "sourceSha256": "28923ffd9817677de2d7a5710bc24cc84b908be1b5a55363518bb1aeb0f041f6",
+      "observedAt": "2026-10-25T03:15:09.570336Z",
+      "independentRowsDigest": "e31480600c36422e9b5e395052410d79f5de9ff30d0f828d47c244f0a206d425",
+      "firstDate": "2006-03-28",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1379,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "18aa79ffb83f04f36b08668c7984009f5b23dabf65ec4eeff6d25df7cf1ffee5",
+      "symbol": "LRBI",
+      "yahooSymbol": "LRBI",
+      "rows": 4803,
+      "sourceSha256": "10f72026130615df8be45b4af721d2b432a3706912b4b450ca41e6d7c9c3a17d",
+      "observedAt": "2026-10-25T03:15:11.572193Z",
+      "independentRowsDigest": "7535d656b5894f29a8cf92d71653a0d5a1856e76f12aefc828e5235667e04092",
+      "firstDate": "2007-09-14",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4525,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "095e1b229166fb03dac77e29ee6a9937b3be7fdbb525c324ac52734dc366af5a",
+      "symbol": "LRCDF",
+      "yahooSymbol": "LRCDF",
+      "rows": 4146,
+      "sourceSha256": "eb75106b98c6301f449954e61c44f420c782579542462d36f502a458625556f7",
+      "observedAt": "2026-10-25T03:15:13.562406Z",
+      "independentRowsDigest": "1eed546e12dec0222d35cc0ba617087fab3c9f9141e01ff32e7bbef9108e8a74",
+      "firstDate": "2010-04-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2723,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "944417d14d4af8c63d9be06d7f0d1cc870b60ce9741f57818bd8a93669336835",
+      "symbol": "LRDC",
+      "yahooSymbol": "LRDC",
+      "rows": 4261,
+      "sourceSha256": "7860a7c8fd190f5ebdcc18f8a25e6176543151c1f8cf73c2f108f5bc70a3f79b",
+      "observedAt": "2026-10-25T03:15:19.502196Z",
+      "independentRowsDigest": "8e7d1e9e45c4d74e873b138f4cb4b862ab1cfff36f0fcde58e4fed5f2de63711",
+      "firstDate": "2009-11-06",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 813,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "495246d96dd5bf9a974ee3d3d8406a592c1f9fdee1f27650c9a560f9dfa2126c",
+      "symbol": "LRDG",
+      "yahooSymbol": "LRDG",
+      "rows": 2534,
+      "sourceSha256": "030e68f22a6fa3d2d47d0863337ee7315ed3b0c621ee77a94025b6c4f064df7a",
+      "observedAt": "2026-10-25T03:15:21.479701Z",
+      "independentRowsDigest": "4f6bb945ec009f1d37a82ba7c5389f57a4a1be34e1f86d77b60d0dcf7f9c7c3c",
+      "firstDate": "2016-09-19",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1707,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f5e6f75cafdb2cdae4356fcf905af09e86220a1d98e37c368e2232e1aaf9fcc0",
+      "symbol": "LRDSF",
+      "yahooSymbol": "LRDSF",
+      "rows": 1486,
+      "sourceSha256": "9cf5057cdf3b992dfd2043e66ff71e64ca1ed218ed2e08881fd84fffb113a69e",
+      "observedAt": "2026-10-25T03:15:25.483416Z",
+      "independentRowsDigest": "32909c759c1a99b64b7accf20d8dd1fa3beba6088d8c0a2e7369ff2a33cf8a72",
+      "firstDate": "2020-11-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1229,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "97f77faf80298454beb0e3e378b412b5ca56d4f517ccf55915c80afe35df89e2",
+      "symbol": "LRKKF",
+      "yahooSymbol": "LRKKF",
+      "rows": 1308,
+      "sourceSha256": "5c2e4cd4e21e1545fb61111e3a47a1e953c54334f8a8e5a694ee32d90766f269",
+      "observedAt": "2026-10-25T03:15:37.491488Z",
+      "independentRowsDigest": "6d99d418c6db8ee4ac959321a67eb0db3a7b61ea91bfefa0b0c45f6e77c81600",
+      "firstDate": "2021-08-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1280,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3aaebd8090bc6e05a217c74ab02ade19fe80ed67540a266f2d246b798da52a47",
+      "symbol": "LRLCF",
+      "yahooSymbol": "LRLCF",
+      "rows": 4146,
+      "sourceSha256": "70c36d86ada5ac0ee5cb75c0825f03406900ad35ad1240aba832f6ce9bc8e093",
+      "observedAt": "2026-10-25T03:15:39.632249Z",
+      "independentRowsDigest": "ff94b485fd168b321da6bbc0cbad17b1d315f4bda3f9b81c023ce263e394052f",
+      "firstDate": "2010-04-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1309,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "d7bfe1d8c52fe43fbae67ee5deff794a6b15572e24243c94393429c967fcb0b3",
+      "symbol": "LRLCY",
+      "yahooSymbol": "LRLCY",
+      "rows": 4907,
+      "sourceSha256": "f4b267e045c0197e5ab151da193c50ca53037b13738a36814d6bc6e1fcc91f6b",
+      "observedAt": "2026-10-25T03:15:41.683039Z",
+      "independentRowsDigest": "2767c0afabe30481063208fc1e590b4b633196fd6434005ecf1c03399a0e0e3d",
+      "firstDate": "2007-04-18",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a43186ae924d10dc810edfd452f1e3af659caa097cb41dae0957deaaeb64bedb",
+      "symbol": "LRRIF",
+      "yahooSymbol": "LRRIF",
+      "rows": 3144,
+      "sourceSha256": "37c5c06d1bbe1b4fb3d2b56c5b0709fa99d790f6be085748b7e8ce0fe0216eeb",
+      "observedAt": "2026-10-25T03:15:45.583925Z",
+      "independentRowsDigest": "4cbd0e9a83bc8edc83560a6a699fb38f41a667f47c25bf3104ea3c128db60e06",
+      "firstDate": "2014-04-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2675,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b4ab87337bedefdfc3b14ec323c55635fc89f92046dbd0fec2db56038f60eb66",
+      "symbol": "LRSNF",
+      "yahooSymbol": "LRSNF",
+      "rows": 2691,
+      "sourceSha256": "61af4bcf9cabb44bd6102df6a25c509b90f82eb84b268bc4b9a526548a1d7c46",
+      "observedAt": "2026-10-25T03:15:49.599159Z",
+      "independentRowsDigest": "8ff1de561a53a88cae49d6060cd873652751fab9ab7bc047df22a6a71b865ec6",
+      "firstDate": "2016-02-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2571,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "7e4f80d7da264e406dce8be9532ac312050b6c5a2d211de028fd2293f8a5dbb0",
+      "symbol": "LRSV",
+      "yahooSymbol": "LRSV",
+      "rows": 4254,
+      "sourceSha256": "fce4d7bdfe656b118e986d212bf917f064c7f5b80746e90f3009d009364a8045",
+      "observedAt": "2026-10-25T03:15:53.647212Z",
+      "independentRowsDigest": "e683ca70323123d691d56830b832eb667689edf0b1ed2bb0bfdc1f7afc5ae91b",
+      "firstDate": "2009-11-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1736,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6e773dbc7f06fb1d7719daf770a6f19c04365373322855c0762f4b33543301a5",
+      "symbol": "LSANF",
+      "yahooSymbol": "LSANF",
+      "rows": 4912,
+      "sourceSha256": "010ebc66a6d8b5f89731250721cd232daf7ec354393cecaa45fab13048a83a73",
+      "observedAt": "2026-10-25T03:16:07.698572Z",
+      "independentRowsDigest": "698151c515aad9bbd9eed16ad31fafe8d26487df3f53b11e881fa5e8fb1fb6d1",
+      "firstDate": "2007-04-11",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3806,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "1261493a94b277786a6b15c2a71eddd82d743788061425ba1e43b4f31134ae29",
+      "symbol": "LSCG",
+      "yahooSymbol": "LSCG",
+      "rows": 5230,
+      "sourceSha256": "ed78fc69158fd9ea3d4891e64310828780a9a0548649a3fcf552e5e094fa5cd2",
+      "observedAt": "2026-10-25T03:16:23.770188Z",
+      "independentRowsDigest": "8aaccab3bf8a03b1dfefb278d0c2e97e1ec3cec02050e60e519ca597b0f9e703",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1769,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "78352673cf4222af4596830aa687e00a827c5d10fa2a085ad424e8bd573142e1",
+      "symbol": "LSDAF",
+      "yahooSymbol": "LSDAF",
+      "rows": 3436,
+      "sourceSha256": "2117312029d39db05cd7ace9051285b0683bc786d56be023e7a9c70d977ec03a",
+      "observedAt": "2026-10-25T03:16:27.772731Z",
+      "independentRowsDigest": "5d17e10cac821ebfedf1f10161a398bdb1ca14b67f0cf5223a30f39cc89a9f56",
+      "firstDate": "2013-02-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3125,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a0ce18f552dc1c1df0fb747a15743c6237bde77930c279f4b096539f24724508",
+      "symbol": "LSDIF",
+      "yahooSymbol": "LSDIF",
+      "rows": 925,
+      "sourceSha256": "bac18d441969b7c867b729014cbb77f416c6afe811fb6cd13352f47977189c42",
+      "observedAt": "2026-10-25T03:16:29.731861Z",
+      "independentRowsDigest": "a0e703970c4fbca69118de8a3d97c1381b2f3fcaaed6e534538f359165249738",
+      "firstDate": "2023-02-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 393,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e0933221266540ba44cfa3f3b3dd0adf2a0ccc2b81c222b99e4f850a29fc6b17",
+      "symbol": "LSEB",
+      "yahooSymbol": "LSEB",
+      "rows": 888,
+      "sourceSha256": "07dd15af901f759e76e767029daa4d2ed293d90fc997df24ccb4e2f90b81381a",
+      "observedAt": "2026-10-25T03:16:35.793508Z",
+      "independentRowsDigest": "9a2defde81dd7b39e9d56b38412e8c6541260536c4463f023a166c6d3a507d74",
+      "firstDate": "2023-04-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 729,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b7d7db949c9f75f05a1d7f7af50504ff0aaa40898965cab1513d765c55238cca",
+      "symbol": "LSEGY",
+      "yahooSymbol": "LSEGY",
+      "rows": 2171,
+      "sourceSha256": "bcfcca549a55002210faf61eebbb88ab6a0500d2037b3b425945cc59c9284d81",
+      "observedAt": "2026-10-25T03:16:37.814425Z",
+      "independentRowsDigest": "1463e53bc2fe35cf958081241234ac66fe41d726e329f1016f07161bac6a3fb9",
+      "firstDate": "2018-02-28",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "0fc3255c29bd26b4e1824b1cf31a9bfb1ab129d1e36af9f8e6dbeedb170ef3db",
+      "symbol": "LSFG",
+      "yahooSymbol": "LSFG",
+      "rows": 5230,
+      "sourceSha256": "66e4f5c3a3a7272e33f8d84a31cd29f1e1cee5290cb1137be131742f1044edb2",
+      "observedAt": "2026-10-25T03:16:39.887737Z",
+      "independentRowsDigest": "825e0457272a6a7cdaaed2c4e4f2e345322483696ce43ad642b8e55af3c8408d",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4562,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6be834f0ddcc973ac136b9e925bbecdc94f873ac83d4ab97366c7aa301b6bc52",
+      "symbol": "LSGOF",
+      "yahooSymbol": "LSGOF",
+      "rows": 3571,
+      "sourceSha256": "09da5d0535b2314b77fac81d80253f1831316a63b12c68d2cb9934e6a5aeb9e3",
+      "observedAt": "2026-10-25T03:16:43.880251Z",
+      "independentRowsDigest": "fcd5b040c13309f55f5aa00d51d93f3739853a8a709e67629c57ab1a1c437e3d",
+      "firstDate": "2012-08-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2696,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "af0e62b20dd6279b4858c3d63cd3e4d7bcdc67a8fbb6785c50a2e61069a92ab3",
+      "symbol": "LSHGF",
+      "yahooSymbol": "LSHGF",
+      "rows": 30,
+      "sourceSha256": "a2a71762c7b4cbc20b1139d8905b1dea8a9d676bfd9827738a6dd948b87b0e1b",
+      "observedAt": "2026-10-25T03:16:45.830442Z",
+      "independentRowsDigest": "e30f0b241b67306eab71a25fdaf27de0d9ae7319e4269256c7b284ef6b691808",
+      "firstDate": "2026-09-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 25,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b41109a6015c6f798c6f323fec23ea9f1861c850536f04bc2db0443b7d197ca9",
+      "symbol": "LSIHF",
+      "yahooSymbol": "LSIHF",
+      "rows": 3771,
+      "sourceSha256": "a70854f8c5bafaba083b3e5193b12e40a75bda2033d83a6a21c8e8ceb2d4b345",
+      "observedAt": "2026-10-25T03:16:53.982266Z",
+      "independentRowsDigest": "88313894136758e8e9c805441ab54019611d6bcc11d8d2faac741092c6a11fd3",
+      "firstDate": "2011-10-18",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3669,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "db3e413607786c66985793be58b23aa7661693c9d4eaef301d85e9b8bec7e684",
+      "symbol": "LSLCF",
+      "yahooSymbol": "LSLCF",
+      "rows": 3438,
+      "sourceSha256": "8ace1e9ff9ce736ba43b361a88543c525af4cae19326ca4f426ba83c66c9a9fa",
+      "observedAt": "2026-10-25T03:17:01.996090Z",
+      "independentRowsDigest": "e1cefc42a6f4da8881dbe8cda34f425d16688dc6c290dc045f221e0344bc4fb6",
+      "firstDate": "2013-02-15",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3247,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "430f2f0e1927e85b9e6c16d393bfc555891d7a8b691d5f478f6833e5f51fc969",
+      "symbol": "LSLPF",
+      "yahooSymbol": "LSLPF",
+      "rows": 3092,
+      "sourceSha256": "d46726534e1b83551de5ac6fefb36667ef71eba2d2e02c8f01ffb592e0bda497",
+      "observedAt": "2026-10-25T03:17:03.959349Z",
+      "independentRowsDigest": "32cc28e227b50036e9e68324d53351fe0a1cda831728caa0a63b1d81b1efe19e",
+      "firstDate": "2014-07-02",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2698,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "d7498dd923710138e733c387668db415ae35816308d05f7f7bc61905070809f6",
+      "symbol": "LSMLF",
+      "yahooSymbol": "LSMLF",
+      "rows": 2135,
+      "sourceSha256": "36a428d5fb28073d29aa06f3777f8c94996c3119430813fe0dd2411dbd5c06b5",
+      "observedAt": "2026-10-25T03:17:05.959597Z",
+      "independentRowsDigest": "bfb212b9f511381dc9cd84dbab7c3caf96dceed85b8f8a53217a875cacd38f2c",
+      "firstDate": "2018-04-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2115,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "51ff4d75d77365e6c613da8e7d300643d2fb2274414d154ae93ea36c53e2cd2a",
+      "symbol": "LSRBF",
+      "yahooSymbol": "LSRBF",
+      "rows": 164,
+      "sourceSha256": "ceb8ae87111ea17f823bd88eb55df431a85939157723b51c29e724e057ca0377",
+      "observedAt": "2026-10-25T03:17:18.011818Z",
+      "independentRowsDigest": "2e2f1940d113c6cfee2fee958bc743765a09154f5024145fcd16ad1bf3e4000c",
+      "firstDate": "2026-02-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 157,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ae999020b7dfe681df3f0ec8493be8709b9e94bdbd04a8029c8d3aaeb893e81f",
+      "symbol": "LSRCY",
+      "yahooSymbol": "LSRCY",
+      "rows": 1532,
+      "sourceSha256": "efaaa40482cb17ee1e131f8fd7f7784c46e2b26402a456a5da5a868db1942829",
+      "observedAt": "2026-10-25T03:17:22.041696Z",
+      "independentRowsDigest": "d69da6764e8e01c7677717d32af827bf30ece2f911089afa18ecf55c3e4727ed",
+      "firstDate": "2020-09-11",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b04aa0f25de62ea5f82023f29cac1a77df6c8986138d80fc8e3a2a2bd173ebbe",
+      "symbol": "LTAFF",
+      "yahooSymbol": "LTAFF",
+      "rows": 38,
+      "sourceSha256": "58b1f61c8b22fe39abc94ef03ab62aacc7232200124fd4cce59d1a36bb56341a",
+      "observedAt": "2026-10-25T03:17:50.214186Z",
+      "independentRowsDigest": "0a6645e57929710869c25a934070daad8ae64ae714138203a548fb2a1fd991c3",
+      "firstDate": "2026-08-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 25,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "790ad8e214b3b2d0a891384ef1dadef5d201e3782e9430f06698cb661bc5438d",
+      "symbol": "LTCEF",
+      "yahooSymbol": "LTCEF",
+      "rows": 37,
+      "sourceSha256": "c15efe7e5a0e543c60f735462e0de44ddb722f07945e82d11483853be9fdbcf5",
+      "observedAt": "2026-10-25T03:17:52.241156Z",
+      "independentRowsDigest": "94dcb4d56848868662d54b9d4ddf364f4df41282004214a2cc06c2333cbf36fa",
+      "firstDate": "2026-08-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 6,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "bccfa3d2329f345301fcd26fc98dfeaea5bbe8a505e149b0ad210b6279c711b7",
+      "symbol": "LTCH",
+      "yahooSymbol": "LTCH",
+      "rows": 1455,
+      "sourceSha256": "58b2d411fc38634bf101312aa77170db2254499c479749df1136c731d1cca94f",
+      "observedAt": "2026-10-25T03:17:54.245533Z",
+      "independentRowsDigest": "e53c3a5e327c0a8994c927991648ba0108c447da1a23594f7cab6939854f58e2",
+      "firstDate": "2020-12-31",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 8,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "cac5f50ce0f7345650b401157942e36996ac5ed0ba6227811808a83436983b8c",
+      "symbol": "LTCOF",
+      "yahooSymbol": "LTCOF",
+      "rows": 1795,
+      "sourceSha256": "ea20887be74206bf4fddff3584a35d7bbf70300227f5d057f519e70b8662100c",
+      "observedAt": "2026-10-25T03:18:02.331594Z",
+      "independentRowsDigest": "3ed054390eee17fd24059b4fc8ecd358f8203e852b39be4c169f478966c82c5a",
+      "firstDate": "2019-08-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 936,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "5ca5613e918799bf83e14632093bebc9519b1051cf881956f0eb7933272fc246",
+      "symbol": "LTCP",
+      "yahooSymbol": "LTCP",
+      "rows": 4002,
+      "sourceSha256": "588fdae847c9090ac7762b16aa76047a6658895310bea2d8973fbe18c6709f2d",
+      "observedAt": "2026-10-25T03:18:04.351598Z",
+      "independentRowsDigest": "220ae4d5c28a1bd2d141c91db7880b8ed1f4edc316085c80c24b2dc76c641810",
+      "firstDate": "2010-11-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3411,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3c0782f4bc7af832d03620d110a7aedc1c8f09e484c74aa7b1cf63c088e52c89",
+      "symbol": "LTEC",
+      "yahooSymbol": "LTEC",
+      "rows": 5230,
+      "sourceSha256": "a31eb06b13c2b1fd7b9ac9fbed0f90e6cc8106c59a0607d860b9d1c766751890",
+      "observedAt": "2026-10-25T03:18:12.389678Z",
+      "independentRowsDigest": "48f021d892f4eb30983812322e7615beae516dfbba14e0e4550daa16c3b01193",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4084,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e171e153d85f5be6eeb6a90efab266894bebb94baea3f11fb95239b1d3a7e54f",
+      "symbol": "LTESF",
+      "yahooSymbol": "LTESF",
+      "rows": 2778,
+      "sourceSha256": "f892276cfe22b735454dbd68c83b4e90fba5749320e1c662d1f2dd218af5195d",
+      "observedAt": "2026-10-25T03:18:18.381420Z",
+      "independentRowsDigest": "358263dba6a647ad0d6e8e3876708133c1ce60424cde7c60282c918b031a3b26",
+      "firstDate": "2015-09-30",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1291,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "480e04fa5b9ff339a9a50e971bf0eb4d40aef676550a598d1530b0dcd78d35ce",
+      "symbol": "LTFD",
+      "yahooSymbol": "LTFD",
+      "rows": 5230,
+      "sourceSha256": "352aec71fa62eb4eb68d935e926a78b3ff414259c8c5166090f5f02e18e8a97e",
+      "observedAt": "2026-10-25T03:18:20.450593Z",
+      "independentRowsDigest": "15b208b856dfcf8220c75c69b13398ae234d3020a58554e090f817bdf7aadfdc",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3718,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "200e2ecc9abb51df7dadf057ba5d72e805feae7d60d0dad1714e0140f8f411bc",
+      "symbol": "LTGHY",
+      "yahooSymbol": "LTGHY",
+      "rows": 3347,
+      "sourceSha256": "f4aeb464b072142e5e53020e96b3a3332326117522e2e56607b9e92686ee9942",
+      "observedAt": "2026-10-25T03:18:24.474322Z",
+      "independentRowsDigest": "efe7d99cd1ab6e4f8778168ff67864095a6a1bf547ebd8fcb84938d29ff65d1a",
+      "firstDate": "2013-06-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 325,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ce466b82422bfc811cecbd8d9da21d46d61c8331246bb6409fe9598d737b8fd9",
+      "symbol": "LTGJ",
+      "yahooSymbol": "LTGJ",
+      "rows": 3604,
+      "sourceSha256": "088b1df92e37539a723a47ef34b3cf62b768a72bb704756deb4b343bd98b8797",
+      "observedAt": "2026-10-25T03:18:26.443619Z",
+      "independentRowsDigest": "281cbacd3002b3b7f8907f14b9296b7383688e9fb269e354f69c0bce40d79bec",
+      "firstDate": "2012-06-18",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3300,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "60c84ff6ff18822b97033cd559054c6b2b4fac47614c23869d2a3f2c2897abde",
+      "symbol": "LTHCF",
+      "yahooSymbol": "LTHCF",
+      "rows": 1074,
+      "sourceSha256": "db42c0a9ad62e86eb70089009d2b38b0d6192947f19469a6cf435ea3b4cf5245",
+      "observedAt": "2026-10-25T03:18:28.438739Z",
+      "independentRowsDigest": "0c2e8bb4ff9f47d16aa4c36f98d15fbfa141ff0d7bae640e6d2ed39c6a3db5ee",
+      "firstDate": "2022-07-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 251,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "fefe77f9f4b3ee65ce323095d1f67f54684b57fa6d06074640c761038d0c544a",
+      "symbol": "LTHIF",
+      "yahooSymbol": "LTHIF",
+      "rows": 5230,
+      "sourceSha256": "fb14fa47c8f6ef88f2252f1013fe6999689afd3feeeaca5b5cf1d731c4e5968a",
+      "observedAt": "2026-10-25T03:18:32.541108Z",
+      "independentRowsDigest": "23a749a6aaa97efdef107aff975a5b6447a885ecb50ab7a8a27dbcc91729a59a",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4059,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "606f386e86e439b5dd3afecea0659154f8578895103b56967e201ddd5b2d76f1",
+      "symbol": "LTHO",
+      "yahooSymbol": "LTHO",
+      "rows": 5138,
+      "sourceSha256": "f281c8f342458c1d1ee17398a4389520454f8256cdf95c0fefc512ae50816823",
+      "observedAt": "2026-10-25T03:18:36.510623Z",
+      "independentRowsDigest": "6bf3064b227d922f989518ce14e5396f36afd3fd308fdbc81453fe8a14ea64d0",
+      "firstDate": "2006-05-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4779,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c9d9251747d2e0845367af852e7934c3574e33fdd6cd230ada81b3f7b1225e5a",
+      "symbol": "LTMCF",
+      "yahooSymbol": "LTMCF",
+      "rows": 1450,
+      "sourceSha256": "03b13034ef20f978ab46d593ec760551d0df266aeade9f20c6efaf7982509ee1",
+      "observedAt": "2026-10-25T03:18:48.523264Z",
+      "independentRowsDigest": "1402ff6c1bfbf455d223131e0dc1076c872c05e6f76e330d54a6965475a52450",
+      "firstDate": "2021-01-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 21,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "7fb84d1dd69c7e12f48c12dcbb571a0e9f51cd2d8efe68d8583d4094dc37fc8e",
+      "symbol": "LTMGF",
+      "yahooSymbol": "LTMGF",
+      "rows": 270,
+      "sourceSha256": "2a642f6b02af10663f65bdaef5bc7a618b4948e045283c4426d243b2ceb05e63",
+      "observedAt": "2026-10-25T03:18:52.564670Z",
+      "independentRowsDigest": "ef7aaa1d392e3c06b75164d3909a7d28e7725083aa1aa3d41f451226c024b171",
+      "firstDate": "2025-09-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 265,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2b8302f5737bafb3c5ea295e91ae8f0578e3eb2a2bcbd53e8700c0a96d46cee6",
+      "symbol": "LTOUF",
+      "yahooSymbol": "LTOUF",
+      "rows": 4608,
+      "sourceSha256": "fc5f2d8bf1c53ab0abfaf54aa6691f7c1ab1f2fde02d60d5901cbe032ef14de5",
+      "observedAt": "2026-10-25T03:19:00.663657Z",
+      "independentRowsDigest": "10303ccc3d9354c4f284c9c76e2fe7d3e3e67c6d905782c3a4575e725f67e895",
+      "firstDate": "2008-06-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3831,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "1bd602a84a25eddf16d29412f0a657091be560dc4239e3ee700d5960b1ab5cc9",
+      "symbol": "LTRBF",
+      "yahooSymbol": "LTRBF",
+      "rows": 1242,
+      "sourceSha256": "18c037f3d33f9d7da7df94a554cf0a8bd52687b7f4357dc7d589a714a303e7a4",
+      "observedAt": "2026-10-25T03:19:04.620653Z",
+      "independentRowsDigest": "f35ce9200bc3d287119dc7ae78d15b3cfb543f67c7597a304cd5c2dc81fc83fa",
+      "firstDate": "2021-11-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1101,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e173b503b72b6b6912e75c46afe935d28224aefaa375cc37c947b07ca16052a7",
+      "symbol": "LTRCF",
+      "yahooSymbol": "LTRCF",
+      "rows": 1041,
+      "sourceSha256": "908b01dc1a347e5d9da61d6f9024243ec9e9c04ded5fb1c75b7d53835d11286e",
+      "observedAt": "2026-10-25T03:19:06.633424Z",
+      "independentRowsDigest": "2a35dc35116f98fd9ab9eb219fdd1e5cc700c91b5c695537f9da6b1e84faa362",
+      "firstDate": "2022-08-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 974,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "261036d04b25e20d35491b874aa006999b9875ac9bcabd51afe740c8d3c7ef3e",
+      "symbol": "LTSAP",
+      "yahooSymbol": "LTSAP",
+      "rows": 1660,
+      "sourceSha256": "ee91a7f3d937b363daeb4910c210ccdb4989bc06396df8b411c3be1b673dfc3b",
+      "observedAt": "2026-10-25T03:19:18.716588Z",
+      "independentRowsDigest": "63442c88755e7fd3c43d1d38614bcc6ae0f08969c610c06e009a51ac5271b0c1",
+      "firstDate": "2020-03-11",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 223,
+      "dateGridMatchesStoredSpy": true
+    }
+  ],
+  "fiveYearSources": [
+    {
+      "task": "1920e6d2830e1149c23444870bf56af011eda5639a02d5b94931b804411b3e2b",
+      "symbol": "LMSC",
+      "yahooSymbol": "LMSC",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "a96b11d360d35d9fd8fd30fc7552ea481830e30772af80928ab0f4402d0e2fdc",
+      "observedAt": "2026-10-25T03:08:19.386303Z",
+      "independentRowsDigest": "90dfdb23c038600fb432f5ab3be5d7675b955a55868c8a6fbca9801ac775a3c2",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "2bd9516d17e50790dd83b0790e7a007a8a5265aa3aa09835b33854db4e21b753",
+      "symbol": "LOGL",
+      "yahooSymbol": "LOGL",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "7af118fe45819c4fb9b0a62ce32ef05ffbe81a3be1758cb14776bc062d8a1921",
+      "observedAt": "2026-10-25T03:12:10.854074Z",
+      "independentRowsDigest": "e96aafa1b1def20d26bd74df4ef27585f3a8b9f804eb9df26b33ae38dfe475ef",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "3fb4e329eb37e1cf017340007ce79306f67f905a23bb9608e8524954fddf6f74",
+      "symbol": "LMGR",
+      "yahooSymbol": "LMGR",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "1087b3bb90ebb9a2522a2c0a49b466476b651ce7e0a29cd1fd8d08b863ae897b",
+      "observedAt": "2026-10-25T03:07:19.092188Z",
+      "independentRowsDigest": "390a2207f6b87fd3f9afffdadcb0279e0f61e3055a693d0995a943b1eba9bf8a",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "4da8e466a483f63f2e07c513f843695621ff45281e3d3f6ba808eba942068325",
+      "symbol": "LQWDF",
+      "yahooSymbol": "LQWDF",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "c0ea4ac1ba07464507b94cd77e498fe472068e258fae2869befabf207e4ebda8",
+      "observedAt": "2026-10-25T03:15:07.487283Z",
+      "independentRowsDigest": "880ef15b6d72c9ecde33fa5891af282056a24584cf4b2fd3e205329b3781807d",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "57b3fe05b69a02478278aca9023eece4bef6806b07a8bcea494ac26c575bd166",
+      "symbol": "LOGQ",
+      "yahooSymbol": "LOGQ",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "89245408c24f5141bae8fd3c9a673b6004e96ab11a896a0315112bb516c578c0",
+      "observedAt": "2026-10-25T03:12:19.155337Z",
+      "independentRowsDigest": "891bf106909799719a35568dbf55d3aa09e442b2271a064624c34eb7b2ab74f4",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "75f6330bc6279bab8252ea56892d4eedb48d65e7f61af460d64c9c302eadbeec",
+      "symbol": "LMEFF",
+      "yahooSymbol": "LMEFF",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "2bfb8e04ffe02cca3503e57dcc31e6cccdda3d9ae5d95ef8fe586fc0afdea80f",
+      "observedAt": "2026-10-25T03:07:07.094088Z",
+      "independentRowsDigest": "2eb1042eccd5bf1d33c92983dd46db729535f1b71263b641507637d99795ba94",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "8669419cf6adbb762dae43a0c7c3e8bd765b6a51bc5a749959c68ea5b901173a",
+      "symbol": "LOTT",
+      "yahooSymbol": "LOTT",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "2b1195044393000dbdba65a065c34c5fefe4d836563c9969308c388ab9271619",
+      "observedAt": "2026-10-25T03:13:19.135039Z",
+      "independentRowsDigest": "a71d09a094a2372e135783334f7d3a183f432977595b7cf3669e2871e7c283c4",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "8787ec85813ed96ee6abd3bce28744abe9a65e829ab9ee8625b80137522e6771",
+      "symbol": "LPTI",
+      "yahooSymbol": "LPTI",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "034560e2f22daf6090c5288d4088ee8fa6cfa0b745a660abca6ffbade58f3cba",
+      "observedAt": "2026-10-25T03:14:41.529144Z",
+      "independentRowsDigest": "be839e1f99d7033640e7572df671ec0249408c5a9c3120a12b431c8b92cef243",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "8c4119aa2398acc0e8eeb3b9be149cb00e13d155deb0ba4793733de6684a2880",
+      "symbol": "LRDJF",
+      "yahooSymbol": "LRDJF",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "31e9259b4fd91bf876d123c32b3ea16476c9c72e447ec46f4fed4cb89c31a114",
+      "observedAt": "2026-10-25T03:15:23.584317Z",
+      "independentRowsDigest": "d6dd8d7d2fd2295dd3a5d12a2849ede895a14c966188b9a726d0fc8360513562",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "ae87d1f722e4e86c9e238c2c532817cf11aad11139a5055d764ea792f349361b",
+      "symbol": "LOCM",
+      "yahooSymbol": "LOCM",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "d4971e519e994f860bd2285b17a45169519420d3869a7afb6d9f3ff3e16b39dd",
+      "observedAt": "2026-10-25T03:11:58.689078Z",
+      "independentRowsDigest": "bcd675da31c55a3b4aa88f25c12839003e37b4034a5b30071a6269a3c36e17b8",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "afca0973b6f7d1b7801422c472e01050ea6353e41f41ea1a1fe6ea9455cb3756",
+      "symbol": "LSIIF",
+      "yahooSymbol": "LSIIF",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "c344bd41d2fbd0923aaf526d54de3e72958298e3fbe48c1525f302197f1feeea",
+      "observedAt": "2026-10-25T03:16:55.950298Z",
+      "independentRowsDigest": "cfc8def9d03cce1894580a1a2982e5c869c6bc32b89428a26ca5594c772f8dcd",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "c85e28f5848e3eda3cb42fcaa860e95d709e77b2c23130bc613841166e3b331b",
+      "symbol": "LTRE",
+      "yahooSymbol": "LTRE",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "7baad70387c0099aca0e84ea8d8dc2db0f1b246231d9581f5dc32cc1857ba2ad",
+      "observedAt": "2026-10-25T03:19:08.751169Z",
+      "independentRowsDigest": "a3fee802d169c84744c0700f51efe746e1887ad3d8164ae22e1e06083b7e7058",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "d110d18ba224bc867ffe95e773f87ea4148afe96aa4761d00105135ac556aed3",
+      "symbol": "LMMFF",
+      "yahooSymbol": "LMMFF",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "c93279b99183402edbf3ab451c02d5c05af98fac0b3af89f18454b2df294f68f",
+      "observedAt": "2026-10-25T03:07:35.115602Z",
+      "independentRowsDigest": "7c7e62d2fff288ba2c653c53cc20c0bb63f62366f30964c00c11211760b8f83e",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "e100a4ee48f6d96f00bdf002895b0aef5823932fa2e1742cbfe26daeb5b6bdd8",
+      "symbol": "LTHUQ",
+      "yahooSymbol": "LTHUQ",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "0fb897736cf30f5dec8401cf6326e3daf153322cf0022b5c3da0c25c2df27cf7",
+      "observedAt": "2026-10-25T03:18:38.543933Z",
+      "independentRowsDigest": "dcbf9251b3e40fe3670a37277dd3a3ed846e0e8035d9a4f10baf6c3a50416fae",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "f46f20a7978b15924471baf60489270b274f2c6c92fc5e38330c78eab9bf899e",
+      "symbol": "LOTE",
+      "yahooSymbol": "LOTE",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "a8d161a13756f9d617309638b48833c1014f3aabbf64824537db0dca88266269",
+      "observedAt": "2026-10-25T03:13:15.190016Z",
+      "independentRowsDigest": "6c5efef49c4ae6c4fc420aa61d236b13c24074f16376a4abbe2f22aa620df7ee",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    }
+  ],
+  "years": [
+    {
+      "year": 2006,
+      "rows": 3615,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "acb0656f46f736b799783d188bc4b7fff8c20ef3d8edf2dca3621cec5ac40f69",
+      "native": {
+        "runId": "market-97725b76-5ed7-4896-9b0f-c901c2bc84c6",
+        "rows": 3615,
+        "preparedSha256": "c05ebf5a993093509612304273b4dce0f34c9db618dc470ed374bb675332365e",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2007,
+      "rows": 4543,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "41e58d6543f78f13dbd52a22fe1c1a7738828db8e48279525f7a40e844c83130",
+      "native": {
+        "runId": "market-055862f9-0032-4270-9e5b-6ca9a8c8bbe4",
+        "rows": 4543,
+        "preparedSha256": "b0398b6cf71b23cb7f89e0f24aa2f7d5198b3d4b52b25c04fb82944880fe4bc8",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2008,
+      "rows": 5592,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "ba5dc306764775404c180ad1b096fccda4d1d26d99f35cdc1514228c9d59f487",
+      "native": {
+        "runId": "market-bd6b34f1-9ae1-4c54-b942-3b5155ba2677",
+        "rows": 5592,
+        "preparedSha256": "1345a0916dcef611034ba0b3289a80f8b82485095189498f011946c7623d890a",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2009,
+      "rows": 6551,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "3acb009f7c534e9c6833c88091e9d7e85267534b3e876925cbe620b5068baf3b",
+      "native": {
+        "runId": "market-834ba141-0c8a-4a0d-9d71-ccf13e896e5b",
+        "rows": 6551,
+        "preparedSha256": "dda8c857047d22672cd85a04acb80e21eb1ba628422448f9da3f641781785acb",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2010,
+      "rows": 8207,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "9cc5df0751b242632d77a717f8807ee58e8eecc42a499d1c8c355ed396f3132d",
+      "native": {
+        "runId": "market-9c7d79b2-17ee-4f41-be9e-11c51d4427ce",
+        "rows": 8207,
+        "preparedSha256": "53b231bcf109ad6f1a56f9e83dcfc103bdd24fe8811fc86bee585c63373ad4a3",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2011,
+      "rows": 9789,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "eadb9a1cc822e9983fe45e56870f2566892e428389916b0c74c17cce081c4e95",
+      "native": {
+        "runId": "market-c3d32f78-6d40-4fab-949d-d295754a61cb",
+        "rows": 9789,
+        "preparedSha256": "8a2393e6953ec93e7463dccf68770740ba367a6cf710cef4595ff7da8c262ba8",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2012,
+      "rows": 11051,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "61c6897fcf8a1198c2a30872ca29cc8ce6e6fe907587f80568ecf9b84b805edd",
+      "native": {
+        "runId": "market-adf6c08e-46b7-45b8-9f99-feda267d0097",
+        "rows": 11051,
+        "preparedSha256": "6f4f02739c1c1e4da8f6460e401a1ed5d99ef0d77422248390feaf98d6801006",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2013,
+      "rows": 13498,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "d232e4c7201cf68c1f24ed73df7fc340cce4ed3f33743d284b882138489a34f5",
+      "native": {
+        "runId": "market-51a0bd3d-7f29-4802-a201-0b5d86574b3e",
+        "rows": 13498,
+        "preparedSha256": "26162be873bba5ddbf11ff824de868656d3a5be2992379117c7e12ad614a6342",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2014,
+      "rows": 14448,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "9f2af19a3adeffccca29372821371b31c436189475c1519b63ee75ae59f3aa82",
+      "native": {
+        "runId": "market-92ff2735-38af-4181-9731-5658c8d0d286",
+        "rows": 14448,
+        "preparedSha256": "84f6f1199e0b4f088b8bffc60b31ecd76b1cfd214c6bfb4262ad8d9fd72d34dd",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2015,
+      "rows": 15007,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "ba5dbdd463ae45f952fec409940f270b50cbe6d943ea602a0a9ec803861f45cb",
+      "native": {
+        "runId": "market-dbd5d335-28ff-4a49-86d6-03648005b8c8",
+        "rows": 15007,
+        "preparedSha256": "815c453e427fc7740938b54eb156152d348888f3e48ee72e0b44cee752ad7c9c",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2016,
+      "rows": 15890,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "705f27b07aa9db7732e2f98f6cc3756f0e518dc8d01f1ab27ea7b36aa578aa54",
+      "native": {
+        "runId": "market-331db7e0-598b-461e-a41e-c72ac4896782",
+        "rows": 15890,
+        "preparedSha256": "07d8c510f4f9f2d216dcf30dd7b316ad9f34b472fdc095e252664ed156d111ba",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2017,
+      "rows": 16541,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "51b5e3b59bd86e2201b0d5bd7d85137b2cadf47d41408b3713802b6953820c71",
+      "native": {
+        "runId": "market-695513b8-5c60-4116-a7e3-5b1db6cb6c8a",
+        "rows": 16541,
+        "preparedSha256": "c00dfb434b3c53deae309f048ddee5b6dd18634fd9730dbb263a4f7e5f64dc1c",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2018,
+      "rows": 17687,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "79583fa844685fc124012a9b368020283ea53af3c9b79cffc6006678296fd9df",
+      "native": {
+        "runId": "market-6da539a7-0f6f-4226-9de8-aec166f84674",
+        "rows": 17687,
+        "preparedSha256": "3c12cb664be56e65566bd38518c3822e3b1204537981a8bb2dc326e3c3ef253a",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2019,
+      "rows": 18678,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "9c41d2d721bdad43c5ad5eaa7a3504cca1910a7c9f15f1ffde2f3bd9d2011357",
+      "native": {
+        "runId": "market-e36d4ac6-1e1a-44f3-9e8a-b5c54478441b",
+        "rows": 18678,
+        "preparedSha256": "f4bf03221d1fd8d222f463645702cfeea31340db1a0e4b6e8276f544ab2e9adc",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2020,
+      "rows": 20219,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "9c9be365d32296ae55b5b02a0667a2018a9af8846d493de890f6298933fb4cb0",
+      "native": {
+        "runId": "market-f5c20f95-b636-474d-969d-ec625f60a32a",
+        "rows": 20219,
+        "preparedSha256": "22525393fe347385063e3f1ea61a56101a19f7841eab6bf365ce6dc45fbd4b47",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2021,
+      "rows": 22463,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "2427bf904c84b941d33a26fe0dfae086c4ee2689b8faa245a48a9769da05a519",
+      "native": {
+        "runId": "market-0c45c53e-e98b-4454-bcfe-d39240f93ec3",
+        "rows": 22463,
+        "preparedSha256": "5f07564f03cd9d09bc5dceefce02c5acfbff454fee3c19e318768b33832b1cd5",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2022,
+      "rows": 23305,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "a319e67479427823cd57b1a9aef82cd19a405cfbb8c6907771b78092c414160a",
+      "native": {
+        "runId": "market-16e8984d-4faf-4bab-aec6-a6647b2692be",
+        "rows": 23305,
+        "preparedSha256": "0bb40352ef754ef370e6a2de02c36acd38b4d5ce13dc0179727107a3b627cad4",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2023,
+      "rows": 24634,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "6fb179daf9e53476074c56d4b81c01d31d5b26df5eee277cc7cab6c1075c26bc",
+      "native": {
+        "runId": "market-c2859f9f-8ed0-466d-8759-65651bbaf55c",
+        "rows": 24634,
+        "preparedSha256": "b23f465db51226c853a4c4346a934be4814ed59a6723cf338eaf779f5f15f6ae",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2024,
+      "rows": 25264,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "875186453fe58fe97b1267e454d220814c89befc7797b28533f184b388382287",
+      "native": {
+        "runId": "market-9012db68-baec-4177-a352-411d89412a3f",
+        "rows": 25264,
+        "preparedSha256": "4330c0b8753d747751883d336172dd6478855c167877c26d06452cf0e8c2e524",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2025,
+      "rows": 25668,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "97a009a484c82f6f2a8190ed5b54cede70e362be11fb6d1fc791a285df231d5a",
+      "native": {
+        "runId": "market-139cc080-e40c-47a2-a387-0dcaaab725cd",
+        "rows": 25668,
+        "preparedSha256": "8f103a28c131adbddbd89108f812c7721179025f21b25b7dad61121f01e88419",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2026,
+      "rows": 21790,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "fcb4df715eed072f89a587ab0528de1d5774e825089f830d3da12377a652dd7e",
+      "native": {
+        "runId": "market-71f3ee7b-676e-4791-9cc8-bcbd4310519c",
+        "rows": 21790,
+        "preparedSha256": "35c3630bdcaefaf0d11a7a7643a32e702fd4945854ca3e454a5b9e8ddb19d5eb",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    }
+  ],
+  "native": [
+    {
+      "runId": "market-97725b76-5ed7-4896-9b0f-c901c2bc84c6",
+      "rows": 3615,
+      "preparedSha256": "c05ebf5a993093509612304273b4dce0f34c9db618dc470ed374bb675332365e",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-055862f9-0032-4270-9e5b-6ca9a8c8bbe4",
+      "rows": 4543,
+      "preparedSha256": "b0398b6cf71b23cb7f89e0f24aa2f7d5198b3d4b52b25c04fb82944880fe4bc8",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-bd6b34f1-9ae1-4c54-b942-3b5155ba2677",
+      "rows": 5592,
+      "preparedSha256": "1345a0916dcef611034ba0b3289a80f8b82485095189498f011946c7623d890a",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-834ba141-0c8a-4a0d-9d71-ccf13e896e5b",
+      "rows": 6551,
+      "preparedSha256": "dda8c857047d22672cd85a04acb80e21eb1ba628422448f9da3f641781785acb",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-9c7d79b2-17ee-4f41-be9e-11c51d4427ce",
+      "rows": 8207,
+      "preparedSha256": "53b231bcf109ad6f1a56f9e83dcfc103bdd24fe8811fc86bee585c63373ad4a3",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-c3d32f78-6d40-4fab-949d-d295754a61cb",
+      "rows": 9789,
+      "preparedSha256": "8a2393e6953ec93e7463dccf68770740ba367a6cf710cef4595ff7da8c262ba8",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-adf6c08e-46b7-45b8-9f99-feda267d0097",
+      "rows": 11051,
+      "preparedSha256": "6f4f02739c1c1e4da8f6460e401a1ed5d99ef0d77422248390feaf98d6801006",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-51a0bd3d-7f29-4802-a201-0b5d86574b3e",
+      "rows": 13498,
+      "preparedSha256": "26162be873bba5ddbf11ff824de868656d3a5be2992379117c7e12ad614a6342",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-92ff2735-38af-4181-9731-5658c8d0d286",
+      "rows": 14448,
+      "preparedSha256": "84f6f1199e0b4f088b8bffc60b31ecd76b1cfd214c6bfb4262ad8d9fd72d34dd",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-dbd5d335-28ff-4a49-86d6-03648005b8c8",
+      "rows": 15007,
+      "preparedSha256": "815c453e427fc7740938b54eb156152d348888f3e48ee72e0b44cee752ad7c9c",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-331db7e0-598b-461e-a41e-c72ac4896782",
+      "rows": 15890,
+      "preparedSha256": "07d8c510f4f9f2d216dcf30dd7b316ad9f34b472fdc095e252664ed156d111ba",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-695513b8-5c60-4116-a7e3-5b1db6cb6c8a",
+      "rows": 16541,
+      "preparedSha256": "c00dfb434b3c53deae309f048ddee5b6dd18634fd9730dbb263a4f7e5f64dc1c",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-6da539a7-0f6f-4226-9de8-aec166f84674",
+      "rows": 17687,
+      "preparedSha256": "3c12cb664be56e65566bd38518c3822e3b1204537981a8bb2dc326e3c3ef253a",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-e36d4ac6-1e1a-44f3-9e8a-b5c54478441b",
+      "rows": 18678,
+      "preparedSha256": "f4bf03221d1fd8d222f463645702cfeea31340db1a0e4b6e8276f544ab2e9adc",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-f5c20f95-b636-474d-969d-ec625f60a32a",
+      "rows": 20219,
+      "preparedSha256": "22525393fe347385063e3f1ea61a56101a19f7841eab6bf365ce6dc45fbd4b47",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-0c45c53e-e98b-4454-bcfe-d39240f93ec3",
+      "rows": 22463,
+      "preparedSha256": "5f07564f03cd9d09bc5dceefce02c5acfbff454fee3c19e318768b33832b1cd5",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-16e8984d-4faf-4bab-aec6-a6647b2692be",
+      "rows": 23305,
+      "preparedSha256": "0bb40352ef754ef370e6a2de02c36acd38b4d5ce13dc0179727107a3b627cad4",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-c2859f9f-8ed0-466d-8759-65651bbaf55c",
+      "rows": 24634,
+      "preparedSha256": "b23f465db51226c853a4c4346a934be4814ed59a6723cf338eaf779f5f15f6ae",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-9012db68-baec-4177-a352-411d89412a3f",
+      "rows": 25264,
+      "preparedSha256": "4330c0b8753d747751883d336172dd6478855c167877c26d06452cf0e8c2e524",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-139cc080-e40c-47a2-a387-0dcaaab725cd",
+      "rows": 25668,
+      "preparedSha256": "8f103a28c131adbddbd89108f812c7721179025f21b25b7dad61121f01e88419",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-71f3ee7b-676e-4791-9cc8-bcbd4310519c",
+      "rows": 21790,
+      "preparedSha256": "35c3630bdcaefaf0d11a7a7643a32e702fd4945854ca3e454a5b9e8ddb19d5eb",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-d051ddd6-5301-4fda-9f3d-4927db1e4238",
+      "rows": 18825,
+      "preparedSha256": "ac3dcd4cda54b9055825ab7a6407982eea4a6c7842058efa8f95c1453ddbecdf",
+      "slices": 4,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    }
+  ],
+  "held": [
+    {
+      "task": "bdeb63662c8dfffa2c9513125141b1e310c93e817df1f91588c21bbccdbf1324",
+      "symbol": "LMNX",
+      "reason": "SOURCE_VALUE_OR_GRID_REQUIRES_REVIEW",
+      "detail": "AssertionError: "
+    },
+    {
+      "task": "f108a583e7f7ed0e962f808f521401388ef45d7a1e3febf1047c7522e1e0353c",
+      "symbol": "LMRMF",
+      "reason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW",
+      "detail": null
+    },
+    {
+      "task": "1deb66531a3d9b7a91f0a9fb71ab5f1b18086693d7db1b29eb4610f943280e0b",
+      "symbol": "LPRO",
+      "reason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW",
+      "detail": null
+    },
+    {
+      "task": "09763c59542f241f4d1f99a556d2e7ff965efe423853702365c2b7e888953a3d",
+      "symbol": "LSBWF",
+      "reason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW",
+      "detail": null
+    },
+    {
+      "task": "7ec7bfbd5248567c6d497a649d54362423fdad3ba081fc3931ba324aae3b08c3",
+      "symbol": "LTCN",
+      "reason": "INSTRUMENT_TYPE_REQUIRES_SCOPE_REVIEW",
+      "detail": null
+    }
+  ],
+  "heldDiagnostics": [
+    {
+      "task": "bdeb63662c8dfffa2c9513125141b1e310c93e817df1f91588c21bbccdbf1324",
+      "symbol": "LMNX",
+      "name": "Defiance Daily Target 2X Long LMND ETF",
+      "currency": "USD",
+      "instrumentType": "ETF",
+      "timezone": "America/New_York",
+      "sourceSha256": "fd1580a5393baa1316cc5309653e98c6ffe891a804b4d01ae4efb466d85fa9b8",
+      "dates": 1,
+      "firstDate": "2026-08-27",
+      "lastDate": "2026-08-27",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SOURCE_VALUE_OR_GRID_REQUIRES_REVIEW"
+    },
+    {
+      "task": "f108a583e7f7ed0e962f808f521401388ef45d7a1e3febf1047c7522e1e0353c",
+      "symbol": "LMRMF",
+      "name": "Lomiko Metals Inc",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "dc13770bd77b4d3019c8dc88201014ae50c47344c4470eb741a63d38239967de",
+      "dates": 1,
+      "firstDate": "2026-10-07",
+      "lastDate": "2026-10-07",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW"
+    },
+    {
+      "task": "1deb66531a3d9b7a91f0a9fb71ab5f1b18086693d7db1b29eb4610f943280e0b",
+      "symbol": "LPRO",
+      "name": "Open Lending Corp",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "c412b0e28512b2dac52e11eade408b711ca7058def2748fc87c07a93a66c591c",
+      "dates": 1,
+      "firstDate": "2026-07-29",
+      "lastDate": "2026-07-29",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW"
+    },
+    {
+      "task": "09763c59542f241f4d1f99a556d2e7ff965efe423853702365c2b7e888953a3d",
+      "symbol": "LSBWF",
+      "name": "LakeShore Biopharma Co., Ltd",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "c48e798bd4977ccf04b89d13a9b00bb32a161657a34ac97fd2091d6f0fa8a5f2",
+      "dates": 1,
+      "firstDate": "2026-07-06",
+      "lastDate": "2026-07-06",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW"
+    },
+    {
+      "task": "7ec7bfbd5248567c6d497a649d54362423fdad3ba081fc3931ba324aae3b08c3",
+      "symbol": "LTCN",
+      "name": "Grayscale Litecoin Trust",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "516bb9b9a022648911838ff32b0f1f88c161092a42f6fdbfbde795b743c9a1c9",
+      "dates": 1549,
+      "firstDate": "2020-08-18",
+      "lastDate": "2026-10-16",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "INSTRUMENT_TYPE_REQUIRES_SCOPE_REVIEW"
+    }
+  ],
+  "wal": [
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 602,
+      "sequencerTxn": 602,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_daily",
+      "writerTxn": 4457,
+      "sequencerTxn": 4457,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_etf_equity_holdings",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_history_catalog",
+      "writerTxn": 11,
+      "sequencerTxn": 11,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_identifiers",
+      "writerTxn": 35,
+      "sequencerTxn": 35,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_universe",
+      "writerTxn": 15,
+      "sequencerTxn": 15,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 602,
+      "sequencerTxn": 602,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_intraday",
+      "writerTxn": 507,
+      "sequencerTxn": 507,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    }
+  ],
+  "idempotence": {
+    "checkedAt": "2026-10-25T03:48:21.947261+00:00",
+    "annualRows": 324440,
+    "fiveYearRows": 18825,
+    "allOriginalNativeAndControlRowsUnchanged": true,
+    "allWalUnchanged": true,
+    "sourceRequests": 0,
+    "newNativeRuns": 0,
+    "formalWrites": 0
+  },
+  "ohlcGate": {
+    "runtime": "v62",
+    "allNewSelectedDatesPassed": true,
+    "legacyPostcheck": {
+      "checkedAt": "2026-10-25T03:48:56.265433+00:00",
+      "routes": 700,
+      "conflictingRows": 3512,
+      "httpPgwireExact": true,
+      "rowsDigest": "415bbf4df344bfa3f503ab9904bb2b7c8aeed188b99c17e64a97df96603f55cb",
+      "legacyQualitySnapshotUnchanged": true,
+      "newBatchOhlcConflicts": 0,
+      "sourceRequests": 0,
+      "formalWrites": 0,
+      "oldSevenConflictRowsAll20FieldsUnchanged": true,
+      "oldSevenRowsDigest": "99f0c2192a3d7dd160b9ee1524c5af1e9a9c12eb9c256a47bcfa42a54600f6b8"
+    }
+  },
+  "sourceHttpStatuses": {
+    "404": 224,
+    "200": 160
+  },
+  "sourceTasksFailedThisBatch": 265,
+  "queuePhaseCounts": {
+    "FAILED_SOURCE": 11523,
+    "PLANNED": 15083,
+    "SCOPE_REVIEW_REQUIRED": 1763,
+    "VERIFIED": 12169
+  },
+  "queueCountsAreNotUniqueCompanyCounts": true,
+  "sourceRequestedFrom": "2006-01-01",
+  "fiveYearFrom": "2021-10-18",
+  "referenceSql": {
+    "path": "tools/sql/us-expanded-history-seventh-20261025-reference.sql",
+    "sha256": "cbfe115d6e491ee0b72cb0b36fe7419c8205d03c0c49e108ef4af5d92a539065",
+    "queries": [
+      {
+        "query": 1,
+        "rows": 24775,
+        "httpPgwireExact": true,
+        "rowsDigest": "51e5d9d6b6fd1f5ce1b5fb1422b892c8825a12121c57e503b3883c7d6bc12c03"
+      },
+      {
+        "query": 2,
+        "rows": 129,
+        "httpPgwireExact": true,
+        "rowsDigest": "65d7db0d2599aed8846dd99762d354148f52036c49150dde86101b7460bf4fe7"
+      },
+      {
+        "query": 3,
+        "rows": 18825,
+        "httpPgwireExact": true,
+        "rowsDigest": "b470640162934a9dd2569cec1ced315c6461d4076dd4282c1fc209923e5e2f71"
+      },
+      {
+        "query": 4,
+        "rows": 2,
+        "httpPgwireExact": true,
+        "rowsDigest": "f639d17f4040ce801d9d88e1212e8cddd9a56fa009ff5c5959d88fd79462fb4f"
+      }
+    ]
+  },
+  "runtime": {
+    "manifest": "F:\\repo\\engine\\data\\var\\market-data\\scope-review\\yahoo-ohlc-v62-20261025\\runtime-v62.json",
+    "sha256": "aa32412a8b2fbbaa5da4e1b3a2125ed1f7a6677e91284ee3ee17d23ebef93303",
+    "runtime": "F:\\repo\\engine\\data\\var\\market-data\\runtime\\us-data-20261025-v62-ohlc-guard",
+    "jars": 47,
+    "tests": [
+      {
+        "scope": "us",
+        "tests": 50,
+        "failures": 0
+      },
+      {
+        "scope": "app",
+        "tests": 58,
+        "failures": 0
+      },
+      {
+        "scope": "architecture",
+        "tests": 5,
+        "failures": 0
+      }
+    ],
+    "moduleBoundariesPassed": true
+  },
+  "corePriorityGate": {
+    "checkedAt": "2026-10-25T03:04:46.865927+00:00",
+    "newYorkDate": "2026-10-24",
+    "lastCompleteUsSession": "2026-10-23",
+    "lastCompleteUtcCryptoDate": "2026-10-24",
+    "noNewCompleteCoreSession": true,
+    "daily": [
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 4331
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 3629
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 4106
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5168
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      }
+    ],
+    "minute": [
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      }
+    ],
+    "crypto": [
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44399
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44399
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      }
+    ],
+    "previousFullFieldProofAndControlsPreserved": true,
+    "httpPgwireExact": true,
+    "sourceRequests": 0,
+    "formalWrites": 0
+  },
+  "evidence": [
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/source-only-verification.json",
+      "sha256": "b719ec71495638bb7db0a7bfc94a27f81502dc90f16b15f5840dcc1464ec0a0f"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/review-independent-verification.json",
+      "sha256": "518f9ad739ff215d353a1264ae12e8fac29ef7083f76a6a72159154eca391b14"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/held-source-diagnostics.json",
+      "sha256": "d1e3d2c91aee40f0bb24f49705766267a459fa7bb1b29e7648bad85a3fecd7c4"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/prior-five-carrier-reuse.json",
+      "sha256": "29b707360f16611f05eb34f9ff71a1c323d688cf8e5412dc0b4b2a5f277cfcbb"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/execution-and-source-cards.json",
+      "sha256": "5a5d6ef91fe043497c9d803d3e274e0e33068f608d1da08d57c511802bdc7831"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/core-priority-gate.json",
+      "sha256": "c061b677604635710d2f965870c3d0828ee551593bb7046e0c905ecc019052e3"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/remaining-priority-audit.json",
+      "sha256": "da363664f96e72b87ad5396ea196dd38e49b0ab1d2abb57aac8dd85036324518"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/independent-verification.json",
+      "sha256": "769ccc8c83087c2b2cf0fd1bb0c78943869c08ebbd872245ab14ae44e126b76c"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/annual-readonly-verification.json",
+      "sha256": "f8e1253185cadcbb41fdba18023cf9a0f4f0a79d49aa91dc4e306f449775097a"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/idempotence-independent-verification.json",
+      "sha256": "378a954bf027a73d788b51ed66d1b37bc612a252b85cbffb6017799021229c82"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v73-20261025/legacy-quality-postcheck.json",
+      "sha256": "d95be0e1409125aa0c33cab099f4e0ba1a3de533e422cc265d14111af81ee7b7"
+    }
+  ],
+  "limitations": [
+    "历史请求边界仍截止2026-10-16；核心另有10月23日增量。",
+    "来源实际起止日逐项记录；不足五年、提前结束和零量报价不补造。",
+    "日期网格参照库存SPY/TIINGO，不代替官方历史交易日历。",
+    "来源EQUITY标签不证明永久身份或代码没有复用，调整基准按原文取得时刻。",
+    "本批5份待核缓存、265个失败任务及其他失败、未下载范围保留。",
+    "本批五年段不推进原全历史任务，原失败与原文保持。"
+  ]
+}
