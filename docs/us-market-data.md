@@ -10,7 +10,7 @@
 
 固定 SPY/QQQ 持仓参照中的 518 个价格路由也已补至 10-23：本轮新增 2540 条，复用 10 个核心股票的 50 条，五日窗口共 2590 条。持仓参照日期仍为 10-16，原 5600 路首批清单保持原截止日；实际价格键、来源和限制见[持仓增量清单](snapshots/us-core-holdings-incremental-20261023.json)、[查询](../tools/sql/us-core-holdings-incremental-20261023-reference.sql)及[验收记录](decisions/2026-10-25-固定持仓核心日线增量验收.md)。
 
-BTC/ETH 的 Binance、Bybit 现货及 USDT 永续已补到 UTC 10-24，最新新增 192 根小时线和 8 根日线，累计 369998 行。原两条官方停市小时缺口及固定首批保持，全部十三列回读、旧字段保护和幂等通过；见[币价增量清单](snapshots/crypto-core-incremental-20261024.json)、[查询](../tools/sql/crypto-core-incremental-20261024-reference.sql)及[验收](decisions/2026-10-25-核心币价十月二十四日增量验收.md)。现有每日持续任务先维护美股核心，再维护这八个既有币价产品，不扩大币种或产品。
+BTC/ETH 的 Binance、Bybit 现货及 USDT 永续已补到 UTC 10-25，最新新增 192 根小时线和 8 根日线，累计 370198 行。原两条官方停市小时缺口及固定首批保持，全部十三列回读、旧字段保护和幂等通过；见[币价增量清单](snapshots/crypto-core-incremental-20261025.json)、[查询](../tools/sql/crypto-core-incremental-20261025-reference.sql)及[验收](decisions/2026-10-26-核心币价十月二十五日增量验收.md)。现有每日持续任务先维护美股核心，再维护这八个既有币价产品，不扩大币种或产品。
 
 ## 首批从这里读取
 
