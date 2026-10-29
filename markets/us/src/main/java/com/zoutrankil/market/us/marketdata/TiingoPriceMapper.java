@@ -17,20 +17,45 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** 保留 Tiingo 未复权价、总回报调整价及除权事件；不把 IEX 成交量解释为 SIP 全市场量。 */
+/** 保留 Tiingo 未复权价和来源调整价；现金额按已核对的发行人事件明确转换。 */
 public final class TiingoPriceMapper {
+    public static final String CASH_DIVIDEND_POLICY = "TIINGO_CASH_DIVIDEND_V3";
     private static final ObjectMapper JSON = new ObjectMapper();
     private static final ZoneId NEW_YORK = ZoneId.of("America/New_York");
+    private static final String SEARS_COMMON = "US000000086368";
+    private static final LocalDate LANDS_END_ADJUSTMENT_DATE = LocalDate.of(2014, 4, 7);
+    private static final String LANDS_END_SOURCE =
+            "https://www.sec.gov/Archives/edgar/data/799288/000119312514134340/d703946dex992.htm";
+
+    /** 原文、实际现金额及事件依据同时交给发布方，避免只留下转换后的值。 */
+    public record DailyMapping(
+            List<Map<String, Object>> rows,
+            List<Map<String, Object>> nonCashDistributions,
+            List<Map<String, Object>> cashDividendCorrections) {
+        public DailyMapping {
+            rows = List.copyOf(rows);
+            nonCashDistributions = List.copyOf(nonCashDistributions);
+            cashDividendCorrections = List.copyOf(cashDividendCorrections);
+        }
+    }
 
     private TiingoPriceMapper() {}
 
     public static List<Map<String, Object>> daily(
             byte[] bytes, String symbol, String sha, Instant observed, LocalDate through)
             throws Exception {
+        return dailyMapping(bytes, symbol, sha, observed, through).rows();
+    }
+
+    public static DailyMapping dailyMapping(
+            byte[] bytes, String symbol, String sha, Instant observed, LocalDate through)
+            throws Exception {
         symbol(symbol);
         JsonNode array = JSON.readTree(bytes);
         if (!array.isArray()) throw new IllegalArgumentException("Tiingo 日线响应必须是数组");
         var rows = new ArrayList<Map<String, Object>>();
+        var nonCash = new ArrayList<Map<String, Object>>();
+        var cashCorrections = new ArrayList<Map<String, Object>>();
         var seen = new HashSet<LocalDate>();
         for (var source : array) {
             Instant marker = Instant.parse(source.required("date").asText());
@@ -50,6 +75,42 @@ public final class TiingoPriceMapper {
                 row.put("adj_" + field.toLowerCase(Locale.ROOT), number(source, "adj" + field));
             row.put("dividend", number(source, "divCash"));
             row.put("split_factor", number(source, "splitFactor"));
+            if (symbol.equals(SEARS_COMMON) && date.equals(LANDS_END_ADJUSTMENT_DATE)) {
+                // 2014 年实际分派 LE 股票；供应商用现金等价额调整价格，不能把它记成实收现金或数量拆股。
+                if (Double.compare((double) row.get("dividend"), 9.52618) != 0
+                        || Double.compare((double) row.get("split_factor"), 1.0) != 0)
+                    throw new IllegalArgumentException("已核对非现金分拆的来源金额或数量因子变化，保留原文核对");
+                row.put("dividend", 0.0);
+                nonCash.add(
+                        Map.ofEntries(
+                                Map.entry("policy", CASH_DIVIDEND_POLICY),
+                                Map.entry("eventType", "NON_CASH_SPIN_OFF"),
+                                Map.entry("symbol", SEARS_COMMON),
+                                Map.entry("sourceAdjustmentDate", date.toString()),
+                                Map.entry("distributionDate", "2014-04-04"),
+                                Map.entry("sourceDivCash", 9.52618),
+                                Map.entry("cashDividend", 0.0),
+                                Map.entry("distributedSymbol", "LE"),
+                                Map.entry("sharesPerShare", 0.300795),
+                                Map.entry("primarySourceUrl", LANDS_END_SOURCE)));
+            }
+            var cashCorrection = TiingoVerifiedCashDividends.find(symbol, date);
+            if (cashCorrection != null) {
+                // 永久证券、来源日、原金额和数量因子同时命中，才补足发行人已明确的现金金额。
+                if (Double.compare((double) row.get("dividend"), cashCorrection.sourceCash()) != 0
+                        || Double.compare((double) row.get("split_factor"), 1.0) != 0)
+                    throw new IllegalArgumentException("已核对现金分红的来源金额或数量因子变化，保留原文核对");
+                row.put("dividend", cashCorrection.cashDividend());
+                cashCorrections.add(
+                        Map.ofEntries(
+                                Map.entry("policy", CASH_DIVIDEND_POLICY),
+                                Map.entry("eventType", "VERIFIED_CASH_AMOUNT"),
+                                Map.entry("symbol", symbol),
+                                Map.entry("sourceAdjustmentDate", date.toString()),
+                                Map.entry("sourceDivCash", cashCorrection.sourceCash()),
+                                Map.entry("cashDividend", cashCorrection.cashDividend()),
+                                Map.entry("primarySourceUrl", cashCorrection.primarySourceUrl())));
+            }
             if ((double) row.get("high") < (double) row.get("low")
                     || (double) row.get("volume") < 0
                     || (double) row.get("split_factor") <= 0)
@@ -61,7 +122,7 @@ public final class TiingoPriceMapper {
             rows.add(Collections.unmodifiableMap(row));
         }
         rows.sort(Comparator.comparing(row -> row.get("trade_date").toString()));
-        return List.copyOf(rows);
+        return new DailyMapping(rows, nonCash, cashCorrections);
     }
 
     public static List<Map<String, Object>> minute(

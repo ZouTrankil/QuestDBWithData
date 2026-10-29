@@ -12,7 +12,7 @@
 | `apps/cn-main-strategy.yml` | 主策略参数、端口和日批开关 | 参数供 `data` / `main-strategy` 使用；仅策略 profile 默认启用策略日批 |
 | `apps/cn-batch.yml` | Batch 端口、SQLite、归档和任务计划 | `data`；`batch` 供控制 CLI 和隔离测试使用 |
 | `apps/cn-l2-live.yml` | 实时 L2 订阅、会话和本地存储 | `l2` |
-| `apps/us-data.yml` | 美股行情目录、核心证券列表、Tiingo/Yahoo 请求预算 | `us-data` |
+| `apps/us-data.yml` | 美股行情目录、核心证券列表、Tiingo/Yahoo 预算、ITCH 有限前缀及预算 | `us-data` |
 | `apps/btc-data.yml` | BTC/ETH 历史起点、目录及公开来源请求预算 | `btc-data` |
 
 美股和 BTC 分别通过 `us-data`、`btc-data` 带上 `market-us`、`market-btc`。入口仅运行明确的有限采集任务；命令和恢复约束见[基础行情](us-market-data.md)。core、engine、公共 API 库不单独放一份运行配置。

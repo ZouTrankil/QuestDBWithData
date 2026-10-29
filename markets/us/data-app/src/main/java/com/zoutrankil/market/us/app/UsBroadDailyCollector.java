@@ -996,6 +996,7 @@ final class UsBroadDailyCollector {
                 }
         }
         holdNonCommonCandidates(db, nonCommon.values());
+        UsYahooAliasOwnership.hold(db, through);
     }
 
     /** 当前明确是非普通股票，但历史 Stock 标签不能排除代码复用；保留任务待分段复核，不删历史范围。 */

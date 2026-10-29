@@ -48,6 +48,21 @@ final class CompleteFrozenSlices {
         return require(ledger, run, prepared, definition, rows, sourceSha, page, entries, false);
     }
 
+    /** 原进程突然退出时，提交意图可以没有发送回执；仅供另行全量回读的显式入口使用。 */
+    static List<Slice> requireStoppedSubmissions(
+            SyncRunLedger ledger,
+            String run,
+            Path prepared,
+            DatasetDefinition definition,
+            List<Map<String, Object>> rows,
+            String sourceSha,
+            VerifiedMarketDataStore.PublicationPage page,
+            List<SyncRunLedger.Entry> entries)
+            throws Exception {
+        return require(
+                ledger, run, prepared, definition, rows, sourceSha, page, entries, true, true);
+    }
+
     private static List<Slice> require(
             SyncRunLedger ledger,
             String run,
@@ -58,6 +73,22 @@ final class CompleteFrozenSlices {
             VerifiedMarketDataStore.PublicationPage page,
             List<SyncRunLedger.Entry> entries,
             boolean complete)
+            throws Exception {
+        return require(
+                ledger, run, prepared, definition, rows, sourceSha, page, entries, complete, false);
+    }
+
+    private static List<Slice> require(
+            SyncRunLedger ledger,
+            String run,
+            Path prepared,
+            DatasetDefinition definition,
+            List<Map<String, Object>> rows,
+            String sourceSha,
+            VerifiedMarketDataStore.PublicationPage page,
+            List<SyncRunLedger.Entry> entries,
+            boolean complete,
+            boolean stoppedSubmission)
             throws Exception {
         var roots = entries.stream().filter(e -> e.kind() == SyncRunLedger.Kind.RUN).toList();
         var attempts =
@@ -86,7 +117,13 @@ final class CompleteFrozenSlices {
         for (var entry : slices) {
             if (!run.equals(entry.runId())
                     || !attempts.getFirst().id().equals(entry.parentId())
-                    || !Set.of(SyncRunState.IN_DOUBT, SyncRunState.VERIFIED)
+                    || !(stoppedSubmission
+                                    ? Set.of(
+                                            SyncRunState.SUBMITTED,
+                                            SyncRunState.ACKNOWLEDGED,
+                                            SyncRunState.IN_DOUBT,
+                                            SyncRunState.VERIFIED)
+                                    : Set.of(SyncRunState.IN_DOUBT, SyncRunState.VERIFIED))
                             .contains(entry.state()))
                 throw new IllegalStateException("存在未发送或不属于原尝试的分页");
             var events = ledger.events(entry.id(), -1, 100);
@@ -122,6 +159,18 @@ final class CompleteFrozenSlices {
                 throw new IllegalStateException("原冻结分页缺失、重复或来源事件不符");
             ledger.requireUncancelledRevision4SubmissionEvent(
                     run, entry.id(), fetched.payloadJson());
+            // 这里仅证明原页有完整提交意图，不伪造发送成功。调用方还必须回读全部键值和稳定 WAL。
+            if (stoppedSubmission
+                    && entry.state() == SyncRunState.SUBMITTED
+                    && entry.revision() == 4) continue;
+            if (stoppedSubmission
+                    && Set.of(SyncRunState.IN_DOUBT, SyncRunState.VERIFIED).contains(entry.state())
+                    && JSON.readTree(entry.payloadJson())
+                            .path("stoppedSubmissionReadback")
+                            .asBoolean()) {
+                requireProof(JSON.readTree(entry.payloadJson()), count, sourceSha);
+                continue;
+            }
             // 发送页可能按字节再次拆批，逐批重算原编码、边界和摘要，不能只相加行数。
             var written = events.stream().filter(e -> e.revision() == 5).findFirst().orElseThrow();
             if (!Set.of(SyncRunState.ACKNOWLEDGED, SyncRunState.IN_DOUBT).contains(written.state()))

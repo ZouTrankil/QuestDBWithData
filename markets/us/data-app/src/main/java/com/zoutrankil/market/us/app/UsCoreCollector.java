@@ -5,6 +5,7 @@ import com.zoutrankil.data.marketdata.AtomicMarketStatus;
 import com.zoutrankil.data.marketdata.FrozenHttpSource;
 import com.zoutrankil.data.marketdata.PersistentMarketApiBudget;
 import com.zoutrankil.data.marketdata.VerifiedMarketDataStore;
+import com.zoutrankil.data.service.SyncJobRunner.Result;
 import com.zoutrankil.market.us.marketdata.TiingoPriceMapper;
 import com.zoutrankil.market.us.marketdata.UsMarketDatasets;
 
@@ -132,6 +133,16 @@ final class UsCoreCollector {
     }
 
     void run(LocalDate through, int maximumJobs) throws Exception {
+        run(null, through, maximumJobs);
+    }
+
+    void runIncremental(LocalDate from, LocalDate through, int maximumJobs) throws Exception {
+        UsCoreIncrementalPlan.missing(from, through, List.of());
+        run(from, through, maximumJobs);
+    }
+
+    private void run(LocalDate incrementalFrom, LocalDate through, int maximumJobs)
+            throws Exception {
         Files.createDirectories(root);
         try (var channel =
                         FileChannel.open(
@@ -155,7 +166,10 @@ final class UsCoreCollector {
                                     "app.market-data.tiingo-monthly-bytes",
                                     Long.class,
                                     1073741824L),
-                            0);
+                            env.getProperty(
+                                    "app.market-data.tiingo-request-spacing-ms",
+                                    Long.class,
+                                    2000L));
             try (var budget =
                             new PersistentMarketApiBudget(
                                     root.resolve("api-budget.sqlite3"), Map.of("tiingo", policy));
@@ -175,7 +189,12 @@ final class UsCoreCollector {
                             "CREATE TABLE IF NOT EXISTS us_collection_tasks(id TEXT PRIMARY KEY,kind TEXT NOT NULL,symbol TEXT NOT NULL,from_date TEXT NOT NULL,through_date TEXT NOT NULL,phase TEXT NOT NULL,raw_path TEXT,source_sha TEXT,observed_at TEXT,evidence TEXT,updated_at TEXT NOT NULL)");
                 }
                 seedProbes(budget, account);
-                plan(db, through);
+                if (incrementalFrom == null) plan(db, through);
+                else {
+                    store.requireNoUnresolved(UsMarketDatasets.DAILY.datasetId());
+                    store.requireNoUnresolved(UsMarketDatasets.MINUTE.datasetId());
+                    planIncremental(db, incrementalFrom, through);
+                }
                 var unresolved = tasks(db, "phase='PUBLISHING'");
                 if (!unresolved.isEmpty())
                     throw new IllegalStateException("有原发布尚未核对：" + unresolved.getFirst().id());
@@ -186,7 +205,18 @@ final class UsCoreCollector {
                         status(db, budget, "STOPPED", null);
                         return;
                     }
-                    var pending = tasks(db, "phase IN ('PLANNED','FETCHED')");
+                    var pending =
+                            tasks(
+                                    db,
+                                    "phase IN ('PLANNED','FETCHED')"
+                                            + (incrementalFrom == null
+                                                    ? ""
+                                                    : " AND from_date>="
+                                                            + VerifiedMarketDataStore.literal(
+                                                                    incrementalFrom.toString())
+                                                            + " AND through_date<="
+                                                            + VerifiedMarketDataStore.literal(
+                                                                    through.toString())));
                     if (pending.isEmpty()) {
                         status(
                                 db,
@@ -228,7 +258,9 @@ final class UsCoreCollector {
                                                             "Token " + token,
                                                             "Content-Type",
                                                             "application/json"),
-                                                    16 * 1024 * 1024);
+                                                    (incrementalFrom == null ? 16 : 2)
+                                                            * 1024
+                                                            * 1024);
                         } catch (PersistentMarketApiBudget.Exhausted wait) {
                             status(db, budget, "WAITING_QUOTA", wait.nextAllowed.toString());
                             while (Instant.now().isBefore(wait.nextAllowed)) {
@@ -281,22 +313,40 @@ final class UsCoreCollector {
                                     "核心证券的真实来源响应，未声称全市场完成");
                     try {
                         if (task.kind().equals("DAILY")) {
-                            var rows =
-                                    TiingoPriceMapper.daily(
+                            var mapped =
+                                    TiingoPriceMapper.dailyMapping(
                                             bytes,
                                             task.symbol(),
                                             response.sha256(),
                                             response.observedAt(),
                                             task.through());
+                            var rows = mapped.rows();
                             if (rows.isEmpty()) throw new IllegalArgumentException("核心证券日线来源为空");
+                            if (incrementalFrom != null)
+                                UsCoreIncrementalPlan.requireSource(
+                                        task.kind(), task.from(), task.through(), rows);
+                            var dailyProof = new LinkedHashMap<>(proof);
+                            dailyProof.put(
+                                    "cashDividendPolicy", TiingoPriceMapper.CASH_DIVIDEND_POLICY);
+                            dailyProof.put("nonCashDistributions", mapped.nonCashDistributions());
+                            dailyProof.put(
+                                    "cashDividendCorrections", mapped.cashDividendCorrections());
                             update(db, task, "PUBLISHING", response, response.sourceUrl());
                             var result =
-                                    store.publish(
-                                            UsMarketDatasets.DAILY,
-                                            rows,
-                                            response.path(),
-                                            response.sha256(),
-                                            proof);
+                                    incrementalFrom == null
+                                            ? store.publish(
+                                                    UsMarketDatasets.DAILY,
+                                                    rows,
+                                                    response.path(),
+                                                    response.sha256(),
+                                                    dailyProof)
+                                            : store.publishMissing(
+                                                    UsMarketDatasets.DAILY,
+                                                    rows,
+                                                    response.path(),
+                                                    response.sha256(),
+                                                    dailyProof);
+                            requireVerified(result, rows.size());
                             update(
                                     db,
                                     task,
@@ -313,21 +363,54 @@ final class UsCoreCollector {
                                             task.from(),
                                             task.through());
                             if (rows.isEmpty()) throw new IllegalArgumentException("核心证券分钟来源为空");
+                            if (incrementalFrom != null)
+                                UsCoreIncrementalPlan.requireSource(
+                                        task.kind(), task.from(), task.through(), rows);
                             update(db, task, "PUBLISHING", response, response.sourceUrl());
                             var one =
-                                    store.publish(
-                                            UsMarketDatasets.MINUTE,
-                                            rows,
-                                            response.path(),
-                                            response.sha256(),
-                                            proof);
+                                    incrementalFrom == null
+                                            ? store.publish(
+                                                    UsMarketDatasets.MINUTE,
+                                                    rows,
+                                                    response.path(),
+                                                    response.sha256(),
+                                                    proof)
+                                            : store.publishMissing(
+                                                    UsMarketDatasets.MINUTE,
+                                                    rows,
+                                                    response.path(),
+                                                    response.sha256(),
+                                                    proof);
+                            requireVerified(one, rows.size());
+                            // 先保存一分钟运行，五分钟未完成时仍保留原发布态，不能伪装整个任务已成功。
+                            update(
+                                    db,
+                                    task,
+                                    "PUBLISHING",
+                                    response,
+                                    JSON.writeValueAsString(
+                                            Map.of(
+                                                    "minute",
+                                                    one,
+                                                    "fiveMinutePending",
+                                                    true,
+                                                    "sourceUrl",
+                                                    response.sourceUrl())));
                             var five =
-                                    store.publish(
-                                            UsMarketDatasets.MINUTE,
-                                            TiingoPriceMapper.fiveMinute(rows),
-                                            response.path(),
-                                            response.sha256(),
-                                            proof);
+                                    incrementalFrom == null
+                                            ? store.publish(
+                                                    UsMarketDatasets.MINUTE,
+                                                    TiingoPriceMapper.fiveMinute(rows),
+                                                    response.path(),
+                                                    response.sha256(),
+                                                    proof)
+                                            : store.publishMissing(
+                                                    UsMarketDatasets.MINUTE,
+                                                    TiingoPriceMapper.fiveMinute(rows),
+                                                    response.path(),
+                                                    response.sha256(),
+                                                    proof);
+                            requireVerified(five, TiingoPriceMapper.fiveMinute(rows).size());
                             update(
                                     db,
                                     task,
@@ -365,6 +448,33 @@ final class UsCoreCollector {
             if (end.isAfter(through)) end = through;
             for (String symbol : symbols) insert(db, "MINUTE", symbol, from, end);
         }
+    }
+
+    private void planIncremental(Connection db, LocalDate from, LocalDate through)
+            throws Exception {
+        for (String kind : List.of("DAILY", "MINUTE"))
+            for (String symbol : configuredSymbols(env)) {
+                var reserved =
+                        tasks(
+                                        db,
+                                        "kind="
+                                                + VerifiedMarketDataStore.literal(kind)
+                                                + " AND symbol="
+                                                + VerifiedMarketDataStore.literal(symbol))
+                                .stream()
+                                .map(t -> new UsCoreIncrementalPlan.Range(t.from(), t.through()))
+                                .toList();
+                for (var range : UsCoreIncrementalPlan.missing(from, through, reserved))
+                    insert(db, kind, symbol, range.from(), range.through());
+            }
+    }
+
+    static void requireVerified(Result result, int rows) {
+        if (!result.state().toString().equals("VERIFIED")
+                || result.errorCode() != null
+                || result.sourceRows() != rows
+                || result.verifiedRows() != rows)
+            throw new IllegalStateException("核心正式运行未完整通过，保留原发布态及原运行，不能重发");
     }
 
     static LinkedHashSet<String> configuredSymbols(Environment environment) {

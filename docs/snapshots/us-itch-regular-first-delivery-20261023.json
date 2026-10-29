@@ -1,0 +1,127 @@
+{
+  "version": 1,
+  "checkedAt": "2026-10-22T21:48:32.892724+00:00",
+  "scope": "首批正常时段连续10万条消息，约0.59秒，不代表完整分钟或订单簿",
+  "table": "us_nasdaq_itch_messages",
+  "physical": {
+    "table_name": "us_nasdaq_itch_messages",
+    "id": 3208,
+    "directoryName": "us_nasdaq_itch_messages~3208"
+  },
+  "source": {
+    "url": "https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/S061226-v50.txt.gz",
+    "fileDate": "2026-06-12",
+    "compressedPrefixBytes": 763363328,
+    "totalCompressedBytes": 17894268560,
+    "sha256": "a5a050723c9ca9c4e84be02dc2664898c207441043c69952b781a61f483c2dfa",
+    "metadataSha256": "99c79cc9c5c4c935d1a549af5fe7ba45544682914c04934b7907a28385eb17be",
+    "entityValidator": "\"cde32cfe443dd1:0\"",
+    "chunks": 91,
+    "sourceComplete": false
+  },
+  "range": {
+    "firstMessage": 60936546,
+    "lastMessage": 61036545,
+    "rows": 100000,
+    "firstTimestamp": "2026-06-12T13:31:00.000000357Z",
+    "lastTimestamp": "2026-06-12T13:31:00.591333287Z",
+    "firstNanoseconds": "1781271060000000357",
+    "lastNanoseconds": "1781271060591333287",
+    "durationNanoseconds": "591332930",
+    "timeZone": "America/New_York",
+    "firstDecompressedOffset": 1908042975,
+    "selectedEndDecompressedOffsetExclusive": 1911116523,
+    "types": {
+      "D": 41095,
+      "A": 38211,
+      "U": 15963,
+      "F": 1256,
+      "E": 1596,
+      "X": 1130,
+      "P": 720,
+      "C": 26,
+      "I": 2,
+      "Y": 1
+    }
+  },
+  "verification": {
+    "runId": "market-08cdc2f6-2aaa-4689-9ff1-87fba7ee6046",
+    "state": "VERIFIED",
+    "columns": [
+      "ts",
+      "message_index",
+      "message_type",
+      "stock_locate",
+      "tracking_number",
+      "symbol",
+      "order_ref",
+      "new_order_ref",
+      "side",
+      "shares",
+      "price_4",
+      "raw_hex",
+      "decompressed_offset",
+      "source_sha256",
+      "source_complete",
+      "observed_at"
+    ],
+    "allSixteenFieldsExactRawPreparedHttpPgwire": true,
+    "canonicalRowsDigest": "4e4c9a62a1b7e0b60e782cf23559d1f1665395b8472c7daf246f6d0ebd1801f7",
+    "oldPremarketRowsAllSixteenFieldsExact": 350836,
+    "priorNativeRowsUnchanged": {
+      "sync_runs": 2360,
+      "sync_entries": 9363,
+      "sync_events": 46718
+    },
+    "queuesUnchanged": true,
+    "otherWalUnchanged": true,
+    "priorPublicSnapshotsUnchanged": true,
+    "wal": [
+      {
+        "name": "us_nasdaq_itch_messages",
+        "writerTxn": 131,
+        "sequencerTxn": 131,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    ]
+  },
+  "runtime": {
+    "path": "var/market-data/runtime/us-data-20261023-v50-streamed-source",
+    "manifestSha256": "5e36348eef1560950d6a4749eec1110a4fde8b222ab92e724ec5c200ee4705ec",
+    "jars": 47,
+    "relatedTests": 27,
+    "streamedSourceHashChecks": 9
+  },
+  "budget": {
+    "provider": "nasdaq-itch",
+    "requests": 91,
+    "acceptedHttpStatus": 206,
+    "receivedBytes": 763363328,
+    "newTiingoOrYahooRequests": 0
+  },
+  "references": {
+    "sql": "tools\\sql\\us-itch-regular-slice-2026-06-12.sql",
+    "sqlSha256": "6118fc024070960fd05a1fce53ffdd983ac693a59c5e7a941c59f8a6d2d3bcd7",
+    "queryRowCounts": [
+      100000,
+      10,
+      1,
+      1,
+      1,
+      1
+    ],
+    "privateEvidenceDirectory": "var/market-data/scope-review/itch-rth-v49-20261023",
+    "acceptanceSha256": "cff6475ce0ffa2a3a3e775710af68799abaa77dcfaebe84e45fee2b511e5b2a3",
+    "readySha256": "12e88ee3a4e27ca5681bc1514fee37013fc8054256ac0dd67f2e82ddc0f8f3bf",
+    "referenceSqlProofSha256": "936b2ce31670d1160cb115a56680fea593686f01f910fccf33fc78938041f17c"
+  },
+  "limitations": [
+    "source_complete=false，不是完整文件或全日订单流",
+    "旧盘前与新正常时段之间的消息未全部发布",
+    "执行消息价格可依赖片段以前的订单，不补空价格计算全片段VWAP",
+    "不同长度前缀的摘要不同，不能把相同原消息重复计为成交",
+    "全市场历史长尾继续保留来源队列，整体目标尚未完成"
+  ],
+  "wholeGoalComplete": false
+}

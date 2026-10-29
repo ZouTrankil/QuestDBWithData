@@ -28,8 +28,20 @@ import java.util.UUID;
 final class FredMacroCollector {
     private static final ObjectMapper JSON = new ObjectMapper();
 
+    /** 各序列发布进度不同；显式选择单条，避免一个空源阻断其他已提供的指数。 */
+    static List<String> selectedSeries(String series) {
+        if (series == null) return List.of("NASDAQCOM", "SP500", "VIXCLS");
+        if (!FredMarketDaily.SERIES.contains(series))
+            throw new IllegalArgumentException("FRED series 仅接受 NASDAQCOM、SP500 或 VIXCLS");
+        return List.of(series);
+    }
+
     static void collect(
-            Environment env, Path work, VerifiedMarketDataStore store, LocalDate through)
+            Environment env,
+            Path work,
+            VerifiedMarketDataStore store,
+            LocalDate through,
+            List<String> selected)
             throws Exception {
         Path root = work.toAbsolutePath().normalize();
         Files.createDirectories(root);
@@ -57,7 +69,7 @@ final class FredMacroCollector {
                             new PersistentMarketApiBudget(
                                     root.resolve("api-budget.sqlite3"), Map.of("fred", policy));
                     var source = new FrozenHttpSource(root, budget, proxy)) {
-                for (String series : List.of("NASDAQCOM", "SP500", "VIXCLS")) {
+                for (String series : selected) {
                     store.requireNoUnresolved(d.datasetId());
                     URI uri =
                             URI.create(

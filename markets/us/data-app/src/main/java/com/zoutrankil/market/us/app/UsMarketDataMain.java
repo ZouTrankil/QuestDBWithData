@@ -2,6 +2,7 @@ package com.zoutrankil.market.us.app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.marketdata.VerifiedMarketDataStore;
+import com.zoutrankil.market.us.marketdata.CboeIndexDaily;
 import com.zoutrankil.market.us.marketdata.FredMarketDaily;
 import com.zoutrankil.market.us.marketdata.NasdaqItchDataset;
 import com.zoutrankil.market.us.marketdata.NasdaqItchMapper;
@@ -14,7 +15,6 @@ import com.zoutrankil.market.us.marketdata.UsSecurityIdentifiers;
 import com.zoutrankil.market.us.marketdata.UsUniverseSnapshot;
 import com.zoutrankil.runtime.ProjectConfiguration;
 
-import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,7 +37,7 @@ public final class UsMarketDataMain {
     public static void main(String[] args) throws Exception {
         if (args.length == 0)
             throw new IllegalArgumentException(
-                    "命令：definitions|status|collect-core|import-tiingo-daily|import-tiingo-minute");
+                    "命令：definitions|status|collect-core|import-tiingo-daily|import-tiingo-minute|collect-cboe-vix|import-cboe-vix");
         var options = new LinkedHashMap<String, String>();
         for (int i = 1; i < args.length; i += 2)
             if (!args[i].startsWith("--")
@@ -54,6 +54,19 @@ public final class UsMarketDataMain {
                         env.getProperty("app.questdb.password", ""),
                         root);
         switch (args[0]) {
+            case "collect-cboe-vix", "import-cboe-vix" -> {
+                boolean imported = args[0].equals("import-cboe-vix");
+                if (!(imported ? Set.of("through", "source") : Set.of("through"))
+                        .containsAll(options.keySet()))
+                    throw new IllegalArgumentException("未知 CBOE 参数");
+                print(
+                        CboeIndexCollector.collect(
+                                env,
+                                root,
+                                store,
+                                LocalDate.parse(required(options, "through")),
+                                imported ? Path.of(required(options, "source")) : null));
+            }
             case "create-regular-view" -> {
                 if (!Set.of("calendar-source", "hours-source").containsAll(options.keySet()))
                     throw new IllegalArgumentException("未知交易日历参数");
@@ -65,12 +78,23 @@ public final class UsMarketDataMain {
                                 Path.of(required(options, "hours-source"))));
             }
             case "collect-fred" -> {
-                if (!Set.of("through").containsAll(options.keySet()))
+                if (!Set.of("through", "series").containsAll(options.keySet()))
                     throw new IllegalArgumentException("未知 FRED 参数");
+                var selected = FredMacroCollector.selectedSeries(options.get("series"));
                 LocalDate through = LocalDate.parse(required(options, "through"));
                 if (!through.isBefore(LocalDate.now(ZoneId.of("America/New_York"))))
                     throw new IllegalArgumentException("FRED 有限回补只使用已结束的纽约日期");
-                FredMacroCollector.collect(env, root, store, through);
+                FredMacroCollector.collect(env, root, store, through, selected);
+            }
+            case "reconcile-stopped-submitted-frozen" -> {
+                if (!Set.of("run", "prepared-sha256", "stopped-evidence")
+                        .containsAll(options.keySet()))
+                    throw new IllegalArgumentException("未知突然退出只读核对参数");
+                print(
+                        store.reconcileStoppedSubmittedFrozen(
+                                required(options, "run"),
+                                required(options, "prepared-sha256"),
+                                Path.of(required(options, "stopped-evidence"))));
             }
             case "reconcile-complete-frozen" -> {
                 if (!Set.of("run", "prepared-sha256", "stopped-evidence")
@@ -166,38 +190,54 @@ public final class UsMarketDataMain {
                                         "scope",
                                         "发行人当前股票持仓；不是官方历史指数成分")));
             }
+            case "fetch-itch-prefix" -> {
+                if (!options.isEmpty()) throw new IllegalArgumentException("ITCH 前缀参数通过根配置及标准覆盖设置");
+                print(new UsItchPrefixCollector(env, root).run());
+            }
             case "import-itch" -> {
-                if (!Set.of("source", "metadata", "first-message", "message-count")
+                if (!Set.of(
+                                "source",
+                                "metadata",
+                                "first-message",
+                                "message-count",
+                                "maximum-first-message")
                         .containsAll(options.keySet()))
                     throw new IllegalArgumentException("未知 ITCH 参数");
                 Path raw = Path.of(required(options, "source")),
                         metadata = Path.of(required(options, "metadata"));
-                byte[] bytes = Files.readAllBytes(raw);
                 var card = JSON.readTree(Files.readAllBytes(metadata));
-                String sha = VerifiedMarketDataStore.sha(bytes);
+                String sha = UsItchPrefixCollector.sha(raw);
                 if (!sha.equals(card.path("compressedSha256").asText())
                         || card.path("sourceComplete").asBoolean(true)
-                        || card.path("compressedPrefixBytes").asLong() != bytes.length)
+                        || card.path("compressedPrefixBytes").asLong() != Files.size(raw))
                     throw new IllegalArgumentException("ITCH 前缀元数据或摘要不符");
                 long first = Long.parseLong(required(options, "first-message"));
                 int count = Integer.parseInt(required(options, "message-count"));
                 Instant observed =
                         Instant.parse(card.path("observedAt").asText())
                                 .truncatedTo(ChronoUnit.MICROS);
-                var rows =
-                        NasdaqItchMapper.messages(
-                                new ByteArrayInputStream(bytes),
-                                LocalDate.parse(card.path("fileDate").asText()),
-                                first,
-                                count,
-                                sha,
-                                observed);
-                print(
-                        store.publish(
-                                NasdaqItchDataset.MESSAGES,
-                                rows,
-                                raw,
-                                sha,
+                long scanLimit =
+                        options.containsKey("maximum-first-message")
+                                ? Long.parseLong(options.get("maximum-first-message"))
+                                : 5_000_000L;
+                if (options.containsKey("maximum-first-message")
+                        && scanLimit > UsItchPrefixCollector.settings(env).maximumMessages())
+                    throw new IllegalArgumentException("ITCH 扫描不能超过根配置上限");
+                List<Map<String, Object>> rows;
+                // 较大原件只按流扫描；旧调用仍使用原五百万条范围和原十六列。
+                try (var input = Files.newInputStream(raw)) {
+                    rows =
+                            NasdaqItchMapper.messages(
+                                    input,
+                                    LocalDate.parse(card.path("fileDate").asText()),
+                                    first,
+                                    count,
+                                    sha,
+                                    observed,
+                                    scanLimit);
+                }
+                var evidence =
+                        new LinkedHashMap<String, Object>(
                                 Map.of(
                                         "sourceMetadata",
                                         card,
@@ -208,7 +248,10 @@ public final class UsMarketDataMain {
                                         "messageCount",
                                         count,
                                         "sourceComplete",
-                                        false)));
+                                        false));
+                if (options.containsKey("maximum-first-message"))
+                    evidence.put("maximumFirstMessage", scanLimit);
+                print(store.publish(NasdaqItchDataset.MESSAGES, rows, raw, sha, evidence));
             }
             case "reconcile-undelivered" -> {
                 if (!Set.of("run", "prepared-sha256", "stopped-evidence")
@@ -220,8 +263,12 @@ public final class UsMarketDataMain {
                                 required(options, "prepared-sha256"),
                                 Path.of(required(options, "stopped-evidence"))));
             }
-            case "collect-core", "collect-broad" -> {
-                if (!Set.of("through", "maximum-jobs").containsAll(options.keySet()))
+            case "collect-core", "collect-broad", "collect-core-incremental" -> {
+                boolean incremental = args[0].equals("collect-core-incremental");
+                if (!(incremental
+                                ? Set.of("from", "through", "maximum-jobs")
+                                : Set.of("through", "maximum-jobs"))
+                        .containsAll(options.keySet()))
                     throw new IllegalArgumentException("未知采集参数");
                 if (args[0].equals("collect-broad") && options.containsKey("maximum-jobs"))
                     throw new IllegalArgumentException("maximum-jobs 仅适用于核心队列，不能在挂牌队列中静默忽略");
@@ -235,7 +282,11 @@ public final class UsMarketDataMain {
                 int maximum = Integer.parseInt(options.getOrDefault("maximum-jobs", "100000"));
                 if (maximum < 1 || maximum > 100000)
                     throw new IllegalArgumentException("明确的任务上限必须在 1 到 100000 之间");
-                if (args[0].equals("collect-core"))
+                if (incremental)
+                    new UsCoreCollector(env, root, store)
+                            .runIncremental(
+                                    LocalDate.parse(required(options, "from")), through, maximum);
+                else if (args[0].equals("collect-core"))
                     new UsCoreCollector(env, root, store).run(through, maximum);
                 else new UsBroadDailyCollector(env, root, store).run(through);
             }
@@ -259,10 +310,15 @@ public final class UsMarketDataMain {
                                     UsSecurityIdentifiers.IDENTIFIERS,
                                     UsFundHoldings.EQUITIES,
                                     NasdaqItchDataset.MESSAGES,
+                                    CboeIndexDaily.DEFINITION,
                                     FredMarketDaily.DEFINITION));
             case "status" -> {
                 var result = new ArrayList<Object>();
-                for (var d : List.of(UsMarketDatasets.DAILY, UsMarketDatasets.MINUTE)) {
+                for (var d :
+                        List.of(
+                                UsMarketDatasets.DAILY,
+                                UsMarketDatasets.MINUTE,
+                                CboeIndexDaily.DEFINITION)) {
                     var exists =
                             store.query(
                                     "SELECT table_name FROM tables() WHERE table_name="
@@ -324,15 +380,21 @@ public final class UsMarketDataMain {
                                 through.toString(),
                                 "coverageScope",
                                 "仅核验冻结来源的完整业务键和值，不证明全市场覆盖");
-                if (args[0].equals("import-tiingo-daily"))
+                if (args[0].equals("import-tiingo-daily")) {
+                    var mapped =
+                            TiingoPriceMapper.dailyMapping(bytes, symbol, sha, observed, through);
+                    var dailyEvidence = new LinkedHashMap<>(evidence);
+                    dailyEvidence.put("cashDividendPolicy", TiingoPriceMapper.CASH_DIVIDEND_POLICY);
+                    dailyEvidence.put("nonCashDistributions", mapped.nonCashDistributions());
+                    dailyEvidence.put("cashDividendCorrections", mapped.cashDividendCorrections());
                     print(
                             store.publish(
                                     UsMarketDatasets.DAILY,
-                                    TiingoPriceMapper.daily(bytes, symbol, sha, observed, through),
+                                    mapped.rows(),
                                     raw,
                                     sha,
-                                    evidence));
-                else {
+                                    dailyEvidence));
+                } else {
                     LocalDate from = LocalDate.parse(required(options, "from"));
                     var minute =
                             TiingoPriceMapper.minute(bytes, symbol, sha, observed, from, through);

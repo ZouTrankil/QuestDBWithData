@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "说明": "本轮写前门槛未通过，保留已有成功范围，不产生10月26日新增验收。",
+  "checkedAt": "2026-10-27T02:25:40.266912+00:00",
+  "state": "PREFLIGHT_WAL_MISMATCH",
+  "newSourceRequests": 0,
+  "newFormalWrites": 0,
+  "newSourceTasks": 0,
+  "newNativeRuns": 0,
+  "newCollectorLaunched": false,
+  "affectedTables": [
+    {
+      "name": "crypto_ohlcv",
+      "previous": {
+        "name": "crypto_ohlcv",
+        "writerTxn": 610,
+        "sequencerTxn": 610,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "current": {
+        "name": "crypto_ohlcv",
+        "writerTxn": 610,
+        "sequencerTxn": 602,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    {
+      "name": "us_equity_daily",
+      "previous": {
+        "name": "us_equity_daily",
+        "writerTxn": 5056,
+        "sequencerTxn": 5056,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "current": {
+        "name": "us_equity_daily",
+        "writerTxn": 5056,
+        "sequencerTxn": 4994,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    }
+  ],
+  "observations": [
+    {
+      "path": "F:/repo/engine/data/var/market-data/scope-review/core-incremental-v102-20261027/wal-preflight-blocked-observation-01.json",
+      "checkedAt": "2026-10-27T02:18:46.474212+00:00",
+      "sha256": "404be842484969a07a5c7d2b337e800ab688a9ce60e984033c91c8b698081f39"
+    },
+    {
+      "path": "F:/repo/engine/data/var/market-data/scope-review/core-incremental-v102-20261027/wal-preflight-blocked-observation-02.json",
+      "checkedAt": "2026-10-27T02:21:49.683762+00:00",
+      "sha256": "284507d98ae0099105832bc3f0fdbace2f8d5c331d71b51733d40347f1340dca"
+    }
+  ],
+  "httpAndPgwireWalExact": true,
+  "physicalTargetsUnchanged": true,
+  "allUsCryptoControlRowsAndUnknownReservationsUnchanged": true,
+  "nativeStatus": [
+    {
+      "market": "US",
+      "runs": 3257,
+      "unresolved": 0,
+      "intervalLocks": 0
+    },
+    {
+      "market": "BTC",
+      "runs": 612,
+      "unresolved": 0,
+      "intervalLocks": 0
+    }
+  ],
+  "existingCheckedWindows": {
+    "coreDaily": {
+      "fromDate": "2026-10-22",
+      "throughDate": "2026-10-23",
+      "rows": 32,
+      "columns": 20
+    },
+    "coreRawMinute": {
+      "fromDate": "2026-10-22",
+      "throughDate": "2026-10-23",
+      "rows": 14976,
+      "columns": 13
+    },
+    "coreRegularMinute": {
+      "fromDate": "2026-10-22",
+      "throughDate": "2026-10-23",
+      "rows": 14976,
+      "columns": 14
+    },
+    "crypto": {
+      "fromDate": "2026-10-25",
+      "throughDate": "2026-10-25",
+      "rows": 200,
+      "columns": 13
+    },
+    "allCheckedValuesMatchOriginalEvidence": true,
+    "fredAll13079SixAndCboeAll5268SevenFieldsUnchanged": true
+  },
+  "stillMissing": {
+    "coreDate": "2026-10-26",
+    "cryptoUtcDate": "2026-10-26"
+  },
+  "sourceAndRootConfigAndOtherSharedChangesPreserved": true,
+  "rootCauseEstablished": false,
+  "wholeTableLosslessnessEstablished": false,
+  "wholeMarketComplete": false,
+  "runtime": {
+    "usJars": 47,
+    "cryptoJars": 47,
+    "allJarSha256Exact": true,
+    "productionBusinessCodeChanged": false
+  },
+  "referenceSql": {
+    "path": "tools/sql/us-core-preflight-blocked-20261027-reference.sql",
+    "sha256": "56da0bbd3e4e193c05c35462643e1004c3e7aace9be0d173d16fcbd2435d7a9a",
+    "checks": [
+      {
+        "query": 1,
+        "rows": 2,
+        "httpPgwireExact": true,
+        "rowsSha256": "34ea3d2eabeaa8ce8f4ead1ae3a480e9791b29813e45a13b83a063ebdae521c6"
+      },
+      {
+        "query": 2,
+        "rows": 0,
+        "httpPgwireExact": true,
+        "rowsSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "query": 3,
+        "rows": 0,
+        "httpPgwireExact": true,
+        "rowsSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "query": 4,
+        "rows": 1,
+        "httpPgwireExact": true,
+        "rowsSha256": "9629d6c0082947ae7f6c92e1c15b76d3c11c3e3807e146b3e14582b530d3c81c"
+      }
+    ]
+  },
+  "automation": {
+    "id": "automation",
+    "status": "ACTIVE",
+    "incidentGateRefreshPending": false,
+    "scheduleAndScopeToPreserve": true,
+    "scheduleAndScopePreserved": true,
+    "configSha256": "75d2b2a0d1ffedf4ab41520b7ce5f3c6ab65806ec50e5a7515a76c8acdc7e2fb",
+    "currentIncidentReference": "docs/snapshots/us-core-preflight-blocked-20261027.json"
+  },
+  "evidence": [
+    {
+      "path": "F:/repo/engine/data/var/market-data/scope-review/core-incremental-v102-20261027/preflight-wide-read-timeout.json",
+      "sha256": "5109315e1a27747591b597fcab4d1f729a367b5170ca280dd8373393ae4d6dce"
+    },
+    {
+      "path": "F:/repo/engine/data/var/market-data/scope-review/core-incremental-v102-20261027/wal-preflight-blocked-observation-01.json",
+      "sha256": "404be842484969a07a5c7d2b337e800ab688a9ce60e984033c91c8b698081f39"
+    },
+    {
+      "path": "F:/repo/engine/data/var/market-data/scope-review/core-incremental-v102-20261027/wal-preflight-blocked-observation-02.json",
+      "sha256": "284507d98ae0099105832bc3f0fdbace2f8d5c331d71b51733d40347f1340dca"
+    },
+    {
+      "path": "F:/repo/engine/data/var/market-data/scope-review/core-incremental-v102-20261027/server-build-observation.json",
+      "sha256": "613dc08e800fb1235d16f373ae1fb6d7dd3f14f1c83fde52a9f91fd94ed66ace"
+    },
+    {
+      "path": "F:/repo/engine/data/var/market-data/scope-review/core-incremental-v102-20261027/unstarted-helper-manifest.json",
+      "sha256": "a446f99e4c3151cf5de5843a759f3f42385b60107a9b24fb8f228867f52c5aa8"
+    },
+    {
+      "path": "F:/repo/engine/data/var/market-data/scope-review/core-incremental-v102-20261027/automation-incident-gate-proof.json",
+      "sha256": "73cd7678cd1a69ef09aed10f72dc4bd20ec257096f36b8ac8933c088d8d11f85"
+    }
+  ],
+  "limits": [
+    "writerTxn与sequencerTxn当前不满足原已验收的相等门槛；不重标旧Native、不修水位、不重发。",
+    "旧末窗口数值一致只证明这些窗口，不能代替全表和服务器恢复验收。",
+    "固定518路和指数的后续来源阶段未启动；核心和币价新日期仍待补。"
+  ]
+}

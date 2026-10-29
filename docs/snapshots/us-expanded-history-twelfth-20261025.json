@@ -1,0 +1,4258 @@
+{
+  "checkedAt": "2026-10-25T07:19:08.023280+00:00",
+  "bundle": "broad-f6fb3319-d07f-4c9d-899a-afea66cc882b",
+  "fullSourceCount": 95,
+  "fullRequestedFrom": "2006-01-01",
+  "throughDate": "2026-10-16",
+  "fullRows": 279563,
+  "fiveYearSourceCount": 9,
+  "fiveYearRows": 11295,
+  "newRows": 290858,
+  "nativeRuns": 22,
+  "all20FieldsIndependentRawJavaPreparedNativePgwireHttpExact": true,
+  "oldNativeTypedValuesUnchanged": true,
+  "oldGroupsWindowsRetriesAndOtherTasksUnchanged": true,
+  "originalRawShaObservedAndFailuresRetained": true,
+  "cryptoControlsPhysicalAndWalUnchanged": true,
+  "coreSnapshotsAndSharedL2Unchanged": true,
+  "sourceRequests": 384,
+  "newUnknownSourceRequests": 0,
+  "receivedBytes": 38500723,
+  "sourceRequestsDuringPublication": 0,
+  "oldRequestsAndUnknownReservationsUnchanged": true,
+  "shortSources": [
+    {
+      "task": "6636b74fe465b44d07eb76e966417d4cd1660c863054e3dfed25e0396ce722ee",
+      "symbol": "MRMNF",
+      "yahooSymbol": "MRMNF",
+      "rows": 39,
+      "sourceSha256": "9608ed3ea0dbe91b756d7c136e5be7890251edb4b64f338edfe3bc53b4df63d5",
+      "observedAt": "2026-10-25T06:51:53.269738Z",
+      "independentRowsDigest": "fbda88d9dfcade76b01d4a20d538f1da64f1188014d52c2467c9a03b78165f78",
+      "firstDate": "2026-08-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c2819909ae80080fa47c66acd8dc4bab980d947aaf4020139ff183d9d1a1c116",
+      "symbol": "MROPF",
+      "yahooSymbol": "MROPF",
+      "rows": 818,
+      "sourceSha256": "9c2d9627bc3c5108fd461003efbdd6ac83ecf79259b94effce8cbd37343dd6a6",
+      "observedAt": "2026-10-25T06:52:17.460631Z",
+      "independentRowsDigest": "bfb9e53d188cdc16e8057193d905bd4f404da3cf19af302b9885bca629fdf0bd",
+      "firstDate": "2023-07-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 815,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "acfe07e807777d50cddbb83c5cf567b04030b1c3db3c77a429c3a2f933e7ec5d",
+      "symbol": "MRPMF",
+      "yahooSymbol": "MRPMF",
+      "rows": 859,
+      "sourceSha256": "4bf681cc528f33a957c5741c09ad4400b2c9d2a0eae25ecaf71530ae24c1e7f9",
+      "observedAt": "2026-10-25T06:52:25.578984Z",
+      "independentRowsDigest": "f4eff2e4ebee48da96b7d168770f05e3a9e778bb9a390f4f0403ee9208088da1",
+      "firstDate": "2023-05-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 722,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c127cc93845a1c0b070a728ef198c7b79dcaf773b21fd427e16cfe0ecd51d936",
+      "symbol": "MRUWY",
+      "yahooSymbol": "MRUWY",
+      "rows": 82,
+      "sourceSha256": "5e25ddd46ea58c9398e38d6f770af3d36262528e513a57fa0d63b5c7656db46c",
+      "observedAt": "2026-10-25T06:53:17.789123Z",
+      "independentRowsDigest": "0df0ddaf6617a4a8cefd8a1c613600573dd94f302b58c5b87b8a29f64bf3791d",
+      "firstDate": "2026-06-23",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "7c41cfea5f1b8d7ef60ba9b3fd38bc35c0f067f8650b71170455f71ba116381f",
+      "symbol": "MSBB",
+      "yahooSymbol": "MSBB",
+      "rows": 810,
+      "sourceSha256": "abed049c9734cfe72f519e0a7dcb883955571e825f897aa1af06807e5e2103f7",
+      "observedAt": "2026-10-25T06:54:18.673822Z",
+      "independentRowsDigest": "8483fc78366293e27aa59ba68a1a3602d8dd2ea32be14f8b43400c1e286c951d",
+      "firstDate": "2023-07-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 489,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e026d87a768cbaf9832227b016f05b6fdf249c0836c130009ee3da0d5e4e589d",
+      "symbol": "MSHHF",
+      "yahooSymbol": "MSHHF",
+      "rows": 759,
+      "sourceSha256": "58d074c5030c58f492f6d0d7929e1f01706dd77cdf1b92fe4f53147c89043d14",
+      "observedAt": "2026-10-25T06:55:34.671584Z",
+      "independentRowsDigest": "1a582195ed531fa802234a512542a64f07f1065afdb6978179e170b879d16ca6",
+      "firstDate": "2023-10-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 756,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f9f63352c7ff926739130f1e00efecd56c1a96f5a57854154511f273f42e8098",
+      "symbol": "MSMMF",
+      "yahooSymbol": "MSMMF",
+      "rows": 544,
+      "sourceSha256": "af921d2181fc07bffd2335e347411ee65e200fe26633c89ef0c28f543f398d8f",
+      "observedAt": "2026-10-25T06:56:33.025673Z",
+      "independentRowsDigest": "78734c89e0f52b1870fe64505086a39dfaee67d379345023426254d8e7b14e0a",
+      "firstDate": "2024-08-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 333,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3fba4f8eef0bb68a8b502a8507479638c22d6d1616d0494ed9cbe85faa5f31b7",
+      "symbol": "MSSHY",
+      "yahooSymbol": "MSSHY",
+      "rows": 5,
+      "sourceSha256": "04b731d1192b28b0afa730f69ea1a9a7c09133dcce9f60d36cb80975713e913b",
+      "observedAt": "2026-10-25T06:57:35.274062Z",
+      "independentRowsDigest": "7f099b38c25de00af1f39b43c2b975a09582de8840d125e9f63f39dd7fa0b216",
+      "firstDate": "2026-10-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f928f429ea7b4f37053724d230020ee6d769211bf29d72a7622f217729065b94",
+      "symbol": "MSTH",
+      "yahooSymbol": "MSTH",
+      "rows": 1067,
+      "sourceSha256": "4933804f781c16cc0f4d974ca67481a970b5e6cf07584080c2d3ad1b9a739420",
+      "observedAt": "2026-10-25T06:58:05.498476Z",
+      "independentRowsDigest": "960d664133bf5bc529910fe56581e162b7773db67884414abcac11429e3cc67a",
+      "firstDate": "2022-07-19",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 862,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "951d0dbe8a7cad9a068e2589884183875b3878768e94e599e226bd4d1e061479",
+      "symbol": "MTASF",
+      "yahooSymbol": "MTASF",
+      "rows": 465,
+      "sourceSha256": "3392e8cb74c4e1dff1e271c103fec40b7d4c3bfa071362cdab89dde71ee9394a",
+      "observedAt": "2026-10-25T06:59:29.904212Z",
+      "independentRowsDigest": "0d0f8cbdd74d03eaf3eeec08bbb10a4575de0da7905af7ca678a086e0e9c71c0",
+      "firstDate": "2024-12-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 370,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e760caf86144aa906f6b8d7d734a795b1cbdc479615ce4b349a07b34ce840ba6",
+      "symbol": "MTCPY",
+      "yahooSymbol": "MTCPY",
+      "rows": 545,
+      "sourceSha256": "2a32e9e14944fa395435ddb674d5cdd770c00784af33e564ac63b6d2a38cb4d4",
+      "observedAt": "2026-10-25T06:59:50.032268Z",
+      "independentRowsDigest": "cacac5ef35270c8ecbdd72dfb598097f30d891d728305c8f6945346e2fefc2d8",
+      "firstDate": "2024-08-15",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 435,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "8958e1f0bba9eae5dd0c0cfdc5d8347c62b6a6b27598b71e712c6b582092d24a",
+      "symbol": "MTLEF",
+      "yahooSymbol": "MTLEF",
+      "rows": 32,
+      "sourceSha256": "f61d76322023d85debb38a55bf5c3411baf3ae0653b3222c21c7a4ff7987a13c",
+      "observedAt": "2026-10-25T07:01:06.434036Z",
+      "independentRowsDigest": "bae3fb6416ceca96428d19d4568657dae30d7af87d569cfe57740008dd4d02a8",
+      "firstDate": "2026-09-02",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 25,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "9ca70dc0e31bced7a620ac9c79c8aae212e7b617458f0981f7e515798372a844",
+      "symbol": "MTLMY",
+      "yahooSymbol": "MTLMY",
+      "rows": 53,
+      "sourceSha256": "959e62d80f9006e7d7545750d6fe1aff7b7d6cb84ae81efe45b414503be9b1ff",
+      "observedAt": "2026-10-25T07:01:20.454459Z",
+      "independentRowsDigest": "51b0448f201150d92863141a302d59bc227d0e69549bb0ff08e1499c688b2316",
+      "firstDate": "2026-08-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "befdb00ce4582c55d5dc21ae3a8f7031044dbf09f342394e09d6fe02de6e3bdf",
+      "symbol": "MTLPF",
+      "yahooSymbol": "MTLPF",
+      "rows": 36,
+      "sourceSha256": "8d9872f132b1c135f68ddcae8e3852490a2061bbc06cf803394208f0cd44c6d7",
+      "observedAt": "2026-10-25T07:01:24.486916Z",
+      "independentRowsDigest": "1e2e9cc4cffef3b1bcd2ee182a71ab05eba11d82ac24aaeae69b9802043e6a16",
+      "firstDate": "2026-08-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 35,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "8ea597ec00255d57de2a05ee53ba7ffdbcfd00689019caa81d7f4f7ae81c5a14",
+      "symbol": "MTLZF",
+      "yahooSymbol": "MTLZF",
+      "rows": 1033,
+      "sourceSha256": "b79d18fe18ea5e10f85376f53ffb130a247784f5a8165066fd92c361a4cc025c",
+      "observedAt": "2026-10-25T07:01:32.624877Z",
+      "independentRowsDigest": "1d1440c7c4f86f0362de753da56728170a3007a8f1a659faed3de2686eafbe17",
+      "firstDate": "2022-09-06",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1029,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3d74e0f415d477c4020c240b9ac9fe1571dd9e0de96a507ec59169c8794f6107",
+      "symbol": "MTMCF",
+      "yahooSymbol": "MTMCF",
+      "rows": 78,
+      "sourceSha256": "0b85a6b3cc89e15ae82c2eeb2e7f76f03394b13a0d9f83ddd176b786375026f7",
+      "observedAt": "2026-10-25T07:01:34.801099Z",
+      "independentRowsDigest": "ebfe3251882f3733cae3b7f2a8e503f68df7f4691462f86531350dd8086676d6",
+      "firstDate": "2026-06-29",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "06496162eeeb0baadc320bba4ecf5694c814acd24a52467794985157690bf4b5",
+      "symbol": "MTOPF",
+      "yahooSymbol": "MTOPF",
+      "rows": 12,
+      "sourceSha256": "91bbd1a5fcacd7b7a87ebded28703a7eb1c5dc1dc09a3ee45eb294c314179d87",
+      "observedAt": "2026-10-25T07:01:54.659522Z",
+      "independentRowsDigest": "f9d402f0d024405a5cb0c792cb8fd5cae8e9943d1c0ca7057b741fa38e6b39ba",
+      "firstDate": "2026-10-01",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 11,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c5eb109320b751c03d96000a37914793feba8c7ddcb796f861b3df233becead3",
+      "symbol": "MTPLF",
+      "yahooSymbol": "MTPLF",
+      "rows": 474,
+      "sourceSha256": "2a6b93ea29fa9e372af5ce4335d7a2661afd99c2563569f20af942a14ff4f2d5",
+      "observedAt": "2026-10-25T07:01:58.696497Z",
+      "independentRowsDigest": "d019cc64a6c08c9fe41cedccd6a0f551e10979c41aa2d405c677217a1e438f49",
+      "firstDate": "2024-11-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "330b0e52279c69506e3e5930adac8d942ec7562a2cd27e14111cd748a55fbdea",
+      "symbol": "MTSUY",
+      "yahooSymbol": "MTSUY",
+      "rows": 545,
+      "sourceSha256": "30b8b1205a28ce3fa3e7ced6c171d57784519ea39dd79bff78e0bc3abb06e44f",
+      "observedAt": "2026-10-25T07:03:07.060918Z",
+      "independentRowsDigest": "8dd774dedfd1bbbef214eb74a48e68fd2bb737ee9e70da9b8afb66d108a88f72",
+      "firstDate": "2024-08-15",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a47d32ca77c3acbb403ca427655ebe84db91d415284888900544e915cedaf1f0",
+      "symbol": "MTSZF",
+      "yahooSymbol": "MTSZF",
+      "rows": 361,
+      "sourceSha256": "8474e4de2261559f1b2196fcc6194f2ec59ede7f0428cb8d18555b838224885a",
+      "observedAt": "2026-10-25T07:03:09.392985Z",
+      "independentRowsDigest": "84e410e05ec2ef253242478da2354267faeb75be1a79c8f39a582e0484a7f94e",
+      "firstDate": "2025-05-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 350,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "476835ad5f65761ae542514c4a76733d950c206decd3f04258d5e0d5aabb1c63",
+      "symbol": "MTTAF",
+      "yahooSymbol": "MTTAF",
+      "rows": 961,
+      "sourceSha256": "11a8c86c715509de0af947eb3c1d3215570f3050cc6ab5331151c0a9bf9d8688",
+      "observedAt": "2026-10-25T07:03:11.118682Z",
+      "independentRowsDigest": "c5ae5fcc3c14e85b882e2942b30b95155ff55487b1c520116b34f5f5093e73cb",
+      "firstDate": "2022-12-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 277,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ae4b1ceffdbe8fa7d0e957f563f16d081673419047d5da5af3f221d420ee3662",
+      "symbol": "MTTN",
+      "yahooSymbol": "MTTN",
+      "rows": 20,
+      "sourceSha256": "fd4202760b29a80ad334889df8723240a60199728d00256291995d89f941c059",
+      "observedAt": "2026-10-25T07:03:17.085583Z",
+      "independentRowsDigest": "d4866eea4dfc987f45c120a3f1b0ac0fb149776cc879901be5b04044ba8f1c66",
+      "firstDate": "2026-09-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "cde38a553317bda03d304561d76c5b9371b2b4735c089ecd154df8f3948a0868",
+      "symbol": "MTWO",
+      "yahooSymbol": "MTWO",
+      "rows": 1170,
+      "sourceSha256": "2e18346dd5536e5ec88ce86fc7a092c7ac70e09ee06208953e6f249a663befca",
+      "observedAt": "2026-10-25T07:04:15.505593Z",
+      "independentRowsDigest": "59dedd7bea0f5466d6ba1488223c5cbbf4ca213cce230f515f0db10e1a4cc650",
+      "firstDate": "2022-02-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 552,
+      "dateGridMatchesStoredSpy": true
+    }
+  ],
+  "earlyEndedSources": [],
+  "zeroVolumeRows": 194430,
+  "wholeMarketComplete": false,
+  "queuePriorityAuditBeforeBatch": {
+    "checkedAt": "2026-10-25T06:51:30.381008+00:00",
+    "snapshotSha256": "6fa817adf76d5ba399bc93c003fe85d465a14e393422584c4d00cd539bb3b34e",
+    "rows": [
+      {
+        "kind": "DAILY",
+        "priority": 0,
+        "phase": "FAILED_SOURCE",
+        "tasks": 1
+      },
+      {
+        "kind": "DAILY",
+        "priority": 0,
+        "phase": "VERIFIED",
+        "tasks": 517
+      },
+      {
+        "kind": "DAILY",
+        "priority": 10,
+        "phase": "FAILED_SOURCE",
+        "tasks": 36
+      },
+      {
+        "kind": "DAILY",
+        "priority": 10,
+        "phase": "SCOPE_REVIEW_REQUIRED",
+        "tasks": 31
+      },
+      {
+        "kind": "DAILY",
+        "priority": 10,
+        "phase": "VERIFIED",
+        "tasks": 5357
+      },
+      {
+        "kind": "HISTORY_CATALOG",
+        "priority": 10,
+        "phase": "VERIFIED",
+        "tasks": 1
+      },
+      {
+        "kind": "UNIVERSE_NASDAQ",
+        "priority": 10,
+        "phase": "VERIFIED",
+        "tasks": 1
+      },
+      {
+        "kind": "UNIVERSE_OTHER",
+        "priority": 10,
+        "phase": "VERIFIED",
+        "tasks": 1
+      },
+      {
+        "kind": "DAILY",
+        "priority": 20,
+        "phase": "FAILED_SOURCE",
+        "tasks": 12521
+      },
+      {
+        "kind": "DAILY",
+        "priority": 20,
+        "phase": "PLANNED",
+        "tasks": 13553
+      },
+      {
+        "kind": "DAILY",
+        "priority": 20,
+        "phase": "SCOPE_REVIEW_REQUIRED",
+        "tasks": 1749
+      },
+      {
+        "kind": "DAILY",
+        "priority": 20,
+        "phase": "VERIFIED",
+        "tasks": 6770
+      }
+    ],
+    "countsAreTasksNotCompanies": true,
+    "sourceRequests": 0,
+    "formalWrites": 0
+  },
+  "sourceLedgerStatusZeroMeansIncompleteRequest": true,
+  "sourceBatchLimits": {
+    "maximumRequests": 384,
+    "maximumFetched": 128,
+    "requestSpacingMs": 2000,
+    "originalBudgetsUnchanged": true
+  },
+  "annualFiveYearCarrierProbe": {
+    "reusedVerifiedEvidence": true,
+    "sourcePath": "F:\\repo\\engine\\data\\var\\market-data\\scope-review\\broad-ohlc-history-v65-20261025\\annual-five-carrier-independent-verification.json",
+    "sourceSha256": "823a2edd51f2c9b9e61d77de11ef525ef1cbdea77b5b83d359fdc2b98b25ce13",
+    "proof": {
+      "checkedAt": "2026-10-24T22:32:46.104145+00:00",
+      "members": 18,
+      "rows": 22590,
+      "windows": 6,
+      "all20FieldsIndependentSourceJavaExact": true,
+      "rowsDigest": "7affe4da8766aff5d0a253ee7564a6eb551b7e0438017461fe8ef1c81c8ae16b",
+      "sourceSha256": "7368806e745d486d275c7536c7eb3174b9a3a4cd3339ac2e27ff14530bdc06ea",
+      "oldNativeAndWalUnchanged": true,
+      "sourceRequests": 0,
+      "formalWrites": 0,
+      "probeIsNotNewFormalData": true
+    },
+    "newSourceRequests": 0,
+    "newFormalWrites": 0,
+    "rowsAreNotNewFormalData": true
+  },
+  "failedHttp200Sources": [
+    {
+      "task": "01c027b2c515cb9d5dbe573dfaa19d3021b939ed37d6ab644af444bb71a133eb",
+      "symbol": "MTRO",
+      "yahooSymbol": "MTRO",
+      "sourceSha256": "24d7e7d539ccc2ba83957aafba9bed61821f092fd08c9eaba661999d2a6aa4af",
+      "observedAt": "2026-10-25T07:02:28.824917Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTRO?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "094a258c3864772a598582eaf693bd1a21f8de4e212667ae5e280dd613625d57",
+      "symbol": "MRWGS",
+      "yahooSymbol": "MRWGS",
+      "sourceSha256": "877de83ac736159ffa24d8ba52e60eb8de3a3f991586d94abaefeb7f3d56e4aa",
+      "observedAt": "2026-10-25T06:53:43.985292Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRWGS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "0977fc4aac48eceb47cd616141432b04c56e04b972c30a57d06e1500da073110",
+      "symbol": "MTGH",
+      "yahooSymbol": "MTGH",
+      "sourceSha256": "589129c0a715c8a8c37c65d0cff624c578a550714f26631720f56d681f240b65",
+      "observedAt": "2026-10-25T07:00:38.769984Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTGH?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MTGH 2008-12-08",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "0c666a5c38df39d9e248dd84c8f5d1e94456f631d7e88ef546d9d8b9e12e3b1c",
+      "symbol": "MTWKS",
+      "yahooSymbol": "MTWKS",
+      "sourceSha256": "0aeb97ba73983689fcc1c7eb280af7feab01ca82c1e278cae54c5b008186cc81",
+      "observedAt": "2026-10-25T07:04:07.367653Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWKS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "0d230cab7413c7b65edf47cd9c2ac56bb7f2b2a2944296b53923ad23e62337f8",
+      "symbol": "MSWGS",
+      "yahooSymbol": "MSWGS",
+      "sourceSha256": "3ae367147d2c747a2070372e279d213a90a23e096516c6024a9b474714e3fe5e",
+      "observedAt": "2026-10-25T06:58:37.566977Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWGS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "0f03dbab90af198589c01710b42cf30d3d9f49ae70e4e8350f16bd1d34d1280e",
+      "symbol": "MSPR",
+      "yahooSymbol": "MSPR",
+      "sourceSha256": "92b24193bb5033b4a750619f8c6a7c495720d906e5e3acf7fd2d39279159c9bc",
+      "observedAt": "2026-10-25T06:57:03.215106Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSPR?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "175eb6a7f6ecc868f8654c3670b92962a0da0d3f8b4ebcbdce1e3225b0944ce7",
+      "symbol": "MSBPF",
+      "yahooSymbol": "MSBPF",
+      "sourceSha256": "da993c28b710d9b20839725fc847dacc47bd340383de29b86862a1a92384eb60",
+      "observedAt": "2026-10-25T06:54:32.377464Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSBPF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "18ebf9d13620e8affbabdf24835059e9634526c8361177e3f0573c9d4446721b",
+      "symbol": "MTFC",
+      "yahooSymbol": "MTFC",
+      "sourceSha256": "5e4a83e758bb6588ade3ec46fc65b4ec68e922a4152c1c92922d92c8d5f43b59",
+      "observedAt": "2026-10-25T07:00:22.169592Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTFC?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "1b1b0bf65522065de23dfbe01ebdff01d84469799fda46bbc158062cc0b7f1f4",
+      "symbol": "MRWNS",
+      "yahooSymbol": "MRWNS",
+      "sourceSha256": "759b27ca191794b79c784644520e3e3a2eaf65d1715ac6e0185da31f27131a00",
+      "observedAt": "2026-10-25T06:53:48.168612Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRWNS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "1b4311f54ad1a2ea77a873c26d46ea5e0d93aad5bb8a3b5ea9bcf10e67e6eb11",
+      "symbol": "MSPC",
+      "yahooSymbol": "MSPC",
+      "sourceSha256": "e2ae92566a731340e3002eb3d98476789c876c57a09828680e1a648459f28add",
+      "observedAt": "2026-10-25T06:56:53.440772Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSPC?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MSPC 2020-04-08",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "28451f8e2d8aabd133a449e304334e4b17880413985d72f64d694bc8f3258bf8",
+      "symbol": "MTRSF",
+      "yahooSymbol": "MTRSF",
+      "sourceSha256": "8fd5c88891f0b69f950972a025d913ce6e56d2b25faad587c54579c56a2f6e13",
+      "observedAt": "2026-10-25T07:02:34.922678Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTRSF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "2c6f75c452569d497ebd5da19863c76033293fd4359ab13610a6273a50460826",
+      "symbol": "MSXSS",
+      "yahooSymbol": "MSXSS",
+      "sourceSha256": "4f9e0f178b0759e7466e099fed2ee4238f499fcdfb6e47eeb5bf90b861c50bfe",
+      "observedAt": "2026-10-25T06:59:03.738079Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSXSS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "2c97c6a78a135870bbe1f0b7a51d224db234a3770645f234342b026b1ad5327b",
+      "symbol": "MTCFS",
+      "yahooSymbol": "MTCFS",
+      "sourceSha256": "a90f0c9da3288d57557f5d71a3a70889fe15523076fdc44420570082505cd88d",
+      "observedAt": "2026-10-25T06:59:43.964974Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTCFS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "2d30cb8cf9a605a021df4a25872ab027adaddc19863344c7c75caa05697057ed",
+      "symbol": "MRTOS",
+      "yahooSymbol": "MRTOS",
+      "sourceSha256": "359283ee1192521d550fd804a04c9c9dcefaad7b9346592829ac15e152589ec8",
+      "observedAt": "2026-10-25T06:53:07.762740Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRTOS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "2e029ccd6b4ee92713f610663d1216f05dd4898192ad524a70fc3f35711e4818",
+      "symbol": "MTWPS",
+      "yahooSymbol": "MTWPS",
+      "sourceSha256": "70fe2591f7812fda3e51bbed469cd53bcf1ae4219787146cf3f05c261367bf14",
+      "observedAt": "2026-10-25T07:04:17.451829Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWPS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "3274e431d5e1161e847d9cd43ece699b142961fc8a19c1a4da8f3faf2c6e0ffb",
+      "symbol": "MTUL",
+      "yahooSymbol": "MTUL",
+      "sourceSha256": "ac14ada3b544d0c58d76013f1359fe2447dca3630f1543139cfcbde22198277f",
+      "observedAt": "2026-10-25T07:03:37.199335Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTUL?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MTUL 2026-08-18",
+      "currency": "USD",
+      "instrumentType": "ETF",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "35df3ee9a05725370d4e1bafcf2fd9512ae5ac830c8bb999cb068e99835366b8",
+      "symbol": "MTUAF",
+      "yahooSymbol": "MTUAF",
+      "sourceSha256": "d89b148465bde0d3a5a4ff7dd42db1b2d3cc2d97008c2fde124886fc0a168c97",
+      "observedAt": "2026-10-25T07:03:33.449617Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTUAF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MTUAF 2021-09-09",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "36cc5786f673e64762234c80552f94c6ebe2d2ece4c3b80b4bc5db88ecda821d",
+      "symbol": "MTTWF",
+      "yahooSymbol": "MTTWF",
+      "sourceSha256": "e4ce575b20cd7d5d35b28920629be3899cd3f00b057300f39c8391bb3c445ced",
+      "observedAt": "2026-10-25T07:03:29.379769Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTTWF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "375128649e65ed0f2a7d6f2b429873f50dc2cb1cfb1e0931578c942253c3ed4f",
+      "symbol": "MTEDF",
+      "yahooSymbol": "MTEDF",
+      "sourceSha256": "a8eab8c26dd3e5611764218e88b4a866a63bc226eb6e70d8d9c5539c69c8f87c",
+      "observedAt": "2026-10-25T07:00:04.070577Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTEDF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "3a9e514db7da1f5ead5e2f43463966d4cea6bb00b737833e955779f380fbecf6",
+      "symbol": "MSAOS",
+      "yahooSymbol": "MSAOS",
+      "sourceSha256": "150cbe871718ec29105dfcb075045fb56f6a902cc1ab4184b20fb52a776f559c",
+      "observedAt": "2026-10-25T06:54:16.163678Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSAOS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "400509cb5cdec5ffb09da2f67e8c169429a510200681b48bafb4a593fd899ae8",
+      "symbol": "MTWMS",
+      "yahooSymbol": "MTWMS",
+      "sourceSha256": "21489b2d624ce136bdb3c5e0bfba6708ef654aaba1b8db8674230c7989ef1a6d",
+      "observedAt": "2026-10-25T07:04:11.403974Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWMS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "405dc5bea33cb27bcb5698f33348abeebcceb694a17d477ac15c4fa13b8f5554",
+      "symbol": "MSBN",
+      "yahooSymbol": "MSBN",
+      "sourceSha256": "f775fbdb56563aacd1b23dc0083cc6191b7a5baaafac00dc3de071e5f6d83a21",
+      "observedAt": "2026-10-25T06:54:31.303467Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSBN?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MSBN 2015-03-30",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "4547fd88bcf899081e29c255b13cfec2276ac8e49230b6ae09ced09ea7adeb9b",
+      "symbol": "MTEST",
+      "yahooSymbol": "MTEST",
+      "sourceSha256": "fdb914d19488c05f07354086d29640d8727318055e93b4fa4f5346c7981fbb5a",
+      "observedAt": "2026-10-25T07:00:12.083639Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTEST?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MTEST 2026-10-02",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "47f537108a454ad68e4154907c83966966748d78099a3c600913518d31bdd3f2",
+      "symbol": "MTSEF",
+      "yahooSymbol": "MTSEF",
+      "sourceSha256": "3be0199d00725dd84f0aae11cb3a19aa9e6c2d0627f2c1205fd54d5a6564a3dd",
+      "observedAt": "2026-10-25T07:02:52.996536Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTSEF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "4c40b631499081ca2a1ebb9ae38099311983342fdc2b48de08cd30b47a9155c5",
+      "symbol": "MRUHF",
+      "yahooSymbol": "MRUHF",
+      "sourceSha256": "09f92959c570c9b6b5256bd5ee05f797ee9bbaeb684694f8fc8473c437045105",
+      "observedAt": "2026-10-25T06:53:13.833888Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRUHF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "4e703880e4a0de38c90e8c82df14c65055c6b025c7cf18cdb77e55c72b18bbec",
+      "symbol": "MSKCS",
+      "yahooSymbol": "MSKCS",
+      "sourceSha256": "3d93167860e55441f13c45fb7cbb948660e662c90a70e96390def423dad6205e",
+      "observedAt": "2026-10-25T06:55:54.795738Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSKCS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "4e8df241feedbb3c5b7c8769af6dfe63c87b49d2414fe5d9588a03edb77e83c4",
+      "symbol": "MTNX",
+      "yahooSymbol": "MTNX",
+      "sourceSha256": "3aeda7765fa264b4256d9eb5827eb0edfbf96ea9857f7decd3a3f573bd5cee00",
+      "observedAt": "2026-10-25T07:01:48.810613Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTNX?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MTNX 2007-11-21",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "51d7d477edb480ec14d5b7c1d3a6e1f55ee5e8c11bddd099a5930ae2ca7ceb98",
+      "symbol": "MRWFS",
+      "yahooSymbol": "MRWFS",
+      "sourceSha256": "ee928b264db9ced5bf457034595caf252a120d878f6cb9b581bf640dacb4d746",
+      "observedAt": "2026-10-25T06:53:41.975274Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRWFS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "53943739ed9c4469e9beba9545404e3cad17ede1d0f1da8d1d0b04cb1afdc677",
+      "symbol": "MSWAS",
+      "yahooSymbol": "MSWAS",
+      "sourceSha256": "d44994c8db107673af5431473611f2de1a724167da15ddfc92ff627da1022a74",
+      "observedAt": "2026-10-25T06:58:27.541672Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWAS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "53a48606a63586f3cb8478cc812e5447a737bcb27bcd60e06f2e71e242858e5d",
+      "symbol": "MSPRZ",
+      "yahooSymbol": "MSPRZ",
+      "sourceSha256": "cebbb4e413554d005ec97d93c89e6ec44479f7b601664bf4b395d5de47d08867",
+      "observedAt": "2026-10-25T06:57:09.134419Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSPRZ?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 请求区间没有可用日线",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "5798ece2780f1df5c6f42576c9f1658cc6710df404236df644daeda5b77c0c2d",
+      "symbol": "MTKTS",
+      "yahooSymbol": "MTKTS",
+      "sourceSha256": "9d969373a161e9be3dc50b59959e91c57fe7058928a3f09597ca8c54c6e3733f",
+      "observedAt": "2026-10-25T07:00:58.342960Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTKTS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "594fc56f049b5b856758e7be2de1ccffe9567a873c96fd572579b18d8f7bfa0d",
+      "symbol": "MSOKS",
+      "yahooSymbol": "MSOKS",
+      "sourceSha256": "a4798fd72c38c4909aa4cbe0c2553311c250155409e96fd706dc60896e526e9f",
+      "observedAt": "2026-10-25T06:56:45.032710Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSOKS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "5a88205a901a5b1231696329a1e5e6622e7e31fb46edd88f0413d661f3c7e444",
+      "symbol": "MSWZS",
+      "yahooSymbol": "MSWZS",
+      "sourceSha256": "2d0c78283ebb077cc0f28bf2fb8c03d925b847b529ab3d940f3792b66864c5f8",
+      "observedAt": "2026-10-25T06:59:01.728113Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWZS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "5fafa9aa77f91bc0dd1b7e5c52cb77bee9fd8af037023d329b8ed526d900a6c0",
+      "symbol": "MSGP",
+      "yahooSymbol": "MSGP",
+      "sourceSha256": "9a439898ab27383bf93ca35eb92f947ea6db3929a78c57ae8e05a25ce5667b8c",
+      "observedAt": "2026-10-25T06:55:28.816296Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSGP?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MSGP 2016-03-30",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "5fbe4ac9e1af26be7a8f7b9215ff6cde11b20275f664d9bcacb5fcc8191e3710",
+      "symbol": "MSWBS",
+      "yahooSymbol": "MSWBS",
+      "sourceSha256": "b675abf50c307187206120ca326ca5fff3c624be8d57130f58c2664dfc828f73",
+      "observedAt": "2026-10-25T06:58:29.579018Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWBS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "60ff87527508a438d8438e4b528ef2ebd6adc6d717c6b1cdbf74b6cd1d5c56cd",
+      "symbol": "MSWSS",
+      "yahooSymbol": "MSWSS",
+      "sourceSha256": "fdc6eee18f946044b37e7b64753f34058bd7a55b0d2b3aa55cd5cce3d2fa8e29",
+      "observedAt": "2026-10-25T06:58:53.743530Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWSS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "62fe8b382d00f7f5d21e22cb29e54c8f4f464ab879e26fe440661e7e3486963b",
+      "symbol": "MSCH",
+      "yahooSymbol": "MSCH",
+      "sourceSha256": "39633198a9860572cf099e170e2f883c468c87e809d6e000ce6d24b47f9cb76b",
+      "observedAt": "2026-10-25T06:54:40.621648Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSCH?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MSCH 2015-01-27",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "6617b783be9ffdf67dde313a2e8a40f7d91975a005bc380f37f2935e06f32015",
+      "symbol": "MTWDS",
+      "yahooSymbol": "MTWDS",
+      "sourceSha256": "1ce97693c457ef22b657f85f52d601409ead0b42b469a3fb73234cf497bd131c",
+      "observedAt": "2026-10-25T07:03:57.309875Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWDS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "6a01ad1540a019949ffc777dc07c3ebf5edb92a7031bf95727a22ff105dd01c9",
+      "symbol": "MRWDS",
+      "yahooSymbol": "MRWDS",
+      "sourceSha256": "f18122552ffd0e3416d97f86b122a4effbb851625d19f74423ea52000c3e2e0b",
+      "observedAt": "2026-10-25T06:53:37.938154Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRWDS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "6ae42c11b3750edc3a070faa37ff49a799cde1b5cdbe5407c0b0ea1a5dff67f3",
+      "symbol": "MSMGF",
+      "yahooSymbol": "MSMGF",
+      "sourceSha256": "0c4c945baa8a95a2e862c46021ca20547a93aaffcd373d307acf4e24d5d39c38",
+      "observedAt": "2026-10-25T06:56:29.090645Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSMGF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "6b2e800ce962d4302d86a3c2028fedc350a0d479a2fd8632fdd68194c92c7f32",
+      "symbol": "MTWRS",
+      "yahooSymbol": "MTWRS",
+      "sourceSha256": "1297fa7cd3931900cc0ed1b4e60847c095533693ab8ebcfb07b0bacbf7cf0334",
+      "observedAt": "2026-10-25T07:04:22.010962Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWRS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "6bb2602021fdf5c269f04499ef19a2c2006f62fb38f957abf17e742c6964de49",
+      "symbol": "MSMKF",
+      "yahooSymbol": "MSMKF",
+      "sourceSha256": "16bc44334ec8311e4dbc723a70f619eea03aa2c5301af5da54f4bd17023e83bc",
+      "observedAt": "2026-10-25T06:56:31.483831Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSMKF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "6fff0a0a9c4c82237f299dfd13211ee21cb53de314fecae41c03d0f9002e8cb4",
+      "symbol": "MSWHS",
+      "yahooSymbol": "MSWHS",
+      "sourceSha256": "fa0d235efa4e79f3bc870eca98bf9c7d567d03e83806f8a6d7128a939c0b1de2",
+      "observedAt": "2026-10-25T06:58:39.597893Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWHS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "7013718bab39d244ddfee522a0c01b8f5bbd4a070666d7131a275c783a7fbb95",
+      "symbol": "MSKES",
+      "yahooSymbol": "MSKES",
+      "sourceSha256": "40cf7ac403878b6b3a64f8d3579da1ef392ffa19d0308f31a3223170972bc842",
+      "observedAt": "2026-10-25T06:55:56.801599Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSKES?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "7952d2f80393602225b21fdf55bb6ae33bd4980bc1c253eb19632d02b89384bc",
+      "symbol": "MSWIS",
+      "yahooSymbol": "MSWIS",
+      "sourceSha256": "fedc052884a9a9772675f48f59eed66e0a7b0c827538d710c52e507faa5ca782",
+      "observedAt": "2026-10-25T06:58:41.606308Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWIS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "7a7c1b325ac011a84be5294026943d004a04c38a47bed99b9ad707787bbe2dca",
+      "symbol": "MSSUF",
+      "yahooSymbol": "MSSUF",
+      "sourceSha256": "c3ab9134df2451ccb41395ad0285e397283a737dd8fae5eab87936f9233e065b",
+      "observedAt": "2026-10-25T06:57:47.354452Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSSUF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "7d654a0c2d7e23f1a17dd97d66262a0f65a986ba6431a7059f32b77923369410",
+      "symbol": "MTWJS",
+      "yahooSymbol": "MTWJS",
+      "sourceSha256": "7639a27cfdaf68daf2aa6bbc4b6d121c85c7f9b99f05b6e44e5cf8c44e26deba",
+      "observedAt": "2026-10-25T07:04:05.380813Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWJS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "806d15dfdd3807e235c07c5df1171dff45b20401201ce2b56cd560f7723c6c3e",
+      "symbol": "MTRWS",
+      "yahooSymbol": "MTRWS",
+      "sourceSha256": "3b6fd027fd17c58fb592ad2ce20c7c8eb54a63a829f5f7b60d689a23e1f81518",
+      "observedAt": "2026-10-25T07:02:40.906569Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTRWS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "873a81eeac0b86362f9fe415d5ce79695d96d3cbef9d9296162daf16d08200f7",
+      "symbol": "MTRRF",
+      "yahooSymbol": "MTRRF",
+      "sourceSha256": "605d959bc004690342016b6061c07036eb70cc088b258820f01dd1ae4d8b37f8",
+      "observedAt": "2026-10-25T07:02:33.012694Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTRRF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MTRRF 2015-03-30",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "8821448adbea5e60320014f538ea92e59e2db9a57723bbeeb4bc6ce1c1534361",
+      "symbol": "MRPI",
+      "yahooSymbol": "MRPI",
+      "sourceSha256": "f98e1e759a830d6cd40809a1522d26d23eedb7eee7b8d8232ec601306384c9f4",
+      "observedAt": "2026-10-25T06:52:21.577709Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRPI?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MRPI 2010-06-22",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "887a869c55803dd1e00230757e587c39d710966224b0d0e4866f880a994350c6",
+      "symbol": "MSWES",
+      "yahooSymbol": "MSWES",
+      "sourceSha256": "9941550d0aa2efe809c83825ad1783a14a2dd66150c910be124ef15350a728ff",
+      "observedAt": "2026-10-25T06:58:35.564370Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWES?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "8acd15553358447d68c9572f2113438f6ae19d57cdc24f07c1830a79a99c7fd1",
+      "symbol": "MSKHS",
+      "yahooSymbol": "MSKHS",
+      "sourceSha256": "136fe0378bc6c08c9b982d28d9e60fd3ffbb2504b8286155391caae9561424e7",
+      "observedAt": "2026-10-25T06:56:00.842423Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSKHS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "8af72f77b5eb2ec86d4e0ecbf343854d2c8d922a3f95a3d0de21bc3fe172e9f0",
+      "symbol": "MSWPS",
+      "yahooSymbol": "MSWPS",
+      "sourceSha256": "4c46a7420dca6826711259663bb7321f7139cac0bb8e2abfa7a2b57aa51ed8fd",
+      "observedAt": "2026-10-25T06:58:49.684844Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWPS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "8dd3517644679afdbc939e6692dbfc12cc08168f80ce1235b975f92c86180ad6",
+      "symbol": "MTWTF",
+      "yahooSymbol": "MTWTF",
+      "sourceSha256": "bc95542e2a232c1446b74f22428db17731c9fe01d8bd765e9d0a9b1127d308cd",
+      "observedAt": "2026-10-25T07:04:23.658955Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWTF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "8fff119994de0b45b3412df37e0b2cff725452f9803934bd65f2f17bb2d512e7",
+      "symbol": "MSWOS",
+      "yahooSymbol": "MSWOS",
+      "sourceSha256": "270055943c8578dc3f93101e698179703cf08fbfe960ea8ef2a6936cc99c3067",
+      "observedAt": "2026-10-25T06:58:47.638471Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWOS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "93bd0efd7e6feb3a88085ff2b4fa0298102570f5b462f8337974026eb648b610",
+      "symbol": "MSTTS",
+      "yahooSymbol": "MSTTS",
+      "sourceSha256": "6c14935bd0abad4b86dcf639f15b0d88757f12094e76e5dd86a825dae506ea81",
+      "observedAt": "2026-10-25T06:58:11.691599Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSTTS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "93d4ee7d5dbce48094f4407b508ab3e83ad0fc081feee8bf6a744fd20d24f342",
+      "symbol": "MSKBS",
+      "yahooSymbol": "MSKBS",
+      "sourceSha256": "34707ec786d63bb85d7352e74b7b8b6f4b724729e1ddb6f6f703ac51788d07ef",
+      "observedAt": "2026-10-25T06:55:52.780019Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSKBS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "95d0b622eaf73b0152f2d697879a7d37254922be1d5ee5d2eeb9c612fb287407",
+      "symbol": "MSSGF",
+      "yahooSymbol": "MSSGF",
+      "sourceSha256": "ed06653685c6663a2f13c8eb1597e86a2e07c8eb4d425ee338c7211ce1d12991",
+      "observedAt": "2026-10-25T06:57:33.249717Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSSGF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "96841256efae2c38b2ed2b3b6b78cec1025da7e5f23e9016eb39ea66ed90fb7d",
+      "symbol": "MSWDS",
+      "yahooSymbol": "MSWDS",
+      "sourceSha256": "5a638f84511da82d07780f79033959e6c4519188dd27d8d120d15debdfcf1e3d",
+      "observedAt": "2026-10-25T06:58:33.584602Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWDS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "9892b269dbb11826652b1f9c15e27e9874092bcd99375ad5b30de8bd4322d508",
+      "symbol": "MSTO",
+      "yahooSymbol": "MSTO",
+      "sourceSha256": "2d4ac855a5412ca39979d8ef96d175d6441f814062e00b955d822b705f31a32d",
+      "observedAt": "2026-10-25T06:58:07.745686Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSTO?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "9ad10f30d1c0910c21fc0f878b3e5be7a618e2cf34d8b6db8af8c1d0a3e9404d",
+      "symbol": "MSKPS",
+      "yahooSymbol": "MSKPS",
+      "sourceSha256": "ba0b9841a77620c6bc371b8dc5854046acebe9a51b8f73cf2bd0530f83be231b",
+      "observedAt": "2026-10-25T06:56:04.848398Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSKPS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "a229eb63af9ed55ca16d260fd3d235cecbe9a21a031746714383b1e46cc02e47",
+      "symbol": "MTWFS",
+      "yahooSymbol": "MTWFS",
+      "sourceSha256": "4610f9599844b967c8833fdd975f7f30d9a790ed4b4b5836196aa7a077bf8085",
+      "observedAt": "2026-10-25T07:03:59.331695Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWFS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "a5b3b90b4ee3401c4f56d5f4f2625d60f200fa47900c1327b13d963ac8fba665",
+      "symbol": "MSRKS",
+      "yahooSymbol": "MSRKS",
+      "sourceSha256": "a57d4b846e22424c910255097b8f7e42d894239a1b27320c39f54894f49c3afa",
+      "observedAt": "2026-10-25T06:57:17.205052Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSRKS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "a67625a9032f7e096fafbc18e6e58846c723618cda6d3d04bd2a895df9bec5b5",
+      "symbol": "MSWJS",
+      "yahooSymbol": "MSWJS",
+      "sourceSha256": "06d32ea60cf9d5bee3aa6c852f88446ed75b655d3e05e1810eac64e8f86d189a",
+      "observedAt": "2026-10-25T06:58:43.642744Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWJS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "a951fc3d6f18e0d9e2f020a1b6e44a603c6c200f80a2b3eb7cf36f4b414e1a8e",
+      "symbol": "MTWIS",
+      "yahooSymbol": "MTWIS",
+      "sourceSha256": "a03c312620f87dd0894d5b1606681cc1f6acc9f8fc11d9b4153676886319ec40",
+      "observedAt": "2026-10-25T07:04:03.340619Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWIS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "ab4da9adb9232171afd5b0ac99b6a956bb462b469f04f71f793b5d0e8968071b",
+      "symbol": "MRWAS",
+      "yahooSymbol": "MRWAS",
+      "sourceSha256": "f9e4a7bece883a835c627ba40b88c25083e35b2d1a7c939e108b1be19e1d69e6",
+      "observedAt": "2026-10-25T06:53:33.907515Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRWAS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "aeb8523683751721c6678dfd9069247a5d38c431d76d9ad9c93de6c17d98bc4b",
+      "symbol": "MROFS",
+      "yahooSymbol": "MROFS",
+      "sourceSha256": "879359e10641aa0f1fb7ae56d40cb0726950458908ee2fcdcdfcf9db1d67a93e",
+      "observedAt": "2026-10-25T06:52:11.444044Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MROFS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "af9b267841e52e8db1d5fa91cc8c8ad49ef3f94068ed9d6224d321ad6b1379c9",
+      "symbol": "MTEST-A",
+      "yahooSymbol": "MTEST-A",
+      "sourceSha256": "455aa216528551b4dd1dccd9994125717f51a499d53ff46d1243b23dd82a5ed7",
+      "observedAt": "2026-10-25T07:00:14.115485Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTEST-A?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 请求区间没有可用日线",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "b3b4a079214a3c4a0da44b6b5f65a56b8d8909ee1f3ca8be41383dc2c18445c7",
+      "symbol": "MSYKS",
+      "yahooSymbol": "MSYKS",
+      "sourceSha256": "ec50603ed796475a284fe05f5a6845dc570a5c3056102e347f671e52bdef51ee",
+      "observedAt": "2026-10-25T06:59:07.917201Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSYKS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "bb1c9e730625f05ce61eda8133259ea4746b650b79489233b141425b1d2e98d5",
+      "symbol": "MSPRW",
+      "yahooSymbol": "MSPRW",
+      "sourceSha256": "c8989696db2fc6009e3c394646b3880c3e37ee929bc4c60ab74c80b0bfe8ce52",
+      "observedAt": "2026-10-25T06:57:07.178441Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSPRW?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 请求区间没有可用日线",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "bb8236b796e4af8191cdaf6ef749b4d7a1a06eafcdebce4b0579bb703c09b026",
+      "symbol": "MSKWS",
+      "yahooSymbol": "MSKWS",
+      "sourceSha256": "d8e8f3e4ba66dc3c44f3ada9de8b3ea4293c4996158b43c1beda6401eefadc49",
+      "observedAt": "2026-10-25T06:56:08.849233Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSKWS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "bbbf81d7ccedf6cf4a3d5881d702e5bca182bc7baa277d75c5c213912054f275",
+      "symbol": "MTWTS",
+      "yahooSymbol": "MTWTS",
+      "sourceSha256": "b60a9e563283d1d85c9b2dc23881a4da00ce710b7d7098067f9ca8356d7031b3",
+      "observedAt": "2026-10-25T07:04:25.510673Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWTS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "bd5a197bcd9a8d1a3d6658ca231bcc8ffc2177caa6da4223eb39f75f6261808c",
+      "symbol": "MSKFS",
+      "yahooSymbol": "MSKFS",
+      "sourceSha256": "41b68de9db189022c95a727e148c2c64dd42818f8271b3486d9fcd1d3bfc4633",
+      "observedAt": "2026-10-25T06:55:58.828527Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSKFS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "c2a92d7e7ca4487469c96588e933d601a32b367c5f65db32e13fe18e8590f5f3",
+      "symbol": "MSWWS",
+      "yahooSymbol": "MSWWS",
+      "sourceSha256": "4e5a062f759a866e0b3a07bc84458ebcf12cacd337fbfed1d50a248d9ae7f680",
+      "observedAt": "2026-10-25T06:58:59.750879Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWWS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "c8df37d8f2bdb76faf5de6890dbc110fb1977edc32ffe241f0c58d4e93f85ab1",
+      "symbol": "MTQCF",
+      "yahooSymbol": "MTQCF",
+      "sourceSha256": "18dd5fc33c163b2e15653933e4ec7acd46da4605b4dc27c54aea50ab8ceb70ba",
+      "observedAt": "2026-10-25T07:02:14.801464Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTQCF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "cad9f72c1cdd2c48a4a749a802bf16008218bbe67b802097838c31082451dee5",
+      "symbol": "MTIRF",
+      "yahooSymbol": "MTIRF",
+      "sourceSha256": "1c7addc8c51bdea0b9a1454ddd4006a9e24eb607aa87741f71628c17c83cf0a5",
+      "observedAt": "2026-10-25T07:00:52.309413Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTIRF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MTIRF 2026-04-17",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "cae61a37a1a1966a51db1ad7b1aec9e070a2b0ec8d3e7f76be6272acca1a65a2",
+      "symbol": "MRWBS",
+      "yahooSymbol": "MRWBS",
+      "sourceSha256": "af3b258c8864b7e7b067353dc675a86b31b4c0b79a4d4c44f3b91d5d546c2187",
+      "observedAt": "2026-10-25T06:53:35.942746Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRWBS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "cb5f7acf993ae841b5b710229f5b65a6fd75518fc2739e733bb4abcb30d326cb",
+      "symbol": "MTTCF",
+      "yahooSymbol": "MTTCF",
+      "sourceSha256": "802ad8f50b84849fa5e7b219f413dad02c6e2d73c9dba216edd98fec80901acc",
+      "observedAt": "2026-10-25T07:03:13.434872Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTTCF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MTTCF 2021-11-10",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "cc2f9fe86d7cd79a1655cae8ace0c4908dd67883096ece98875223a41e4f8b75",
+      "symbol": "MTPOF",
+      "yahooSymbol": "MTPOF",
+      "sourceSha256": "6d50f65d3ad921424372f6a0ce82dad516095aabf1f9259632089fc2cbe8a36f",
+      "observedAt": "2026-10-25T07:02:00.831707Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTPOF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "cc67921aa3841d0a3a605ea7a5dd371ce001ce0278d3206619c888db91438900",
+      "symbol": "MSWKS",
+      "yahooSymbol": "MSWKS",
+      "sourceSha256": "b5a366bb2193c0000f49c0517fc9aaab92c4350ca5e8bb1c5ca12fab32b4df98",
+      "observedAt": "2026-10-25T06:58:45.653386Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWKS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "d059bc1d87699f227c0c61b71d12135bcee309d89238f22c16e94ed208ae8337",
+      "symbol": "MSWCS",
+      "yahooSymbol": "MSWCS",
+      "sourceSha256": "6207599b568daf61ce32773edff9125978fcde01bb04861e6ce0c5548e6c8f0f",
+      "observedAt": "2026-10-25T06:58:31.580880Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWCS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "d8a43d4895f0a1b2e8a5b858adffa2b0370de3b0ac95eda5b85319a5e97e3058",
+      "symbol": "MTWAS",
+      "yahooSymbol": "MTWAS",
+      "sourceSha256": "272f7bcd76832961a418937cca86c7853029a081540555bdccabda9e76c25012",
+      "observedAt": "2026-10-25T07:03:53.293879Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWAS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "de3b0186895aaf56d8840f6b2ec5226fd324a8b04c2a79be530dc57a19f31952",
+      "symbol": "MSET",
+      "yahooSymbol": "MSET",
+      "sourceSha256": "a904794cd9dd3fc5d3bcfbd89740132137195ed4b0ea7614fc331b85c921a87c",
+      "observedAt": "2026-10-25T06:55:02.893756Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSET?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MSET 2010-04-19",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "dff3bfdf8b81c3bd86ed9145a24ace0a4442503f33d96dff6a4a95d345c69c31",
+      "symbol": "MSTF",
+      "yahooSymbol": "MSTF",
+      "sourceSha256": "9dc4ec4740669e739329725e214c85f050c67be2a81a6227522cc8a4cbbbac87",
+      "observedAt": "2026-10-25T06:58:01.474709Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSTF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e147eae0e88c5e963e0a0416b554f8aa256d3cd40b2812a8219cb6662c390de2",
+      "symbol": "MSWRS",
+      "yahooSymbol": "MSWRS",
+      "sourceSha256": "9651ee9c622f1255905c1d147553468759fdc526c8988ce684a55f4a2e580074",
+      "observedAt": "2026-10-25T06:58:51.906303Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWRS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e14964bfe1f1c3b3bb3f0bc6a54dff412be8b4c9473a87018c673b9ecd65bd0c",
+      "symbol": "MRSKF",
+      "yahooSymbol": "MRSKF",
+      "sourceSha256": "0193cb17efea9a83ec9220f9266a1bfa274af704ed46b6a931c852630aa8fb5b",
+      "observedAt": "2026-10-25T06:52:53.961932Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRSKF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e1814678263424b19073ed3c19fca12f9c2c01a28e82918a3dba8ab92276ffc2",
+      "symbol": "MTKRS",
+      "yahooSymbol": "MTKRS",
+      "sourceSha256": "d8b7f0fffa2b150f0dbe4d95987e81566466201a936ca405a5308f385166d5b4",
+      "observedAt": "2026-10-25T07:00:56.321925Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTKRS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e42031060dbf94209a10f66fc877da61fbd375fbe6512a8c4e87989bb9e0ae16",
+      "symbol": "MTGSF",
+      "yahooSymbol": "MTGSF",
+      "sourceSha256": "f0936672ce946498a0d0e3f1b06b6269eff0d584229d8861e1e06d5c881e4ecb",
+      "observedAt": "2026-10-25T07:00:44.540593Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTGSF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e561c198788b65947dc804286b7506037c134c3585d8b10b8677dabe9362dccc",
+      "symbol": "MTWLS",
+      "yahooSymbol": "MTWLS",
+      "sourceSha256": "1e9842f7219774d0cac015e87517284e26982be5def70d1ac4b79cbe44365339",
+      "observedAt": "2026-10-25T07:04:09.927329Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWLS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e5f86dd68250c63a64be2122cf4c00093dbf30ba81b1407dff9cefe5b8d0b1e5",
+      "symbol": "MSCMS",
+      "yahooSymbol": "MSCMS",
+      "sourceSha256": "0e6d39b0ac8927bcb732765192181ab66c4dde5333e92302f722388918f47017",
+      "observedAt": "2026-10-25T06:54:46.609858Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSCMS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e641055bf09822a986ef9cbb28ec5efe52005e4d7bd8d0dde587c9786c2f1c09",
+      "symbol": "MRWXS",
+      "yahooSymbol": "MRWXS",
+      "sourceSha256": "86637ba922959c8e0e7e9882495914b511defe6a2b41c7de596b0cef992b79a1",
+      "observedAt": "2026-10-25T06:53:54.268791Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRWXS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "e8698c19ad1fdb64cee70786a3de60cfef8b04d7872e74c2e2b3f4e82587d9a5",
+      "symbol": "MRWKS",
+      "yahooSymbol": "MRWKS",
+      "sourceSha256": "1140c126d56c5bbe94c780acf306e15f628f031f33ec7bf9a4f45c6b461490b3",
+      "observedAt": "2026-10-25T06:53:46.056173Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRWKS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "ec6ca942cc3f004b62ce3e0b997a9269e5ad7e26eca98781ff22e097043613ee",
+      "symbol": "MRNJ",
+      "yahooSymbol": "MRNJ",
+      "sourceSha256": "3eb6d2c67f0eeaf200b017628e9688cce0b170708bccf8ddfa9d509471338d90",
+      "observedAt": "2026-10-25T06:51:57.495154Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRNJ?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo OHLC 超出高低价范围：MRNJ 2015-03-30",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "ede3dfb3c7a64e467ed87ffc7544a9e510a222195c6a66c87e938b01912bab3c",
+      "symbol": "MTWQS",
+      "yahooSymbol": "MTWQS",
+      "sourceSha256": "e32830547f119b1f76fc406e79ed2f23c97e354daa48b91de6fdf5d55ce79c54",
+      "observedAt": "2026-10-25T07:04:19.424740Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWQS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "eec9d90017d98e8d21844f7f39ad1952bc649e6eb0654598c0b7e89926a63a67",
+      "symbol": "MSWTS",
+      "yahooSymbol": "MSWTS",
+      "sourceSha256": "77ef77747fd297c2d84037a43f4e3b7b65cc5c74ee913c99eb8e6853f4c68c62",
+      "observedAt": "2026-10-25T06:58:55.693021Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSWTS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "efade65f988f4c3e7fc378edcba940fda3d4f69e5689034fe9300736f9996bd3",
+      "symbol": "MSHE",
+      "yahooSymbol": "MSHE",
+      "sourceSha256": "d3f313fc565c8b7ab9c94ea63706ec485f943df0b2ca51ef4218904981d8dd35",
+      "observedAt": "2026-10-25T06:55:32.607814Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSHE?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "f16387ea2a30a5019db2642ce0b690970cd1c1a51f7209b4d9f2eb2d544207d7",
+      "symbol": "MTWHS",
+      "yahooSymbol": "MTWHS",
+      "sourceSha256": "6364bb399c599a439b5dc19aa6d17468e37226a1f9fc7eab441017b599015a11",
+      "observedAt": "2026-10-25T07:04:01.349619Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWHS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "f1dd8e4627ff380c6661917c97a99c668a6d844c7ed3e68324d81267a8be2926",
+      "symbol": "MTAOS",
+      "yahooSymbol": "MTAOS",
+      "sourceSha256": "1b4175bfe9aef9ab2cbcba59f9337861aa932fb319dda02c20be8d6c0d71a2d6",
+      "observedAt": "2026-10-25T06:59:27.877545Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTAOS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "f37add6bc08c4e662aab4df6c69df11726fcc0692b3cdd47955c270b79b0e3ea",
+      "symbol": "MTWNS",
+      "yahooSymbol": "MTWNS",
+      "sourceSha256": "67a48fbab48615149e47917d0564df6827634acfd84158aaf0063319d87e3ceb",
+      "observedAt": "2026-10-25T07:04:13.396810Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTWNS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "f4d0b53cb69b1c2d82b2ee8655bc2b3b5777eec12bd9aeb4d6c5b674ccecd7ae",
+      "symbol": "MRWES",
+      "yahooSymbol": "MRWES",
+      "sourceSha256": "afad68fc94e82fd3568e562c45c538da6978251e32398ecd4ef559e21e1b03ce",
+      "observedAt": "2026-10-25T06:53:39.961393Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRWES?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "f4f7ab663a346c5732efbf5bc7e49b5db7912f34630fd46acac9ed3a56775482",
+      "symbol": "MSFFS",
+      "yahooSymbol": "MSFFS",
+      "sourceSha256": "3d4ae9bdbf243e0f661ec7ae580060e69a022ab82224750e55fce73f38ddf9f0",
+      "observedAt": "2026-10-25T06:55:08.503504Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSFFS?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "f8a58360aab18a806081c4f2f2af795a7ebcadbd1dc62312b0ea4231b255fcf2",
+      "symbol": "MSILF",
+      "yahooSymbol": "MSILF",
+      "sourceSha256": "214d6742627df9d1066f9815d77f2520ea6fb7e06cefd9d6f6b40638305861f5",
+      "observedAt": "2026-10-25T06:55:41.021887Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSILF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 代码、币种、市场时区或证券类型不符",
+      "currency": "USD",
+      "instrumentType": "MUTUALFUND",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "fece958c9b283da2cff898cb142000788618a3430217806b21e7ba6d5c664319",
+      "symbol": "MTSMF",
+      "yahooSymbol": "MTSMF",
+      "sourceSha256": "c7319dd82b1f1927bd5c64aea1c3bd24af8199fc8e304526fcbe2fdb7fd02b2d",
+      "observedAt": "2026-10-25T07:02:59.090185Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MTSMF?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 价格或拆股因子必须为正",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    },
+    {
+      "task": "ff18958642f8a3cc7ef6d371faf12bd6a99f4412a345e64b76c3197219f19bfa",
+      "symbol": "MRZM",
+      "yahooSymbol": "MRZM",
+      "sourceSha256": "a12913d13974233419e6d3b5dee3bc2797512c863ffb4f22fad7caa35a1d6432",
+      "observedAt": "2026-10-25T06:53:58.528946Z",
+      "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MRZM?period1=1136073600&period2=1792972800&interval=1d&events=div,splits",
+      "originalFailure": "Yahoo 数值缺失或非法，不能补零",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York"
+    }
+  ],
+  "failedRawReasonGroups": {
+    "Yahoo 代码、币种、市场时区或证券类型不符": 68,
+    "Yahoo OHLC 超出高低价范围": 15,
+    "Yahoo 数值缺失或非法，不能补零": 7,
+    "Yahoo 价格或拆股因子必须为正": 11,
+    "Yahoo 请求区间没有可用日线": 3
+  },
+  "说明": "原历史目录任务的下一有限批，不扩大固定首批清单；可用响应不代表永久证券身份或上市以来完整历史。",
+  "sourceChecks": [
+    {
+      "task": "ea1734d28bdcb7aa407eb4947fa787ba2557608e76b3fe9b025a5282c8f13593",
+      "symbol": "MRLLF",
+      "yahooSymbol": "MRLLF",
+      "rows": 3436,
+      "sourceSha256": "8d0e600350ddc7b9232a9d932a2eb3f3fecd220210104d659ac9b2d22733d44b",
+      "observedAt": "2026-10-25T06:51:41.442160Z",
+      "independentRowsDigest": "4021520081871b185d9ace459c8a0fa855a41aed903a9bd90ab884b840b5b21e",
+      "firstDate": "2013-02-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2749,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a1483c36d1fcd9b6bfae469fd447bd7ddbe002ea963e448f633fc7b9be914dfb",
+      "symbol": "MRMD",
+      "yahooSymbol": "MRMD",
+      "rows": 3571,
+      "sourceSha256": "b63253e3d372f6f4092f44ae4dd8cac415b53828357d9e30657cc2f7a3271c40",
+      "observedAt": "2026-10-25T06:51:51.370365Z",
+      "independentRowsDigest": "9ad2498475474037d35509d94550d6df9dc184e4dffcdd47a93003f4fef39118",
+      "firstDate": "2012-08-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 463,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6636b74fe465b44d07eb76e966417d4cd1660c863054e3dfed25e0396ce722ee",
+      "symbol": "MRMNF",
+      "yahooSymbol": "MRMNF",
+      "rows": 39,
+      "sourceSha256": "9608ed3ea0dbe91b756d7c136e5be7890251edb4b64f338edfe3bc53b4df63d5",
+      "observedAt": "2026-10-25T06:51:53.269738Z",
+      "independentRowsDigest": "fbda88d9dfcade76b01d4a20d538f1da64f1188014d52c2467c9a03b78165f78",
+      "firstDate": "2026-08-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "28002e7e7353351ab147cb4584e2c0fbe8cf5c3b18c34a072cee34e557ff15c6",
+      "symbol": "MRNFF",
+      "yahooSymbol": "MRNFF",
+      "rows": 4471,
+      "sourceSha256": "57015897e1d610cd8464d301e54beb54915ec050c6e9a615ad1facc78935dc59",
+      "observedAt": "2026-10-25T06:51:55.375071Z",
+      "independentRowsDigest": "ec7e4579e099aa7ebb4d322bd882d9d91d17f73cc51125bd5d60f10228d16355",
+      "firstDate": "2009-01-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 168,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c2819909ae80080fa47c66acd8dc4bab980d947aaf4020139ff183d9d1a1c116",
+      "symbol": "MROPF",
+      "yahooSymbol": "MROPF",
+      "rows": 818,
+      "sourceSha256": "9c2d9627bc3c5108fd461003efbdd6ac83ecf79259b94effce8cbd37343dd6a6",
+      "observedAt": "2026-10-25T06:52:17.460631Z",
+      "independentRowsDigest": "bfb9e53d188cdc16e8057193d905bd4f404da3cf19af302b9885bca629fdf0bd",
+      "firstDate": "2023-07-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 815,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "4d70c0447d169898fc78dfe7040d83f5d45f1ef5c531a5c01db5aafd9d6fab65",
+      "symbol": "MRPLY",
+      "yahooSymbol": "MRPLY",
+      "rows": 3571,
+      "sourceSha256": "bf9e546c0e386d5aa7c0155617c228c22a746e136be1e4f29bb3b7717c10fe73",
+      "observedAt": "2026-10-25T06:52:23.529123Z",
+      "independentRowsDigest": "a5ac68df1c2cdc5f4940d3da68ef647379a6b6c663aabd1df1d9896cef0b73c6",
+      "firstDate": "2012-08-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 371,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "acfe07e807777d50cddbb83c5cf567b04030b1c3db3c77a429c3a2f933e7ec5d",
+      "symbol": "MRPMF",
+      "yahooSymbol": "MRPMF",
+      "rows": 859,
+      "sourceSha256": "4bf681cc528f33a957c5741c09ad4400b2c9d2a0eae25ecaf71530ae24c1e7f9",
+      "observedAt": "2026-10-25T06:52:25.578984Z",
+      "independentRowsDigest": "f4eff2e4ebee48da96b7d168770f05e3a9e778bb9a390f4f0403ee9208088da1",
+      "firstDate": "2023-05-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 722,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "101f3278ac1bf772cf13f01f040e66ade8778acc6120351ee55b276a5752bb5e",
+      "symbol": "MRPRF",
+      "yahooSymbol": "MRPRF",
+      "rows": 3054,
+      "sourceSha256": "041e818f34c14e68530fab61b22aadc8e5fbcffd497b29c0a10198c25e7845a5",
+      "observedAt": "2026-10-25T06:52:27.677820Z",
+      "independentRowsDigest": "d7de4346026adf89ff22db2c774038fab03c04430de9c040f9eda9c8f40093e5",
+      "firstDate": "2014-08-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2465,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a290402f3832e02ab52e9eb001425883cbad244f736e6d16efb4ecede67c3b9c",
+      "symbol": "MRPS",
+      "yahooSymbol": "MRPS",
+      "rows": 5230,
+      "sourceSha256": "e9f2900cef60052f86f7dd0d98bcbe012a43fe8ecfbb9696c7a0664deca4d557",
+      "observedAt": "2026-10-25T06:52:30.030863Z",
+      "independentRowsDigest": "a076ce9f12a22c6b25ad25411b14a358b481eb6938df859749e8bf95e87904db",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4407,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "9e0bdcc6a50b0f2817f9c851b61ab5689129c753a5f06d2d1b5e6dc759e2b1cc",
+      "symbol": "MRPT",
+      "yahooSymbol": "MRPT",
+      "rows": 5230,
+      "sourceSha256": "5f1be64aef78267f9602c6ef20d1133fa09902b58326cd16fab4195e9b619fb7",
+      "observedAt": "2026-10-25T06:52:31.738052Z",
+      "independentRowsDigest": "34e4b2e10e1e028f424a92e23dc236225a82474f863700b527db04cbd21bbbdc",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4717,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "9bd5e091df1028ffebc49a6c8a2581a2eabfb830bb535401b4be751e18370f95",
+      "symbol": "MRPZF",
+      "yahooSymbol": "MRPZF",
+      "rows": 2708,
+      "sourceSha256": "970da8eda542d87f4da722bdecdf488b55b52beb161ae5130fd3b8c316e90b26",
+      "observedAt": "2026-10-25T06:52:34.227041Z",
+      "independentRowsDigest": "c02afb6546f2d18c91803a2713a746799b816548037de3e5c8a052427c02220d",
+      "firstDate": "2016-01-11",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2682,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ce5a34aa1d3520200cee2a786769738eeaaea85259dd48d520a69cffaf5e0b78",
+      "symbol": "MRRCF",
+      "yahooSymbol": "MRRCF",
+      "rows": 5230,
+      "sourceSha256": "f4064056f347ee0dc7b21a1db38b8c5d86d74d358c8cf9b30ad614f1cb2c20c5",
+      "observedAt": "2026-10-25T06:52:41.723079Z",
+      "independentRowsDigest": "6cf0bc8107b321d23b06f160e862848ef8d9b628f8a6e5aeecb39255c86003a8",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4094,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c468178fc8ffa192de7c89e17b61318e09f219da8bd39e84729651baf81d4ee3",
+      "symbol": "MRRDF",
+      "yahooSymbol": "MRRDF",
+      "rows": 2212,
+      "sourceSha256": "e9ef49d7fbb5b1deb46ce068c626c7332bc893350dd9577694e32f21da816b6f",
+      "observedAt": "2026-10-25T06:52:43.688083Z",
+      "independentRowsDigest": "9837833a77b3dd1b4dbe858b6f0cb20a66f37c9502bd78d1681807c63f6de362",
+      "firstDate": "2017-12-28",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1043,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "0c7f5c305ff92c1254e742bd2a0a2aebb372e14573969380a798759be2e9c0a6",
+      "symbol": "MRRYF",
+      "yahooSymbol": "MRRYF",
+      "rows": 1260,
+      "sourceSha256": "28062a88372bbdcfff4964b2823c2dc5c9e1b74722c4398b93c6a554eaa4d931",
+      "observedAt": "2026-10-25T06:52:51.668101Z",
+      "independentRowsDigest": "fd93f092eab6d2794099909562ed5e32dea1160c06f31913244020a296148533",
+      "firstDate": "2021-10-11",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1216,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c0719ea280969b8dd9990dabece2e7c7dc25d997a97d5b29448905b387a625fb",
+      "symbol": "MRTI",
+      "yahooSymbol": "MRTI",
+      "rows": 5230,
+      "sourceSha256": "4e760eaeb74096fb1275981b9b9d639514fa54641079c2ac9e8d5d2e48ea50c3",
+      "observedAt": "2026-10-25T06:53:01.860527Z",
+      "independentRowsDigest": "66b4c5289e8eca77320bc50d1a7ba1e0b0cdd54a282a7168288f6fc4ced9e459",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3552,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "be515110fa10274299b579c932532affaac36b722aebb338f3537a85191b60b2",
+      "symbol": "MRTPY",
+      "yahooSymbol": "MRTPY",
+      "rows": 2475,
+      "sourceSha256": "9e99eafbefaace1c660deb3a1c0462b5256e7da9316aeadde127ce9b5ae48302",
+      "observedAt": "2026-10-25T06:53:09.834475Z",
+      "independentRowsDigest": "b5c7f583a875675981c57e3a4f71cdfa42f754d6d1543a925d267df13047eb66",
+      "firstDate": "2016-12-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2442,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c127cc93845a1c0b070a728ef198c7b79dcaf773b21fd427e16cfe0ecd51d936",
+      "symbol": "MRUWY",
+      "yahooSymbol": "MRUWY",
+      "rows": 82,
+      "sourceSha256": "5e25ddd46ea58c9398e38d6f770af3d36262528e513a57fa0d63b5c7656db46c",
+      "observedAt": "2026-10-25T06:53:17.789123Z",
+      "independentRowsDigest": "0df0ddaf6617a4a8cefd8a1c613600573dd94f302b58c5b87b8a29f64bf3791d",
+      "firstDate": "2026-06-23",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "121f4062250235e47a8a3e0c5a1cf5ba882d042dc176d782eb931c2808356ec1",
+      "symbol": "MRVCF",
+      "yahooSymbol": "MRVCF",
+      "rows": 1526,
+      "sourceSha256": "c99a1344fce993acb37d7ddb1312e4026065379c55d4a16636fbf409ff161265",
+      "observedAt": "2026-10-25T06:53:21.901990Z",
+      "independentRowsDigest": "d1257c43b01c4d1f5b7bacfee5470f30eada293eee115b4fc4cf533335add081",
+      "firstDate": "2020-09-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1523,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "69123ed8dae0e9d010d988f9479b7d10493aeab3429e6ec1f3abff12ad3b1abc",
+      "symbol": "MRVGF",
+      "yahooSymbol": "MRVGF",
+      "rows": 3439,
+      "sourceSha256": "ed2c9b4e2fa17e13b6315db601de1db5e27c40a8d4359a58edb213a5395cbd29",
+      "observedAt": "2026-10-25T06:53:26.044421Z",
+      "independentRowsDigest": "539f47a80e20e46151d3a3316109c5806c85ba4477dc09c8f32e92876ebe97c4",
+      "firstDate": "2013-02-14",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2665,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "4a2f5f8562048fa5cbacbd7b585e8197248276dfc2707d00560f103d6c6d9ef8",
+      "symbol": "MRVSY",
+      "yahooSymbol": "MRVSY",
+      "rows": 3558,
+      "sourceSha256": "9647b04f3b4ee16735964d81190a13037dd55c038cfd12e148af51b3f0568e8d",
+      "observedAt": "2026-10-25T06:53:30.066908Z",
+      "independentRowsDigest": "4a51bc530f92d84c28f86117e493ad9662926421cc146c611496a358e913bd0b",
+      "firstDate": "2012-08-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2709,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "abfc1db99ca1578bbac10cb5ef244841422ffbc18fb537c0b13bd3dc25c4b3ed",
+      "symbol": "MRZLF",
+      "yahooSymbol": "MRZLF",
+      "rows": 4811,
+      "sourceSha256": "fb1d3b366da0b6de6810d3d0c8a01049f43a5faf58b207f3fe3d1d5957f845bb",
+      "observedAt": "2026-10-25T06:53:56.490999Z",
+      "independentRowsDigest": "2a07a0148266279690baff8f62bcd91b5085f21a34d34d7218fbe033645df01b",
+      "firstDate": "2007-09-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 846,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "19f21b2f1812b63d635792d626d9d7ecae32616661e06f281500123a9964428e",
+      "symbol": "MSADF",
+      "yahooSymbol": "MSADF",
+      "rows": 4662,
+      "sourceSha256": "0694b264717df1085020f217fafb685323caf8866243c7d87f626316c0c89ad6",
+      "observedAt": "2026-10-25T06:54:08.660854Z",
+      "independentRowsDigest": "6acf856ca6358537c35034ed1c74d736ead442a7c49d97f8b306a5fb665fc19f",
+      "firstDate": "2008-04-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3543,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6d35c4402d871efdaff48ca159b184d75e8af41000878755052ac3b7d28d9252",
+      "symbol": "MSADY",
+      "yahooSymbol": "MSADY",
+      "rows": 4727,
+      "sourceSha256": "730840689b2f4eda445a28f4e6b9af1c7e294412861c66637000ed821b9908e4",
+      "observedAt": "2026-10-25T06:54:10.652744Z",
+      "independentRowsDigest": "38fe7ebf24c6f1ae24d286eb2ed1aa7fcd88164a347af5d5d530a35fba0626bf",
+      "firstDate": "2008-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "54c1a3700a8cc97bfc71d3645d1999de3797520b5291c0409909d1535ff9e231",
+      "symbol": "MSAH",
+      "yahooSymbol": "MSAH",
+      "rows": 4299,
+      "sourceSha256": "ee230fe7a8cec5a904ba94a34e539a4f0f3140cacc38a93cc9d14874979c75e3",
+      "observedAt": "2026-10-25T06:54:13.012628Z",
+      "independentRowsDigest": "abc6b5da51fe29d4508ac1a23eee10c899b568dea4177acfa71b03ccb8cdf22b",
+      "firstDate": "2009-09-15",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3435,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "7c41cfea5f1b8d7ef60ba9b3fd38bc35c0f067f8650b71170455f71ba116381f",
+      "symbol": "MSBB",
+      "yahooSymbol": "MSBB",
+      "rows": 810,
+      "sourceSha256": "abed049c9734cfe72f519e0a7dcb883955571e825f897aa1af06807e5e2103f7",
+      "observedAt": "2026-10-25T06:54:18.673822Z",
+      "independentRowsDigest": "8483fc78366293e27aa59ba68a1a3602d8dd2ea32be14f8b43400c1e286c951d",
+      "firstDate": "2023-07-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 489,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e2648e580ed670c7ce609516f4a977ca58d314a0c3bad3d8d782ffaf16475fac",
+      "symbol": "MSBC",
+      "yahooSymbol": "MSBC",
+      "rows": 5230,
+      "sourceSha256": "f7edcccb54844ebdef781de0e8e16a6ad9681947bfee38042d5895e8ccdbda93",
+      "observedAt": "2026-10-25T06:54:20.842234Z",
+      "independentRowsDigest": "8eb2690dbfa2f5d353bfe4ee635812e5162342798d55a1838acbf28ed399b89a",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3820,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "6f5a4682cb10a1ff0b69a6b2fb3bc626c63f3adba3ebf4cc8faead1d2b39f7e2",
+      "symbol": "MSBHF",
+      "yahooSymbol": "MSBHF",
+      "rows": 4115,
+      "sourceSha256": "b593bb545d502f29298185905254ec56f3652d3badcd1930d8b05c929463aaad",
+      "observedAt": "2026-10-25T06:54:24.670933Z",
+      "independentRowsDigest": "445321f04c8c64edcb7b76adff0e1838b0222c7d729129fe29a8d50ffd3bbb88",
+      "firstDate": "2010-06-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2233,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "cd73c649ac5c50a0fcc3e5236962bbfb29bb25af63cfc716c90eeb93d7d3874d",
+      "symbol": "MSBM",
+      "yahooSymbol": "MSBM",
+      "rows": 4304,
+      "sourceSha256": "3bc562444c688a38fbcb4623cea3d44a913ce6955ffc75ab0e6f51b3acfd918d",
+      "observedAt": "2026-10-25T06:54:29.033962Z",
+      "independentRowsDigest": "89394db69f9cbeaca4bb9278d8e398068592fc645f1dd75f50d8918d5db903aa",
+      "firstDate": "2009-09-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3019,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3d2e0affc8cf08890642ac3dee10912027109a7be0ef19c1321e7b74f8c4f98c",
+      "symbol": "MSEXP",
+      "yahooSymbol": "MSEXP",
+      "rows": 2279,
+      "sourceSha256": "c021e9de8fb206bc88a665b73c928ce16834a41e8fc59648a7a3a48e9f52e877",
+      "observedAt": "2026-10-25T06:55:04.622737Z",
+      "independentRowsDigest": "7025ad0acdac3fa9fb7081cceb7a9ddaefc8ac2c180b7e8640dcbe66cd56f256",
+      "firstDate": "2017-09-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2138,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "9066ad1e19d2f8c21214fed83d3408f73bc87a197504d298911dcf6ec8fce5e3",
+      "symbol": "MSGNF",
+      "yahooSymbol": "MSGNF",
+      "rows": 2954,
+      "sourceSha256": "ecee296d75c78ed2cf3d80dfd6d9cb7a380399aab772a03bf097e6fc0979406c",
+      "observedAt": "2026-10-25T06:55:26.778964Z",
+      "independentRowsDigest": "895d9664c435afc0e633c133a26b536c8d4b4e406146c6e408ad2a9e6680e5ad",
+      "firstDate": "2015-01-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2674,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e026d87a768cbaf9832227b016f05b6fdf249c0836c130009ee3da0d5e4e589d",
+      "symbol": "MSHHF",
+      "yahooSymbol": "MSHHF",
+      "rows": 759,
+      "sourceSha256": "58d074c5030c58f492f6d0d7929e1f01706dd77cdf1b92fe4f53147c89043d14",
+      "observedAt": "2026-10-25T06:55:34.671584Z",
+      "independentRowsDigest": "1a582195ed531fa802234a512542a64f07f1065afdb6978179e170b879d16ca6",
+      "firstDate": "2023-10-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 756,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "972cfbdcf66f1a4df80ea5adce366ebac9207c15fd2d14c9419fd0f387649b4d",
+      "symbol": "MSIU",
+      "yahooSymbol": "MSIU",
+      "rows": 4257,
+      "sourceSha256": "1d8f8d2eb90ac86867d0e3d4f8fed394c12070866c36c53b68f1aba93cccf6c4",
+      "observedAt": "2026-10-25T06:55:45.001618Z",
+      "independentRowsDigest": "25312c47a0a294478bc9a4ae0d48ce6c8902954dac1f3205a00e002483c14d0d",
+      "firstDate": "2009-11-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3946,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "94090cf693e70a59ae326567ec358a9e4b05c6e685ea6489a79884057e7faec1",
+      "symbol": "MSLOF",
+      "yahooSymbol": "MSLOF",
+      "rows": 3561,
+      "sourceSha256": "ee2c5c8102154232c344efd1b2eb901d304c927a2ddc16f02f12929ee1841960",
+      "observedAt": "2026-10-25T06:56:19.068232Z",
+      "independentRowsDigest": "e8620c3a2e089029352c351a7a19eda3a71a7b204569a6c4b00a7fe48e495a07",
+      "firstDate": "2012-08-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3304,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "aa097eb06acc254a312f3412af03349488e82887340f1be827a0573bc1cf5e9f",
+      "symbol": "MSLOY",
+      "yahooSymbol": "MSLOY",
+      "rows": 4212,
+      "sourceSha256": "f96a47474152e5ba1089667c8130e8e73e7ce690b3049f5463c827670d5d6929",
+      "observedAt": "2026-10-25T06:56:21.177821Z",
+      "independentRowsDigest": "2643a61ba8f762c4c7b077b36e3b2872d1b7fdf7b88c82be251dc5409934906c",
+      "firstDate": "2010-01-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2561,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f9f63352c7ff926739130f1e00efecd56c1a96f5a57854154511f273f42e8098",
+      "symbol": "MSMMF",
+      "yahooSymbol": "MSMMF",
+      "rows": 544,
+      "sourceSha256": "af921d2181fc07bffd2335e347411ee65e200fe26633c89ef0c28f543f398d8f",
+      "observedAt": "2026-10-25T06:56:33.025673Z",
+      "independentRowsDigest": "78734c89e0f52b1870fe64505086a39dfaee67d379345023426254d8e7b14e0a",
+      "firstDate": "2024-08-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 333,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "8af1599811cda49b93374b424b51230cafb5faa92ca423d38393b15b72f3d783",
+      "symbol": "MSMY",
+      "yahooSymbol": "MSMY",
+      "rows": 4078,
+      "sourceSha256": "4b3113bf5cf7014ed2769a905f60d82f146114e6901454dbe3eebce42b874a1a",
+      "observedAt": "2026-10-25T06:56:35.474091Z",
+      "independentRowsDigest": "2b576f23cad17792c9031ebba774cf0c973c3c1ffec9201064b365be19c7af06",
+      "firstDate": "2010-08-02",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1359,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "7594e1fb6cdceaec7674c36c17f595a7b3092f0973c4734938d56629c2b7036a",
+      "symbol": "MSNVF",
+      "yahooSymbol": "MSNVF",
+      "rows": 2584,
+      "sourceSha256": "353f05f070cc038143c36e3e3a59de0178771f9b921331dd6de380709558a6b2",
+      "observedAt": "2026-10-25T06:56:39.253440Z",
+      "independentRowsDigest": "0d4705acb1529b692d1e08aa07bfaca228703cead80b92de4d85a1f90ad9eb75",
+      "firstDate": "2016-07-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1360,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "984e4ef1450618f7d8665716213df771eb8a4e8d09bd22d830ab1b5cae14916f",
+      "symbol": "MSRM",
+      "yahooSymbol": "MSRM",
+      "rows": 5007,
+      "sourceSha256": "c733f63765d2bfa28ac88cf325d4c12d08e01e1a6009b15f645730b2aa5c2031",
+      "observedAt": "2026-10-25T06:57:19.665911Z",
+      "independentRowsDigest": "acccfc0baf509819c24a81dbb886e918381b4b36f37b710c1e734550f5908d2d",
+      "firstDate": "2006-11-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3255,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2322f00aa8f910bef6145b7552edc9938607dfe92bbc2c8cc2574b311521ec0d",
+      "symbol": "MSSEL",
+      "yahooSymbol": "MSSEL",
+      "rows": 3530,
+      "sourceSha256": "3fd800111df921cb673d178986470471e734f88e8f98279ceb872252323fc99b",
+      "observedAt": "2026-10-25T06:57:31.373739Z",
+      "independentRowsDigest": "ec918e0fe05f8c9b91a15b648b8a2b430406a557cdfbcc78c9727eafcf919724",
+      "firstDate": "2012-10-02",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3424,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3fba4f8eef0bb68a8b502a8507479638c22d6d1616d0494ed9cbe85faa5f31b7",
+      "symbol": "MSSHY",
+      "yahooSymbol": "MSSHY",
+      "rows": 5,
+      "sourceSha256": "04b731d1192b28b0afa730f69ea1a9a7c09133dcce9f60d36cb80975713e913b",
+      "observedAt": "2026-10-25T06:57:35.274062Z",
+      "independentRowsDigest": "7f099b38c25de00af1f39b43c2b975a09582de8840d125e9f63f39dd7fa0b216",
+      "firstDate": "2026-10-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2b48480cef44ceeeaf8fb7cfbf388a78d69614d510791505778aea982de89ed8",
+      "symbol": "MSSMY",
+      "yahooSymbol": "MSSMY",
+      "rows": 1461,
+      "sourceSha256": "7b0c46e8ff12097471fe4133a51db2056aa9e8fb325a40586ee35acc06e3c238",
+      "observedAt": "2026-10-25T06:57:39.628483Z",
+      "independentRowsDigest": "accdeb3d16eb00b28a14012b5b3bbc3465374a59915561b9518a902f5dac90a3",
+      "firstDate": "2020-12-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 159,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f928f429ea7b4f37053724d230020ee6d769211bf29d72a7622f217729065b94",
+      "symbol": "MSTH",
+      "yahooSymbol": "MSTH",
+      "rows": 1067,
+      "sourceSha256": "4933804f781c16cc0f4d974ca67481a970b5e6cf07584080c2d3ad1b9a739420",
+      "observedAt": "2026-10-25T06:58:05.498476Z",
+      "independentRowsDigest": "960d664133bf5bc529910fe56581e162b7773db67884414abcac11429e3cc67a",
+      "firstDate": "2022-07-19",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 862,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3fecfa748975f30f3f70716ecd957117d9d26e39066847bfab514aaafda2d6cd",
+      "symbol": "MSTXF",
+      "yahooSymbol": "MSTXF",
+      "rows": 5230,
+      "sourceSha256": "21b762a2541b1ca729e5c38d8c9476c02b706aaea2543f849006f7787a1ff45d",
+      "observedAt": "2026-10-25T06:58:17.943114Z",
+      "independentRowsDigest": "71263ed83a8f743800a93b118905f20f1ce2f4dfa865d8e2fdd5f1735e3fc4e6",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4948,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "4678399eb4b0323348ad9c5f6d152194b50cc15559617dcdbcfe57f71c426009",
+      "symbol": "MSUXF",
+      "yahooSymbol": "MSUXF",
+      "rows": 5230,
+      "sourceSha256": "fe1473626f9464fedbbeb2dcc1d2e2826cdb179fce324b305d8f4e05f3f939c5",
+      "observedAt": "2026-10-25T06:58:22.022642Z",
+      "independentRowsDigest": "7e0c494188311d3e4c647da0ec450f38fa18659ea2a450413940fd33974ff42f",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 5046,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "592d26421d541241cbe45964239d1ebc1b4325dbafe3af3033e9c603f61fcc4a",
+      "symbol": "MSWV",
+      "yahooSymbol": "MSWV",
+      "rows": 1450,
+      "sourceSha256": "56434405bf675d144dc8500f9b8d64ba8d8782f081c1027fca07b35b88646187",
+      "observedAt": "2026-10-25T06:58:57.823110Z",
+      "independentRowsDigest": "7e285a9925d8da16da7c3b89b098a0b5f57a5f0cae39450a88e604debb1a5e27",
+      "firstDate": "2021-01-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 792,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "084ee1f708de3e332ef6a7304143f92b6da3f942eb87727f22a58e0990515f12",
+      "symbol": "MTAGF",
+      "yahooSymbol": "MTAGF",
+      "rows": 2277,
+      "sourceSha256": "f92383c54e0fe4291788c0eb7b01d464576686aa7607e35051ed55c350816220",
+      "observedAt": "2026-10-25T06:59:17.992998Z",
+      "independentRowsDigest": "70ef5311d88fc0c4188fe0ecdaedea181393a0d7959fd3b7c7d34fd655ab7ba6",
+      "firstDate": "2017-09-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2166,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "951d0dbe8a7cad9a068e2589884183875b3878768e94e599e226bd4d1e061479",
+      "symbol": "MTASF",
+      "yahooSymbol": "MTASF",
+      "rows": 465,
+      "sourceSha256": "3392e8cb74c4e1dff1e271c103fec40b7d4c3bfa071362cdab89dde71ee9394a",
+      "observedAt": "2026-10-25T06:59:29.904212Z",
+      "independentRowsDigest": "0d0f8cbdd74d03eaf3eeec08bbb10a4575de0da7905af7ca678a086e0e9c71c0",
+      "firstDate": "2024-12-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 370,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "19f64e1b07b8351c4e1529b936d1b17768c8c6ee74515f43ccaac505bbd8c092",
+      "symbol": "MTBLY",
+      "yahooSymbol": "MTBLY",
+      "rows": 3887,
+      "sourceSha256": "72dbcf32c1f763705d6a80a0048156af087a6e2a95781fa6e1f02e68ee210f8b",
+      "observedAt": "2026-10-25T06:59:36.178035Z",
+      "independentRowsDigest": "3520a62735716fee65a882a0f3a16c0958108a4310e0832b6c95c1a8e034a244",
+      "firstDate": "2011-05-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 149,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "4b94bc6edfb1043f4b1b25248ff8fa35c1966a165e1bc17c16fdbb891cf7e55a",
+      "symbol": "MTBMF",
+      "yahooSymbol": "MTBMF",
+      "rows": 1468,
+      "sourceSha256": "f64b1cd511d631e778112b69a1f9f456947f30be4a48573c910b8ff9c2404fa4",
+      "observedAt": "2026-10-25T06:59:38.112250Z",
+      "independentRowsDigest": "8c158f3994eba97531fafa71fceb532abcc4ec72364991051f1425cd39df2eb2",
+      "firstDate": "2020-12-11",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1460,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "e760caf86144aa906f6b8d7d734a795b1cbdc479615ce4b349a07b34ce840ba6",
+      "symbol": "MTCPY",
+      "yahooSymbol": "MTCPY",
+      "rows": 545,
+      "sourceSha256": "2a32e9e14944fa395435ddb674d5cdd770c00784af33e564ac63b6d2a38cb4d4",
+      "observedAt": "2026-10-25T06:59:50.032268Z",
+      "independentRowsDigest": "cacac5ef35270c8ecbdd72dfb598097f30d891d728305c8f6945346e2fefc2d8",
+      "firstDate": "2024-08-15",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 435,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "eb3783657acf46c9e2d6414c9372214e0dc2d82e9ad462866b24892813eb06ad",
+      "symbol": "MTEI",
+      "yahooSymbol": "MTEI",
+      "rows": 5230,
+      "sourceSha256": "a622817cf0e704de4a1ce605874964144a8f4b9d0e110bdca5f1602031546e75",
+      "observedAt": "2026-10-25T07:00:06.505345Z",
+      "independentRowsDigest": "91445b234045a36bd77b9e20b4ccb869deb25a0c689c019e48a2cf72fc383ca5",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4364,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "1016cffba98f9dc322ea8bad8b05391ba5753377e169f91d3309a1118368ad4c",
+      "symbol": "MTGRF",
+      "yahooSymbol": "MTGRF",
+      "rows": 5230,
+      "sourceSha256": "f48c5e3dafce7323cff6a3b1b6e0558bdbb16859099885e92db8485e55d79260",
+      "observedAt": "2026-10-25T07:00:40.754046Z",
+      "independentRowsDigest": "9185cc8f5d53b3e303d68e50652659e83285aa721ae8b03048abb8e7f633d29c",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4515,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f72b35bd08c58c3c67bc25bda1ac2491a31057c5992721a6f924205f58ef92fd",
+      "symbol": "MTGRY",
+      "yahooSymbol": "MTGRY",
+      "rows": 3264,
+      "sourceSha256": "509fa5a576711adeaa85c38aa30c2cb3868af5f0bde698ea8312d64c20843712",
+      "observedAt": "2026-10-25T07:00:42.602135Z",
+      "independentRowsDigest": "de98317b2b7e6b8c7a478e3a7cc928d10a331e501241ca853bad916342e94ee6",
+      "firstDate": "2013-10-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3062,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "dd3555e1f9e1106277171fc7649ee294910c0315d5f6c9bcf63726ceaec0f72c",
+      "symbol": "MTHI",
+      "yahooSymbol": "MTHI",
+      "rows": 4082,
+      "sourceSha256": "4348278a17b195e0869e2c5fa80cb294c4b2f8c50a9f969053324c47e530d70c",
+      "observedAt": "2026-10-25T07:00:46.614017Z",
+      "independentRowsDigest": "1e0626a60d6f5084b3dbacf234b76f7e177df527efe2b66a159983a53d710a79",
+      "firstDate": "2010-07-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3213,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "cd127a217b1df77522c9c92beec980724677fb69ef747c41caad8f7a8aee15c1",
+      "symbol": "MTHRF",
+      "yahooSymbol": "MTHRF",
+      "rows": 3045,
+      "sourceSha256": "ece5da42dd59df366c54cb891cebf89438b8965d1831f6a1fa33f841cce49957",
+      "observedAt": "2026-10-25T07:00:48.563918Z",
+      "independentRowsDigest": "52e85cc421b57fb18b024ab53a404c3f946d0b6c0b1cfa4077d96fa38f9e7ed4",
+      "firstDate": "2014-09-09",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2386,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f3af08da81a0532f713bae878b90d42689aa60f99f31528e59aece91c5e358cc",
+      "symbol": "MTHRY",
+      "yahooSymbol": "MTHRY",
+      "rows": 1584,
+      "sourceSha256": "fb35faf88d39dc54f599256bd701a7bfdeecd86562b82640d76375dcd4a61d5a",
+      "observedAt": "2026-10-25T07:00:50.419011Z",
+      "independentRowsDigest": "23dc9141d94c7776539db68d0d61161ca6a9eb355066e7b4993273ec2ddaca78",
+      "firstDate": "2020-06-29",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 18,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "8958e1f0bba9eae5dd0c0cfdc5d8347c62b6a6b27598b71e712c6b582092d24a",
+      "symbol": "MTLEF",
+      "yahooSymbol": "MTLEF",
+      "rows": 32,
+      "sourceSha256": "f61d76322023d85debb38a55bf5c3411baf3ae0653b3222c21c7a4ff7987a13c",
+      "observedAt": "2026-10-25T07:01:06.434036Z",
+      "independentRowsDigest": "bae3fb6416ceca96428d19d4568657dae30d7af87d569cfe57740008dd4d02a8",
+      "firstDate": "2026-09-02",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 25,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3bbcb27edeced47bda3f66427f9710db17b0793ab6e74db3d187482cb50def95",
+      "symbol": "MTLFF",
+      "yahooSymbol": "MTLFF",
+      "rows": 1450,
+      "sourceSha256": "875c52c2a4acdeff7e3c83e75ffc46960aa659fecbb1f3c72eb6353a69920302",
+      "observedAt": "2026-10-25T07:01:08.502039Z",
+      "independentRowsDigest": "bd266da29a385e808f5ddfde9a99a17ce583c5e86058af0e6e98229599e1970e",
+      "firstDate": "2021-01-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 437,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "477d43264160d783a14ddacd1de6a57ed50879c73370a0db3d0a410db676434a",
+      "symbol": "MTLHF",
+      "yahooSymbol": "MTLHF",
+      "rows": 4146,
+      "sourceSha256": "7a63dcfa163b2ae06b39c523524e85da5733818b94bd51f00be8a55bacab53ff",
+      "observedAt": "2026-10-25T07:01:10.654081Z",
+      "independentRowsDigest": "6e86573a3b744c234e38e50f4cc3b580ba4582cc5b6a08698389f23a3e5f4808",
+      "firstDate": "2010-04-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3625,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "89fc0ce89d08de7a538ebdc60c857a5e6056dae731276c90b75179062a5dad5b",
+      "symbol": "MTLHY",
+      "yahooSymbol": "MTLHY",
+      "rows": 4212,
+      "sourceSha256": "18ecb442be8cafb1d20186af128a530cd4fa65e58d7a6b18519a1f80e0647687",
+      "observedAt": "2026-10-25T07:01:12.661343Z",
+      "independentRowsDigest": "32a9033be1a4631215a3132e88085bd35175a20b728268f85d33312b820c8a32",
+      "firstDate": "2010-01-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2140,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f445ea9b79815d42be779f014e03098adeb42854cda3b4c8335a71379f86765e",
+      "symbol": "MTLI",
+      "yahooSymbol": "MTLI",
+      "rows": 4954,
+      "sourceSha256": "aebde40da3010fffba9ca3d15982cffcfb3a84834dbbae18a00d30c2d0542f3a",
+      "observedAt": "2026-10-25T07:01:14.833086Z",
+      "independentRowsDigest": "1308d63160c5e609c0fbeb87d33e155ec2f140a7f85f62a3197ef354735afd8e",
+      "firstDate": "2007-02-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4690,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "264a7037d8c96d595d734f7eba4565f5be83227a63256cd8387856743a755faf",
+      "symbol": "MTLK",
+      "yahooSymbol": "MTLK",
+      "rows": 5230,
+      "sourceSha256": "fdef9d956ddaffed31bbcf17414813d88c04b43475098708640dc66256197b9b",
+      "observedAt": "2026-10-25T07:01:16.902755Z",
+      "independentRowsDigest": "e2860d5269328dd57d12c577493e72ef06509ab08972a54ff178f05d512568da",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3021,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "9ca70dc0e31bced7a620ac9c79c8aae212e7b617458f0981f7e515798372a844",
+      "symbol": "MTLMY",
+      "yahooSymbol": "MTLMY",
+      "rows": 53,
+      "sourceSha256": "959e62d80f9006e7d7545750d6fe1aff7b7d6cb84ae81efe45b414503be9b1ff",
+      "observedAt": "2026-10-25T07:01:20.454459Z",
+      "independentRowsDigest": "51b0448f201150d92863141a302d59bc227d0e69549bb0ff08e1499c688b2316",
+      "firstDate": "2026-08-04",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "befdb00ce4582c55d5dc21ae3a8f7031044dbf09f342394e09d6fe02de6e3bdf",
+      "symbol": "MTLPF",
+      "yahooSymbol": "MTLPF",
+      "rows": 36,
+      "sourceSha256": "8d9872f132b1c135f68ddcae8e3852490a2061bbc06cf803394208f0cd44c6d7",
+      "observedAt": "2026-10-25T07:01:24.486916Z",
+      "independentRowsDigest": "1e2e9cc4cffef3b1bcd2ee182a71ab05eba11d82ac24aaeae69b9802043e6a16",
+      "firstDate": "2026-08-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 35,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "98a5e267ddf6d8c92a5803d3b74343c25f9b03f96ec1066db91b1ea5a4c172d0",
+      "symbol": "MTLRF",
+      "yahooSymbol": "MTLRF",
+      "rows": 4025,
+      "sourceSha256": "a66409fcb02ef1ffebb2a0c95d4f39c071eda6c548321aefb122659f7187e70f",
+      "observedAt": "2026-10-25T07:01:28.733560Z",
+      "independentRowsDigest": "442393876458e514aba572f1c202c435497d24dfc0761b0d6fec03946a5560d0",
+      "firstDate": "2010-10-15",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3763,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "8ea597ec00255d57de2a05ee53ba7ffdbcfd00689019caa81d7f4f7ae81c5a14",
+      "symbol": "MTLZF",
+      "yahooSymbol": "MTLZF",
+      "rows": 1033,
+      "sourceSha256": "b79d18fe18ea5e10f85376f53ffb130a247784f5a8165066fd92c361a4cc025c",
+      "observedAt": "2026-10-25T07:01:32.624877Z",
+      "independentRowsDigest": "1d1440c7c4f86f0362de753da56728170a3007a8f1a659faed3de2686eafbe17",
+      "firstDate": "2022-09-06",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1029,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3d74e0f415d477c4020c240b9ac9fe1571dd9e0de96a507ec59169c8794f6107",
+      "symbol": "MTMCF",
+      "yahooSymbol": "MTMCF",
+      "rows": 78,
+      "sourceSha256": "0b85a6b3cc89e15ae82c2eeb2e7f76f03394b13a0d9f83ddd176b786375026f7",
+      "observedAt": "2026-10-25T07:01:34.801099Z",
+      "independentRowsDigest": "ebfe3251882f3733cae3b7f2a8e503f68df7f4691462f86531350dd8086676d6",
+      "firstDate": "2026-06-29",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "913cec05aae194ddb83c2f179fce3c932c47491c688e205c484d5df4bf918e06",
+      "symbol": "MTMV",
+      "yahooSymbol": "MTMV",
+      "rows": 5230,
+      "sourceSha256": "2ca9d963dfd13099fc8ffd6390b323c2e0f2534508a1474aee6d0aa7edc15573",
+      "observedAt": "2026-10-25T07:01:36.720896Z",
+      "independentRowsDigest": "e3accf1de16cc82ed52cc43c03161e720171332cde190fba2f4312beeda0de16",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 5215,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "56631b76db735a4d2221506af993d569656153f92c9566ace62f4cbab6bf877a",
+      "symbol": "MTNOF",
+      "yahooSymbol": "MTNOF",
+      "rows": 3955,
+      "sourceSha256": "f30e6056983bf49a706be079517f4a0089df3fb97514123d3be7c6878029eb80",
+      "observedAt": "2026-10-25T07:01:44.742146Z",
+      "independentRowsDigest": "fa66e2bba0db3856c9052aa185d9412ccec0576b771163991f792429d8d72e39",
+      "firstDate": "2011-01-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2310,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ebd803c86be1e839b5b9ba2b3a38dc557c98c4f442b8b06ccad2cf7469af77c8",
+      "symbol": "MTNOY",
+      "yahooSymbol": "MTNOY",
+      "rows": 4212,
+      "sourceSha256": "6d91c0bef4e35a38a7f4b8d974d63d0deeb86a68d5bcfee36102592aff8540fb",
+      "observedAt": "2026-10-25T07:01:46.843055Z",
+      "independentRowsDigest": "5ea6e85bc64684fb2fb8442d27397e43b71f497eb26a0fbebe4b6e4f4e999bec",
+      "firstDate": "2010-01-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3f77bcd6d7a570aa43954ecf963d67c3c4b47c4c09dfc714b1038e6d34507740",
+      "symbol": "MTOMF",
+      "yahooSymbol": "MTOMF",
+      "rows": 2985,
+      "sourceSha256": "7d708180808f4f31f0ee91e6ff3260000948c1c45d16c027241a63fde2678e67",
+      "observedAt": "2026-10-25T07:01:50.762462Z",
+      "independentRowsDigest": "2c41e28573e707c912ea4fc3bcf1fd20bab097148861bbfcf495b6f725a023ec",
+      "firstDate": "2014-12-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2947,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "06496162eeeb0baadc320bba4ecf5694c814acd24a52467794985157690bf4b5",
+      "symbol": "MTOPF",
+      "yahooSymbol": "MTOPF",
+      "rows": 12,
+      "sourceSha256": "91bbd1a5fcacd7b7a87ebded28703a7eb1c5dc1dc09a3ee45eb294c314179d87",
+      "observedAt": "2026-10-25T07:01:54.659522Z",
+      "independentRowsDigest": "f9d402f0d024405a5cb0c792cb8fd5cae8e9943d1c0ca7057b741fa38e6b39ba",
+      "firstDate": "2026-10-01",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 11,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "c5eb109320b751c03d96000a37914793feba8c7ddcb796f861b3df233becead3",
+      "symbol": "MTPLF",
+      "yahooSymbol": "MTPLF",
+      "rows": 474,
+      "sourceSha256": "2a6b93ea29fa9e372af5ce4335d7a2661afd99c2563569f20af942a14ff4f2d5",
+      "observedAt": "2026-10-25T07:01:58.696497Z",
+      "independentRowsDigest": "d019cc64a6c08c9fe41cedccd6a0f551e10979c41aa2d405c677217a1e438f49",
+      "firstDate": "2024-11-25",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a9dbac0ad924093d943dd1506b2686a08f4c70bc9a031f66d0432090d35d73bc",
+      "symbol": "MTPOY",
+      "yahooSymbol": "MTPOY",
+      "rows": 3294,
+      "sourceSha256": "3060ba0aa42262cdfe39f06eea34efe808ebe5db38e65b1acf18902cec07c62d",
+      "observedAt": "2026-10-25T07:02:02.883601Z",
+      "independentRowsDigest": "0e24d573a92da6d6df755dc63c648887c4c234ca9421a3b0c859ab9d7230b26e",
+      "firstDate": "2013-09-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3195,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ee1dc9fa3ec2aac23b9ded3b3ebd6359875cb676a3de1ee884f030479fdcc83e",
+      "symbol": "MTPP",
+      "yahooSymbol": "MTPP",
+      "rows": 2974,
+      "sourceSha256": "713200fb5cc4aae8e81f48736dd7895b17d1b5e847c7da4a1a478f7eb693de76",
+      "observedAt": "2026-10-25T07:02:04.793154Z",
+      "independentRowsDigest": "d2105e70f05fbfe6e19788a9a8002147691de723fc3b553bc59f3dd4f6a7b6bf",
+      "firstDate": "2014-12-18",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2504,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "4ca4fcae06a12a0bda572e64a46ed78ef8e1295e09b7823383dfd9cdd58e6b48",
+      "symbol": "MTPR",
+      "yahooSymbol": "MTPR",
+      "rows": 5230,
+      "sourceSha256": "0d3e8a7dd98f3ffd19db366671d2ef61a1373396f3975aef1bb919c250b5ab7c",
+      "observedAt": "2026-10-25T07:02:07.168339Z",
+      "independentRowsDigest": "7065ca2df8745e8362957642190bd83fb840637d7bfef7c1d7a5129fa396119c",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3738,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "7b2a154290a2def4fa5032faefb460e856e7d71e311c076cbb45ead6855dc7a4",
+      "symbol": "MTPTF",
+      "yahooSymbol": "MTPTF",
+      "rows": 2070,
+      "sourceSha256": "77fd9f0e200e3753d461c1d1ebaf8728ee926874ff6abe200b0794fcc3aa550a",
+      "observedAt": "2026-10-25T07:02:08.850904Z",
+      "independentRowsDigest": "2da32d053909ace15465bcf1976c852a08c20610acdba97d0ad70fc6137b1ae8",
+      "firstDate": "2018-07-24",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2018,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "f374701090e1d37d5fd616f2f013460149eeeae035db583af73d0c7a481b8390",
+      "symbol": "MTPVY",
+      "yahooSymbol": "MTPVY",
+      "rows": 3581,
+      "sourceSha256": "62b3b4c6abeae1032a72ce4dc4287a21249520affe78a4220aaee41f6ca3cb9e",
+      "observedAt": "2026-10-25T07:02:10.840917Z",
+      "independentRowsDigest": "bb6cec3c835b006132983e0a3927e27afcf45caa0e5a0a581a42fe18ea23181e",
+      "firstDate": "2012-07-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3555,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3a3f33cefbf4fe319096cb36fdb61aed9455cac6eb723291bd8542f3ccf0ffdd",
+      "symbol": "MTPY",
+      "yahooSymbol": "MTPY",
+      "rows": 5230,
+      "sourceSha256": "e5327dca7b234a9a77f33753236e04757ce59a2d11c1f075496e59683213d2ed",
+      "observedAt": "2026-10-25T07:02:12.966872Z",
+      "independentRowsDigest": "8bb90f589c9b161ef05d1af044e1d02b621631b8e645fdb2d55e16cb0cd36a0f",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2772,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "3b6503544e69be8035e73fc37371257a1103fece6e37a98d80564bcc4a803928",
+      "symbol": "MTRAF",
+      "yahooSymbol": "MTRAF",
+      "rows": 4146,
+      "sourceSha256": "0bc652ca81ff8caedc72c5289d14ece3a808d5caecd134bda2fb531ecff9dd56",
+      "observedAt": "2026-10-25T07:02:16.977388Z",
+      "independentRowsDigest": "a2f97f0e32c489ca317f462dbc9081ec2cdb4794ecc45bacb8c872e50bba40d1",
+      "firstDate": "2010-04-26",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1971,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "722cda45dfd6b1b706dba50cfd7387c24281e9ed34adad7f834b90bee34c8fdb",
+      "symbol": "MTRBF",
+      "yahooSymbol": "MTRBF",
+      "rows": 2634,
+      "sourceSha256": "88d562dccfd20db10ae2050856647f5b0729b55f898ddde9cb4b3241141430e5",
+      "observedAt": "2026-10-25T07:02:18.883197Z",
+      "independentRowsDigest": "81275130f500abbdbb37e8a02e3def14b94f268444af117da86873ef0cfaf045",
+      "firstDate": "2016-04-27",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1072,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "d4b3bdf10534c64b042ceded0b38d49f5ce216bff74ee3ff7957ff60225249f1",
+      "symbol": "MTRJF",
+      "yahooSymbol": "MTRJF",
+      "rows": 3561,
+      "sourceSha256": "7a0edcaf756899b3cd7baace8567e6b1931663d6c010d23a92dbeff9cea9c747",
+      "observedAt": "2026-10-25T07:02:22.901022Z",
+      "independentRowsDigest": "c0dd8607612bbaf9a7efd5db33e98c71c5493afd381fa711c66e9605cc4ae309",
+      "firstDate": "2012-08-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3101,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "2c330f9ca2ad48d4198e270e88c7741e1c557ecf564578063d91db7320bb8473",
+      "symbol": "MTRT",
+      "yahooSymbol": "MTRT",
+      "rows": 5230,
+      "sourceSha256": "d4ca8de09063fd8188bc36bd22cb242d520123ec0f887f5c41b411baaf004709",
+      "observedAt": "2026-10-25T07:02:37.109213Z",
+      "independentRowsDigest": "f9e41985e06994dff19320c06b46969937199d8eacae3d2840bf1f299e9254b4",
+      "firstDate": "2006-01-03",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4232,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "9d9fbaed0011efdf449a8a0ed4832f46d52db1360ae12aaed96322aa3496e494",
+      "symbol": "MTSFF",
+      "yahooSymbol": "MTSFF",
+      "rows": 1450,
+      "sourceSha256": "f0179002c238dd805d58f1eae99dde913ed0f4e874cfcc952da85cd6cede0e04",
+      "observedAt": "2026-10-25T07:02:55.126142Z",
+      "independentRowsDigest": "38a52a627f5d1b892eea3b61bfcb8d1bbb8d3ee437e0b952b75ec59f60a755d9",
+      "firstDate": "2021-01-08",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 957,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "18967a63d135a2408a318788f5c3cca1ab7b839b68107247bae63f145c4558cf",
+      "symbol": "MTSFY",
+      "yahooSymbol": "MTSFY",
+      "rows": 4452,
+      "sourceSha256": "ef87d60039e0720f6396bf0883bf59193c12ce3edb4ab9ff011514f47cd0246f",
+      "observedAt": "2026-10-25T07:02:57.269511Z",
+      "independentRowsDigest": "0223817f312444fae9076397981d859a6faab16426fadd7478db6e24a7ec3d72",
+      "firstDate": "2009-02-05",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2236,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "7ada318565edc022de951752f03f53502aca6580d71af11c148deea2b073d17d",
+      "symbol": "MTST",
+      "yahooSymbol": "MTST",
+      "rows": 4474,
+      "sourceSha256": "4f6939a22f1fd816ee88e5192ac52763f4812151056df94182a9de38c8776b87",
+      "observedAt": "2026-10-25T07:03:05.313657Z",
+      "independentRowsDigest": "7636dea2664f71b772d0acad2030de91bc8673b3294a127e0e2464f4cbf1f8b7",
+      "firstDate": "2009-01-05",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 3268,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "330b0e52279c69506e3e5930adac8d942ec7562a2cd27e14111cd748a55fbdea",
+      "symbol": "MTSUY",
+      "yahooSymbol": "MTSUY",
+      "rows": 545,
+      "sourceSha256": "30b8b1205a28ce3fa3e7ced6c171d57784519ea39dd79bff78e0bc3abb06e44f",
+      "observedAt": "2026-10-25T07:03:07.060918Z",
+      "independentRowsDigest": "8dd774dedfd1bbbef214eb74a48e68fd2bb737ee9e70da9b8afb66d108a88f72",
+      "firstDate": "2024-08-15",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 0,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "a47d32ca77c3acbb403ca427655ebe84db91d415284888900544e915cedaf1f0",
+      "symbol": "MTSZF",
+      "yahooSymbol": "MTSZF",
+      "rows": 361,
+      "sourceSha256": "8474e4de2261559f1b2196fcc6194f2ec59ede7f0428cb8d18555b838224885a",
+      "observedAt": "2026-10-25T07:03:09.392985Z",
+      "independentRowsDigest": "84e410e05ec2ef253242478da2354267faeb75be1a79c8f39a582e0484a7f94e",
+      "firstDate": "2025-05-12",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 350,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "476835ad5f65761ae542514c4a76733d950c206decd3f04258d5e0d5aabb1c63",
+      "symbol": "MTTAF",
+      "yahooSymbol": "MTTAF",
+      "rows": 961,
+      "sourceSha256": "11a8c86c715509de0af947eb3c1d3215570f3050cc6ab5331151c0a9bf9d8688",
+      "observedAt": "2026-10-25T07:03:11.118682Z",
+      "independentRowsDigest": "c5ae5fcc3c14e85b882e2942b30b95155ff55487b1c520116b34f5f5093e73cb",
+      "firstDate": "2022-12-16",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 277,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "ae4b1ceffdbe8fa7d0e957f563f16d081673419047d5da5af3f221d420ee3662",
+      "symbol": "MTTN",
+      "yahooSymbol": "MTTN",
+      "rows": 20,
+      "sourceSha256": "fd4202760b29a80ad334889df8723240a60199728d00256291995d89f941c059",
+      "observedAt": "2026-10-25T07:03:17.085583Z",
+      "independentRowsDigest": "d4866eea4dfc987f45c120a3f1b0ac0fb149776cc879901be5b04044ba8f1c66",
+      "firstDate": "2026-09-21",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 4,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "99cc12d0244526e28e4bc9e39c8e6f6cab099587264264e87cc5ceb017aa71fa",
+      "symbol": "MTTRF",
+      "yahooSymbol": "MTTRF",
+      "rows": 4190,
+      "sourceSha256": "b774506d413eef43fe56df03b4ecd3bce25ada1bacf7409bb7e64a1b1526b22a",
+      "observedAt": "2026-10-25T07:03:23.434657Z",
+      "independentRowsDigest": "f827f98dea808bde78505d6eed64c1f2b46b1daed768efe3861eb0bbc8f6b4be",
+      "firstDate": "2010-02-22",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1752,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "21e8e0f1d918ba5fc0eb939a7d8e6809c75596f2685e780e0212a88458962d62",
+      "symbol": "MTTRY",
+      "yahooSymbol": "MTTRY",
+      "rows": 3969,
+      "sourceSha256": "24bf9afb76632fe5a21c7f2043ce93c9d242f949dda03c5254c4f4c726437043",
+      "observedAt": "2026-10-25T07:03:27.535602Z",
+      "independentRowsDigest": "c4b76c2c762f05ad80b149b1b94666cde431bd0f31a334f82d891d109ee20307",
+      "firstDate": "2011-01-05",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1494,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "b471847d12237a76102119b4bd9dadfcac60853c0fb93a53596501bc37d23797",
+      "symbol": "MTUAY",
+      "yahooSymbol": "MTUAY",
+      "rows": 4212,
+      "sourceSha256": "820e0dd1fb29b18f4f8f98a5702a2ac049d063189faac2771a73876555d96bea",
+      "observedAt": "2026-10-25T07:03:35.821528Z",
+      "independentRowsDigest": "dd6aa4ff8afc836b6b498ad7f9a559b82f9097040b8d6f97f33b830330b297a7",
+      "firstDate": "2010-01-20",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 1402,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "d96f69358a8efa5147f778210fc61e28b489831f18fee852da047fd821da50f2",
+      "symbol": "MTVX",
+      "yahooSymbol": "MTVX",
+      "rows": 3450,
+      "sourceSha256": "3b9c75fb0aae78a276f6a8a6d2d3cf654ec3951159d7e3fd578c9ccfc6914d3b",
+      "observedAt": "2026-10-25T07:03:49.531480Z",
+      "independentRowsDigest": "5336f8a440c3acb279df289a63d7e6261f503c0fa1daa2e7eb8f673663111b09",
+      "firstDate": "2013-01-30",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 2553,
+      "dateGridMatchesStoredSpy": true
+    },
+    {
+      "task": "cde38a553317bda03d304561d76c5b9371b2b4735c089ecd154df8f3948a0868",
+      "symbol": "MTWO",
+      "yahooSymbol": "MTWO",
+      "rows": 1170,
+      "sourceSha256": "2e18346dd5536e5ec88ce86fc7a092c7ac70e09ee06208953e6f249a663befca",
+      "observedAt": "2026-10-25T07:04:15.505593Z",
+      "independentRowsDigest": "59dedd7bea0f5466d6ba1488223c5cbbf4ca213cce230f515f0db10e1a4cc650",
+      "firstDate": "2022-02-17",
+      "lastDate": "2026-10-16",
+      "zeroVolumeRows": 552,
+      "dateGridMatchesStoredSpy": true
+    }
+  ],
+  "fiveYearSources": [
+    {
+      "task": "0977fc4aac48eceb47cd616141432b04c56e04b972c30a57d06e1500da073110",
+      "symbol": "MTGH",
+      "yahooSymbol": "MTGH",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "589129c0a715c8a8c37c65d0cff624c578a550714f26631720f56d681f240b65",
+      "observedAt": "2026-10-25T07:00:38.769984Z",
+      "independentRowsDigest": "23d32d60b73dba20e4796286c594fc703818bb1cc477601b30fab8cf81e932bd",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "35df3ee9a05725370d4e1bafcf2fd9512ae5ac830c8bb999cb068e99835366b8",
+      "symbol": "MTUAF",
+      "yahooSymbol": "MTUAF",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "d89b148465bde0d3a5a4ff7dd42db1b2d3cc2d97008c2fde124886fc0a168c97",
+      "observedAt": "2026-10-25T07:03:33.449617Z",
+      "independentRowsDigest": "ae3a5019da73eae34b621119065cda93e92fc5e3b60aef96b133dfcb3c250848",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "405dc5bea33cb27bcb5698f33348abeebcceb694a17d477ac15c4fa13b8f5554",
+      "symbol": "MSBN",
+      "yahooSymbol": "MSBN",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "f775fbdb56563aacd1b23dc0083cc6191b7a5baaafac00dc3de071e5f6d83a21",
+      "observedAt": "2026-10-25T06:54:31.303467Z",
+      "independentRowsDigest": "f0ea0c9af02d417f46666f70797394a98b54eeec12a48de0c8cb1836f42cc4ba",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "4e8df241feedbb3c5b7c8769af6dfe63c87b49d2414fe5d9588a03edb77e83c4",
+      "symbol": "MTNX",
+      "yahooSymbol": "MTNX",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "3aeda7765fa264b4256d9eb5827eb0edfbf96ea9857f7decd3a3f573bd5cee00",
+      "observedAt": "2026-10-25T07:01:48.810613Z",
+      "independentRowsDigest": "b0ad91ccba52d69d888aab1acbe13c784edcb0958815f3c629e067c5be4cbaf0",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "5fafa9aa77f91bc0dd1b7e5c52cb77bee9fd8af037023d329b8ed526d900a6c0",
+      "symbol": "MSGP",
+      "yahooSymbol": "MSGP",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "9a439898ab27383bf93ca35eb92f947ea6db3929a78c57ae8e05a25ce5667b8c",
+      "observedAt": "2026-10-25T06:55:28.816296Z",
+      "independentRowsDigest": "f7f528c803d2d4868a49a709d448719f56623196efb1d0a2a2f8fa7738c06727",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "6ae42c11b3750edc3a070faa37ff49a799cde1b5cdbe5407c0b0ea1a5dff67f3",
+      "symbol": "MSMGF",
+      "yahooSymbol": "MSMGF",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "0c4c945baa8a95a2e862c46021ca20547a93aaffcd373d307acf4e24d5d39c38",
+      "observedAt": "2026-10-25T06:56:29.090645Z",
+      "independentRowsDigest": "3d776fa52bb31b0e5484590b9b8611a670c6abdeda41cb70ac1fd6608d7b4159",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "8821448adbea5e60320014f538ea92e59e2db9a57723bbeeb4bc6ce1c1534361",
+      "symbol": "MRPI",
+      "yahooSymbol": "MRPI",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "f98e1e759a830d6cd40809a1522d26d23eedb7eee7b8d8232ec601306384c9f4",
+      "observedAt": "2026-10-25T06:52:21.577709Z",
+      "independentRowsDigest": "d56a20d8eb46d0edbb188ab0a98539bda390d0335e366556c7596756352bb03b",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "de3b0186895aaf56d8840f6b2ec5226fd324a8b04c2a79be530dc57a19f31952",
+      "symbol": "MSET",
+      "yahooSymbol": "MSET",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "a904794cd9dd3fc5d3bcfbd89740132137195ed4b0ea7614fc331b85c921a87c",
+      "observedAt": "2026-10-25T06:55:02.893756Z",
+      "independentRowsDigest": "f1e1bb8a93b385462dd620d4f711ae2884277bc8fb1d964867f5b6e251b9bbf3",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    },
+    {
+      "task": "ff18958642f8a3cc7ef6d371faf12bd6a99f4412a345e64b76c3197219f19bfa",
+      "symbol": "MRZM",
+      "yahooSymbol": "MRZM",
+      "firstDate": "2021-10-18",
+      "lastDate": "2026-10-16",
+      "rows": 1255,
+      "sourceSha256": "a12913d13974233419e6d3b5dee3bc2797512c863ffb4f22fad7caa35a1d6432",
+      "observedAt": "2026-10-25T06:53:58.528946Z",
+      "independentRowsDigest": "ce56c7badd8d1c96f69777dd05ecb1f1efc43ddba95b1e3de6a4810aa4a07305",
+      "originalFullTaskPhase": "FAILED_SOURCE"
+    }
+  ],
+  "years": [
+    {
+      "year": 2006,
+      "rows": 3542,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "e6d1537165eb9067282a7bfd8f840ec653255ca01e6061429737fa547b1b5f7f",
+      "native": {
+        "runId": "market-05c05241-6797-44cc-a5ea-192f5f09d7f0",
+        "rows": 3542,
+        "preparedSha256": "0490117e513dcfbcb927db218e1e4b7ac320c3b5cf92b4a9a872fe4b0bfa5859",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2007,
+      "rows": 4074,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "c5e64f545b399a3b6acd0ca180f3454139fe6744dbe4ec4c86a090fcdce64e28",
+      "native": {
+        "runId": "market-8001d123-9775-4bb4-919e-1014aeb48b05",
+        "rows": 4074,
+        "preparedSha256": "6b98d39dd281d13f9d720bd1ecf9182cc2008e13480f0bc422bdcbdfd1fc56cd",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2008,
+      "rows": 4740,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "7bc908351225ced22e4e751b02b626bdae88684777bfbdc15e017d2963cd2ec8",
+      "native": {
+        "runId": "market-ceedef9d-777d-4e12-8f86-96192b09603b",
+        "rows": 4740,
+        "preparedSha256": "a4213fc147869619f0ccbc450810dfafd94a493fcde2d28b84cd9366d3e900f6",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2009,
+      "rows": 5707,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "611ef69d454839f6c50308759ad23d35f798fb74a332b9a918844b5d19bec15b",
+      "native": {
+        "runId": "market-5952465e-25b4-4a75-9fbf-336781712235",
+        "rows": 5707,
+        "preparedSha256": "9a5335af4aa033d05a733986852df6b1dd2aee030df741774d88f9232f0774a5",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2010,
+      "rows": 8249,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "e9b7c0b43494d19369856e32bf02937e44a9e71fc5c3c1f5e771130137f60c25",
+      "native": {
+        "runId": "market-edbdcce0-3386-4836-8c9d-927e0882ad40",
+        "rows": 8249,
+        "preparedSha256": "ce8db32d6b13535fa425671f5b10bd49fbd5425f34024ba2c23cf2ba73f6bdc7",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2011,
+      "rows": 9726,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "2af0d52293439c56ee433c8b91c500c00572699603b8ab0d4a17acd2c6999428",
+      "native": {
+        "runId": "market-32d6e792-bcbe-4e5b-ac53-8ecb7fdb4a5a",
+        "rows": 9726,
+        "preparedSha256": "bd9a5a2febee704499579be9448a2479d6c5402916205c2b33867a4686ee2d67",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2012,
+      "rows": 10400,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "5a736ab8d33fbf6389d3e7406d119c016e214151bb6cdafaefd209b5b10a3fe8",
+      "native": {
+        "runId": "market-41ceef10-8971-4039-af34-2afb7c149a5c",
+        "rows": 10400,
+        "preparedSha256": "c8c5f8fb0a8b47dd7a4e65f8c8bea9d1c223de47b2fa1918bc18ee235446a780",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2013,
+      "rows": 12390,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "88f4445d4b3f6d4a3c735f0a3be2672b6e71811864f0d5907eec7d26529b671d",
+      "native": {
+        "runId": "market-6621f0fb-fd9d-402c-be7b-6e946ca5885c",
+        "rows": 12390,
+        "preparedSha256": "4eff74a1bce08569c78f083e443eddda20d74bb2e632b109be32db1e247bfab6",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2014,
+      "rows": 13050,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "9de792eee6cdc9c6cd5badcae3ea00ec65cb552cb5f448109808271473a055f5",
+      "native": {
+        "runId": "market-a6f793ef-d1e4-415d-8141-8c9e2d8ca44a",
+        "rows": 13050,
+        "preparedSha256": "28fc2ebf56d5e0f066fb8b0c22ed1fef99448fb58aa7073205aae6e570f0d8ef",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2015,
+      "rows": 14101,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "464f8e77cc33e4b63df0b1ed78a6b5810adace483427e686e994f975d6d04372",
+      "native": {
+        "runId": "market-6b851e0a-98e8-4bdf-934b-da9447ef4a51",
+        "rows": 14101,
+        "preparedSha256": "ed024d1202474cd61a7ffed8edb784163a5eb083e1a1752608d7ddf077e2c08c",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2016,
+      "rows": 14669,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "5326669d66bf7cc187c01cd6aa2352c37591b3b0ecb62798e1343531199ce6b6",
+      "native": {
+        "runId": "market-fbec30f4-fd40-41df-8ffc-cbd79e2e357d",
+        "rows": 14669,
+        "preparedSha256": "0c516e90171364fe316acef63d6688c49b103b5fd4a8625c7bc142ddc579ea0a",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2017,
+      "rows": 15198,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "e509494a5210fe5e0a7e68234499db9edbf90d2e3eef40972b752b6d6d4d52f9",
+      "native": {
+        "runId": "market-74a90949-e1b5-45c7-a95f-a33726147e19",
+        "rows": 15198,
+        "preparedSha256": "3118cd7b5ceaf82b1af3175d4876c5a9c08ba4aa6ff9b5ac4fa46f03765f5a06",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2018,
+      "rows": 15924,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "8592de9a7fc529f813880efd42a5a711291a7a06029c069f57305329451bef57",
+      "native": {
+        "runId": "market-aa793234-bc70-4f0b-9693-bf5f9e969d64",
+        "rows": 15924,
+        "preparedSha256": "85b39b72f531825880a7758ef44227a25ad1e8105153dfd4f1da1808df30eaf9",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2019,
+      "rows": 16128,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "554a7986c433d638ef5d45cbac754533db9fd0339777d9cd61e0144f6c689d03",
+      "native": {
+        "runId": "market-9c3bbc2e-48eb-4ce6-86e8-bf06c31c4f9a",
+        "rows": 16128,
+        "preparedSha256": "e73d5c8f131d7a055ce3778b08a45d2fccb5d29c56961e31a8c3d6a2596b311d",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2020,
+      "rows": 16415,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "d6d50531196055e127aa6afaac29c1af6095561c68116b8c9dd62a1e21f84ff2",
+      "native": {
+        "runId": "market-460d545b-d5f8-434f-9025-ed803041acba",
+        "rows": 16415,
+        "preparedSha256": "9bcfc7f54d0cbc9005ce024a2697683ce2c3afecd728589608e48cd0b35498c4",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2021,
+      "rows": 17938,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "9910c99f4c921e4fa915777048d395fae176b2a138f338e4e64d03990f1bb48a",
+      "native": {
+        "runId": "market-43858b64-c3e8-40f0-9fd8-a47bcb2a9ae1",
+        "rows": 17938,
+        "preparedSha256": "8506f476bbf0a6469b2e0ebb50f2d340415484371fbccb27bde9ed4144db8f26",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2022,
+      "rows": 18499,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "4371654d814cea3a72649e3083b64287d3b5e5359fc1fa3bfa9c286e7ff4ba6c",
+      "native": {
+        "runId": "market-affbb6c7-e498-45b2-bcd3-671500ce087b",
+        "rows": 18499,
+        "preparedSha256": "871145a96cc3d72e080e89ef3f4ecc878a30dc6f7c9c2eec8a0571a26c991df3",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2023,
+      "rows": 19442,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "04ee60cfd349a02577e67624991d1fe0cf50ff504ebf1ac98a728b17664680fa",
+      "native": {
+        "runId": "market-da158d25-b770-4112-b520-131fd7e65cdd",
+        "rows": 19442,
+        "preparedSha256": "8b81085934d5331919c82b6fcf6fb2b31985140c13096662a5bfac8fbb7d9d19",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2024,
+      "rows": 20488,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "2dec535b622fc07ad24ceb7353ca26194a92bacd2701fecbafff17d1313c395d",
+      "native": {
+        "runId": "market-db624a46-343d-4b57-972c-a49299332d02",
+        "rows": 20488,
+        "preparedSha256": "3ade02871b18e34fd58d388cc367b1908708e1012abb3e9242dd9aa215eb69e8",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2025,
+      "rows": 21412,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "9ba4d86075240cf0ac7a80e3304e8408ea64e211a2d22ae1e1ec161bbd7b4868",
+      "native": {
+        "runId": "market-01665376-8cb1-40cc-934a-2cf9ad48bf68",
+        "rows": 21412,
+        "preparedSha256": "9cd86162d072759af4325a1cb34a2bb27485ab79670131ddfd429024d2503f31",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    },
+    {
+      "year": 2026,
+      "rows": 17471,
+      "all20FieldsPgwireHttpExact": true,
+      "rowsDigest": "6ad5a46b1d41242586f9ba44e738bbd8081dec81ab46ff31ddf10bf387c71519",
+      "native": {
+        "runId": "market-a88943e9-1b63-44f0-afc2-58923b9ee629",
+        "rows": 17471,
+        "preparedSha256": "652919e8d9bb227eac37eef4acfbc735539f27ae15be2ca900718d8d64b13731",
+        "slices": 1,
+        "all20SourceJavaPreparedNativeFieldsExact": true
+      }
+    }
+  ],
+  "native": [
+    {
+      "runId": "market-05c05241-6797-44cc-a5ea-192f5f09d7f0",
+      "rows": 3542,
+      "preparedSha256": "0490117e513dcfbcb927db218e1e4b7ac320c3b5cf92b4a9a872fe4b0bfa5859",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-8001d123-9775-4bb4-919e-1014aeb48b05",
+      "rows": 4074,
+      "preparedSha256": "6b98d39dd281d13f9d720bd1ecf9182cc2008e13480f0bc422bdcbdfd1fc56cd",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-ceedef9d-777d-4e12-8f86-96192b09603b",
+      "rows": 4740,
+      "preparedSha256": "a4213fc147869619f0ccbc450810dfafd94a493fcde2d28b84cd9366d3e900f6",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-5952465e-25b4-4a75-9fbf-336781712235",
+      "rows": 5707,
+      "preparedSha256": "9a5335af4aa033d05a733986852df6b1dd2aee030df741774d88f9232f0774a5",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-edbdcce0-3386-4836-8c9d-927e0882ad40",
+      "rows": 8249,
+      "preparedSha256": "ce8db32d6b13535fa425671f5b10bd49fbd5425f34024ba2c23cf2ba73f6bdc7",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-32d6e792-bcbe-4e5b-ac53-8ecb7fdb4a5a",
+      "rows": 9726,
+      "preparedSha256": "bd9a5a2febee704499579be9448a2479d6c5402916205c2b33867a4686ee2d67",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-41ceef10-8971-4039-af34-2afb7c149a5c",
+      "rows": 10400,
+      "preparedSha256": "c8c5f8fb0a8b47dd7a4e65f8c8bea9d1c223de47b2fa1918bc18ee235446a780",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-6621f0fb-fd9d-402c-be7b-6e946ca5885c",
+      "rows": 12390,
+      "preparedSha256": "4eff74a1bce08569c78f083e443eddda20d74bb2e632b109be32db1e247bfab6",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-a6f793ef-d1e4-415d-8141-8c9e2d8ca44a",
+      "rows": 13050,
+      "preparedSha256": "28fc2ebf56d5e0f066fb8b0c22ed1fef99448fb58aa7073205aae6e570f0d8ef",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-6b851e0a-98e8-4bdf-934b-da9447ef4a51",
+      "rows": 14101,
+      "preparedSha256": "ed024d1202474cd61a7ffed8edb784163a5eb083e1a1752608d7ddf077e2c08c",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-fbec30f4-fd40-41df-8ffc-cbd79e2e357d",
+      "rows": 14669,
+      "preparedSha256": "0c516e90171364fe316acef63d6688c49b103b5fd4a8625c7bc142ddc579ea0a",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-74a90949-e1b5-45c7-a95f-a33726147e19",
+      "rows": 15198,
+      "preparedSha256": "3118cd7b5ceaf82b1af3175d4876c5a9c08ba4aa6ff9b5ac4fa46f03765f5a06",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-aa793234-bc70-4f0b-9693-bf5f9e969d64",
+      "rows": 15924,
+      "preparedSha256": "85b39b72f531825880a7758ef44227a25ad1e8105153dfd4f1da1808df30eaf9",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-9c3bbc2e-48eb-4ce6-86e8-bf06c31c4f9a",
+      "rows": 16128,
+      "preparedSha256": "e73d5c8f131d7a055ce3778b08a45d2fccb5d29c56961e31a8c3d6a2596b311d",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-460d545b-d5f8-434f-9025-ed803041acba",
+      "rows": 16415,
+      "preparedSha256": "9bcfc7f54d0cbc9005ce024a2697683ce2c3afecd728589608e48cd0b35498c4",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-43858b64-c3e8-40f0-9fd8-a47bcb2a9ae1",
+      "rows": 17938,
+      "preparedSha256": "8506f476bbf0a6469b2e0ebb50f2d340415484371fbccb27bde9ed4144db8f26",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-affbb6c7-e498-45b2-bcd3-671500ce087b",
+      "rows": 18499,
+      "preparedSha256": "871145a96cc3d72e080e89ef3f4ecc878a30dc6f7c9c2eec8a0571a26c991df3",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-da158d25-b770-4112-b520-131fd7e65cdd",
+      "rows": 19442,
+      "preparedSha256": "8b81085934d5331919c82b6fcf6fb2b31985140c13096662a5bfac8fbb7d9d19",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-db624a46-343d-4b57-972c-a49299332d02",
+      "rows": 20488,
+      "preparedSha256": "3ade02871b18e34fd58d388cc367b1908708e1012abb3e9242dd9aa215eb69e8",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-01665376-8cb1-40cc-934a-2cf9ad48bf68",
+      "rows": 21412,
+      "preparedSha256": "9cd86162d072759af4325a1cb34a2bb27485ab79670131ddfd429024d2503f31",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-a88943e9-1b63-44f0-afc2-58923b9ee629",
+      "rows": 17471,
+      "preparedSha256": "652919e8d9bb227eac37eef4acfbc735539f27ae15be2ca900718d8d64b13731",
+      "slices": 1,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    },
+    {
+      "runId": "market-dc298856-cd79-4b4c-b242-9c1c6accbc70",
+      "rows": 11295,
+      "preparedSha256": "a394c480d473ebdc3935050235cf7fdb0698e8cd9e2f398d307b767cc1dbba47",
+      "slices": 3,
+      "all20SourceJavaPreparedNativeFieldsExact": true
+    }
+  ],
+  "held": [
+    {
+      "task": "d6fc67039b4e88d07b8a122d55444aa4171f8a5b016fea427d4c759e52e8dde6",
+      "symbol": "MSSAF",
+      "reason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW",
+      "detail": null
+    }
+  ],
+  "heldDiagnostics": [
+    {
+      "task": "d6fc67039b4e88d07b8a122d55444aa4171f8a5b016fea427d4c759e52e8dde6",
+      "symbol": "MSSAF",
+      "name": "Metal Sky Star Acquisition Corp",
+      "currency": "USD",
+      "instrumentType": "EQUITY",
+      "timezone": "America/New_York",
+      "sourceSha256": "ef0f17bb13a2c44443afe188ab5a5ffab7a0fb8c6834b31ec58a5350ae513e29",
+      "dates": 1,
+      "firstDate": "2026-10-01",
+      "lastDate": "2026-10-01",
+      "badDatesCount": 0,
+      "badExamples": [],
+      "badDatesWithinFiveYears": [],
+      "holdReason": "SINGLE_OBSERVATION_REQUIRES_HISTORY_REVIEW"
+    }
+  ],
+  "wal": [
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 602,
+      "sequencerTxn": 602,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_daily",
+      "writerTxn": 4585,
+      "sequencerTxn": 4585,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_etf_equity_holdings",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_history_catalog",
+      "writerTxn": 11,
+      "sequencerTxn": 11,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_identifiers",
+      "writerTxn": 35,
+      "sequencerTxn": 35,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_universe",
+      "writerTxn": 15,
+      "sequencerTxn": 15,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 602,
+      "sequencerTxn": 602,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_intraday",
+      "writerTxn": 507,
+      "sequencerTxn": 507,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 4,
+      "sequencerTxn": 4,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 17,
+      "sequencerTxn": 17,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    }
+  ],
+  "idempotence": {
+    "checkedAt": "2026-10-25T07:20:54.344380+00:00",
+    "annualRows": 279563,
+    "fiveYearRows": 11295,
+    "allOriginalNativeAndControlRowsUnchanged": true,
+    "allWalUnchanged": true,
+    "sourceRequests": 0,
+    "newNativeRuns": 0,
+    "formalWrites": 0
+  },
+  "ohlcGate": {
+    "runtime": "v62",
+    "allNewSelectedDatesPassed": true,
+    "legacyPostcheck": {
+      "checkedAt": "2026-10-25T07:21:25.956110+00:00",
+      "routes": 700,
+      "conflictingRows": 3512,
+      "httpPgwireExact": true,
+      "rowsDigest": "415bbf4df344bfa3f503ab9904bb2b7c8aeed188b99c17e64a97df96603f55cb",
+      "legacyQualitySnapshotUnchanged": true,
+      "newBatchOhlcConflicts": 0,
+      "sourceRequests": 0,
+      "formalWrites": 0,
+      "oldSevenConflictRowsAll20FieldsUnchanged": true,
+      "oldSevenRowsDigest": "99f0c2192a3d7dd160b9ee1524c5af1e9a9c12eb9c256a47bcfa42a54600f6b8"
+    }
+  },
+  "sourceHttpStatuses": {
+    "404": 184,
+    "200": 200
+  },
+  "sourceTasksFailedThisBatch": 288,
+  "queuePhaseCounts": {
+    "FAILED_SOURCE": 12846,
+    "PLANNED": 13169,
+    "SCOPE_REVIEW_REQUIRED": 1781,
+    "VERIFIED": 12742
+  },
+  "queueCountsAreNotUniqueCompanyCounts": true,
+  "sourceRequestedFrom": "2006-01-01",
+  "fiveYearFrom": "2021-10-18",
+  "referenceSql": {
+    "path": "tools/sql/us-expanded-history-twelfth-20261025-reference.sql",
+    "sha256": "27abce9b0151c24024307cdf28c0bc6cff8df6be1f4145f12755258b7768b315",
+    "queries": [
+      {
+        "query": 1,
+        "rows": 19262,
+        "httpPgwireExact": true,
+        "rowsDigest": "4a409ba3ce4e540421ebad958463ff88bcfd6997c30374b4626b73592c08497f"
+      },
+      {
+        "query": 2,
+        "rows": 104,
+        "httpPgwireExact": true,
+        "rowsDigest": "c2b3d08356076f299af9063ee615ee74bf256ae13aa1d7d219f9a7b55e4eeeb1"
+      },
+      {
+        "query": 3,
+        "rows": 11295,
+        "httpPgwireExact": true,
+        "rowsDigest": "6d25537ace566622342691ca07d81c1b38f3f77b4aa43cdaab1a050c52c361dd"
+      },
+      {
+        "query": 4,
+        "rows": 2,
+        "httpPgwireExact": true,
+        "rowsDigest": "d990426c14581137e932e2c86bc0295e0c959a2728b9e5d3fc80ae151d6b0481"
+      }
+    ]
+  },
+  "runtime": {
+    "manifest": "F:\\repo\\engine\\data\\var\\market-data\\scope-review\\yahoo-ohlc-v62-20261025\\runtime-v62.json",
+    "sha256": "aa32412a8b2fbbaa5da4e1b3a2125ed1f7a6677e91284ee3ee17d23ebef93303",
+    "runtime": "F:\\repo\\engine\\data\\var\\market-data\\runtime\\us-data-20261025-v62-ohlc-guard",
+    "jars": 47,
+    "tests": [
+      {
+        "scope": "us",
+        "tests": 50,
+        "failures": 0
+      },
+      {
+        "scope": "app",
+        "tests": 58,
+        "failures": 0
+      },
+      {
+        "scope": "architecture",
+        "tests": 5,
+        "failures": 0
+      }
+    ],
+    "moduleBoundariesPassed": true
+  },
+  "corePriorityGate": {
+    "checkedAt": "2026-10-25T06:50:34.926035+00:00",
+    "newYorkDate": "2026-10-25",
+    "lastCompleteUsSession": "2026-10-23",
+    "lastCompleteUtcCryptoDate": "2026-10-24",
+    "noNewCompleteCoreSession": true,
+    "daily": [
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 4331
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 3629
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 4106
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5168
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO",
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "rows": 5235
+      }
+    ],
+    "minute": [
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:59:00+00:00",
+        "rows": 82290
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "trade_date": "2026-10-23T00:00:00+00:00",
+        "ts": "2026-10-23T19:55:00+00:00",
+        "rows": 16458
+      }
+    ],
+    "crypto": [
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44399
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44399
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 60,
+        "ts": "2026-10-24T23:00:00+00:00",
+        "rows": 44400
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "interval_minutes": 1440,
+        "ts": "2026-10-24T00:00:00+00:00",
+        "rows": 1850
+      }
+    ],
+    "previousFullFieldProofAndControlsPreserved": true,
+    "httpPgwireExact": true,
+    "sourceRequests": 0,
+    "formalWrites": 0
+  },
+  "evidence": [
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/source-only-verification.json",
+      "sha256": "85ca1509b374461f519d1b850f9dc092b37f6b0ad733335c28b9b31b1a043317"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/review-independent-verification.json",
+      "sha256": "3b35ac39317639a07af13064b9f7c0895cbb6eb0dcd2c15de926adc45ff7791a"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/held-source-diagnostics.json",
+      "sha256": "329cdeddf958b278f62d5b9066944066618cbb5965a3dfca6fdabf44520c46b1"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/prior-five-carrier-reuse.json",
+      "sha256": "29b707360f16611f05eb34f9ff71a1c323d688cf8e5412dc0b4b2a5f277cfcbb"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/execution-and-source-cards.json",
+      "sha256": "635cf8db028c59e0b2d37a7464fcb3ba5d75dc375876827c45b216261d3786aa"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/core-priority-gate.json",
+      "sha256": "d458ce12b016a6e3fdc259a09a76e582d0523467bbe581a72628bc606d663f6b"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/remaining-priority-audit.json",
+      "sha256": "39f63df38a73e364f8e0aee20656d3a859b4cd7b4a4718897a8bbf3e49eda31d"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/independent-verification.json",
+      "sha256": "4c4cecfc06a7452960c7b7a567d9293f8ab643e5f5b81fa78030752e75b24365"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/annual-readonly-verification.json",
+      "sha256": "18f9b72c61835a3dcb9de7e27c33e3cb749419b1c2e93e52b70601cadc6161ab"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/idempotence-independent-verification.json",
+      "sha256": "27ea56cc480e94c76ea5916faecf1655baf033dd0ca46829d610b59085e39b62"
+    },
+    {
+      "path": "var/market-data/scope-review/broad-ohlc-history-v79-20261025/legacy-quality-postcheck.json",
+      "sha256": "5b462c42ac121e92236aaf072c21e220a9979cda87a62f6737996d72ac88cc0d"
+    }
+  ],
+  "limitations": [
+    "历史请求边界仍截止2026-10-16；核心另有10月23日增量。",
+    "来源实际起止日逐项记录；不足五年、提前结束和零量报价不补造。",
+    "日期网格参照库存SPY/TIINGO，不代替官方历史交易日历。",
+    "来源EQUITY标签不证明永久身份或代码没有复用，调整基准按原文取得时刻。",
+    "本批1份待核缓存、288个失败任务及其他失败、未下载范围保留。",
+    "本批五年段不推进原全历史任务，原失败与原文保持。"
+  ]
+}

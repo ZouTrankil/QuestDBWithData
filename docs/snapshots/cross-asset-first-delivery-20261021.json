@@ -1,0 +1,734 @@
+{
+  "schema_version": 1,
+  "title": "首批跨资产读取清单",
+  "created_at": "2026-10-22T19:16:10.169143+00:00",
+  "whole_goal_complete": false,
+  "daily": {
+    "snapshot": "us-equity-first-delivery-20261016.json",
+    "sha256": "e4e4b69969b80ee947047dc637412bd75a89b6a778cf76ba22917764933e0d03",
+    "routes": 5600,
+    "rows": 10293674,
+    "through": "2026-10-16"
+  },
+  "minutes": {
+    "object": "us_equity_intraday_regular",
+    "business_key": [
+      "ts",
+      "symbol",
+      "provider",
+      "interval_minutes"
+    ],
+    "timestamp_zone": "UTC",
+    "trade_date_zone": "America/New_York",
+    "calendar_version": "us-equities-rth-2026-20261019",
+    "routes": [
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 3,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 4,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 16,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 7245,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 27,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 8,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 79,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 529,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 42,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 3,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 3,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 73,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 3,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 6531,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 9,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 2,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 24780,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 504,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 1,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 78780,
+        "rawRows": 81510,
+        "zeroVolumeRows": 49,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:59:00+00:00",
+        "sessions": 202
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO_IEX",
+        "intervalMinutes": 5,
+        "fromDate": "2026-01-02",
+        "throughDate": "2026-10-21",
+        "rows": 15756,
+        "rawRows": 16302,
+        "zeroVolumeRows": 0,
+        "firstTs": "2026-01-02T14:30:00+00:00",
+        "lastTs": "2026-10-21T19:55:00+00:00",
+        "sessions": 202
+      }
+    ],
+    "one_minute_rows": 1260480,
+    "five_minute_rows": 252096,
+    "excluded_raw_source_rows": 52416,
+    "volume_scope": "IEX 场所；零量报价不证明该分钟成交"
+  },
+  "crypto": {
+    "object": "crypto_ohlcv",
+    "business_key": [
+      "ts",
+      "exchange",
+      "symbol",
+      "instrument",
+      "interval_minutes"
+    ],
+    "timestamp_zone": "UTC",
+    "routes": [
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "intervalMinutes": 60,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 44327,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T23:00:00+00:00"
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "intervalMinutes": 1440,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 1847,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T00:00:00+00:00"
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "intervalMinutes": 60,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 44328,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T23:00:00+00:00"
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "intervalMinutes": 1440,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 1847,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T00:00:00+00:00"
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "intervalMinutes": 60,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 44327,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T23:00:00+00:00"
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "intervalMinutes": 1440,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 1847,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T00:00:00+00:00"
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "intervalMinutes": 60,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 44328,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T23:00:00+00:00"
+      },
+      {
+        "exchange": "BINANCE",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "intervalMinutes": 1440,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 1847,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T00:00:00+00:00"
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "intervalMinutes": 60,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 44328,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T23:00:00+00:00"
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "SPOT",
+        "intervalMinutes": 1440,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 1847,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T00:00:00+00:00"
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "intervalMinutes": 60,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 44328,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T23:00:00+00:00"
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "BTCUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "intervalMinutes": 1440,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 1847,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T00:00:00+00:00"
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "intervalMinutes": 60,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 44328,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T23:00:00+00:00"
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "SPOT",
+        "intervalMinutes": 1440,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 1847,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T00:00:00+00:00"
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "intervalMinutes": 60,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 44328,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T23:00:00+00:00"
+      },
+      {
+        "exchange": "BYBIT",
+        "symbol": "ETHUSDT",
+        "instrument": "USDT_PERPETUAL",
+        "intervalMinutes": 1440,
+        "fromDate": "2021-10-01",
+        "throughDate": "2026-10-21",
+        "rows": 1847,
+        "firstTs": "2021-10-01T00:00:00+00:00",
+        "lastTs": "2026-10-21T00:00:00+00:00"
+      }
+    ],
+    "rows": 369398,
+    "official_missing_hourly_bars": 2,
+    "full_utc_grid_complete": false,
+    "active_venue_grids_complete": true,
+    "daily_sum_comparison": {
+      "method": "独立 math.fsum；存储值保留原聚合结果",
+      "differing_field_values": 1558,
+      "maximum_ulps": 1.0,
+      "existing_relative_tolerance": 1e-12,
+      "existing_absolute_tolerance": 1e-08
+    }
+  },
+  "itch": {
+    "object": "us_nasdaq_itch_messages",
+    "business_key": [
+      "ts",
+      "source_sha256",
+      "message_index"
+    ],
+    "timestamp_zone": "UTC",
+    "timestamp_precision": "NANOS",
+    "source_sha256": "fdf8133e8aa56e888a57dcdc9048142890a7bac346dee158f16fee233c2c396e",
+    "source_complete": false,
+    "session": "PREOPEN",
+    "rows": 350836,
+    "first_message": 309047,
+    "last_message": 659882,
+    "first_timestamp_ns": "1781251200000425736",
+    "last_timestamp_ns": "1781251286711979539",
+    "compressed_prefix_bytes": 8388608,
+    "scope": "约 87 秒盘前原消息片段，不证明正常时段、全日或完整订单簿"
+  },
+  "macro": {
+    "fred_object": "us_market_daily",
+    "fred_series": [
+      {
+        "ts_code": "NASDAQCOM.US",
+        "rows": 5234,
+        "first_date": "2006-01-03T00:00:00.000000Z",
+        "last_date": "2026-10-21T00:00:00.000000Z"
+      },
+      {
+        "ts_code": "SP500.US",
+        "rows": 2576,
+        "first_date": "2016-07-25T00:00:00.000000Z",
+        "last_date": "2026-10-21T00:00:00.000000Z"
+      },
+      {
+        "ts_code": "VIXCLS.US",
+        "rows": 5266,
+        "first_date": "2006-01-03T00:00:00.000000Z",
+        "last_date": "2026-10-21T00:00:00.000000Z"
+      }
+    ],
+    "cboe_object": "us_index_daily",
+    "cboe_series": [
+      {
+        "symbol": "VIX",
+        "provider": "CBOE",
+        "rows": 5266,
+        "first_date": "2006-01-03T00:00:00.000000Z",
+        "last_date": "2026-10-21T00:00:00.000000Z"
+      }
+    ],
+    "date_semantics": "UTC 零点业务日期标记，不当作事件时刻"
+  },
+  "evidence": [
+    {
+      "kind": "分钟",
+      "path": "var/market-data/scope-review/cross-asset-first-v46-20261023/minute-independent-verification.json",
+      "sha256": "69e4a3d7a455e2559fd2efb57985b8d3c9001bde797c4f085da058821375b8f9"
+    },
+    {
+      "kind": "币价",
+      "path": "var/market-data/scope-review/cross-asset-first-v46-20261023/crypto-independent-verification.json",
+      "sha256": "0bb4282250ce115b8297a89ecef4829885893f2219992c8ed36979a1c7f4a980"
+    },
+    {
+      "kind": "ITCH",
+      "path": "var/market-data/scope-review/cross-asset-first-v46-20261023/itch-independent-verification.json",
+      "sha256": "230c4d71729ebda80525d0c47fc0ca38d2ba87bd7c022ac19ffb271573d00d84"
+    },
+    {
+      "kind": "宏观",
+      "path": "var/market-data/scope-review/cross-asset-first-v46-20261023/macro-current-verification.json",
+      "sha256": "7d0bb55be3f6398fd10e9dd995c1653da9af4f6a945aa150c18457775758a7ec"
+    },
+    {
+      "kind": "读取查询",
+      "path": "var/market-data/scope-review/cross-asset-first-v46-20261023/saved-query-verification.json",
+      "sha256": "dac030ed2c89201d44ae708be304fca978f94f9ed283c4b42f5d625162c7a969"
+    }
+  ],
+  "reference_sql": "../../tools/sql/cross-asset-first-20261021-reference.sql",
+  "limits": [
+    "日线、分钟、币价和 ITCH 各保留原截止日，不拼成共同可用日期。",
+    "分钟量只代表 IEX；币价的两处官方停市小时不补造。",
+    "日线短来源和四项待核保持原清单限制；全美股历史范围仍未完成。"
+  ]
+}

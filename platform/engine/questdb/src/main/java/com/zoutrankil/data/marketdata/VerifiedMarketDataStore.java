@@ -345,8 +345,7 @@ public final class VerifiedMarketDataStore {
             throw new IllegalArgumentException("来源必须明确非空且不超过十万行");
         if ((source.size() + page.rows() - 1) / page.rows() > 100)
             throw new IllegalArgumentException("发布分页超过冻结的一百页预算");
-        if (!sha(Files.readAllBytes(raw)).equals(expectedSha))
-            throw new IllegalStateException("冻结的来源响应摘要已改变");
+        if (!shaFile(raw).equals(expectedSha)) throw new IllegalStateException("冻结的来源响应摘要已改变");
         var rows = source.stream().map(row -> normalize(d, row)).toList();
         var codec = codec(d);
         var wanted = new LinkedHashMap<String, Map<String, Object>>();
@@ -470,7 +469,7 @@ public final class VerifiedMarketDataStore {
                     public void preflight() throws Exception {
                         if (!identity(d).equals(target)
                                 || !sha(Files.readAllBytes(prepared)).equals(preparedSha)
-                                || !sha(Files.readAllBytes(raw)).equals(expectedSha))
+                                || !shaFile(raw).equals(expectedSha))
                             throw new IllegalStateException("物理目标或冻结来源发生变化，停止发布");
                         requireSchema(d);
                         if (!settled(d.objectName()))
@@ -900,8 +899,7 @@ public final class VerifiedMarketDataStore {
             throw new IllegalArgumentException("零投递核对入口仅接受单批一千行以内");
         var raw = Path.of(document.path("raw").asText());
         String sourceSha = document.path("sourceSha256").asText();
-        if (!sha(Files.readAllBytes(raw)).equals(sourceSha)
-                || !identity(d).equals(card.path("targetId").asText()))
+        if (!shaFile(raw).equals(sourceSha) || !identity(d).equals(card.path("targetId").asText()))
             throw new IllegalStateException("来源或原物理目标变化");
         requireSchema(d);
         var ledger = SyncRunLedger.openExisting(ledgerPath);
@@ -1102,8 +1100,7 @@ public final class VerifiedMarketDataStore {
                 throw new IllegalArgumentException("此显式恢复只支持首个切片阶段中断且总量不超过一万行");
             var raw = Path.of(document.path("raw").asText());
             String sourceSha = document.path("sourceSha256").asText();
-            if (!sha(Files.readAllBytes(raw)).equals(sourceSha))
-                throw new IllegalStateException("原来源文件变化");
+            if (!shaFile(raw).equals(sourceSha)) throw new IllegalStateException("原来源文件变化");
             requireSchema(d);
             var ledger = SyncRunLedger.openExisting(ledgerPath);
             var original = ledger.getRun(run);
@@ -1172,7 +1169,7 @@ public final class VerifiedMarketDataStore {
                 if (latest.missing().isEmpty()) continue;
                 if (!settled(d.objectName())
                         || !sha(Files.readAllBytes(prepared)).equals(preparedSha)
-                        || !sha(Files.readAllBytes(raw)).equals(sourceSha))
+                        || !shaFile(raw).equals(sourceSha))
                     throw new IllegalStateException("补缺前来源或 WAL 变化");
                 // 少量缺键的显式修复也保留原事务模式；旧修复的两分钟上限保持。
                 sendRows(d, latest.missing(), run, publicationPolicy);
@@ -1617,9 +1614,25 @@ public final class VerifiedMarketDataStore {
         }
     }
 
+    /** 原进程突然退出且没有结果回执时，只核对已登记的完整冻结来源；绝不补写或续接尾页。 */
+    public Map<String, Object> reconcileStoppedSubmittedFrozen(
+            String run, String preparedSha, Path stoppedEvidence) throws Exception {
+        try (var publisher =
+                MarketPublisherLease.acquire(
+                        root.resolve("ledger-writer.lock"), Duration.ofMinutes(15))) {
+            return reconcileCompleteFrozenLocked(run, preparedSha, stoppedEvidence, true);
+        }
+    }
+
     private Map<String, Object> reconcileCompleteFrozenLocked(
             String run, String preparedSha, Path stoppedEvidence) throws Exception {
-        var context = frozenRecovery(run, preparedSha, stoppedEvidence);
+        return reconcileCompleteFrozenLocked(run, preparedSha, stoppedEvidence, false);
+    }
+
+    private Map<String, Object> reconcileCompleteFrozenLocked(
+            String run, String preparedSha, Path stoppedEvidence, boolean stoppedSubmission)
+            throws Exception {
+        var context = frozenRecovery(run, preparedSha, stoppedEvidence, stoppedSubmission);
         Path prepared = context.prepared(), raw = context.raw();
         byte[] stopBytes = context.stopBytes();
         var d = context.definition();
@@ -1631,8 +1644,11 @@ public final class VerifiedMarketDataStore {
         var entries = context.entries();
         var page = context.page();
         var slices =
-                CompleteFrozenSlices.require(
-                        ledger, run, prepared, d, rows, sourceSha, page, entries);
+                stoppedSubmission
+                        ? CompleteFrozenSlices.requireStoppedSubmissions(
+                                ledger, run, prepared, d, rows, sourceSha, page, entries)
+                        : CompleteFrozenSlices.require(
+                                ledger, run, prepared, d, rows, sourceSha, page, entries);
         var locks = new DatasetIntervalLock(ledgerPath);
         var lease =
                 locks.findOwned(
@@ -1641,14 +1657,15 @@ public final class VerifiedMarketDataStore {
                                 d.datasetId(),
                                 LocalDate.parse(request.path("from").asText()),
                                 LocalDate.parse(request.path("to").asText())));
-        if (lease == null || !lease.inDoubt()) throw new IllegalStateException("原未决锁缺失");
+        if (lease == null || (!lease.inDoubt() && !stoppedSubmission))
+            throw new IllegalStateException("原恢复锁缺失或不属于允许的恢复状态");
         var frontier = reconciliationFrontier(d);
         var compared = compareExisting(d, rows, original.targetId());
         if (!compared.missing().isEmpty()) throw new IllegalStateException("完整来源仍有缺失键；只读核对不会补写");
         if (!frontier.equals(reconciliationFrontier(d))
                 || !original.targetId().equals(identity(d))
                 || !preparedSha.equals(sha(Files.readAllBytes(prepared)))
-                || !sourceSha.equals(sha(Files.readAllBytes(raw)))
+                || !sourceSha.equals(shaFile(raw))
                 || !entries.equals(ledger.entries(run, null, 1000)))
             throw new IllegalStateException("核对期间来源、账本或 WAL 版本变化");
         Path folder = root.resolve("reconciliations/" + run + "-" + UUID.randomUUID());
@@ -1705,16 +1722,38 @@ public final class VerifiedMarketDataStore {
                 || !original.targetId().equals(identity(d))
                 || !entries.equals(ledger.entries(run, null, 1000))
                 || !preparedSha.equals(sha(Files.readAllBytes(prepared)))
-                || !sourceSha.equals(sha(Files.readAllBytes(raw))))
-            throw new IllegalStateException("推进检查点前版本变化");
-        for (var slice : slices)
-            if (slice.entry().state() != SyncRunState.VERIFIED)
-                ledger.transition(
-                        slice.entry().id(),
-                        slice.entry().revision(),
-                        SyncRunState.VERIFIED,
+                || !sourceSha.equals(shaFile(raw))) throw new IllegalStateException("推进检查点前版本变化");
+        if (stoppedSubmission) {
+            // 回读期间仍可能收到取消；推进前重查原提交链、停止身份及锁的实际归属。
+            CompleteFrozenSlices.requireStoppedSubmissions(
+                    ledger, run, prepared, d, rows, sourceSha, page, entries);
+            frozenRecovery(run, preparedSha, stoppedEvidence, true);
+            if (!lease.equals(locks.findOwned(run, lease.scope())))
+                throw new IllegalStateException("原恢复锁在回读期间变化");
+        }
+        // 只有全量证明已落盘且版本稳定后，才把突然退出留下的普通锁转为原未决锁。
+        if (stoppedSubmission && !lease.inDoubt()) {
+            locks.retainInDoubt(lease);
+            lease = locks.findOwned(run, lease.scope());
+        }
+        for (var slice : slices) {
+            if (slice.entry().state() != SyncRunState.VERIFIED) {
+                String proof =
                         reconciliationProof(
-                                slice.rows(), sourceSha, proofs.get(slice.entry().id()), folder));
+                                slice.rows(),
+                                sourceSha,
+                                proofs.get(slice.entry().id()),
+                                folder,
+                                stoppedSubmission);
+                var entry = slice.entry();
+                // 不把未知发送结果伪装成确认；先保留真实未决事件，再按已落盘的完整回读证明完成。
+                if (stoppedSubmission && entry.state() == SyncRunState.SUBMITTED) {
+                    ledger.transition(entry.id(), entry.revision(), SyncRunState.IN_DOUBT, proof);
+                    entry = ledger.get(entry.id());
+                }
+                ledger.transition(entry.id(), entry.revision(), SyncRunState.VERIFIED, proof);
+            }
+        }
         for (var kind : List.of(SyncRunLedger.Kind.ATTEMPT, SyncRunLedger.Kind.RUN))
             for (var entry : entries)
                 if (entry.kind() == kind && entry.state() != SyncRunState.VERIFIED)
@@ -1722,7 +1761,8 @@ public final class VerifiedMarketDataStore {
                             entry.id(),
                             entry.revision(),
                             SyncRunState.VERIFIED,
-                            reconciliationProof(rows.size(), sourceSha, full, folder));
+                            reconciliationProof(
+                                    rows.size(), sourceSha, full, folder, stoppedSubmission));
         locks.releaseAfterReconciliation(lease, true, true);
         var result =
                 Map.<String, Object>of(
@@ -1761,16 +1801,29 @@ public final class VerifiedMarketDataStore {
     /** 两种恢复共用原来源、停止证据、物理目标与冻结预算校验，不修改原请求。 */
     private FrozenRecovery frozenRecovery(String run, String preparedSha, Path stoppedEvidence)
             throws Exception {
+        return frozenRecovery(run, preparedSha, stoppedEvidence, false);
+    }
+
+    private FrozenRecovery frozenRecovery(
+            String run, String preparedSha, Path stoppedEvidence, boolean stoppedSubmission)
+            throws Exception {
         if (!run.matches("market-[a-f0-9-]{36}")) throw new IllegalArgumentException("原运行标识非法");
         Path prepared = root.resolve("prepared/" + run + ".json");
         byte[] bytes = Files.readAllBytes(prepared),
                 stopBytes = Files.readAllBytes(stoppedEvidence);
         var document = JSON.readTree(bytes);
         var stop = JSON.readTree(stopBytes);
-        var receipt = JSON.readTree(Files.readAllBytes(root.resolve("receipts/" + run + ".json")));
+        Path receiptPath = root.resolve("receipts/" + run + ".json");
+        if (stoppedSubmission && !Files.notExists(receiptPath))
+            throw new IllegalArgumentException("已有结果回执，应使用原完整冻结恢复入口");
+        JsonNode receipt =
+                stoppedSubmission
+                        ? JSON.createObjectNode()
+                        : JSON.readTree(Files.readAllBytes(receiptPath));
         Instant inspected = Instant.parse(stop.path("inspectedAt").asText());
         if (!sha(bytes).equals(preparedSha)
-                || !receipt.path("preparedSha256").asText().equals(preparedSha)
+                || (!stoppedSubmission
+                        && !receipt.path("preparedSha256").asText().equals(preparedSha))
                 || !stop.path("writerStopped").asBoolean(false)
                 || !run.equals(stop.path("runId").asText())
                 || stop.path("evidence").asText().isBlank()
@@ -1790,8 +1843,7 @@ public final class VerifiedMarketDataStore {
             rows.add(normalize(d, JSON.convertValue(row, Map.class)));
         Path raw = Path.of(document.path("raw").asText());
         String sourceSha = document.path("sourceSha256").asText();
-        if (!sha(Files.readAllBytes(raw)).equals(sourceSha))
-            throw new IllegalStateException("原来源文件变化");
+        if (!shaFile(raw).equals(sourceSha)) throw new IllegalStateException("原来源文件变化");
         requireSchema(d);
         var ledger = SyncRunLedger.openExisting(ledgerPath);
         var original = ledger.getRun(run);
@@ -1812,7 +1864,8 @@ public final class VerifiedMarketDataStore {
         if (!d.datasetId().equals(request.path("definition").path("datasetId").asText())
                 || d.schemaVersion() != request.path("definition").path("datasetVersion").asInt()
                 || !original.targetId().equals(identity(d))
-                || !receipt.path("targetId").asText().equals(original.targetId())
+                || (!stoppedSubmission
+                        && !receipt.path("targetId").asText().equals(original.targetId()))
                 || !request.path("parameters").path("prepared_sha256").asText().equals(preparedSha)
                 || !request.path("parameters").path("source_sha256").asText().equals(sourceSha))
             throw new IllegalStateException("原账本、来源或物理目标不符");
@@ -1866,6 +1919,12 @@ public final class VerifiedMarketDataStore {
 
     private String reconciliationProof(int rows, String sourceSha, String evidence, Path folder)
             throws Exception {
+        return reconciliationProof(rows, sourceSha, evidence, folder, false);
+    }
+
+    private String reconciliationProof(
+            int rows, String sourceSha, String evidence, Path folder, boolean stoppedSubmission)
+            throws Exception {
         var proof =
                 Map.of(
                         "passed",
@@ -1888,16 +1947,19 @@ public final class VerifiedMarketDataStore {
                         evidence,
                         "writerStopped",
                         true);
-        return JSON.writeValueAsString(
-                Map.of(
-                        "verification",
-                        proof,
-                        "sourceComplete",
-                        true,
-                        "returnedRows",
-                        rows,
-                        "reconciliationIntent",
-                        folder.resolve("intent.json").toString()));
+        var payload =
+                new LinkedHashMap<String, Object>(
+                        Map.of(
+                                "verification",
+                                proof,
+                                "sourceComplete",
+                                true,
+                                "returnedRows",
+                                rows,
+                                "reconciliationIntent",
+                                folder.resolve("intent.json").toString()));
+        if (stoppedSubmission) payload.put("stoppedSubmissionReadback", true);
+        return JSON.writeValueAsString(payload);
     }
 
     private record Comparison(
@@ -2083,7 +2145,7 @@ public final class VerifiedMarketDataStore {
             if (ledger.get(run).state() != SyncRunState.VERIFIED
                     || !original.targetId().equals(identity(d))
                     || !request.path("parameters").path("source_sha256").asText().equals(sourceSha)
-                    || !sha(Files.readAllBytes(raw)).equals(sourceSha))
+                    || !shaFile(raw).equals(sourceSha))
                 throw new IllegalStateException("原运行或冻结来源尚未验收");
             var normalized = expected.stream().map(r -> normalize(d, r)).toList();
             var result = compareExisting(d, normalized, original.targetId());
@@ -2181,6 +2243,17 @@ public final class VerifiedMarketDataStore {
                 }
             }
         };
+    }
+
+    /** 大来源逐块核对摘要，仍在原校验时机检查同一原件，不增加内存中的整份副本。 */
+    static String shaFile(Path path) throws Exception {
+        var digest = MessageDigest.getInstance("SHA-256");
+        try (var input = Files.newInputStream(path)) {
+            byte[] bytes = new byte[65536];
+            int count;
+            while ((count = input.read(bytes)) >= 0) if (count > 0) digest.update(bytes, 0, count);
+        }
+        return HexFormat.of().formatHex(digest.digest());
     }
 
     public static String sha(byte[] bytes) {

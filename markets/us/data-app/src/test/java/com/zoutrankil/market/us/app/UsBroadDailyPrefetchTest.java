@@ -2,6 +2,7 @@ package com.zoutrankil.market.us.app;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -34,6 +35,58 @@ class UsBroadDailyPrefetchTest {
     @TempDir Path root;
     private static final LocalDate FROM = LocalDate.of(2026, 1, 1),
             THROUGH = LocalDate.of(2026, 1, 5);
+
+    @Test
+    void retainsConflictingOhlcRawAsFailedSourceWithoutRetryingOrChangingOtherTasks()
+            throws Exception {
+        try (var db = database()) {
+            insert(db, "X", "PLANNED", 0);
+            insert(db, "NEXT", "PLANNED", 10);
+            insert(db, "DONE", "VERIFIED", 0);
+            var original = response(false);
+            byte[] bad =
+                    Files.readString(original.path())
+                            .replace("\"high\":[11]", "\"high\":[9]")
+                            .getBytes(StandardCharsets.UTF_8);
+            Path raw = root.resolve(UUID.randomUUID() + ".response");
+            Files.write(raw, bad);
+            var rejected =
+                    new FrozenHttpSource.Response(
+                            raw,
+                            VerifiedMarketDataStore.sha(bad),
+                            Instant.EPOCH,
+                            original.sourceUrl(),
+                            bad.length);
+            assertEquals(
+                    UsBroadDailyPrefetch.Step.FAILED_SOURCE,
+                    UsBroadDailyPrefetch.step(db, 16, FROM, THROUGH, t -> rejected, () -> false));
+            try (var s = db.createStatement();
+                    var row =
+                            s.executeQuery(
+                                    "SELECT id,phase,raw,sha,observed,proof,bundle_id FROM broad_tasks WHERE symbol='X'")) {
+                assertTrue(row.next());
+                assertEquals(
+                        VerifiedMarketDataStore.sha(
+                                ("v1|DAILY|X|" + THROUGH + "|").getBytes(StandardCharsets.UTF_8)),
+                        row.getString(1));
+                assertEquals("FAILED_SOURCE", row.getString(2));
+                assertEquals(raw.toString(), row.getString(3));
+                assertEquals(rejected.sha256(), row.getString(4));
+                assertEquals(rejected.observedAt().toString(), row.getString(5));
+                assertTrue(row.getString(6).contains("OHLC"));
+                assertTrue(row.getString(6).contains("X 2026-01-02"));
+                assertNull(row.getString(7));
+            }
+            assertEquals("PLANNED", phase(db, "NEXT"));
+            assertEquals("VERIFIED", phase(db, "DONE"));
+            assertEquals(rejected.sha256(), VerifiedMarketDataStore.sha(Files.readAllBytes(raw)));
+            try (var s = db.createStatement();
+                    var rows = s.executeQuery("SELECT count(*) FROM broad_source_retries")) {
+                assertTrue(rows.next());
+                assertEquals(0, rows.getInt(1));
+            }
+        }
+    }
 
     @Test
     void fetchesOnlyPlannedSourcesWhileAnotherConnectionCanAdvanceAnExistingPublication()

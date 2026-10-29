@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 class YahooPriceMapperTest {
     private final String response =
@@ -18,6 +19,89 @@ class YahooPriceMapperTest {
         "timestamp":[1767364200,1767623400],"events":{"splits":{"one":{"date":1767623400,"numerator":2,"denominator":1}},"dividends":{"cash":{"date":1767364200,"amount":0.25}}},
         "indicators":{"quote":[{"open":[10,11],"high":[12,13],"low":[9,10],"close":[11,12],"volume":[200,300]}],"adjclose":[{"adjclose":[10,12]}]}}]}}
         """;
+
+    @Test
+    void rejectsSourceOhlcConflictsWithoutReturningAPartialRequestedRange() throws Exception {
+        for (String bad :
+                List.of(
+                        response.replace("\"open\":[10,11]", "\"open\":[13,11]"),
+                        response.replace("\"close\":[11,12]", "\"close\":[13,12]"),
+                        response.replace("\"open\":[10,11]", "\"open\":[8,11]"),
+                        response.replace("\"close\":[11,12]", "\"close\":[8,12]"),
+                        response.replace("\"low\":[9,10]", "\"low\":[14,10]"))) {
+            var failure =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () ->
+                                    YahooPriceMapper.daily(
+                                            bad.getBytes(StandardCharsets.UTF_8),
+                                            "X",
+                                            "X",
+                                            "sha",
+                                            Instant.EPOCH,
+                                            LocalDate.of(2026, 1, 1),
+                                            LocalDate.of(2026, 1, 5)));
+            assertTrue(failure.getMessage().contains("OHLC"));
+            assertTrue(failure.getMessage().contains("X 2026-01-02"));
+        }
+    }
+
+    @Test
+    void limitsOhlcValidationToTheSelectedDatesAndKeepsFutureSplitReconstruction()
+            throws Exception {
+        byte[] bytes =
+                response.replace("\"close\":[11,12]", "\"close\":[11,99]")
+                        .getBytes(StandardCharsets.UTF_8);
+        var prepared = YahooPriceMapper.prepare(bytes, "X", "X", "sha", Instant.EPOCH);
+        var first = prepared.rows(LocalDate.of(2026, 1, 2), LocalDate.of(2026, 1, 2));
+        assertEquals(
+                YahooPriceMapper.dailyWindow(
+                        response.getBytes(StandardCharsets.UTF_8),
+                        "X",
+                        "X",
+                        "sha",
+                        Instant.EPOCH,
+                        LocalDate.of(2026, 1, 2),
+                        LocalDate.of(2026, 1, 2)),
+                first);
+        assertEquals(22., first.getFirst().get("close"));
+        assertEquals(.5, first.getFirst().get("dividend"));
+        assertEquals(100., first.getFirst().get("volume"));
+        assertTrue(prepared.rows(LocalDate.of(2025, 1, 1), LocalDate.of(2025, 12, 31)).isEmpty());
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> prepared.rows(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 1, 5)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> prepared.rows(LocalDate.of(2026, 1, 5), LocalDate.of(2026, 1, 5)));
+    }
+
+    @Test
+    void keepsFlatZeroVolumeQuotesWithoutChangingEitherPriceBasis() throws Exception {
+        String flat =
+                response.replace("\"high\":[12,13]", "\"high\":[10,13]")
+                        .replace("\"low\":[9,10]", "\"low\":[10,10]")
+                        .replace("\"close\":[11,12]", "\"close\":[10,12]")
+                        .replace("\"volume\":[200,300]", "\"volume\":[0,300]");
+        var rows =
+                YahooPriceMapper.daily(
+                        flat.getBytes(StandardCharsets.UTF_8),
+                        "X",
+                        "X",
+                        "sha",
+                        Instant.EPOCH,
+                        LocalDate.of(2026, 1, 1),
+                        LocalDate.of(2026, 1, 5));
+        assertEquals(2, rows.size());
+        var first = rows.getFirst();
+        assertEquals(20, first.size());
+        for (String field : List.of("open", "high", "low", "close")) {
+            assertEquals(20., first.get(field));
+            assertEquals(10., first.get("adj_" + field));
+        }
+        assertEquals(0., first.get("volume"));
+        assertEquals(0., first.get("adj_volume"));
+    }
 
     @Test
     void reversesFutureSplitsForPricesVolumesAndDividendsWithoutApplyingTheSplitTwiceOnItsDate()

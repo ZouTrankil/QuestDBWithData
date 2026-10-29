@@ -1,0 +1,1161 @@
+{
+  "version": 1,
+  "kind": "US_CORE_INCREMENTAL",
+  "checkedAt": "2026-10-24T17:34:19.565094+00:00",
+  "note": "核心增量单独记录，固定首批清单及长尾停止状态保持。",
+  "newRange": {
+    "fromDate": "2026-10-22",
+    "throughDate": "2026-10-23",
+    "sessions": 2,
+    "symbols": [
+      "AAPL",
+      "AMZN",
+      "AVGO",
+      "GLD",
+      "GOOGL",
+      "IWM",
+      "JPM",
+      "META",
+      "MSFT",
+      "NVDA",
+      "QQQ",
+      "SPY",
+      "TLT",
+      "TSLA",
+      "USO",
+      "WMT"
+    ],
+    "sourceRequests": 32,
+    "sourceBytes": 1365404,
+    "sourceTasks": 32,
+    "nativeRuns": 48,
+    "dailyRows": 32,
+    "oneMinuteRows": 12480,
+    "fiveMinuteRows": 2496
+  },
+  "currentCore": {
+    "dailyRows": 80054,
+    "minuteFromDate": "2026-01-02",
+    "throughDate": "2026-10-23",
+    "regularSessions": 204,
+    "oneMinuteRows": 1272960,
+    "fiveMinuteRows": 254592,
+    "rawMinuteRows": 1579968,
+    "excludedSourceRows": 52416,
+    "dailyRoutes": [
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO",
+        "rows": 4331,
+        "firstDate": "2009-08-06T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO",
+        "rows": 3629,
+        "firstDate": "2012-05-18T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO",
+        "rows": 4106,
+        "firstDate": "2010-06-29T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO",
+        "rows": 5168,
+        "firstDate": "2006-04-10T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO",
+        "rows": 5235,
+        "firstDate": "2006-01-03T00:00:00.000000Z",
+        "lastDate": "2026-10-23T00:00:00.000000Z"
+      }
+    ],
+    "regularMinuteRoutes": [
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "AAPL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "AMZN",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "AVGO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "GLD",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "GOOGL",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "IWM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "JPM",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "META",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "MSFT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "NVDA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "QQQ",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "SPY",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "TLT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "TSLA",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "USO",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 1,
+        "rows": 79560,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:59:00.000000Z"
+      },
+      {
+        "symbol": "WMT",
+        "provider": "TIINGO_IEX",
+        "interval_minutes": 5,
+        "rows": 15912,
+        "firstTs": "2026-01-02T14:30:00.000000Z",
+        "lastTs": "2026-10-23T19:55:00.000000Z"
+      }
+    ]
+  },
+  "verification": {
+    "dailyColumns": 20,
+    "minuteColumns": 13,
+    "regularViewColumns": 14,
+    "allSourcePreparedNativeHttpPgwireFieldsExact": true,
+    "fiveMinuteOhlcvIndependentlyRebuilt": true,
+    "oldCoreDailyRowsRechecked": 80022,
+    "oldRawMinuteRowsRechecked": 1564992,
+    "oldRegularMinuteRowsRechecked": 1512576,
+    "oldMinuteSourceUnits": 208,
+    "oldNativeAndCoreTasksUnchanged": true,
+    "otherQueuesAndPhysicalObjectsUnchanged": true,
+    "nativeUnresolved": 0,
+    "intervalLocks": 0,
+    "secondRun": {
+      "newRequests": 0,
+      "newTasks": 0,
+      "newNativeRuns": 0,
+      "formalWrites": 0
+    },
+    "dailyRowsSha256": "2e929b147fc57cbc430d27fe0cfa5dcebd839f2e16f8ca0fdd1ac3416e8f75d3",
+    "minuteRowsSha256": "68bf3e62a02fc86458bfb825bc15e17ff4715fd0e574a8e1983ab9ac2b919dec",
+    "proofSha256": "18bff5b50997a501fa48357e848277ed7a8fc71fffaf1f1e29365024aac17810",
+    "oldMinuteProofSha256": "aef6b792fbe56f078cec1e2001ef0f67462d451c38c6cfadcac8c4cd1e34bd4b",
+    "idempotenceProofSha256": "2889018cab97aa7db27d14faae75cfc21cdc7e2bda76e7bced78a32a17d9a0d1"
+  },
+  "calendar": {
+    "version": "us-equities-rth-2026-20261019",
+    "sha256": "b708c1b965f85c561692b22aaefa19b74f397aee815152f73f094e5948a89de5",
+    "supportedYear": 2026
+  },
+  "runtime": {
+    "jars": 47,
+    "manifestSha256": "e02692a9297ac336785858d634219a221fe634308fe1bf2480d68a26bfb9e9a9",
+    "tests": [
+      {
+        "scope": "us-app",
+        "tests": 49,
+        "failures": 0
+      },
+      {
+        "scope": "architecture",
+        "tests": 5,
+        "failures": 0
+      }
+    ],
+    "moduleBoundariesPassed": true,
+    "targetedJavaFormatAndLiteralsPassed": true
+  },
+  "schedule": {
+    "status": "ACTIVE",
+    "timezone": "Asia/Shanghai",
+    "dailyTime": "10:00",
+    "scope": "仅核心16个标的，已覆盖及休市日期不请求"
+  },
+  "native": [
+    {
+      "task": "ef186d1ce65bb302883af46133eed2f1165026013b0b665b9a8cf5c60a08ea32",
+      "symbol": "SPY",
+      "kind": "daily",
+      "runId": "market-02792520-b04c-4ea8-ac9f-16c277ad2e34",
+      "rows": 2,
+      "preparedSha256": "42cdf59e6b2012d420f1b5d6ad53fe9c080c08245f740075797128e1987a2d82",
+      "sourceSha256": "50026ab64596f027103c073955945980f21dd16a02c52a3701800d86d268846d",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/SPY/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 467,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "b7e0de76cf3fda485c90d2c0c9d3edf75f5043f4dbc5be8e28090c2810b4b0ae",
+      "symbol": "QQQ",
+      "kind": "daily",
+      "runId": "market-48ea2ebb-493d-4332-8c50-ec6c5d972797",
+      "rows": 2,
+      "preparedSha256": "bcb4539950ec3c0bf82b7e47c9dd9ada4cdb0cfe147bcb8f9b5f2abd48ed11f1",
+      "sourceSha256": "b73b6ae2c4137c2b8fcb16c9cddb583ecc4cf39b5f76abfa73df4fe3b1fb5d4b",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/QQQ/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 459,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "041c940de423d56c99fd037f0a8117c054e536643a65351299b8b51911f21176",
+      "symbol": "IWM",
+      "kind": "daily",
+      "runId": "market-f24d23e8-4b9f-4173-8adf-36390259444d",
+      "rows": 2,
+      "preparedSha256": "a3acf98e21b92ad5806498888cf363e269f39997426b09376d22eb884a65757d",
+      "sourceSha256": "1485c7fda8d59794e431afc72a1597ea405044afd15ec7a3516dc75f1495ff62",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/IWM/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 465,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "1e19a77614a123afd0f10facdd2925afa032d443908ef2e7d552891e3be0ac45",
+      "symbol": "TLT",
+      "kind": "daily",
+      "runId": "market-efefd265-49c6-4539-8da6-e5d65f25a858",
+      "rows": 2,
+      "preparedSha256": "e4b6f5e1c41dbdbf2944ad89d84af01a30c938d0f773b0d609ccd1d6d28867cf",
+      "sourceSha256": "760fb17281a703cc9131fe5c09d9212730f746c71066705c0c96347269810a51",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/TLT/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 449,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "6a9da98695a644cb834d8002a02eed0e9f571b69b5c773e06902c5398af0d752",
+      "symbol": "GLD",
+      "kind": "daily",
+      "runId": "market-8933436b-cc9a-4db0-aa9d-7c2192def588",
+      "rows": 2,
+      "preparedSha256": "36749f2931ed3b896374ba7d7c0d6a011206867e354017d308d16b7ffb5b1ead",
+      "sourceSha256": "1010288045fc22f44a18f7dc1a02fd1107eda28c8ebd61c710127bdcd6c602d7",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/GLD/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 465,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "90a0e7c10558b86b7e1d61e264325bd602ba6db69b70776c9a3f0a3ceb9f560f",
+      "symbol": "USO",
+      "kind": "daily",
+      "runId": "market-e88c211f-bc22-4d20-9d28-2df1cf8ff87e",
+      "rows": 2,
+      "preparedSha256": "9f1509d5fbff17fe43cbe10cd319874ef0ad7ff9411aadfb84748f176cc3cd9e",
+      "sourceSha256": "761c2654cbe5c765abacd0f7436c7ec10afbdcd9e79948a3c6fff2304e219201",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/USO/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 457,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "8fea115b559ef7a21733074f3a188ec4b5d6925eed4f1eae6131e72c2ee9e4f6",
+      "symbol": "AAPL",
+      "kind": "daily",
+      "runId": "market-fb0741e9-8866-496c-9df9-e6b45d9d7221",
+      "rows": 2,
+      "preparedSha256": "00f856a5b440de7c5c776d1abdd11c9d73007b16b29c24ac33d00eca1cfc7e5c",
+      "sourceSha256": "f757c6f84b155d45cdb118f5c451c6b4bfdc4a464b30eacb1a2bb63767cbf04a",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/AAPL/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 467,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "019c76c75ffecfcfd3814ccd96e31be1a6f790d3a1d72714e272eaec6f6aff63",
+      "symbol": "MSFT",
+      "kind": "daily",
+      "runId": "market-57685c5b-f31f-4191-814a-b59e66e6b696",
+      "rows": 2,
+      "preparedSha256": "54af35b7204fc953b7483732a5b632b87b8ec659db28c4e95bac25996edfe27b",
+      "sourceSha256": "ba8610a1a8bcfa9f02ce4a801aa953f6e6052fdae1a30f7f18126bb83e077a5b",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/MSFT/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 463,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "edf0e5d6fdefae7b11d96c0fc46298d14983efbf2af122c180e5e3b3378ab672",
+      "symbol": "NVDA",
+      "kind": "daily",
+      "runId": "market-a1596fc3-d382-4a53-9002-2fb56a5372d6",
+      "rows": 2,
+      "preparedSha256": "e9ba5e4e5ddc0cf1dfff6ef56d3d67795befd3a58e6f5ee40b19ff10dd7f01ed",
+      "sourceSha256": "788ae4c5d711965bb0cb5ce6c338c2f313c5a650a97d7f626e0d15720b64fb79",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/NVDA/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 465,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "d20f9ba1717c27245f6ed4c15ba5a46f7eae394a74394eab37ea3546478f8255",
+      "symbol": "AMZN",
+      "kind": "daily",
+      "runId": "market-066fe0ea-300b-4ba6-aa29-ea8eee9dfe91",
+      "rows": 2,
+      "preparedSha256": "7b957ad2b5f894509a376192adfc6684cff1cfd5cd8b9cb2dd19915f9d785ac9",
+      "sourceSha256": "03837995ca2d21ee2bec0cd9f10edf5a00fe4353d02bb1b64ef7e7db284e9ede",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/AMZN/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 469,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "e732e85ea840be1bbb9eb693e627a7c387578877e2f6db526270532405a4bb88",
+      "symbol": "GOOGL",
+      "kind": "daily",
+      "runId": "market-50a96f7c-cb2a-416a-b7e7-1c64c75eac9f",
+      "rows": 2,
+      "preparedSha256": "a49a73a2de7078ab7bbf2639e434bd22ce7baae635fb8352396291dda149284f",
+      "sourceSha256": "1c98a098c3d30173f7d11c5fff384a2323a3ba752420b50a92ab5628f703328c",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/GOOGL/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 469,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "0d25b4390374a1564a995fcccd01142aec53adbd0f332afa12bb7b67355b3d4d",
+      "symbol": "META",
+      "kind": "daily",
+      "runId": "market-7260ed1a-4810-4e82-802e-d85a7bb0cf85",
+      "rows": 2,
+      "preparedSha256": "4e95e52c42f686d2c10ca945ac8debcf7f9137846013ad499072eea9a3c6dd3e",
+      "sourceSha256": "326c7d636afd4d89ef03063175d28cbc12e946e460741b6b2c4b9976d8c8cf7d",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/META/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 469,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "6ab42fbf03c0f069fbde3a3537971449348bc6294ae72768a2861aa6197a5cf6",
+      "symbol": "TSLA",
+      "kind": "daily",
+      "runId": "market-5a553c61-a884-4eda-91d8-76d246b5b4f6",
+      "rows": 2,
+      "preparedSha256": "0da42f2c9b50d4b7bcea67111cab1ce9b6b947751e2e9163742cba275699c755",
+      "sourceSha256": "efa32570ecbc6e6a8b3f63c2e23ebcee0c77915600cb9454cce4d1ae37b4423b",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/TSLA/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 467,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "8832d3f56e71beb32bc65ec3a38aab08a6f7fdfbbe9c7809f7902b6c5c1c6b27",
+      "symbol": "AVGO",
+      "kind": "daily",
+      "runId": "market-8d6698d9-3e94-4448-829b-8bc6382a70b8",
+      "rows": 2,
+      "preparedSha256": "8c1c1688b5dde8e799d0d02f9f6e5e6150bc54145edc4742c7f5458823b3847e",
+      "sourceSha256": "ffe5e3db0055d5a35c281e501bad9812104392026d772144e946971a114bb3f9",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/AVGO/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 459,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "00d33fef29f9500c978b950d8a386d78d933aac5df90933e9ab99a392067a73e",
+      "symbol": "JPM",
+      "kind": "daily",
+      "runId": "market-73ca5972-9290-49d5-bdb8-a24c9262794c",
+      "rows": 2,
+      "preparedSha256": "fe84f3fca083aa15c701db9305636f49044ddb33fafb8c46ea46386f7a591fbc",
+      "sourceSha256": "e9851022aac53d7fc87e6cba59762483846de7d973849b378808feb68829a2d2",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/JPM/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 459,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "8190fc1aeb7cb98ae1683ef909ca6ae33b688939581de3bf6ee8a59cd3807e3b",
+      "symbol": "WMT",
+      "kind": "daily",
+      "runId": "market-3372cb16-cbf2-44e0-8d18-96960dc6edab",
+      "rows": 2,
+      "preparedSha256": "3937b81216ab88d5ca2fa780fe190987ff57c0948835bb07af0d762158d29994",
+      "sourceSha256": "7699f33de1d59cd67c0c150b59d593c925af78b990e7191bc0af0164683e09d2",
+      "sourceUrl": "https://api.tiingo.com/tiingo/daily/WMT/prices?startDate=2026-10-22&endDate=2026-10-23",
+      "sourceBytes": 461,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "cf0179a6ab6f7b459039ac31933c40c81b2a9273d14c9ab2e3cc2b2acb6e6ce3",
+      "symbol": "SPY",
+      "kind": "minute",
+      "runId": "market-9e3776ab-4aa5-484a-a68e-e7de415ec9d7",
+      "rows": 780,
+      "preparedSha256": "274f158ca6fcd001f6c57a6a3907dcc714a33d6d59c98d33b1222ab8fda14188",
+      "sourceSha256": "a2a4928742792582276423ceb3593458e715e22fbf53246efcc8f9544d1bd91b",
+      "sourceUrl": "https://api.tiingo.com/iex/SPY/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85472,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "cf0179a6ab6f7b459039ac31933c40c81b2a9273d14c9ab2e3cc2b2acb6e6ce3",
+      "symbol": "SPY",
+      "kind": "fiveMinute",
+      "runId": "market-dd85ba2f-e6e4-48c3-8523-a1a782ce7ec2",
+      "rows": 156,
+      "preparedSha256": "0303703ae6dcff904924162f802a5e2f1b25ca67011d8acc860729d2b67ea5f1",
+      "sourceSha256": "a2a4928742792582276423ceb3593458e715e22fbf53246efcc8f9544d1bd91b",
+      "sourceUrl": "https://api.tiingo.com/iex/SPY/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85472,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "2e8f9a758c67f8c4a6292c932593327541c1cd82450c5cdf1baa90ea4076bcd8",
+      "symbol": "QQQ",
+      "kind": "minute",
+      "runId": "market-9d26fbeb-f0ec-487d-bcbe-82dd639692a5",
+      "rows": 780,
+      "preparedSha256": "2b52cb5d7f1ba37abd618cfd556a3bbe9d52f949b1f53a24a3e197cc9b8fb543",
+      "sourceSha256": "9a9d81503df465956297629abd32055d31f9c9daf76f611d7ac6061dbab2c1f3",
+      "sourceUrl": "https://api.tiingo.com/iex/QQQ/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85354,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "2e8f9a758c67f8c4a6292c932593327541c1cd82450c5cdf1baa90ea4076bcd8",
+      "symbol": "QQQ",
+      "kind": "fiveMinute",
+      "runId": "market-becd9e64-a12f-4036-b378-684dbc73e6bf",
+      "rows": 156,
+      "preparedSha256": "854bf10f2d26873049ac89c2b59bd9a4165d373c46124efc1b49d6737a407aa5",
+      "sourceSha256": "9a9d81503df465956297629abd32055d31f9c9daf76f611d7ac6061dbab2c1f3",
+      "sourceUrl": "https://api.tiingo.com/iex/QQQ/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85354,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "41a06fc219764c19aacdfce5f3325b32f7d86725d4c2fcc897c18b7d59f20964",
+      "symbol": "IWM",
+      "kind": "minute",
+      "runId": "market-fce445dc-f7e5-407b-b13f-af3788d432c7",
+      "rows": 780,
+      "preparedSha256": "d0c4e7a938d1ecce9ae4da291a12b7f4c203b076c7431e9254ebeeb781f03ff3",
+      "sourceSha256": "668dccf9760ececa5459375acc388e993d2ecfc38805b6f60a9e5fa33e291afd",
+      "sourceUrl": "https://api.tiingo.com/iex/IWM/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84661,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "41a06fc219764c19aacdfce5f3325b32f7d86725d4c2fcc897c18b7d59f20964",
+      "symbol": "IWM",
+      "kind": "fiveMinute",
+      "runId": "market-6af201d7-94b0-40de-9f62-4d70032276fb",
+      "rows": 156,
+      "preparedSha256": "6c5387d385ab019717436257d0caf5d893dec54ced6418409fed1e5552788939",
+      "sourceSha256": "668dccf9760ececa5459375acc388e993d2ecfc38805b6f60a9e5fa33e291afd",
+      "sourceUrl": "https://api.tiingo.com/iex/IWM/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84661,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "d3eb1901d73b01ee53d668152039864e06bea3c3d0b60f767f9c9277c116cd0f",
+      "symbol": "TLT",
+      "kind": "minute",
+      "runId": "market-6bd7f5e7-9de9-43d9-92b8-160f00f0977d",
+      "rows": 780,
+      "preparedSha256": "66be7dc2e16aca60974919a52760d4fafe097ab223d6d1a612fc7c0e736e2fe9",
+      "sourceSha256": "db6c2adfda584fd3c94afb63a235e7c8c12d27a65e08dde41b547e2ee8cc53ad",
+      "sourceUrl": "https://api.tiingo.com/iex/TLT/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 83565,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "d3eb1901d73b01ee53d668152039864e06bea3c3d0b60f767f9c9277c116cd0f",
+      "symbol": "TLT",
+      "kind": "fiveMinute",
+      "runId": "market-23328682-1898-4cc1-99a0-9b1aed7b645a",
+      "rows": 156,
+      "preparedSha256": "819b46a080cafb757f1cb9d7e410a8bf01c443bb0ee3409a7dbea98dc19ad94d",
+      "sourceSha256": "db6c2adfda584fd3c94afb63a235e7c8c12d27a65e08dde41b547e2ee8cc53ad",
+      "sourceUrl": "https://api.tiingo.com/iex/TLT/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 83565,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "31fa3d23f46f3f7a734756d96129a75a9f925cf50f1f8dd04d5aa0069bb9f449",
+      "symbol": "GLD",
+      "kind": "minute",
+      "runId": "market-abcafd83-93e9-44b4-8b12-bff54e24ee08",
+      "rows": 780,
+      "preparedSha256": "3afa7d787de6d6f38161a606519b0cb51c2f075b022cc80b4241fd00def90d24",
+      "sourceSha256": "e539fb335c8fa44e5f8bcaf12b4144e64ce59d655de9b9d4d9f2716caf845318",
+      "sourceUrl": "https://api.tiingo.com/iex/GLD/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85203,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "31fa3d23f46f3f7a734756d96129a75a9f925cf50f1f8dd04d5aa0069bb9f449",
+      "symbol": "GLD",
+      "kind": "fiveMinute",
+      "runId": "market-20f5e974-df0c-41f5-944c-438ea93e3e62",
+      "rows": 156,
+      "preparedSha256": "5b3714e2493f15b8767e3565188a572b3dc5e37c74080486b895aca42f51c99d",
+      "sourceSha256": "e539fb335c8fa44e5f8bcaf12b4144e64ce59d655de9b9d4d9f2716caf845318",
+      "sourceUrl": "https://api.tiingo.com/iex/GLD/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85203,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "2372645eb3fdefbb03248bf8314b24bc0d4ce4469db9803908dfb46a5b0ab2df",
+      "symbol": "USO",
+      "kind": "minute",
+      "runId": "market-4d83d029-4e03-4f4c-a02a-9db888dc077d",
+      "rows": 780,
+      "preparedSha256": "9a6cd6de0436b991f5dec4a96197ed9fe7d702392be022c09c20de8527e5a6d4",
+      "sourceSha256": "305262ec52e195f2bc6e27e2ba1dc90d6e57239b3067efefec2036f4cc2f8233",
+      "sourceUrl": "https://api.tiingo.com/iex/USO/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84322,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "2372645eb3fdefbb03248bf8314b24bc0d4ce4469db9803908dfb46a5b0ab2df",
+      "symbol": "USO",
+      "kind": "fiveMinute",
+      "runId": "market-fa9495a0-f803-48a8-b922-ff88d64cbf5a",
+      "rows": 156,
+      "preparedSha256": "2c495a94f8e4ff3399ca2362cfa1683ca2d75b48c03a4cd25334465cadb18696",
+      "sourceSha256": "305262ec52e195f2bc6e27e2ba1dc90d6e57239b3067efefec2036f4cc2f8233",
+      "sourceUrl": "https://api.tiingo.com/iex/USO/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84322,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "8c6f85a915d9726bb9fc97bc891be595ff2565818dca903ff4c8296f6a60dc79",
+      "symbol": "AAPL",
+      "kind": "minute",
+      "runId": "market-b59aedd9-6315-4ba1-b82c-2788d34f0062",
+      "rows": 780,
+      "preparedSha256": "b7eb8a8a688b9fc1894a3c5cf3a226f6b69fff87ae03f6bdda5b516faa1b5f7b",
+      "sourceSha256": "0cb710055d238ad7f742fa106981f24b3621ad000caad90bec49774655fe2198",
+      "sourceUrl": "https://api.tiingo.com/iex/AAPL/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85252,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "8c6f85a915d9726bb9fc97bc891be595ff2565818dca903ff4c8296f6a60dc79",
+      "symbol": "AAPL",
+      "kind": "fiveMinute",
+      "runId": "market-ee5d2bb6-17a4-4e76-9d3d-e7f104f83e86",
+      "rows": 156,
+      "preparedSha256": "53251dcd9cf6d7668895d5979f1b948f3aa03339c4a28ef05570bddf84294f8a",
+      "sourceSha256": "0cb710055d238ad7f742fa106981f24b3621ad000caad90bec49774655fe2198",
+      "sourceUrl": "https://api.tiingo.com/iex/AAPL/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85252,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "5a36d4769069aac0f88195b97799551ba341d34995949c956960c8a665e1f618",
+      "symbol": "MSFT",
+      "kind": "minute",
+      "runId": "market-1a0cbe69-e371-458d-a86f-e5dd25be984b",
+      "rows": 780,
+      "preparedSha256": "0710dbe61cc2c7b4e4c08ae04a2d4fc17375468930c86f3af4d8a7bd1a17f6d8",
+      "sourceSha256": "f8575ec4a71415927cf7357166fbfd5dbcf960b579df1729790bbde789a39f1b",
+      "sourceUrl": "https://api.tiingo.com/iex/MSFT/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84715,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "5a36d4769069aac0f88195b97799551ba341d34995949c956960c8a665e1f618",
+      "symbol": "MSFT",
+      "kind": "fiveMinute",
+      "runId": "market-14c07c7c-25b7-44ea-bc3b-85dfea0c316a",
+      "rows": 156,
+      "preparedSha256": "b2851e61bcbf6009acadce013de142ef9225febc4d52cdd37dd1938bef5c11a0",
+      "sourceSha256": "f8575ec4a71415927cf7357166fbfd5dbcf960b579df1729790bbde789a39f1b",
+      "sourceUrl": "https://api.tiingo.com/iex/MSFT/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84715,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "1fb0be3473f0b3f3c31175d9751d6f4d88aaa1d07fe5a4822da5ad534e8d9c56",
+      "symbol": "NVDA",
+      "kind": "minute",
+      "runId": "market-6b0f3fd6-b68d-482c-9d7f-5bb32078b436",
+      "rows": 780,
+      "preparedSha256": "ec4b31477404cf6f1245fc7ac9e212391ef0b98922a932e8e72abc46359a3ae0",
+      "sourceSha256": "8a9a11d4556a770b38637183ebb86b7f1cabfe02ee5acf07a2bf50b3c5b0df90",
+      "sourceUrl": "https://api.tiingo.com/iex/NVDA/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85835,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "1fb0be3473f0b3f3c31175d9751d6f4d88aaa1d07fe5a4822da5ad534e8d9c56",
+      "symbol": "NVDA",
+      "kind": "fiveMinute",
+      "runId": "market-f3be4833-fa8b-483a-8ca1-cc88536ac42a",
+      "rows": 156,
+      "preparedSha256": "f438d67c76e4cc6d1e89327f637e092e52f777d61071be26ca5c1245abcb80da",
+      "sourceSha256": "8a9a11d4556a770b38637183ebb86b7f1cabfe02ee5acf07a2bf50b3c5b0df90",
+      "sourceUrl": "https://api.tiingo.com/iex/NVDA/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85835,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "fbb6bd39ab6c235550023c1dd477492f906e3a8860808dff90c8ba7e5e0fe39e",
+      "symbol": "AMZN",
+      "kind": "minute",
+      "runId": "market-ac9e84bf-a184-4dcf-8f41-ae080c9d760c",
+      "rows": 780,
+      "preparedSha256": "7789c0085f74d9b191890b10135942ca61fdcb8fcd82c3cd14174a3495c81251",
+      "sourceSha256": "f4ae52775af2a8c3d7066090c6fd365e4a8cdf7e7c14a90962a6be9dafc57239",
+      "sourceUrl": "https://api.tiingo.com/iex/AMZN/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85399,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "fbb6bd39ab6c235550023c1dd477492f906e3a8860808dff90c8ba7e5e0fe39e",
+      "symbol": "AMZN",
+      "kind": "fiveMinute",
+      "runId": "market-a4dc8be7-7e75-4d31-be39-417fcf8d3fc0",
+      "rows": 156,
+      "preparedSha256": "07fed9652300c5ef79b5a7d2161ffe1b1a390311a305417ffe52916f91b99895",
+      "sourceSha256": "f4ae52775af2a8c3d7066090c6fd365e4a8cdf7e7c14a90962a6be9dafc57239",
+      "sourceUrl": "https://api.tiingo.com/iex/AMZN/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85399,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "2a6bedb4d42908b3c8f413e1e6e3eabf6b7fd1f2e73727a9b89b7b8b21231419",
+      "symbol": "GOOGL",
+      "kind": "minute",
+      "runId": "market-0244f124-ac81-476b-80fa-abeed0fe22f2",
+      "rows": 780,
+      "preparedSha256": "c89aadc90a71f32fc0e8b1ffe44f398fe58257240d81aef8ca4d4700e0d831e6",
+      "sourceSha256": "2bcef06a631ce31b2b9cc2d83c2750080854481889cfc1ab1e310a7219f686bc",
+      "sourceUrl": "https://api.tiingo.com/iex/GOOGL/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84968,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "2a6bedb4d42908b3c8f413e1e6e3eabf6b7fd1f2e73727a9b89b7b8b21231419",
+      "symbol": "GOOGL",
+      "kind": "fiveMinute",
+      "runId": "market-c2da1de8-54f3-4b8c-bec7-207e7e5452d6",
+      "rows": 156,
+      "preparedSha256": "146f5eea296be253352f193fd9164d89fefbcd556d034c063ea4859ce8d3eb27",
+      "sourceSha256": "2bcef06a631ce31b2b9cc2d83c2750080854481889cfc1ab1e310a7219f686bc",
+      "sourceUrl": "https://api.tiingo.com/iex/GOOGL/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84968,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "55a979bde3d4ecdcc6811a8caeed6c3810fd2249293c7b669e0fc10b0897a3c0",
+      "symbol": "META",
+      "kind": "minute",
+      "runId": "market-39331b0d-055a-4bc3-87c9-0c0ae4a258c1",
+      "rows": 780,
+      "preparedSha256": "66ca1d1b9800d91e4c5f5889e0c72069aea00029ef0c43b77dec139e546cef96",
+      "sourceSha256": "f43794e4eacdb6508c7dde4f81497f6c696878f5b3f1a26d761f9138d10e21df",
+      "sourceUrl": "https://api.tiingo.com/iex/META/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84606,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "55a979bde3d4ecdcc6811a8caeed6c3810fd2249293c7b669e0fc10b0897a3c0",
+      "symbol": "META",
+      "kind": "fiveMinute",
+      "runId": "market-d54e9235-db99-4ad9-9328-fc56479efdda",
+      "rows": 156,
+      "preparedSha256": "209c13866dea1bb31725f08bfcdd7159f984a6afa30df9f630156ba7d36cf183",
+      "sourceSha256": "f43794e4eacdb6508c7dde4f81497f6c696878f5b3f1a26d761f9138d10e21df",
+      "sourceUrl": "https://api.tiingo.com/iex/META/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84606,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "c5a73275a7a98ed1ecae90f92ba5f86554a5d3e70a76786ff6a9fc6992807755",
+      "symbol": "TSLA",
+      "kind": "minute",
+      "runId": "market-84b5dec7-8f78-4d9e-8adb-36a351075136",
+      "rows": 780,
+      "preparedSha256": "9914335f2d36c02679ed913578d5ce05c507d537f9a35ba69aa2068d44aef90b",
+      "sourceSha256": "9c5b8a2e4dad739da0397448b1d8c2b2ab92f57acaec148fb023a87b2a21d022",
+      "sourceUrl": "https://api.tiingo.com/iex/TSLA/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84774,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "c5a73275a7a98ed1ecae90f92ba5f86554a5d3e70a76786ff6a9fc6992807755",
+      "symbol": "TSLA",
+      "kind": "fiveMinute",
+      "runId": "market-d98e1315-99cb-4254-86e1-ad51fe1c48ee",
+      "rows": 156,
+      "preparedSha256": "657a95c830e203daa93f97ae73bb65e1a0e314087881c2d2288cf802d231017e",
+      "sourceSha256": "9c5b8a2e4dad739da0397448b1d8c2b2ab92f57acaec148fb023a87b2a21d022",
+      "sourceUrl": "https://api.tiingo.com/iex/TSLA/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84774,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "4059e08876d2d0da01671bcfa7bd8488888023cc86ae51daa7205f61aa36547b",
+      "symbol": "AVGO",
+      "kind": "minute",
+      "runId": "market-1ebc9213-b07a-44cf-93ac-9b225b7ffaa5",
+      "rows": 780,
+      "preparedSha256": "1c8da42da1e19f3a63aaf832a60a1f190705ece0d851d1681da94f6f65deb1ec",
+      "sourceSha256": "ba52a46f59bc9a7aeb702b1eb34daf9667546db65a34d6537af405301414e048",
+      "sourceUrl": "https://api.tiingo.com/iex/AVGO/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84578,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "4059e08876d2d0da01671bcfa7bd8488888023cc86ae51daa7205f61aa36547b",
+      "symbol": "AVGO",
+      "kind": "fiveMinute",
+      "runId": "market-c3f54262-9ea3-4236-9e3c-dfbfbbe59770",
+      "rows": 156,
+      "preparedSha256": "f70c45306624c88be6852faead6756fdad44ceb68a99b2b2270e6cb0ef63fa43",
+      "sourceSha256": "ba52a46f59bc9a7aeb702b1eb34daf9667546db65a34d6537af405301414e048",
+      "sourceUrl": "https://api.tiingo.com/iex/AVGO/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 84578,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "99f6866228de14f31888a65a66e049dd8aebea702e65151c9adeac7315714c19",
+      "symbol": "JPM",
+      "kind": "minute",
+      "runId": "market-3145ccd5-a4ee-4dea-b45e-4eb6dcf5b53c",
+      "rows": 780,
+      "preparedSha256": "4cbe8383384bef42b398bc11de5a394b3461bd88705676c7f8d7698d5745116c",
+      "sourceSha256": "ffeb52dad298fe8d3be3aa7cae84bb05dd2110a5fee809a93e21ce1b0a65c76a",
+      "sourceUrl": "https://api.tiingo.com/iex/JPM/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 83940,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "99f6866228de14f31888a65a66e049dd8aebea702e65151c9adeac7315714c19",
+      "symbol": "JPM",
+      "kind": "fiveMinute",
+      "runId": "market-ade1e60b-27b9-4a5a-93b5-1221a348c750",
+      "rows": 156,
+      "preparedSha256": "b165225b082518d2dd4227ac5d5d0ca96a950ea832a92d67b64768a4c971905f",
+      "sourceSha256": "ffeb52dad298fe8d3be3aa7cae84bb05dd2110a5fee809a93e21ce1b0a65c76a",
+      "sourceUrl": "https://api.tiingo.com/iex/JPM/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 83940,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "ec5a160b69a29c92807a9917c94a072c0836468a026c288833498fefa156937a",
+      "symbol": "WMT",
+      "kind": "minute",
+      "runId": "market-afb3d99d-3ada-4a11-93da-4b997499ba49",
+      "rows": 780,
+      "preparedSha256": "41d8092e3b7685fc213369ebebf4466bcc8d37995a1abcd0a4b525c3a8f0ea10",
+      "sourceSha256": "3d01141812991b72ca12dfa6b00ab4642067c077741fc210f200a39855a3b2d5",
+      "sourceUrl": "https://api.tiingo.com/iex/WMT/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85350,
+      "allSourcePreparedNativeFieldsExact": true
+    },
+    {
+      "task": "ec5a160b69a29c92807a9917c94a072c0836468a026c288833498fefa156937a",
+      "symbol": "WMT",
+      "kind": "fiveMinute",
+      "runId": "market-c557a349-69a4-41ec-89b8-e434864051cf",
+      "rows": 156,
+      "preparedSha256": "361da298d3dd281998c4334fd6111d47972494d98f6a30215c714c6bd5e4c05d",
+      "sourceSha256": "3d01141812991b72ca12dfa6b00ab4642067c077741fc210f200a39855a3b2d5",
+      "sourceUrl": "https://api.tiingo.com/iex/WMT/prices?startDate=2026-10-22&endDate=2026-10-23&resampleFreq=1min&columns=open,high,low,close,volume",
+      "sourceBytes": 85350,
+      "allSourcePreparedNativeFieldsExact": true
+    }
+  ],
+  "wal": {
+    "crypto_data_gap_events": {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "crypto_ohlcv": {
+      "name": "crypto_ohlcv",
+      "writerTxn": 582,
+      "sequencerTxn": 582,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_equity_daily": {
+      "name": "us_equity_daily",
+      "writerTxn": 4179,
+      "sequencerTxn": 4179,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_etf_equity_holdings": {
+      "name": "us_etf_equity_holdings",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_index_daily": {
+      "name": "us_index_daily",
+      "writerTxn": 3,
+      "sequencerTxn": 3,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_market_daily": {
+      "name": "us_market_daily",
+      "writerTxn": 15,
+      "sequencerTxn": 15,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_nasdaq_itch_messages": {
+      "name": "us_nasdaq_itch_messages",
+      "writerTxn": 131,
+      "sequencerTxn": 131,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_security_history_catalog": {
+      "name": "us_security_history_catalog",
+      "writerTxn": 11,
+      "sequencerTxn": 11,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_security_identifiers": {
+      "name": "us_security_identifiers",
+      "writerTxn": 35,
+      "sequencerTxn": 35,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_security_universe": {
+      "name": "us_security_universe",
+      "writerTxn": 15,
+      "sequencerTxn": 15,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "us_equity_intraday": {
+      "name": "us_equity_intraday",
+      "writerTxn": 507,
+      "sequencerTxn": 507,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    }
+  },
+  "queries": {
+    "path": "tools/sql/us-core-incremental-20261023-reference.sql",
+    "checks": [
+      {
+        "query": 1,
+        "rows": 32,
+        "allFieldsPgwireHttpExact": true,
+        "rowsSha256": "2e929b147fc57cbc430d27fe0cfa5dcebd839f2e16f8ca0fdd1ac3416e8f75d3"
+      },
+      {
+        "query": 2,
+        "rows": 14976,
+        "allFieldsPgwireHttpExact": true,
+        "rowsSha256": "f77d2359d24f317aa2614044b8a0de39606258a77521f829d68142886532f741"
+      },
+      {
+        "query": 3,
+        "rows": 2,
+        "allFieldsPgwireHttpExact": true,
+        "rowsSha256": "4d42e1ba552e6bbe59678f48d8655e2ee9bc0ba08a1c540fab9da547b95afe7b"
+      }
+    ]
+  },
+  "limits": [
+    "IEX分钟量仅代表该场所，零量报价不证明该分钟有成交。",
+    "新范围只补缺失键，旧调整价不随新来源自动刷新；不同观察基准须分别使用。",
+    "当前仅支持已验证的2026年日历；未知年份停止。",
+    "原固定首批清单保留截止日；长尾、其他跨资产和完整历史身份未完成。",
+    "每日继续依赖Codex会话任务调度，不等同Windows无人登录服务。"
+  ],
+  "wholeMarketComplete": false
+}
