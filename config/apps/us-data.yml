@@ -14,7 +14,9 @@ app.market-data:
   cboe-requests-per-day: 8
   cboe-monthly-bytes: 67108864
   cboe-request-spacing-ms: 60000
-  # 官方 ITCH 仅续取明确前缀；这些是本地保守预算，不代表供应商或其他客户端余量。
+  # 首波只维护日线与小时线；ITCH 已归档退出，恢复须显式覆盖并检查原停止标记。
+  itch-enabled: false
+  # 原来源与预算保留作归档追溯，不表示自动恢复采集。
   itch-source-url: https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/S061226-v50.txt.gz
   itch-file-date: "2026-06-12"
   itch-sample-local-time: "09:31"

@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "frozenFor": "2026-10-30启动研究",
+  "initialCapital": 100000,
+  "cashReturn": 0,
+  "leverage": 1,
+  "fractionalUnits": true,
+  "etf": {
+    "assets": ["SPY", "QQQ", "IWM", "TLT", "GLD"],
+    "from": "2007-02-01",
+    "through": "2026-10-23",
+    "momentumSessions": 126,
+    "trendSessions": 200,
+    "positions": 2,
+    "feeBpsOneWay": 5,
+    "slippageBpsOneWay": 5,
+    "execution": "上一完整交易日及更早数据决策，下一交易日开盘；月末决策、月初执行",
+    "priceBasis": "同一冻结供应商的adj_open与adj_close；总收益近似，不重复加现金分红",
+    "quoteCurrency": "USD"
+  },
+  "btc": {
+    "from": "2020-09-01",
+    "through": "2026-10-24",
+    "trendDays": 200,
+    "feeBpsOneWay": 10,
+    "slippageBpsOneWay": 5,
+    "quoteCurrency": "USDT"
+  },
+  "commonCrypto": {
+    "from": "2022-05-02",
+    "through": "2026-10-25",
+    "exchange": "BINANCE",
+    "instrument": "SPOT",
+    "momentumDays": 90,
+    "trendDays": 200,
+    "weeklyExecution": "周一UTC00:00，以此前已结束日线决策；开盘成交为研究近似"
+  },
+  "costMultipliers": [0, 1, 2],
+  "terminalLiquidation": "在预先固定的末日收盘计入平仓成本",
+  "boundaryExecutionAssumption": "使用下一根开盘价并计入费用和滑点；未模拟处理延迟，不声称可在边界精确成交",
+  "holdout": {
+    "historicalClassification": "全部历史结果为开发回放；不能确认2024年以来未被看过，不称真正未见样本",
+    "descriptiveSplit": "2024-01-01",
+    "prospectiveUnseenFrom": "2026-10-30",
+    "prospectiveResultAvailable": false
+  },
+  "scope": "E0/E1/E2、B0/B1、H0/H1及同区间基准；无资金费策略、杠杆、分钟、盘口或ITCH"
+}

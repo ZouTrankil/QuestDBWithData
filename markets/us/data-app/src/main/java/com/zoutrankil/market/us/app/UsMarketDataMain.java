@@ -45,6 +45,10 @@ public final class UsMarketDataMain {
                     || options.putIfAbsent(args[i].substring(2), args[i + 1]) != null)
                 throw new IllegalArgumentException("参数必须成对且不能重复");
         var env = ProjectConfiguration.load("us-data");
+        // 在创建存储对象或读取原件前拦住退役入口，避免重建归档表或消耗来源预算。
+        if (Set.of("fetch-itch-prefix", "import-itch").contains(args[0])
+                && !env.getRequiredProperty("app.market-data.itch-enabled", Boolean.class))
+            throw new IllegalStateException("ITCH 已退出当前采集与研究范围；原归档和停止标记继续保留");
         var root = Path.of(env.getRequiredProperty("app.market-data.root"));
         var store =
                 new VerifiedMarketDataStore(

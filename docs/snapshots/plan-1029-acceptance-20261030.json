@@ -1,0 +1,752 @@
+{
+  "执行日期": "2026-10-30",
+  "范围": "1029计划T01—T10的库存检查与固定历史基线；T11未执行",
+  "数据库版本": "QuestDB 10.0.1",
+  "行情新增请求": 0,
+  "行情新增写入": 0,
+  "未见留出期通过": false,
+  "实盘通过": false,
+  "输入快照": {
+    "btc_funding-input": {
+      "sha256": "5c0f2c3264aeea8d555b95f9187c3f9c317a8a49c42f092730a9c8997515d613",
+      "rows": 7467,
+      "snapshot": {
+        "id": 3247,
+        "directoryName": "btc_funding~3247",
+        "table_min_timestamp": "2020-01-01T00:00:00.000000Z",
+        "table_max_timestamp": "2026-10-24T16:00:00.000000Z",
+        "table_row_count": 7467,
+        "writerTxn": 14,
+        "sequencerTxn": 14,
+        "suspended": false,
+        "bufferedTxnSize": 0
+      }
+    },
+    "btc_index_1h-input": {
+      "sha256": "6dd0e7ab519cf4699387145b93ce6f409f6a2c2c6b3cd92da04280a703b60466",
+      "rows": 59424,
+      "snapshot": {
+        "id": 3249,
+        "directoryName": "btc_index_1h~3249",
+        "table_min_timestamp": "2020-01-01T00:00:00.000000Z",
+        "table_max_timestamp": "2026-10-24T23:00:00.000000Z",
+        "table_row_count": 59424,
+        "writerTxn": 20,
+        "sequencerTxn": 20,
+        "suspended": false,
+        "bufferedTxnSize": 0
+      }
+    },
+    "btc_mark_1h-input": {
+      "sha256": "a6bc177f93d110d56b0a2bc1c5f00453b399b9d2ca26797c50c4ebebffa94920",
+      "rows": 59520,
+      "snapshot": {
+        "id": 3248,
+        "directoryName": "btc_mark_1h~3248",
+        "table_min_timestamp": "2020-01-01T00:00:00.000000Z",
+        "table_max_timestamp": "2026-10-24T23:00:00.000000Z",
+        "table_row_count": 59520,
+        "writerTxn": 20,
+        "sequencerTxn": 20,
+        "suspended": false,
+        "bufferedTxnSize": 0
+      }
+    },
+    "btc_perp_1h-input": {
+      "sha256": "670db06b8291fc41252715aeb90fbc863e12b49fc043263b0e3b7966b5e6ecea",
+      "rows": 59736,
+      "snapshot": {
+        "id": 3246,
+        "directoryName": "btc_perp_1h~3246",
+        "table_min_timestamp": "2020-01-01T00:00:00.000000Z",
+        "table_max_timestamp": "2026-10-24T23:00:00.000000Z",
+        "table_row_count": 59736,
+        "writerTxn": 20,
+        "sequencerTxn": 20,
+        "suspended": false,
+        "bufferedTxnSize": 0
+      }
+    },
+    "btc_spot_1d-input": {
+      "sha256": "f8803cc95f19670f82b138209e78144461197add9feef4ad1f908aea44582ad7",
+      "rows": 2489,
+      "snapshot": {
+        "id": 3244,
+        "directoryName": "btc_spot_1d~3244",
+        "table_min_timestamp": "2020-01-01T00:00:00.000000Z",
+        "table_max_timestamp": "2026-10-24T00:00:00.000000Z",
+        "table_row_count": 2489,
+        "writerTxn": 17,
+        "sequencerTxn": 17,
+        "suspended": false,
+        "bufferedTxnSize": 0
+      }
+    },
+    "btc_spot_1h-input": {
+      "sha256": "7ac0e6adc6c9679bc95c92d667879f61063f39f1fc09396805fab883041336a4",
+      "rows": 59680,
+      "snapshot": {
+        "id": 3245,
+        "directoryName": "btc_spot_1h~3245",
+        "table_min_timestamp": "2020-01-01T00:00:00.000000Z",
+        "table_max_timestamp": "2026-10-23T23:00:00.000000Z",
+        "table_row_count": 59680,
+        "writerTxn": 20,
+        "sequencerTxn": 20,
+        "suspended": false,
+        "bufferedTxnSize": 0
+      }
+    },
+    "crypto_ohlcv-input": {
+      "sha256": "e725341a98730d10db07b6e7d09b2bc0ff2463681cfa5ba8ce43138977368d8c",
+      "rows": 370198,
+      "snapshot": {
+        "id": 3268,
+        "directoryName": "crypto_ohlcv~3268",
+        "table_min_timestamp": "2021-10-01T00:00:00.000000Z",
+        "table_max_timestamp": "2026-10-25T23:00:00.000000Z",
+        "table_row_count": 370198,
+        "writerTxn": 2,
+        "sequencerTxn": 2,
+        "suspended": false,
+        "bufferedTxnSize": 0
+      }
+    },
+    "us_equity_daily-input": {
+      "sha256": "0a5580f1768d6fde2c30bed0165483998f403ad0c6aa44fcab91414d4cc4dcea",
+      "rows": 80054,
+      "snapshot": {
+        "id": 3267,
+        "directoryName": "us_equity_daily~3267",
+        "table_min_timestamp": "2006-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-10-23T00:00:00.000000Z",
+        "table_row_count": 45584758,
+        "writerTxn": 2,
+        "sequencerTxn": 2,
+        "suspended": false,
+        "bufferedTxnSize": 0
+      }
+    }
+  },
+  "WAL迁移": {
+    "us_equity_daily": {
+      "旧ID": 3205,
+      "新ID": 3267,
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "全部数据文件核对": true,
+      "旧Native保持": true
+    },
+    "crypto_ohlcv": {
+      "旧ID": 3207,
+      "新ID": 3268,
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "全部数据文件核对": true,
+      "旧Native保持": true
+    }
+  },
+  "ITCH": {
+    "归档行数": 450836,
+    "物理文件": 47,
+    "物理压缩包字节数": 15916929,
+    "物理压缩包SHA256": "1321a0168663cbae62547479697b303318422608935282d472e32d522c20e91e",
+    "十六列逻辑导出SHA256": "08f921c2541b1e9b61a26363a073cb65e7614a1f60bed666d837884c27c67a22",
+    "正式表已退出": true,
+    "默认入口禁用": true,
+    "整数纳秒已核对": true
+  },
+  "核心日线": {
+    "全部标的": 16,
+    "ETF行数": 31343,
+    "全部核心行数": 80054,
+    "逐日期无缺失": true,
+    "二十列双协议及原Native通过": true,
+    "公司行动通过": true,
+    "截至": "2026-10-23"
+  },
+  "跨资产币价": {
+    "产品数": 8,
+    "分组数": 16,
+    "总行数": 370198,
+    "全部十三列原文及Native通过": true,
+    "截至UTC": "2026-10-25",
+    "官方停市缺根": 2
+  },
+  "原生BTC": {
+    "总行数": 248316,
+    "日线快照可做基线": true,
+    "多表完整": false,
+    "小时线缺口": {
+      "spot_1h": 32,
+      "mark_1h": 216,
+      "index_1h": 312
+    },
+    "现货短小时线": 7,
+    "未知资金费周期": 72,
+    "当前本地原ZIP及Native未找到": true
+  },
+  "实验": {
+    "runId": "b9c9508e5458f19541785b1fa6b36b26dbe21938dd766d09f5c571b22319c8d5",
+    "manifestSHA256": "64be6ad95228ac52088dbadc01f23852fbf606cef31c55af69fdd0b052f915d4",
+    "实验及基准数": 14,
+    "成本版本数": 42,
+    "历史运行保留": 2,
+    "配置SHA256": "73ab41bed08a29dcf6c953971a51050aaa183ab33428d7bba5d764468981b92a",
+    "重复运行复用": true,
+    "基础成本结果": [
+      {
+        "experiment": "E0",
+        "fromDate": "2007-02-01",
+        "throughDate": "2026-10-23",
+        "quoteCurrency": "USD",
+        "annualReturn": 0.10232094766797828,
+        "maxDrawdown": -0.3164359302256091,
+        "sharpe": 0.8219618012998955,
+        "tradeCount": 1190,
+        "cost": 2623.002989346885,
+        "days": 4964
+      },
+      {
+        "experiment": "E1",
+        "fromDate": "2007-02-01",
+        "throughDate": "2026-10-23",
+        "quoteCurrency": "USD",
+        "annualReturn": 0.10734678019556565,
+        "maxDrawdown": -0.31351267059297416,
+        "sharpe": 0.7180521733472888,
+        "tradeCount": 584,
+        "cost": 33383.97697678255,
+        "days": 4964
+      },
+      {
+        "experiment": "E2",
+        "fromDate": "2007-02-01",
+        "throughDate": "2026-10-23",
+        "quoteCurrency": "USD",
+        "annualReturn": 0.09532864193774437,
+        "maxDrawdown": -0.35198821122997415,
+        "sharpe": 0.6945087227164959,
+        "tradeCount": 546,
+        "cost": 29087.520551032976,
+        "days": 4964
+      },
+      {
+        "experiment": "SPY_BH",
+        "fromDate": "2007-02-01",
+        "throughDate": "2026-10-23",
+        "quoteCurrency": "USD",
+        "annualReturn": 0.1080512438407446,
+        "maxDrawdown": -0.5520110457214169,
+        "sharpe": 0.6225610738810403,
+        "tradeCount": 2,
+        "cost": 855.3275121437042,
+        "days": 4964
+      },
+      {
+        "experiment": "ETF_CASH",
+        "fromDate": "2007-02-01",
+        "throughDate": "2026-10-23",
+        "quoteCurrency": "USD",
+        "annualReturn": 0.0,
+        "maxDrawdown": 0.0,
+        "sharpe": 0.0,
+        "tradeCount": 0,
+        "cost": 0.0,
+        "days": 4964
+      },
+      {
+        "experiment": "B0",
+        "fromDate": "2020-09-01",
+        "throughDate": "2026-10-24",
+        "quoteCurrency": "USDT",
+        "annualReturn": 0.36966630231615194,
+        "maxDrawdown": -0.7662925431645935,
+        "sharpe": 0.8363302641266671,
+        "tradeCount": 2,
+        "cost": 1189.7376549688959,
+        "days": 2245
+      },
+      {
+        "experiment": "B1",
+        "fromDate": "2020-09-01",
+        "throughDate": "2026-10-24",
+        "quoteCurrency": "USDT",
+        "annualReturn": 0.3559875409370252,
+        "maxDrawdown": -0.643686924367362,
+        "sharpe": 0.9272628423489551,
+        "tradeCount": 54,
+        "cost": 32782.75430131976,
+        "days": 2245
+      },
+      {
+        "experiment": "BTC_CASH",
+        "fromDate": "2020-09-01",
+        "throughDate": "2026-10-24",
+        "quoteCurrency": "USDT",
+        "annualReturn": 0.0,
+        "maxDrawdown": 0.0,
+        "sharpe": 0.0,
+        "tradeCount": 0,
+        "cost": 0.0,
+        "days": 2245
+      },
+      {
+        "experiment": "H0_ETH_BH",
+        "fromDate": "2022-05-02",
+        "throughDate": "2026-10-25",
+        "quoteCurrency": "USDT",
+        "annualReturn": -0.042655967568178244,
+        "maxDrawdown": -0.6755345017766713,
+        "sharpe": 0.2739961482163345,
+        "tradeCount": 2,
+        "cost": 273.3082699717353,
+        "days": 1638
+      },
+      {
+        "experiment": "H0",
+        "fromDate": "2022-05-02",
+        "throughDate": "2026-10-25",
+        "quoteCurrency": "USDT",
+        "annualReturn": 0.19379672227359435,
+        "maxDrawdown": -0.3846865789664744,
+        "sharpe": 0.6366876839650408,
+        "tradeCount": 26,
+        "cost": 7385.605036671677,
+        "days": 1638
+      },
+      {
+        "experiment": "H1",
+        "fromDate": "2022-05-02",
+        "throughDate": "2026-10-25",
+        "quoteCurrency": "USDT",
+        "annualReturn": 0.08019456127384039,
+        "maxDrawdown": -0.6900901769137915,
+        "sharpe": 0.41853410826418075,
+        "tradeCount": 50,
+        "cost": 6849.771903116215,
+        "days": 1638
+      },
+      {
+        "experiment": "H1_EQUAL",
+        "fromDate": "2022-05-02",
+        "throughDate": "2026-10-25",
+        "quoteCurrency": "USDT",
+        "annualReturn": 0.0797832746864735,
+        "maxDrawdown": -0.6076219971088026,
+        "sharpe": 0.4176824543738986,
+        "tradeCount": 470,
+        "cost": 1195.7842324313667,
+        "days": 1638
+      },
+      {
+        "experiment": "COMMON_BTC_BH",
+        "fromDate": "2022-05-02",
+        "throughDate": "2026-10-25",
+        "quoteCurrency": "USDT",
+        "annualReturn": 0.17693825102169103,
+        "maxDrawdown": -0.6023862433862434,
+        "sharpe": 0.5771303168919072,
+        "tradeCount": 2,
+        "cost": 461.85281994447297,
+        "days": 1638
+      },
+      {
+        "experiment": "COMMON_BTC_TREND",
+        "fromDate": "2022-05-02",
+        "throughDate": "2026-10-25",
+        "quoteCurrency": "USDT",
+        "annualReturn": 0.3066900413028626,
+        "maxDrawdown": -0.31974174497997876,
+        "sharpe": 0.9447111712049461,
+        "tradeCount": 34,
+        "cost": 13181.55103168383,
+        "days": 1638
+      }
+    ],
+    "三档成本": [
+      {
+        "experiment": "E0",
+        "costMultiplier": 0,
+        "annualReturn": 0.10281985380224556,
+        "maxDrawdown": -0.31604032814086236,
+        "sharpe": 0.8255003829407428,
+        "cost": 0.0
+      },
+      {
+        "experiment": "E0",
+        "costMultiplier": 1,
+        "annualReturn": 0.10232094766797828,
+        "maxDrawdown": -0.3164359302256091,
+        "sharpe": 0.8219618012998955,
+        "cost": 2623.002989346885
+      },
+      {
+        "experiment": "E0",
+        "costMultiplier": 2,
+        "annualReturn": 0.1018222438854337,
+        "maxDrawdown": -0.3168312653187805,
+        "sharpe": 0.8184185152796694,
+        "cost": 5214.635861007747
+      },
+      {
+        "experiment": "E1",
+        "costMultiplier": 0,
+        "annualReturn": 0.11370949993506962,
+        "maxDrawdown": -0.30375989691264993,
+        "sharpe": 0.7537871496479893,
+        "cost": 0.0
+      },
+      {
+        "experiment": "E1",
+        "costMultiplier": 1,
+        "annualReturn": 0.10734678019556565,
+        "maxDrawdown": -0.31351267059297416,
+        "sharpe": 0.7180521733472888,
+        "cost": 33383.97697678255
+      },
+      {
+        "experiment": "E1",
+        "costMultiplier": 2,
+        "annualReturn": 0.10101712716156852,
+        "maxDrawdown": -0.32313155725923215,
+        "sharpe": 0.6821428314095462,
+        "cost": 62087.59620449817
+      },
+      {
+        "experiment": "E2",
+        "costMultiplier": 0,
+        "annualReturn": 0.10165226398394767,
+        "maxDrawdown": -0.34280349135011257,
+        "sharpe": 0.7336770651510114,
+        "cost": 0.0
+      },
+      {
+        "experiment": "E2",
+        "costMultiplier": 1,
+        "annualReturn": 0.09532864193774437,
+        "maxDrawdown": -0.35198821122997415,
+        "sharpe": 0.6945087227164959,
+        "cost": 29087.520551032976
+      },
+      {
+        "experiment": "E2",
+        "costMultiplier": 2,
+        "annualReturn": 0.08903838213284243,
+        "maxDrawdown": -0.3610452068042749,
+        "sharpe": 0.6551503465339578,
+        "cost": 54234.60207093626
+      },
+      {
+        "experiment": "SPY_BH",
+        "costMultiplier": 0,
+        "annualReturn": 0.108163751166374,
+        "maxDrawdown": -0.552011045721417,
+        "sharpe": 0.6230826880015824,
+        "cost": 0.0
+      },
+      {
+        "experiment": "SPY_BH",
+        "costMultiplier": 1,
+        "annualReturn": 0.1080512438407446,
+        "maxDrawdown": -0.5520110457214169,
+        "sharpe": 0.6225610738810403,
+        "cost": 855.3275121437042
+      },
+      {
+        "experiment": "SPY_BH",
+        "costMultiplier": 2,
+        "annualReturn": 0.10793874771254375,
+        "maxDrawdown": -0.5520110457214169,
+        "sharpe": 0.6220383375838467,
+        "cost": 1708.9477837442603
+      },
+      {
+        "experiment": "ETF_CASH",
+        "costMultiplier": 0,
+        "annualReturn": 0.0,
+        "maxDrawdown": 0.0,
+        "sharpe": 0.0,
+        "cost": 0.0
+      },
+      {
+        "experiment": "ETF_CASH",
+        "costMultiplier": 1,
+        "annualReturn": 0.0,
+        "maxDrawdown": 0.0,
+        "sharpe": 0.0,
+        "cost": 0.0
+      },
+      {
+        "experiment": "ETF_CASH",
+        "costMultiplier": 2,
+        "annualReturn": 0.0,
+        "maxDrawdown": 0.0,
+        "sharpe": 0.0,
+        "cost": 0.0
+      },
+      {
+        "experiment": "B0",
+        "costMultiplier": 0,
+        "annualReturn": 0.37033452126772537,
+        "maxDrawdown": -0.7662925431645935,
+        "sharpe": 0.837182935870297,
+        "cost": 0.0
+      },
+      {
+        "experiment": "B0",
+        "costMultiplier": 1,
+        "annualReturn": 0.36966630231615194,
+        "maxDrawdown": -0.7662925431645935,
+        "sharpe": 0.8363302641266671,
+        "cost": 1189.7376549688959
+      },
+      {
+        "experiment": "B0",
+        "costMultiplier": 2,
+        "annualReturn": 0.3689984062047633,
+        "maxDrawdown": -0.7662925431645935,
+        "sharpe": 0.8354769302667918,
+        "cost": 2375.9167725855027
+      },
+      {
+        "experiment": "B1",
+        "costMultiplier": 0,
+        "annualReturn": 0.37396301583439695,
+        "maxDrawdown": -0.6333854892124218,
+        "sharpe": 0.9582266609627336,
+        "cost": 0.0
+      },
+      {
+        "experiment": "B1",
+        "costMultiplier": 1,
+        "annualReturn": 0.3559875409370252,
+        "maxDrawdown": -0.643686924367362,
+        "sharpe": 0.9272628423489551,
+        "cost": 32782.75430131976
+      },
+      {
+        "experiment": "B1",
+        "costMultiplier": 2,
+        "annualReturn": 0.3382471587827365,
+        "maxDrawdown": -0.6536997249452818,
+        "sharpe": 0.8962505596109417,
+        "cost": 62480.142947326836
+      },
+      {
+        "experiment": "BTC_CASH",
+        "costMultiplier": 0,
+        "annualReturn": 0.0,
+        "maxDrawdown": 0.0,
+        "sharpe": 0.0,
+        "cost": 0.0
+      },
+      {
+        "experiment": "BTC_CASH",
+        "costMultiplier": 1,
+        "annualReturn": 0.0,
+        "maxDrawdown": 0.0,
+        "sharpe": 0.0,
+        "cost": 0.0
+      },
+      {
+        "experiment": "BTC_CASH",
+        "costMultiplier": 2,
+        "annualReturn": 0.0,
+        "maxDrawdown": 0.0,
+        "sharpe": 0.0,
+        "cost": 0.0
+      },
+      {
+        "experiment": "H0_ETH_BH",
+        "costMultiplier": 0,
+        "annualReturn": -0.04201577039425075,
+        "maxDrawdown": -0.6755345017766712,
+        "sharpe": 0.27497892763828613,
+        "cost": 0.0
+      },
+      {
+        "experiment": "H0_ETH_BH",
+        "costMultiplier": 1,
+        "annualReturn": -0.042655967568178244,
+        "maxDrawdown": -0.6755345017766713,
+        "sharpe": 0.2739961482163345,
+        "cost": 273.3082699717353
+      },
+      {
+        "experiment": "H0_ETH_BH",
+        "costMultiplier": 2,
+        "annualReturn": -0.043295739792132304,
+        "maxDrawdown": -0.6755345017766713,
+        "sharpe": 0.2730142632406237,
+        "cost": 545.7990675508621
+      },
+      {
+        "experiment": "H0",
+        "costMultiplier": 0,
+        "annualReturn": 0.2042166033643824,
+        "maxDrawdown": -0.3781910454317673,
+        "sharpe": 0.6580044759848899,
+        "cost": 0.0
+      },
+      {
+        "experiment": "H0",
+        "costMultiplier": 1,
+        "annualReturn": 0.19379672227359435,
+        "maxDrawdown": -0.3846865789664744,
+        "sharpe": 0.6366876839650408,
+        "cost": 7385.605036671677
+      },
+      {
+        "experiment": "H0",
+        "costMultiplier": 2,
+        "annualReturn": 0.18346695635696997,
+        "maxDrawdown": -0.39111565770536316,
+        "sharpe": 0.6153441306946731,
+        "cost": 14459.589638421921
+      },
+      {
+        "experiment": "H1",
+        "costMultiplier": 0,
+        "annualReturn": 0.09839897356097049,
+        "maxDrawdown": -0.6863488531842146,
+        "sharpe": 0.4482565788830909,
+        "cost": 0.0
+      },
+      {
+        "experiment": "H1",
+        "costMultiplier": 1,
+        "annualReturn": 0.08019456127384039,
+        "maxDrawdown": -0.6900901769137915,
+        "sharpe": 0.41853410826418075,
+        "cost": 6849.771903116215
+      },
+      {
+        "experiment": "H1",
+        "costMultiplier": 2,
+        "annualReturn": 0.062291781528279966,
+        "maxDrawdown": -0.6937868895620345,
+        "sharpe": 0.38883736064910857,
+        "cost": 13099.739885920008
+      },
+      {
+        "experiment": "H1_EQUAL",
+        "costMultiplier": 0,
+        "annualReturn": 0.08209177822661884,
+        "maxDrawdown": -0.607214684653558,
+        "sharpe": 0.4214803081309085,
+        "cost": 0.0
+      },
+      {
+        "experiment": "H1_EQUAL",
+        "costMultiplier": 1,
+        "annualReturn": 0.0797832746864735,
+        "maxDrawdown": -0.6076219971088026,
+        "sharpe": 0.4176824543738986,
+        "cost": 1195.7842324313667
+      },
+      {
+        "experiment": "H1_EQUAL",
+        "costMultiplier": 2,
+        "annualReturn": 0.07747960299616108,
+        "maxDrawdown": -0.6080289135835274,
+        "sharpe": 0.41388490046871157,
+        "cost": 2378.738009983909
+      },
+      {
+        "experiment": "COMMON_BTC_BH",
+        "costMultiplier": 0,
+        "annualReturn": 0.17772529571687468,
+        "maxDrawdown": -0.6023862433862434,
+        "sharpe": 0.5784879673418125,
+        "cost": 0.0
+      },
+      {
+        "experiment": "COMMON_BTC_BH",
+        "costMultiplier": 1,
+        "annualReturn": 0.17693825102169103,
+        "maxDrawdown": -0.6023862433862434,
+        "sharpe": 0.5771303168919072,
+        "cost": 461.85281994447297
+      },
+      {
+        "experiment": "COMMON_BTC_BH",
+        "costMultiplier": 2,
+        "annualReturn": 0.176151728750904,
+        "maxDrawdown": -0.6023862433862434,
+        "sharpe": 0.5757723878964618,
+        "cost": 922.3242256719811
+      },
+      {
+        "experiment": "COMMON_BTC_TREND",
+        "costMultiplier": 0,
+        "annualReturn": 0.32162459167569457,
+        "maxDrawdown": -0.31049520743677494,
+        "sharpe": 0.9774806087244133,
+        "cost": 0.0
+      },
+      {
+        "experiment": "COMMON_BTC_TREND",
+        "costMultiplier": 1,
+        "annualReturn": 0.3066900413028626,
+        "maxDrawdown": -0.31974174497997876,
+        "sharpe": 0.9447111712049461,
+        "cost": 13181.55103168383
+      },
+      {
+        "experiment": "COMMON_BTC_TREND",
+        "costMultiplier": 2,
+        "annualReturn": 0.2919241874558973,
+        "maxDrawdown": -0.32909669045282053,
+        "sharpe": 0.9118521374268065,
+        "cost": 25636.681245573665
+      }
+    ]
+  },
+  "验证": {
+    "美股入口测试": 60,
+    "研究定向测试": 10,
+    "架构与边界通过": true,
+    "发行包JAR": 47,
+    "运行期已冻结": true
+  },
+  "本机证据根目录": "var/plan-1029/20261030",
+  "证据SHA256": {
+    "backup-verified.json": "8298016941f9dbd374a9d0abe272d5ba246c097082c730ef5734b5ad0811ea96",
+    "repair-full-proof.json": "c1af5473c0ab4acb2f3b455431b5721b2624e8e5a53734807b523015c2a125a4",
+    "core-full-dual-protocol-proof.json": "509aa99ea0987fd371ee093d69dff8fbdac6944eb2288490c36bad66243efa4a",
+    "source-native-prepared-full-proof.json": "1191c25feec4fa64d435b6dc25cb9f5206149e0b529166182ca61885a4e81913",
+    "post-retirement-proof.json": "d6503b34b140e01228fdb3591a624d234d7032688994795644fd988f358bdde9",
+    "itch-retirement/archive-verified.json": "c43d3dba1c726ba9f16f905977df229ac10fb0346ec81e092ae6d164904d310d",
+    "itch-retirement/pgwire-full-proof.json": "f1e876d5324568a707b9429c187139616d3dc40803a40be1a885d3dbbf535c1f",
+    "itch-retirement/retired-verified.json": "e4b2b06d54324088cfa43a384ecd851136c7fb3dc6aa8fe84175265bc31941ee",
+    "runtime-us-plan1029-final.json": "9ceebedd015182fe28f8f9f528164e470328b9e4e5a9d22d7e5add483f63a586",
+    "experiment-consistency-proof.json": "1f6c4450836d133c040750e315e51ce790917a268e6861e7219c2d627c95755d",
+    "automation-updated-proof.json": "7620af1adf29bff54f262fc68ad097570cb22c687098ac91ea0471162634a805",
+    "inputs/audit.json": "490db3a1b9b97879596ea0abe43ca5fe5f5c0fbb7afed59ffe4290232fe13d2e",
+    "inputs/company-actions-verified.json": "08a07b2f025bce357c3ef95e2efb7f2004f4fcfcc56a1e804f67df0a3ad3321a",
+    "inputs/native-full-field-contract.json": "2d17d719d93b0dac251b272d6463b38d9f54d9c679f088eea2db5b12d54314ad",
+    "audit-final-equivalence.json": "d0a924de92db04341f44c9dd6c44ad237179d7b20a2428ea22137daa22721974",
+    "audit-replay-final/audit.json": "67c786105ef1377412e4a47cd55cef1ae5dd9f527ebf713f1dc2c044bc374c0b"
+  },
+  "自动任务": {
+    "原任务身份与每日调度保持": true,
+    "提示已更新为WAL新身份及ITCH退出": true
+  },
+  "限制": [
+    "原生BTC小时线、多表和资金费未知周期不算完整；原ZIP未在当前本地找到。",
+    "本轮使用固定库存末日，没有补齐至今天；美股分钟本轮不重新验收。",
+    "全部历史为开发回放，2024年起只作描述性分段；未证明历史PIT或实盘成交。",
+    "原全市场长尾与Yahoo旧OHLC异常继续保留，不因本次核心验收变更状态。"
+  ],
+  "本轮工具SHA256": {
+    "tools\\plan_1029_audit.py": "37e7e64ecfc81cbc18a4678364a0589e0978b37a81bebf5d6f09367c2e8bff95",
+    "tools\\plan_1029_backup.py": "639446b5ee24920b5be387afc72065c73fcbbb88effb14638b6cb3d2685e8051",
+    "tools\\plan_1029_itch_archive.py": "656f4057cf5c90a4f6d76c144466c4d1f361c5353134c482f8e9666b85712d82",
+    "tools\\plan_1029_research.py": "58bdb6741ae9443585c378d3db36ad97d1996b07ff1050a3f2798e03c3266cc9",
+    "tools\\Plan1029ItchRetirement.java": "adfc42c087bfd4be0c34fca6315520bab3e2cd86a3ac8a8ea151a3f6b3a63691",
+    "tools\\Plan1029WalMaintenance.java": "819676023e69149f8a1d12f6e95432e6d39bc46e64bdd2c9fe40841a42576e52",
+    "tools\\Plan1029WalResume.java": "44be521745bf45bef771131a725a75418bf90d24937cd5745a09e23c96a1e5d9",
+    "tools\\tests\\test_plan_1029_research.py": "e7191de73d53614412cdbdae05b0eb6b653c29f889d6c0b9b65b81bead97a8e9"
+  }
+}
