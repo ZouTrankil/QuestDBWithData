@@ -10,7 +10,7 @@
 
 2026-10-27 的写前 WAL 异常已于 10 月 30 日单独恢复，原异常现场保留。之后本轮通过新物理映射和旧字段门禁，再补齐 26—29 日；最终日线 WAL 为 `19/19`，币价为 `34/34`，均零缓冲、未挂起。每次继续前仍须实查，不把历史水位当作当前值。见[原异常留证](decisions/2026-10-27-核心增量写前WAL异常留证.md)、[本轮验收](decisions/2026-10-30-核心增量十月二十九日验收.md)。
 
-核心指数本轮新增 17 行：NASDAQCOM 和独立 CBOE VIX 到 10-29，FRED SP500、VIXCLS 到 10-28。每条来源仅请求一轮，29 日未提供的两条 FRED 缺口保留，不跨来源回填。见[指数清单](snapshots/us-core-macro-incremental-20261029.json)、[查询](../tools/sql/us-core-macro-incremental-20261029-reference.sql)。
+核心指数上轮新增 17 行后，本轮又补齐 FRED VIXCLS 的 10-29 一行。NASDAQCOM、VIXCLS 和独立 CBOE VIX 到 10-29，SP500 仍只提供到 10-28，29 日缺口保留。每条来源本轮仅请求一次，不跨来源回填。见[最新缺口清单](snapshots/us-core-fred-gap-20261031.json)、[查询](../tools/sql/us-core-fred-gap-20261031-reference.sql)及[验收](decisions/2026-10-31-FRED二十九日缺口跟进.md)；[上轮指数清单](snapshots/us-core-macro-incremental-20261029.json)保留当时截止日。
 
 固定 SPY/QQQ 持仓参照的 518 个价格路由已补到 10-29：本轮新增 2032 行，复用十只核心股票的 40 行，26—29 日共 2072 行。持仓参照日期仍为 10-16，原 5600 路首批清单保留原截止日，不冒充新持仓或官方历史指数成分。见[持仓增量清单](snapshots/us-core-holdings-incremental-20261029.json)、[查询](../tools/sql/us-core-holdings-incremental-20261029-reference.sql)。
 
