@@ -1,0 +1,3186 @@
+{
+  "acceptedAt": "2026-10-30T08:18:53.398646+00:00",
+  "fromDate": "2026-10-26",
+  "throughDate": "2026-10-29",
+  "说明": "仅为原核心范围的新日期验收；旧首批清单和历史实验截止日保持。",
+  "wholeMarketComplete": false,
+  "finalLiveProof": {
+    "path": "var/market-data/scope-review/core-incremental-v131-20261030/cross-asset-final-live-proof.json",
+    "sha256": "0ed5f0c67ccab5a0108a17e16c1339b219106c0ef8d9139e71aaaff1d6923286"
+  },
+  "限制": [
+    "不代表全市场或所有历史完整",
+    "ITCH 保持停用，原件和归档保留",
+    "旧来源失败和未决任务不重发、不解锁，旧预算不清零"
+  ],
+  "holdingsAsOf": "2026-10-16",
+  "holdingsRows": 604,
+  "priceRoutes": 518,
+  "fixedHoldingsSnapshot": {
+    "path": "docs/snapshots/us-equity-first-delivery-20261016.json",
+    "sha256": "e4e4b69969b80ee947047dc637412bd75a89b6a778cf76ba22917764933e0d03"
+  },
+  "routeProviderCounts": {
+    "YAHOO": 507,
+    "TIINGO": 11
+  },
+  "fetchedRoutes": 508,
+  "reusedCoreRoutes": 10,
+  "newRows": 2032,
+  "reusedCoreRows": 40,
+  "all518WindowRows": 2072,
+  "sourceRequests": 508,
+  "receivedBytes": 825003,
+  "newNativeRuns": 1,
+  "runId": "market-51d79253-a5bf-4351-932d-e435cbad7329",
+  "preparedSha256": "064cdeb7d507c82c6b12d315218ab2259ec6335e3afa91e994093c71291f54ed",
+  "sourceBundleSha256": "8d90a0195748cbcfd44555957b38b0ce2d6275bf4deebe72d4c59b8ecce986e8",
+  "all20FieldsRawJavaPreparedNativeHttpPgwireExact": true,
+  "allOldTypedNativeUnchanged": true,
+  "oldRowsVerified": 1248683,
+  "old20FieldsUnchanged": true,
+  "routes": [
+    {
+      "symbol": "A",
+      "price_symbol": "A",
+      "provider": "YAHOO",
+      "yahooSymbol": "A"
+    },
+    {
+      "symbol": "AAPL",
+      "price_symbol": "AAPL",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "ABBV",
+      "price_symbol": "ABBV",
+      "provider": "YAHOO",
+      "yahooSymbol": "ABBV"
+    },
+    {
+      "symbol": "ABNB",
+      "price_symbol": "ABNB",
+      "provider": "YAHOO",
+      "yahooSymbol": "ABNB"
+    },
+    {
+      "symbol": "ABT",
+      "price_symbol": "ABT",
+      "provider": "YAHOO",
+      "yahooSymbol": "ABT"
+    },
+    {
+      "symbol": "ACGL",
+      "price_symbol": "ACGL",
+      "provider": "YAHOO",
+      "yahooSymbol": "ACGL"
+    },
+    {
+      "symbol": "ACN",
+      "price_symbol": "ACN",
+      "provider": "YAHOO",
+      "yahooSymbol": "ACN"
+    },
+    {
+      "symbol": "ADBE",
+      "price_symbol": "ADBE",
+      "provider": "YAHOO",
+      "yahooSymbol": "ADBE"
+    },
+    {
+      "symbol": "ADI",
+      "price_symbol": "ADI",
+      "provider": "YAHOO",
+      "yahooSymbol": "ADI"
+    },
+    {
+      "symbol": "ADM",
+      "price_symbol": "ADM",
+      "provider": "YAHOO",
+      "yahooSymbol": "ADM"
+    },
+    {
+      "symbol": "ADP",
+      "price_symbol": "ADP",
+      "provider": "YAHOO",
+      "yahooSymbol": "ADP"
+    },
+    {
+      "symbol": "ADSK",
+      "price_symbol": "ADSK",
+      "provider": "YAHOO",
+      "yahooSymbol": "ADSK"
+    },
+    {
+      "symbol": "AEE",
+      "price_symbol": "AEE",
+      "provider": "YAHOO",
+      "yahooSymbol": "AEE"
+    },
+    {
+      "symbol": "AEP",
+      "price_symbol": "AEP",
+      "provider": "YAHOO",
+      "yahooSymbol": "AEP"
+    },
+    {
+      "symbol": "AES",
+      "price_symbol": "AES",
+      "provider": "YAHOO",
+      "yahooSymbol": "AES"
+    },
+    {
+      "symbol": "AFL",
+      "price_symbol": "AFL",
+      "provider": "YAHOO",
+      "yahooSymbol": "AFL"
+    },
+    {
+      "symbol": "AIG",
+      "price_symbol": "AIG",
+      "provider": "YAHOO",
+      "yahooSymbol": "AIG"
+    },
+    {
+      "symbol": "AIZ",
+      "price_symbol": "AIZ",
+      "provider": "YAHOO",
+      "yahooSymbol": "AIZ"
+    },
+    {
+      "symbol": "AJG",
+      "price_symbol": "AJG",
+      "provider": "YAHOO",
+      "yahooSymbol": "AJG"
+    },
+    {
+      "symbol": "AKAM",
+      "price_symbol": "AKAM",
+      "provider": "YAHOO",
+      "yahooSymbol": "AKAM"
+    },
+    {
+      "symbol": "ALAB",
+      "price_symbol": "ALAB",
+      "provider": "YAHOO",
+      "yahooSymbol": "ALAB"
+    },
+    {
+      "symbol": "ALB",
+      "price_symbol": "ALB",
+      "provider": "YAHOO",
+      "yahooSymbol": "ALB"
+    },
+    {
+      "symbol": "ALGN",
+      "price_symbol": "ALGN",
+      "provider": "YAHOO",
+      "yahooSymbol": "ALGN"
+    },
+    {
+      "symbol": "ALL",
+      "price_symbol": "ALL",
+      "provider": "YAHOO",
+      "yahooSymbol": "ALL"
+    },
+    {
+      "symbol": "ALLE",
+      "price_symbol": "ALLE",
+      "provider": "YAHOO",
+      "yahooSymbol": "ALLE"
+    },
+    {
+      "symbol": "ALNY",
+      "price_symbol": "ALNY",
+      "provider": "YAHOO",
+      "yahooSymbol": "ALNY"
+    },
+    {
+      "symbol": "AMAT",
+      "price_symbol": "AMAT",
+      "provider": "YAHOO",
+      "yahooSymbol": "AMAT"
+    },
+    {
+      "symbol": "AMCR",
+      "price_symbol": "AMCR",
+      "provider": "YAHOO",
+      "yahooSymbol": "AMCR"
+    },
+    {
+      "symbol": "AMD",
+      "price_symbol": "AMD",
+      "provider": "YAHOO",
+      "yahooSymbol": "AMD"
+    },
+    {
+      "symbol": "AME",
+      "price_symbol": "AME",
+      "provider": "YAHOO",
+      "yahooSymbol": "AME"
+    },
+    {
+      "symbol": "AMGN",
+      "price_symbol": "AMGN",
+      "provider": "YAHOO",
+      "yahooSymbol": "AMGN"
+    },
+    {
+      "symbol": "AMP",
+      "price_symbol": "AMP",
+      "provider": "YAHOO",
+      "yahooSymbol": "AMP"
+    },
+    {
+      "symbol": "AMT",
+      "price_symbol": "AMT",
+      "provider": "YAHOO",
+      "yahooSymbol": "AMT"
+    },
+    {
+      "symbol": "AMZN",
+      "price_symbol": "AMZN",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "ANET",
+      "price_symbol": "ANET",
+      "provider": "YAHOO",
+      "yahooSymbol": "ANET"
+    },
+    {
+      "symbol": "AON",
+      "price_symbol": "AON",
+      "provider": "YAHOO",
+      "yahooSymbol": "AON"
+    },
+    {
+      "symbol": "AOS",
+      "price_symbol": "AOS",
+      "provider": "YAHOO",
+      "yahooSymbol": "AOS"
+    },
+    {
+      "symbol": "APA",
+      "price_symbol": "APA",
+      "provider": "YAHOO",
+      "yahooSymbol": "APA"
+    },
+    {
+      "symbol": "APD",
+      "price_symbol": "APD",
+      "provider": "YAHOO",
+      "yahooSymbol": "APD"
+    },
+    {
+      "symbol": "APH",
+      "price_symbol": "APH",
+      "provider": "YAHOO",
+      "yahooSymbol": "APH"
+    },
+    {
+      "symbol": "APO",
+      "price_symbol": "APO",
+      "provider": "YAHOO",
+      "yahooSymbol": "APO"
+    },
+    {
+      "symbol": "APP",
+      "price_symbol": "APP",
+      "provider": "YAHOO",
+      "yahooSymbol": "APP"
+    },
+    {
+      "symbol": "APTV",
+      "price_symbol": "APTV",
+      "provider": "YAHOO",
+      "yahooSymbol": "APTV"
+    },
+    {
+      "symbol": "ARE",
+      "price_symbol": "ARE",
+      "provider": "YAHOO",
+      "yahooSymbol": "ARE"
+    },
+    {
+      "symbol": "ARES",
+      "price_symbol": "ARES",
+      "provider": "YAHOO",
+      "yahooSymbol": "ARES"
+    },
+    {
+      "symbol": "ARM",
+      "price_symbol": "ARM",
+      "provider": "YAHOO",
+      "yahooSymbol": "ARM"
+    },
+    {
+      "symbol": "ASML",
+      "price_symbol": "ASML",
+      "provider": "YAHOO",
+      "yahooSymbol": "ASML"
+    },
+    {
+      "symbol": "ATO",
+      "price_symbol": "ATO",
+      "provider": "YAHOO",
+      "yahooSymbol": "ATO"
+    },
+    {
+      "symbol": "AVGO",
+      "price_symbol": "AVGO",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "AVY",
+      "price_symbol": "AVY",
+      "provider": "YAHOO",
+      "yahooSymbol": "AVY"
+    },
+    {
+      "symbol": "AWK",
+      "price_symbol": "AWK",
+      "provider": "YAHOO",
+      "yahooSymbol": "AWK"
+    },
+    {
+      "symbol": "AXON",
+      "price_symbol": "AXON",
+      "provider": "YAHOO",
+      "yahooSymbol": "AXON"
+    },
+    {
+      "symbol": "AXP",
+      "price_symbol": "AXP",
+      "provider": "YAHOO",
+      "yahooSymbol": "AXP"
+    },
+    {
+      "symbol": "AZO",
+      "price_symbol": "AZO",
+      "provider": "YAHOO",
+      "yahooSymbol": "AZO"
+    },
+    {
+      "symbol": "BA",
+      "price_symbol": "BA",
+      "provider": "YAHOO",
+      "yahooSymbol": "BA"
+    },
+    {
+      "symbol": "BAC",
+      "price_symbol": "BAC",
+      "provider": "YAHOO",
+      "yahooSymbol": "BAC"
+    },
+    {
+      "symbol": "BALL",
+      "price_symbol": "BALL",
+      "provider": "YAHOO",
+      "yahooSymbol": "BALL"
+    },
+    {
+      "symbol": "BAX",
+      "price_symbol": "BAX",
+      "provider": "YAHOO",
+      "yahooSymbol": "BAX"
+    },
+    {
+      "symbol": "BBY",
+      "price_symbol": "BBY",
+      "provider": "YAHOO",
+      "yahooSymbol": "BBY"
+    },
+    {
+      "symbol": "BDX",
+      "price_symbol": "BDX",
+      "provider": "YAHOO",
+      "yahooSymbol": "BDX"
+    },
+    {
+      "symbol": "BE",
+      "price_symbol": "BE",
+      "provider": "YAHOO",
+      "yahooSymbol": "BE"
+    },
+    {
+      "symbol": "BEN",
+      "price_symbol": "BEN",
+      "provider": "YAHOO",
+      "yahooSymbol": "BEN"
+    },
+    {
+      "symbol": "BF.B",
+      "price_symbol": "BF.B",
+      "provider": "YAHOO",
+      "yahooSymbol": "BF-B"
+    },
+    {
+      "symbol": "BG",
+      "price_symbol": "BG",
+      "provider": "YAHOO",
+      "yahooSymbol": "BG"
+    },
+    {
+      "symbol": "BIIB",
+      "price_symbol": "BIIB",
+      "provider": "YAHOO",
+      "yahooSymbol": "BIIB"
+    },
+    {
+      "symbol": "BKNG",
+      "price_symbol": "BKNG",
+      "provider": "YAHOO",
+      "yahooSymbol": "BKNG"
+    },
+    {
+      "symbol": "BKR",
+      "price_symbol": "BKR",
+      "provider": "YAHOO",
+      "yahooSymbol": "BKR"
+    },
+    {
+      "symbol": "BLK",
+      "price_symbol": "BLK",
+      "provider": "YAHOO",
+      "yahooSymbol": "BLK"
+    },
+    {
+      "symbol": "BMY",
+      "price_symbol": "BMY",
+      "provider": "YAHOO",
+      "yahooSymbol": "BMY"
+    },
+    {
+      "symbol": "BNY",
+      "price_symbol": "BNY",
+      "provider": "YAHOO",
+      "yahooSymbol": "BNY"
+    },
+    {
+      "symbol": "BR",
+      "price_symbol": "BR",
+      "provider": "YAHOO",
+      "yahooSymbol": "BR"
+    },
+    {
+      "symbol": "BRK.B",
+      "price_symbol": "BRK.B",
+      "provider": "YAHOO",
+      "yahooSymbol": "BRK-B"
+    },
+    {
+      "symbol": "BRO",
+      "price_symbol": "BRO",
+      "provider": "YAHOO",
+      "yahooSymbol": "BRO"
+    },
+    {
+      "symbol": "BSX",
+      "price_symbol": "BSX",
+      "provider": "YAHOO",
+      "yahooSymbol": "BSX"
+    },
+    {
+      "symbol": "BX",
+      "price_symbol": "BX",
+      "provider": "YAHOO",
+      "yahooSymbol": "BX"
+    },
+    {
+      "symbol": "BXP",
+      "price_symbol": "BXP",
+      "provider": "YAHOO",
+      "yahooSymbol": "BXP"
+    },
+    {
+      "symbol": "C",
+      "price_symbol": "C",
+      "provider": "YAHOO",
+      "yahooSymbol": "C"
+    },
+    {
+      "symbol": "CAH",
+      "price_symbol": "CAH",
+      "provider": "YAHOO",
+      "yahooSymbol": "CAH"
+    },
+    {
+      "symbol": "CARR",
+      "price_symbol": "CARR",
+      "provider": "YAHOO",
+      "yahooSymbol": "CARR"
+    },
+    {
+      "symbol": "CASY",
+      "price_symbol": "CASY",
+      "provider": "YAHOO",
+      "yahooSymbol": "CASY"
+    },
+    {
+      "symbol": "CAT",
+      "price_symbol": "CAT",
+      "provider": "YAHOO",
+      "yahooSymbol": "CAT"
+    },
+    {
+      "symbol": "CB",
+      "price_symbol": "CB",
+      "provider": "YAHOO",
+      "yahooSymbol": "CB"
+    },
+    {
+      "symbol": "CBOE",
+      "price_symbol": "CBOE",
+      "provider": "YAHOO",
+      "yahooSymbol": "CBOE"
+    },
+    {
+      "symbol": "CBRE",
+      "price_symbol": "CBRE",
+      "provider": "YAHOO",
+      "yahooSymbol": "CBRE"
+    },
+    {
+      "symbol": "CCEP",
+      "price_symbol": "CCEP",
+      "provider": "YAHOO",
+      "yahooSymbol": "CCEP"
+    },
+    {
+      "symbol": "CCI",
+      "price_symbol": "CCI",
+      "provider": "YAHOO",
+      "yahooSymbol": "CCI"
+    },
+    {
+      "symbol": "CCL",
+      "price_symbol": "CCL",
+      "provider": "YAHOO",
+      "yahooSymbol": "CCL"
+    },
+    {
+      "symbol": "CDNS",
+      "price_symbol": "CDNS",
+      "provider": "YAHOO",
+      "yahooSymbol": "CDNS"
+    },
+    {
+      "symbol": "CDW",
+      "price_symbol": "CDW",
+      "provider": "YAHOO",
+      "yahooSymbol": "CDW"
+    },
+    {
+      "symbol": "CEG",
+      "price_symbol": "CEG",
+      "provider": "YAHOO",
+      "yahooSymbol": "CEG"
+    },
+    {
+      "symbol": "CF",
+      "price_symbol": "CF",
+      "provider": "YAHOO",
+      "yahooSymbol": "CF"
+    },
+    {
+      "symbol": "CFG",
+      "price_symbol": "CFG",
+      "provider": "YAHOO",
+      "yahooSymbol": "CFG"
+    },
+    {
+      "symbol": "CHD",
+      "price_symbol": "CHD",
+      "provider": "YAHOO",
+      "yahooSymbol": "CHD"
+    },
+    {
+      "symbol": "CHRW",
+      "price_symbol": "CHRW",
+      "provider": "YAHOO",
+      "yahooSymbol": "CHRW"
+    },
+    {
+      "symbol": "CHTR",
+      "price_symbol": "CHTR",
+      "provider": "YAHOO",
+      "yahooSymbol": "CHTR"
+    },
+    {
+      "symbol": "CI",
+      "price_symbol": "CI",
+      "provider": "YAHOO",
+      "yahooSymbol": "CI"
+    },
+    {
+      "symbol": "CIEN",
+      "price_symbol": "CIEN",
+      "provider": "YAHOO",
+      "yahooSymbol": "CIEN"
+    },
+    {
+      "symbol": "CINF",
+      "price_symbol": "CINF",
+      "provider": "YAHOO",
+      "yahooSymbol": "CINF"
+    },
+    {
+      "symbol": "CL",
+      "price_symbol": "CL",
+      "provider": "YAHOO",
+      "yahooSymbol": "CL"
+    },
+    {
+      "symbol": "CLX",
+      "price_symbol": "CLX",
+      "provider": "YAHOO",
+      "yahooSymbol": "CLX"
+    },
+    {
+      "symbol": "CMCSA",
+      "price_symbol": "CMCSA",
+      "provider": "YAHOO",
+      "yahooSymbol": "CMCSA"
+    },
+    {
+      "symbol": "CME",
+      "price_symbol": "CME",
+      "provider": "YAHOO",
+      "yahooSymbol": "CME"
+    },
+    {
+      "symbol": "CMG",
+      "price_symbol": "CMG",
+      "provider": "YAHOO",
+      "yahooSymbol": "CMG"
+    },
+    {
+      "symbol": "CMI",
+      "price_symbol": "CMI",
+      "provider": "YAHOO",
+      "yahooSymbol": "CMI"
+    },
+    {
+      "symbol": "CMS",
+      "price_symbol": "CMS",
+      "provider": "YAHOO",
+      "yahooSymbol": "CMS"
+    },
+    {
+      "symbol": "CNC",
+      "price_symbol": "CNC",
+      "provider": "YAHOO",
+      "yahooSymbol": "CNC"
+    },
+    {
+      "symbol": "CNP",
+      "price_symbol": "CNP",
+      "provider": "YAHOO",
+      "yahooSymbol": "CNP"
+    },
+    {
+      "symbol": "COF",
+      "price_symbol": "COF",
+      "provider": "YAHOO",
+      "yahooSymbol": "COF"
+    },
+    {
+      "symbol": "COHR",
+      "price_symbol": "COHR",
+      "provider": "YAHOO",
+      "yahooSymbol": "COHR"
+    },
+    {
+      "symbol": "COIN",
+      "price_symbol": "COIN",
+      "provider": "YAHOO",
+      "yahooSymbol": "COIN"
+    },
+    {
+      "symbol": "COO",
+      "price_symbol": "COO",
+      "provider": "YAHOO",
+      "yahooSymbol": "COO"
+    },
+    {
+      "symbol": "COP",
+      "price_symbol": "COP",
+      "provider": "YAHOO",
+      "yahooSymbol": "COP"
+    },
+    {
+      "symbol": "COR",
+      "price_symbol": "COR",
+      "provider": "YAHOO",
+      "yahooSymbol": "COR"
+    },
+    {
+      "symbol": "COST",
+      "price_symbol": "COST",
+      "provider": "YAHOO",
+      "yahooSymbol": "COST"
+    },
+    {
+      "symbol": "CPAY",
+      "price_symbol": "CPAY",
+      "provider": "YAHOO",
+      "yahooSymbol": "CPAY"
+    },
+    {
+      "symbol": "CPRT",
+      "price_symbol": "CPRT",
+      "provider": "YAHOO",
+      "yahooSymbol": "CPRT"
+    },
+    {
+      "symbol": "CPT",
+      "price_symbol": "CPT",
+      "provider": "YAHOO",
+      "yahooSymbol": "CPT"
+    },
+    {
+      "symbol": "CRH",
+      "price_symbol": "CRH",
+      "provider": "YAHOO",
+      "yahooSymbol": "CRH"
+    },
+    {
+      "symbol": "CRL",
+      "price_symbol": "CRL",
+      "provider": "YAHOO",
+      "yahooSymbol": "CRL"
+    },
+    {
+      "symbol": "CRM",
+      "price_symbol": "CRM",
+      "provider": "YAHOO",
+      "yahooSymbol": "CRM"
+    },
+    {
+      "symbol": "CRWD",
+      "price_symbol": "CRWD",
+      "provider": "YAHOO",
+      "yahooSymbol": "CRWD"
+    },
+    {
+      "symbol": "CRWV",
+      "price_symbol": "CRWV",
+      "provider": "YAHOO",
+      "yahooSymbol": "CRWV"
+    },
+    {
+      "symbol": "CSCO",
+      "price_symbol": "CSCO",
+      "provider": "YAHOO",
+      "yahooSymbol": "CSCO"
+    },
+    {
+      "symbol": "CSGP",
+      "price_symbol": "CSGP",
+      "provider": "YAHOO",
+      "yahooSymbol": "CSGP"
+    },
+    {
+      "symbol": "CSX",
+      "price_symbol": "CSX",
+      "provider": "YAHOO",
+      "yahooSymbol": "CSX"
+    },
+    {
+      "symbol": "CTAS",
+      "price_symbol": "CTAS",
+      "provider": "YAHOO",
+      "yahooSymbol": "CTAS"
+    },
+    {
+      "symbol": "CTSH",
+      "price_symbol": "CTSH",
+      "provider": "YAHOO",
+      "yahooSymbol": "CTSH"
+    },
+    {
+      "symbol": "CVNA",
+      "price_symbol": "CVNA",
+      "provider": "YAHOO",
+      "yahooSymbol": "CVNA"
+    },
+    {
+      "symbol": "CVS",
+      "price_symbol": "CVS",
+      "provider": "YAHOO",
+      "yahooSymbol": "CVS"
+    },
+    {
+      "symbol": "CVX",
+      "price_symbol": "CVX",
+      "provider": "YAHOO",
+      "yahooSymbol": "CVX"
+    },
+    {
+      "symbol": "D",
+      "price_symbol": "D",
+      "provider": "YAHOO",
+      "yahooSymbol": "D"
+    },
+    {
+      "symbol": "DAL",
+      "price_symbol": "DAL",
+      "provider": "YAHOO",
+      "yahooSymbol": "DAL"
+    },
+    {
+      "symbol": "DASH",
+      "price_symbol": "DASH",
+      "provider": "YAHOO",
+      "yahooSymbol": "DASH"
+    },
+    {
+      "symbol": "DD",
+      "price_symbol": "DD",
+      "provider": "YAHOO",
+      "yahooSymbol": "DD"
+    },
+    {
+      "symbol": "DDOG",
+      "price_symbol": "DDOG",
+      "provider": "YAHOO",
+      "yahooSymbol": "DDOG"
+    },
+    {
+      "symbol": "DE",
+      "price_symbol": "DE",
+      "provider": "YAHOO",
+      "yahooSymbol": "DE"
+    },
+    {
+      "symbol": "DECK",
+      "price_symbol": "DECK",
+      "provider": "YAHOO",
+      "yahooSymbol": "DECK"
+    },
+    {
+      "symbol": "DELL",
+      "price_symbol": "DELL",
+      "provider": "YAHOO",
+      "yahooSymbol": "DELL"
+    },
+    {
+      "symbol": "DG",
+      "price_symbol": "DG",
+      "provider": "YAHOO",
+      "yahooSymbol": "DG"
+    },
+    {
+      "symbol": "DGX",
+      "price_symbol": "DGX",
+      "provider": "YAHOO",
+      "yahooSymbol": "DGX"
+    },
+    {
+      "symbol": "DHI",
+      "price_symbol": "DHI",
+      "provider": "YAHOO",
+      "yahooSymbol": "DHI"
+    },
+    {
+      "symbol": "DHR",
+      "price_symbol": "DHR",
+      "provider": "YAHOO",
+      "yahooSymbol": "DHR"
+    },
+    {
+      "symbol": "DIS",
+      "price_symbol": "DIS",
+      "provider": "YAHOO",
+      "yahooSymbol": "DIS"
+    },
+    {
+      "symbol": "DLR",
+      "price_symbol": "DLR",
+      "provider": "YAHOO",
+      "yahooSymbol": "DLR"
+    },
+    {
+      "symbol": "DLTR",
+      "price_symbol": "DLTR",
+      "provider": "YAHOO",
+      "yahooSymbol": "DLTR"
+    },
+    {
+      "symbol": "DOC",
+      "price_symbol": "DOC",
+      "provider": "YAHOO",
+      "yahooSymbol": "DOC"
+    },
+    {
+      "symbol": "DOV",
+      "price_symbol": "DOV",
+      "provider": "YAHOO",
+      "yahooSymbol": "DOV"
+    },
+    {
+      "symbol": "DOW",
+      "price_symbol": "DOW",
+      "provider": "YAHOO",
+      "yahooSymbol": "DOW"
+    },
+    {
+      "symbol": "DPZ",
+      "price_symbol": "DPZ",
+      "provider": "YAHOO",
+      "yahooSymbol": "DPZ"
+    },
+    {
+      "symbol": "DRI",
+      "price_symbol": "DRI",
+      "provider": "YAHOO",
+      "yahooSymbol": "DRI"
+    },
+    {
+      "symbol": "DTE",
+      "price_symbol": "DTE",
+      "provider": "YAHOO",
+      "yahooSymbol": "DTE"
+    },
+    {
+      "symbol": "DUK",
+      "price_symbol": "DUK",
+      "provider": "YAHOO",
+      "yahooSymbol": "DUK"
+    },
+    {
+      "symbol": "DVA",
+      "price_symbol": "DVA",
+      "provider": "YAHOO",
+      "yahooSymbol": "DVA"
+    },
+    {
+      "symbol": "DVN",
+      "price_symbol": "DVN",
+      "provider": "YAHOO",
+      "yahooSymbol": "DVN"
+    },
+    {
+      "symbol": "DXCM",
+      "price_symbol": "DXCM",
+      "provider": "YAHOO",
+      "yahooSymbol": "DXCM"
+    },
+    {
+      "symbol": "EBAY",
+      "price_symbol": "EBAY",
+      "provider": "YAHOO",
+      "yahooSymbol": "EBAY"
+    },
+    {
+      "symbol": "ECHO",
+      "price_symbol": "ECHO",
+      "provider": "YAHOO",
+      "yahooSymbol": "ECHO"
+    },
+    {
+      "symbol": "ECL",
+      "price_symbol": "ECL",
+      "provider": "YAHOO",
+      "yahooSymbol": "ECL"
+    },
+    {
+      "symbol": "ED",
+      "price_symbol": "ED",
+      "provider": "YAHOO",
+      "yahooSymbol": "ED"
+    },
+    {
+      "symbol": "EFX",
+      "price_symbol": "EFX",
+      "provider": "YAHOO",
+      "yahooSymbol": "EFX"
+    },
+    {
+      "symbol": "EG",
+      "price_symbol": "EG",
+      "provider": "YAHOO",
+      "yahooSymbol": "EG"
+    },
+    {
+      "symbol": "EIX",
+      "price_symbol": "EIX",
+      "provider": "YAHOO",
+      "yahooSymbol": "EIX"
+    },
+    {
+      "symbol": "EL",
+      "price_symbol": "EL",
+      "provider": "YAHOO",
+      "yahooSymbol": "EL"
+    },
+    {
+      "symbol": "ELV",
+      "price_symbol": "ELV",
+      "provider": "YAHOO",
+      "yahooSymbol": "ELV"
+    },
+    {
+      "symbol": "EME",
+      "price_symbol": "EME",
+      "provider": "YAHOO",
+      "yahooSymbol": "EME"
+    },
+    {
+      "symbol": "EMR",
+      "price_symbol": "EMR",
+      "provider": "YAHOO",
+      "yahooSymbol": "EMR"
+    },
+    {
+      "symbol": "EOG",
+      "price_symbol": "EOG",
+      "provider": "YAHOO",
+      "yahooSymbol": "EOG"
+    },
+    {
+      "symbol": "EQIX",
+      "price_symbol": "EQIX",
+      "provider": "YAHOO",
+      "yahooSymbol": "EQIX"
+    },
+    {
+      "symbol": "EQT",
+      "price_symbol": "EQT",
+      "provider": "YAHOO",
+      "yahooSymbol": "EQT"
+    },
+    {
+      "symbol": "ERIE",
+      "price_symbol": "ERIE",
+      "provider": "YAHOO",
+      "yahooSymbol": "ERIE"
+    },
+    {
+      "symbol": "ES",
+      "price_symbol": "ES",
+      "provider": "YAHOO",
+      "yahooSymbol": "ES"
+    },
+    {
+      "symbol": "ESS",
+      "price_symbol": "ESS",
+      "provider": "YAHOO",
+      "yahooSymbol": "ESS"
+    },
+    {
+      "symbol": "ETN",
+      "price_symbol": "ETN",
+      "provider": "YAHOO",
+      "yahooSymbol": "ETN"
+    },
+    {
+      "symbol": "ETR",
+      "price_symbol": "ETR",
+      "provider": "YAHOO",
+      "yahooSymbol": "ETR"
+    },
+    {
+      "symbol": "EVRG",
+      "price_symbol": "EVRG",
+      "provider": "YAHOO",
+      "yahooSymbol": "EVRG"
+    },
+    {
+      "symbol": "EW",
+      "price_symbol": "EW",
+      "provider": "YAHOO",
+      "yahooSymbol": "EW"
+    },
+    {
+      "symbol": "EXC",
+      "price_symbol": "EXC",
+      "provider": "YAHOO",
+      "yahooSymbol": "EXC"
+    },
+    {
+      "symbol": "EXE",
+      "price_symbol": "EXE",
+      "provider": "YAHOO",
+      "yahooSymbol": "EXE"
+    },
+    {
+      "symbol": "EXPD",
+      "price_symbol": "EXPD",
+      "provider": "YAHOO",
+      "yahooSymbol": "EXPD"
+    },
+    {
+      "symbol": "EXPE",
+      "price_symbol": "EXPE",
+      "provider": "YAHOO",
+      "yahooSymbol": "EXPE"
+    },
+    {
+      "symbol": "EXR",
+      "price_symbol": "EXR",
+      "provider": "YAHOO",
+      "yahooSymbol": "EXR"
+    },
+    {
+      "symbol": "F",
+      "price_symbol": "F",
+      "provider": "YAHOO",
+      "yahooSymbol": "F"
+    },
+    {
+      "symbol": "FANG",
+      "price_symbol": "FANG",
+      "provider": "YAHOO",
+      "yahooSymbol": "FANG"
+    },
+    {
+      "symbol": "FAST",
+      "price_symbol": "FAST",
+      "provider": "YAHOO",
+      "yahooSymbol": "FAST"
+    },
+    {
+      "symbol": "FCX",
+      "price_symbol": "FCX",
+      "provider": "YAHOO",
+      "yahooSymbol": "FCX"
+    },
+    {
+      "symbol": "FDS",
+      "price_symbol": "FDS",
+      "provider": "YAHOO",
+      "yahooSymbol": "FDS"
+    },
+    {
+      "symbol": "FDX",
+      "price_symbol": "FDX",
+      "provider": "YAHOO",
+      "yahooSymbol": "FDX"
+    },
+    {
+      "symbol": "FDXF",
+      "price_symbol": "FDXF",
+      "provider": "YAHOO",
+      "yahooSymbol": "FDXF"
+    },
+    {
+      "symbol": "FE",
+      "price_symbol": "FE",
+      "provider": "YAHOO",
+      "yahooSymbol": "FE"
+    },
+    {
+      "symbol": "FER",
+      "price_symbol": "FER",
+      "provider": "YAHOO",
+      "yahooSymbol": "FER"
+    },
+    {
+      "symbol": "FERG",
+      "price_symbol": "FERG",
+      "provider": "YAHOO",
+      "yahooSymbol": "FERG"
+    },
+    {
+      "symbol": "FFIV",
+      "price_symbol": "FFIV",
+      "provider": "YAHOO",
+      "yahooSymbol": "FFIV"
+    },
+    {
+      "symbol": "FICO",
+      "price_symbol": "FICO",
+      "provider": "YAHOO",
+      "yahooSymbol": "FICO"
+    },
+    {
+      "symbol": "FIS",
+      "price_symbol": "FIS",
+      "provider": "YAHOO",
+      "yahooSymbol": "FIS"
+    },
+    {
+      "symbol": "FISV",
+      "price_symbol": "US000000000280",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "FITB",
+      "price_symbol": "FITB",
+      "provider": "YAHOO",
+      "yahooSymbol": "FITB"
+    },
+    {
+      "symbol": "FIX",
+      "price_symbol": "FIX",
+      "provider": "YAHOO",
+      "yahooSymbol": "FIX"
+    },
+    {
+      "symbol": "FLEX",
+      "price_symbol": "FLEX",
+      "provider": "YAHOO",
+      "yahooSymbol": "FLEX"
+    },
+    {
+      "symbol": "FOX",
+      "price_symbol": "FOX",
+      "provider": "YAHOO",
+      "yahooSymbol": "FOX"
+    },
+    {
+      "symbol": "FOXA",
+      "price_symbol": "FOXA",
+      "provider": "YAHOO",
+      "yahooSymbol": "FOXA"
+    },
+    {
+      "symbol": "FRT",
+      "price_symbol": "FRT",
+      "provider": "YAHOO",
+      "yahooSymbol": "FRT"
+    },
+    {
+      "symbol": "FSLR",
+      "price_symbol": "FSLR",
+      "provider": "YAHOO",
+      "yahooSymbol": "FSLR"
+    },
+    {
+      "symbol": "FTNT",
+      "price_symbol": "FTNT",
+      "provider": "YAHOO",
+      "yahooSymbol": "FTNT"
+    },
+    {
+      "symbol": "FTV",
+      "price_symbol": "FTV",
+      "provider": "YAHOO",
+      "yahooSymbol": "FTV"
+    },
+    {
+      "symbol": "GD",
+      "price_symbol": "GD",
+      "provider": "YAHOO",
+      "yahooSymbol": "GD"
+    },
+    {
+      "symbol": "GDDY",
+      "price_symbol": "GDDY",
+      "provider": "YAHOO",
+      "yahooSymbol": "GDDY"
+    },
+    {
+      "symbol": "GE",
+      "price_symbol": "GE",
+      "provider": "YAHOO",
+      "yahooSymbol": "GE"
+    },
+    {
+      "symbol": "GEHC",
+      "price_symbol": "GEHC",
+      "provider": "YAHOO",
+      "yahooSymbol": "GEHC"
+    },
+    {
+      "symbol": "GEN",
+      "price_symbol": "GEN",
+      "provider": "YAHOO",
+      "yahooSymbol": "GEN"
+    },
+    {
+      "symbol": "GEV",
+      "price_symbol": "GEV",
+      "provider": "YAHOO",
+      "yahooSymbol": "GEV"
+    },
+    {
+      "symbol": "GILD",
+      "price_symbol": "GILD",
+      "provider": "YAHOO",
+      "yahooSymbol": "GILD"
+    },
+    {
+      "symbol": "GIS",
+      "price_symbol": "GIS",
+      "provider": "YAHOO",
+      "yahooSymbol": "GIS"
+    },
+    {
+      "symbol": "GL",
+      "price_symbol": "GL",
+      "provider": "YAHOO",
+      "yahooSymbol": "GL"
+    },
+    {
+      "symbol": "GLW",
+      "price_symbol": "GLW",
+      "provider": "YAHOO",
+      "yahooSymbol": "GLW"
+    },
+    {
+      "symbol": "GM",
+      "price_symbol": "GM",
+      "provider": "YAHOO",
+      "yahooSymbol": "GM"
+    },
+    {
+      "symbol": "GNRC",
+      "price_symbol": "GNRC",
+      "provider": "YAHOO",
+      "yahooSymbol": "GNRC"
+    },
+    {
+      "symbol": "GOOG",
+      "price_symbol": "GOOG",
+      "provider": "YAHOO",
+      "yahooSymbol": "GOOG"
+    },
+    {
+      "symbol": "GOOGL",
+      "price_symbol": "GOOGL",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "GPC",
+      "price_symbol": "GPC",
+      "provider": "YAHOO",
+      "yahooSymbol": "GPC"
+    },
+    {
+      "symbol": "GPN",
+      "price_symbol": "GPN",
+      "provider": "YAHOO",
+      "yahooSymbol": "GPN"
+    },
+    {
+      "symbol": "GRMN",
+      "price_symbol": "GRMN",
+      "provider": "YAHOO",
+      "yahooSymbol": "GRMN"
+    },
+    {
+      "symbol": "GS",
+      "price_symbol": "GS",
+      "provider": "YAHOO",
+      "yahooSymbol": "GS"
+    },
+    {
+      "symbol": "GWW",
+      "price_symbol": "GWW",
+      "provider": "YAHOO",
+      "yahooSymbol": "GWW"
+    },
+    {
+      "symbol": "HAL",
+      "price_symbol": "HAL",
+      "provider": "YAHOO",
+      "yahooSymbol": "HAL"
+    },
+    {
+      "symbol": "HAS",
+      "price_symbol": "HAS",
+      "provider": "YAHOO",
+      "yahooSymbol": "HAS"
+    },
+    {
+      "symbol": "HBAN",
+      "price_symbol": "HBAN",
+      "provider": "YAHOO",
+      "yahooSymbol": "HBAN"
+    },
+    {
+      "symbol": "HCA",
+      "price_symbol": "HCA",
+      "provider": "YAHOO",
+      "yahooSymbol": "HCA"
+    },
+    {
+      "symbol": "HD",
+      "price_symbol": "HD",
+      "provider": "YAHOO",
+      "yahooSymbol": "HD"
+    },
+    {
+      "symbol": "HIG",
+      "price_symbol": "HIG",
+      "provider": "YAHOO",
+      "yahooSymbol": "HIG"
+    },
+    {
+      "symbol": "HII",
+      "price_symbol": "HII",
+      "provider": "YAHOO",
+      "yahooSymbol": "HII"
+    },
+    {
+      "symbol": "HLT",
+      "price_symbol": "HLT",
+      "provider": "YAHOO",
+      "yahooSymbol": "HLT"
+    },
+    {
+      "symbol": "HON",
+      "price_symbol": "HON",
+      "provider": "YAHOO",
+      "yahooSymbol": "HON"
+    },
+    {
+      "symbol": "HONA",
+      "price_symbol": "HONA",
+      "provider": "YAHOO",
+      "yahooSymbol": "HONA"
+    },
+    {
+      "symbol": "HOOD",
+      "price_symbol": "HOOD",
+      "provider": "YAHOO",
+      "yahooSymbol": "HOOD"
+    },
+    {
+      "symbol": "HPE",
+      "price_symbol": "HPE",
+      "provider": "YAHOO",
+      "yahooSymbol": "HPE"
+    },
+    {
+      "symbol": "HPQ",
+      "price_symbol": "HPQ",
+      "provider": "YAHOO",
+      "yahooSymbol": "HPQ"
+    },
+    {
+      "symbol": "HRL",
+      "price_symbol": "HRL",
+      "provider": "YAHOO",
+      "yahooSymbol": "HRL"
+    },
+    {
+      "symbol": "HSIC",
+      "price_symbol": "HSIC",
+      "provider": "YAHOO",
+      "yahooSymbol": "HSIC"
+    },
+    {
+      "symbol": "HST",
+      "price_symbol": "HST",
+      "provider": "YAHOO",
+      "yahooSymbol": "HST"
+    },
+    {
+      "symbol": "HSY",
+      "price_symbol": "HSY",
+      "provider": "YAHOO",
+      "yahooSymbol": "HSY"
+    },
+    {
+      "symbol": "HUBB",
+      "price_symbol": "HUBB",
+      "provider": "YAHOO",
+      "yahooSymbol": "HUBB"
+    },
+    {
+      "symbol": "HUM",
+      "price_symbol": "HUM",
+      "provider": "YAHOO",
+      "yahooSymbol": "HUM"
+    },
+    {
+      "symbol": "HWM",
+      "price_symbol": "HWM",
+      "provider": "YAHOO",
+      "yahooSymbol": "HWM"
+    },
+    {
+      "symbol": "IBKR",
+      "price_symbol": "IBKR",
+      "provider": "YAHOO",
+      "yahooSymbol": "IBKR"
+    },
+    {
+      "symbol": "IBM",
+      "price_symbol": "IBM",
+      "provider": "YAHOO",
+      "yahooSymbol": "IBM"
+    },
+    {
+      "symbol": "ICE",
+      "price_symbol": "ICE",
+      "provider": "YAHOO",
+      "yahooSymbol": "ICE"
+    },
+    {
+      "symbol": "IDXX",
+      "price_symbol": "IDXX",
+      "provider": "YAHOO",
+      "yahooSymbol": "IDXX"
+    },
+    {
+      "symbol": "IEX",
+      "price_symbol": "IEX",
+      "provider": "YAHOO",
+      "yahooSymbol": "IEX"
+    },
+    {
+      "symbol": "IFF",
+      "price_symbol": "IFF",
+      "provider": "YAHOO",
+      "yahooSymbol": "IFF"
+    },
+    {
+      "symbol": "ILMN",
+      "price_symbol": "ILMN",
+      "provider": "YAHOO",
+      "yahooSymbol": "ILMN"
+    },
+    {
+      "symbol": "INCY",
+      "price_symbol": "INCY",
+      "provider": "YAHOO",
+      "yahooSymbol": "INCY"
+    },
+    {
+      "symbol": "INTC",
+      "price_symbol": "INTC",
+      "provider": "YAHOO",
+      "yahooSymbol": "INTC"
+    },
+    {
+      "symbol": "INTU",
+      "price_symbol": "INTU",
+      "provider": "YAHOO",
+      "yahooSymbol": "INTU"
+    },
+    {
+      "symbol": "INVH",
+      "price_symbol": "INVH",
+      "provider": "YAHOO",
+      "yahooSymbol": "INVH"
+    },
+    {
+      "symbol": "IP",
+      "price_symbol": "IP",
+      "provider": "YAHOO",
+      "yahooSymbol": "IP"
+    },
+    {
+      "symbol": "IQV",
+      "price_symbol": "IQV",
+      "provider": "YAHOO",
+      "yahooSymbol": "IQV"
+    },
+    {
+      "symbol": "IR",
+      "price_symbol": "IR",
+      "provider": "YAHOO",
+      "yahooSymbol": "IR"
+    },
+    {
+      "symbol": "IRM",
+      "price_symbol": "IRM",
+      "provider": "YAHOO",
+      "yahooSymbol": "IRM"
+    },
+    {
+      "symbol": "ISRG",
+      "price_symbol": "ISRG",
+      "provider": "YAHOO",
+      "yahooSymbol": "ISRG"
+    },
+    {
+      "symbol": "IT",
+      "price_symbol": "IT",
+      "provider": "YAHOO",
+      "yahooSymbol": "IT"
+    },
+    {
+      "symbol": "ITW",
+      "price_symbol": "ITW",
+      "provider": "YAHOO",
+      "yahooSymbol": "ITW"
+    },
+    {
+      "symbol": "IVZ",
+      "price_symbol": "IVZ",
+      "provider": "YAHOO",
+      "yahooSymbol": "IVZ"
+    },
+    {
+      "symbol": "J",
+      "price_symbol": "J",
+      "provider": "YAHOO",
+      "yahooSymbol": "J"
+    },
+    {
+      "symbol": "JBHT",
+      "price_symbol": "JBHT",
+      "provider": "YAHOO",
+      "yahooSymbol": "JBHT"
+    },
+    {
+      "symbol": "JBL",
+      "price_symbol": "JBL",
+      "provider": "YAHOO",
+      "yahooSymbol": "JBL"
+    },
+    {
+      "symbol": "JCI",
+      "price_symbol": "JCI",
+      "provider": "YAHOO",
+      "yahooSymbol": "JCI"
+    },
+    {
+      "symbol": "JKHY",
+      "price_symbol": "JKHY",
+      "provider": "YAHOO",
+      "yahooSymbol": "JKHY"
+    },
+    {
+      "symbol": "JNJ",
+      "price_symbol": "JNJ",
+      "provider": "YAHOO",
+      "yahooSymbol": "JNJ"
+    },
+    {
+      "symbol": "JPM",
+      "price_symbol": "JPM",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "KDP",
+      "price_symbol": "KDP",
+      "provider": "YAHOO",
+      "yahooSymbol": "KDP"
+    },
+    {
+      "symbol": "KEY",
+      "price_symbol": "KEY",
+      "provider": "YAHOO",
+      "yahooSymbol": "KEY"
+    },
+    {
+      "symbol": "KEYS",
+      "price_symbol": "KEYS",
+      "provider": "YAHOO",
+      "yahooSymbol": "KEYS"
+    },
+    {
+      "symbol": "KHC",
+      "price_symbol": "KHC",
+      "provider": "YAHOO",
+      "yahooSymbol": "KHC"
+    },
+    {
+      "symbol": "KIM",
+      "price_symbol": "KIM",
+      "provider": "YAHOO",
+      "yahooSymbol": "KIM"
+    },
+    {
+      "symbol": "KKR",
+      "price_symbol": "KKR",
+      "provider": "YAHOO",
+      "yahooSymbol": "KKR"
+    },
+    {
+      "symbol": "KLAC",
+      "price_symbol": "KLAC",
+      "provider": "YAHOO",
+      "yahooSymbol": "KLAC"
+    },
+    {
+      "symbol": "KMB",
+      "price_symbol": "KMB",
+      "provider": "YAHOO",
+      "yahooSymbol": "KMB"
+    },
+    {
+      "symbol": "KMI",
+      "price_symbol": "KMI",
+      "provider": "YAHOO",
+      "yahooSymbol": "KMI"
+    },
+    {
+      "symbol": "KO",
+      "price_symbol": "KO",
+      "provider": "YAHOO",
+      "yahooSymbol": "KO"
+    },
+    {
+      "symbol": "KR",
+      "price_symbol": "KR",
+      "provider": "YAHOO",
+      "yahooSymbol": "KR"
+    },
+    {
+      "symbol": "KVUE",
+      "price_symbol": "KVUE",
+      "provider": "YAHOO",
+      "yahooSymbol": "KVUE"
+    },
+    {
+      "symbol": "L",
+      "price_symbol": "L",
+      "provider": "YAHOO",
+      "yahooSymbol": "L"
+    },
+    {
+      "symbol": "LDOS",
+      "price_symbol": "LDOS",
+      "provider": "YAHOO",
+      "yahooSymbol": "LDOS"
+    },
+    {
+      "symbol": "LEN",
+      "price_symbol": "LEN",
+      "provider": "YAHOO",
+      "yahooSymbol": "LEN"
+    },
+    {
+      "symbol": "LH",
+      "price_symbol": "LH",
+      "provider": "YAHOO",
+      "yahooSymbol": "LH"
+    },
+    {
+      "symbol": "LHX",
+      "price_symbol": "LHX",
+      "provider": "YAHOO",
+      "yahooSymbol": "LHX"
+    },
+    {
+      "symbol": "LII",
+      "price_symbol": "LII",
+      "provider": "YAHOO",
+      "yahooSymbol": "LII"
+    },
+    {
+      "symbol": "LIN",
+      "price_symbol": "LIN",
+      "provider": "YAHOO",
+      "yahooSymbol": "LIN"
+    },
+    {
+      "symbol": "LITE",
+      "price_symbol": "LITE",
+      "provider": "YAHOO",
+      "yahooSymbol": "LITE"
+    },
+    {
+      "symbol": "LLY",
+      "price_symbol": "LLY",
+      "provider": "YAHOO",
+      "yahooSymbol": "LLY"
+    },
+    {
+      "symbol": "LMT",
+      "price_symbol": "LMT",
+      "provider": "YAHOO",
+      "yahooSymbol": "LMT"
+    },
+    {
+      "symbol": "LNT",
+      "price_symbol": "LNT",
+      "provider": "YAHOO",
+      "yahooSymbol": "LNT"
+    },
+    {
+      "symbol": "LOW",
+      "price_symbol": "LOW",
+      "provider": "YAHOO",
+      "yahooSymbol": "LOW"
+    },
+    {
+      "symbol": "LRCX",
+      "price_symbol": "LRCX",
+      "provider": "YAHOO",
+      "yahooSymbol": "LRCX"
+    },
+    {
+      "symbol": "LULU",
+      "price_symbol": "LULU",
+      "provider": "YAHOO",
+      "yahooSymbol": "LULU"
+    },
+    {
+      "symbol": "LUV",
+      "price_symbol": "LUV",
+      "provider": "YAHOO",
+      "yahooSymbol": "LUV"
+    },
+    {
+      "symbol": "LVS",
+      "price_symbol": "LVS",
+      "provider": "YAHOO",
+      "yahooSymbol": "LVS"
+    },
+    {
+      "symbol": "LYB",
+      "price_symbol": "LYB",
+      "provider": "YAHOO",
+      "yahooSymbol": "LYB"
+    },
+    {
+      "symbol": "LYV",
+      "price_symbol": "LYV",
+      "provider": "YAHOO",
+      "yahooSymbol": "LYV"
+    },
+    {
+      "symbol": "MA",
+      "price_symbol": "MA",
+      "provider": "YAHOO",
+      "yahooSymbol": "MA"
+    },
+    {
+      "symbol": "MAA",
+      "price_symbol": "MAA",
+      "provider": "YAHOO",
+      "yahooSymbol": "MAA"
+    },
+    {
+      "symbol": "MAR",
+      "price_symbol": "MAR",
+      "provider": "YAHOO",
+      "yahooSymbol": "MAR"
+    },
+    {
+      "symbol": "MAS",
+      "price_symbol": "MAS",
+      "provider": "YAHOO",
+      "yahooSymbol": "MAS"
+    },
+    {
+      "symbol": "MCD",
+      "price_symbol": "MCD",
+      "provider": "YAHOO",
+      "yahooSymbol": "MCD"
+    },
+    {
+      "symbol": "MCHP",
+      "price_symbol": "MCHP",
+      "provider": "YAHOO",
+      "yahooSymbol": "MCHP"
+    },
+    {
+      "symbol": "MCK",
+      "price_symbol": "MCK",
+      "provider": "YAHOO",
+      "yahooSymbol": "MCK"
+    },
+    {
+      "symbol": "MCO",
+      "price_symbol": "MCO",
+      "provider": "YAHOO",
+      "yahooSymbol": "MCO"
+    },
+    {
+      "symbol": "MDLZ",
+      "price_symbol": "MDLZ",
+      "provider": "YAHOO",
+      "yahooSymbol": "MDLZ"
+    },
+    {
+      "symbol": "MDT",
+      "price_symbol": "MDT",
+      "provider": "YAHOO",
+      "yahooSymbol": "MDT"
+    },
+    {
+      "symbol": "MELI",
+      "price_symbol": "MELI",
+      "provider": "YAHOO",
+      "yahooSymbol": "MELI"
+    },
+    {
+      "symbol": "MET",
+      "price_symbol": "MET",
+      "provider": "YAHOO",
+      "yahooSymbol": "MET"
+    },
+    {
+      "symbol": "META",
+      "price_symbol": "META",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "MGM",
+      "price_symbol": "MGM",
+      "provider": "YAHOO",
+      "yahooSymbol": "MGM"
+    },
+    {
+      "symbol": "MKC",
+      "price_symbol": "MKC",
+      "provider": "YAHOO",
+      "yahooSymbol": "MKC"
+    },
+    {
+      "symbol": "MLM",
+      "price_symbol": "MLM",
+      "provider": "YAHOO",
+      "yahooSymbol": "MLM"
+    },
+    {
+      "symbol": "MMM",
+      "price_symbol": "MMM",
+      "provider": "YAHOO",
+      "yahooSymbol": "MMM"
+    },
+    {
+      "symbol": "MNST",
+      "price_symbol": "MNST",
+      "provider": "YAHOO",
+      "yahooSymbol": "MNST"
+    },
+    {
+      "symbol": "MO",
+      "price_symbol": "MO",
+      "provider": "YAHOO",
+      "yahooSymbol": "MO"
+    },
+    {
+      "symbol": "MOS",
+      "price_symbol": "MOS",
+      "provider": "YAHOO",
+      "yahooSymbol": "MOS"
+    },
+    {
+      "symbol": "MPC",
+      "price_symbol": "MPC",
+      "provider": "YAHOO",
+      "yahooSymbol": "MPC"
+    },
+    {
+      "symbol": "MPWR",
+      "price_symbol": "MPWR",
+      "provider": "YAHOO",
+      "yahooSymbol": "MPWR"
+    },
+    {
+      "symbol": "MRK",
+      "price_symbol": "MRK",
+      "provider": "YAHOO",
+      "yahooSymbol": "MRK"
+    },
+    {
+      "symbol": "MRNA",
+      "price_symbol": "MRNA",
+      "provider": "YAHOO",
+      "yahooSymbol": "MRNA"
+    },
+    {
+      "symbol": "MRSH",
+      "price_symbol": "MRSH",
+      "provider": "YAHOO",
+      "yahooSymbol": "MRSH"
+    },
+    {
+      "symbol": "MRVL",
+      "price_symbol": "MRVL",
+      "provider": "YAHOO",
+      "yahooSymbol": "MRVL"
+    },
+    {
+      "symbol": "MS",
+      "price_symbol": "MS",
+      "provider": "YAHOO",
+      "yahooSymbol": "MS"
+    },
+    {
+      "symbol": "MSCI",
+      "price_symbol": "MSCI",
+      "provider": "YAHOO",
+      "yahooSymbol": "MSCI"
+    },
+    {
+      "symbol": "MSFT",
+      "price_symbol": "MSFT",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "MSI",
+      "price_symbol": "MSI",
+      "provider": "YAHOO",
+      "yahooSymbol": "MSI"
+    },
+    {
+      "symbol": "MSTR",
+      "price_symbol": "MSTR",
+      "provider": "YAHOO",
+      "yahooSymbol": "MSTR"
+    },
+    {
+      "symbol": "MTB",
+      "price_symbol": "MTB",
+      "provider": "YAHOO",
+      "yahooSymbol": "MTB"
+    },
+    {
+      "symbol": "MTD",
+      "price_symbol": "MTD",
+      "provider": "YAHOO",
+      "yahooSymbol": "MTD"
+    },
+    {
+      "symbol": "MU",
+      "price_symbol": "MU",
+      "provider": "YAHOO",
+      "yahooSymbol": "MU"
+    },
+    {
+      "symbol": "NBIS",
+      "price_symbol": "NBIS",
+      "provider": "YAHOO",
+      "yahooSymbol": "NBIS"
+    },
+    {
+      "symbol": "NCLH",
+      "price_symbol": "NCLH",
+      "provider": "YAHOO",
+      "yahooSymbol": "NCLH"
+    },
+    {
+      "symbol": "NDAQ",
+      "price_symbol": "NDAQ",
+      "provider": "YAHOO",
+      "yahooSymbol": "NDAQ"
+    },
+    {
+      "symbol": "NDSN",
+      "price_symbol": "NDSN",
+      "provider": "YAHOO",
+      "yahooSymbol": "NDSN"
+    },
+    {
+      "symbol": "NEE",
+      "price_symbol": "NEE",
+      "provider": "YAHOO",
+      "yahooSymbol": "NEE"
+    },
+    {
+      "symbol": "NEM",
+      "price_symbol": "NEM",
+      "provider": "YAHOO",
+      "yahooSymbol": "NEM"
+    },
+    {
+      "symbol": "NFLX",
+      "price_symbol": "NFLX",
+      "provider": "YAHOO",
+      "yahooSymbol": "NFLX"
+    },
+    {
+      "symbol": "NI",
+      "price_symbol": "NI",
+      "provider": "YAHOO",
+      "yahooSymbol": "NI"
+    },
+    {
+      "symbol": "NKE",
+      "price_symbol": "NKE",
+      "provider": "YAHOO",
+      "yahooSymbol": "NKE"
+    },
+    {
+      "symbol": "NOC",
+      "price_symbol": "NOC",
+      "provider": "YAHOO",
+      "yahooSymbol": "NOC"
+    },
+    {
+      "symbol": "NOW",
+      "price_symbol": "NOW",
+      "provider": "YAHOO",
+      "yahooSymbol": "NOW"
+    },
+    {
+      "symbol": "NRG",
+      "price_symbol": "NRG",
+      "provider": "YAHOO",
+      "yahooSymbol": "NRG"
+    },
+    {
+      "symbol": "NSC",
+      "price_symbol": "NSC",
+      "provider": "YAHOO",
+      "yahooSymbol": "NSC"
+    },
+    {
+      "symbol": "NTAP",
+      "price_symbol": "NTAP",
+      "provider": "YAHOO",
+      "yahooSymbol": "NTAP"
+    },
+    {
+      "symbol": "NTRS",
+      "price_symbol": "NTRS",
+      "provider": "YAHOO",
+      "yahooSymbol": "NTRS"
+    },
+    {
+      "symbol": "NUE",
+      "price_symbol": "NUE",
+      "provider": "YAHOO",
+      "yahooSymbol": "NUE"
+    },
+    {
+      "symbol": "NVDA",
+      "price_symbol": "NVDA",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "NVR",
+      "price_symbol": "NVR",
+      "provider": "YAHOO",
+      "yahooSymbol": "NVR"
+    },
+    {
+      "symbol": "NWS",
+      "price_symbol": "NWS",
+      "provider": "YAHOO",
+      "yahooSymbol": "NWS"
+    },
+    {
+      "symbol": "NWSA",
+      "price_symbol": "NWSA",
+      "provider": "YAHOO",
+      "yahooSymbol": "NWSA"
+    },
+    {
+      "symbol": "NXPI",
+      "price_symbol": "NXPI",
+      "provider": "YAHOO",
+      "yahooSymbol": "NXPI"
+    },
+    {
+      "symbol": "O",
+      "price_symbol": "O",
+      "provider": "YAHOO",
+      "yahooSymbol": "O"
+    },
+    {
+      "symbol": "ODFL",
+      "price_symbol": "ODFL",
+      "provider": "YAHOO",
+      "yahooSymbol": "ODFL"
+    },
+    {
+      "symbol": "OKE",
+      "price_symbol": "OKE",
+      "provider": "YAHOO",
+      "yahooSymbol": "OKE"
+    },
+    {
+      "symbol": "OMC",
+      "price_symbol": "OMC",
+      "provider": "YAHOO",
+      "yahooSymbol": "OMC"
+    },
+    {
+      "symbol": "ON",
+      "price_symbol": "ON",
+      "provider": "YAHOO",
+      "yahooSymbol": "ON"
+    },
+    {
+      "symbol": "ORCL",
+      "price_symbol": "ORCL",
+      "provider": "YAHOO",
+      "yahooSymbol": "ORCL"
+    },
+    {
+      "symbol": "ORLY",
+      "price_symbol": "ORLY",
+      "provider": "YAHOO",
+      "yahooSymbol": "ORLY"
+    },
+    {
+      "symbol": "OTIS",
+      "price_symbol": "OTIS",
+      "provider": "YAHOO",
+      "yahooSymbol": "OTIS"
+    },
+    {
+      "symbol": "OXY",
+      "price_symbol": "OXY",
+      "provider": "YAHOO",
+      "yahooSymbol": "OXY"
+    },
+    {
+      "symbol": "P",
+      "price_symbol": "P",
+      "provider": "YAHOO",
+      "yahooSymbol": "P"
+    },
+    {
+      "symbol": "PANW",
+      "price_symbol": "PANW",
+      "provider": "YAHOO",
+      "yahooSymbol": "PANW"
+    },
+    {
+      "symbol": "PAYX",
+      "price_symbol": "PAYX",
+      "provider": "YAHOO",
+      "yahooSymbol": "PAYX"
+    },
+    {
+      "symbol": "PCAR",
+      "price_symbol": "PCAR",
+      "provider": "YAHOO",
+      "yahooSymbol": "PCAR"
+    },
+    {
+      "symbol": "PCG",
+      "price_symbol": "PCG",
+      "provider": "YAHOO",
+      "yahooSymbol": "PCG"
+    },
+    {
+      "symbol": "PDD",
+      "price_symbol": "PDD",
+      "provider": "YAHOO",
+      "yahooSymbol": "PDD"
+    },
+    {
+      "symbol": "PEG",
+      "price_symbol": "PEG",
+      "provider": "YAHOO",
+      "yahooSymbol": "PEG"
+    },
+    {
+      "symbol": "PEP",
+      "price_symbol": "PEP",
+      "provider": "YAHOO",
+      "yahooSymbol": "PEP"
+    },
+    {
+      "symbol": "PFE",
+      "price_symbol": "PFE",
+      "provider": "YAHOO",
+      "yahooSymbol": "PFE"
+    },
+    {
+      "symbol": "PFG",
+      "price_symbol": "PFG",
+      "provider": "YAHOO",
+      "yahooSymbol": "PFG"
+    },
+    {
+      "symbol": "PG",
+      "price_symbol": "PG",
+      "provider": "YAHOO",
+      "yahooSymbol": "PG"
+    },
+    {
+      "symbol": "PGR",
+      "price_symbol": "PGR",
+      "provider": "YAHOO",
+      "yahooSymbol": "PGR"
+    },
+    {
+      "symbol": "PH",
+      "price_symbol": "PH",
+      "provider": "YAHOO",
+      "yahooSymbol": "PH"
+    },
+    {
+      "symbol": "PHM",
+      "price_symbol": "PHM",
+      "provider": "YAHOO",
+      "yahooSymbol": "PHM"
+    },
+    {
+      "symbol": "PKG",
+      "price_symbol": "PKG",
+      "provider": "YAHOO",
+      "yahooSymbol": "PKG"
+    },
+    {
+      "symbol": "PLD",
+      "price_symbol": "PLD",
+      "provider": "YAHOO",
+      "yahooSymbol": "PLD"
+    },
+    {
+      "symbol": "PLTR",
+      "price_symbol": "PLTR",
+      "provider": "YAHOO",
+      "yahooSymbol": "PLTR"
+    },
+    {
+      "symbol": "PM",
+      "price_symbol": "PM",
+      "provider": "YAHOO",
+      "yahooSymbol": "PM"
+    },
+    {
+      "symbol": "PNC",
+      "price_symbol": "PNC",
+      "provider": "YAHOO",
+      "yahooSymbol": "PNC"
+    },
+    {
+      "symbol": "PNR",
+      "price_symbol": "PNR",
+      "provider": "YAHOO",
+      "yahooSymbol": "PNR"
+    },
+    {
+      "symbol": "PNW",
+      "price_symbol": "PNW",
+      "provider": "YAHOO",
+      "yahooSymbol": "PNW"
+    },
+    {
+      "symbol": "PODD",
+      "price_symbol": "PODD",
+      "provider": "YAHOO",
+      "yahooSymbol": "PODD"
+    },
+    {
+      "symbol": "PPG",
+      "price_symbol": "PPG",
+      "provider": "YAHOO",
+      "yahooSymbol": "PPG"
+    },
+    {
+      "symbol": "PPL",
+      "price_symbol": "PPL",
+      "provider": "YAHOO",
+      "yahooSymbol": "PPL"
+    },
+    {
+      "symbol": "PRU",
+      "price_symbol": "PRU",
+      "provider": "YAHOO",
+      "yahooSymbol": "PRU"
+    },
+    {
+      "symbol": "PSA",
+      "price_symbol": "PSA",
+      "provider": "YAHOO",
+      "yahooSymbol": "PSA"
+    },
+    {
+      "symbol": "PSX",
+      "price_symbol": "PSX",
+      "provider": "YAHOO",
+      "yahooSymbol": "PSX"
+    },
+    {
+      "symbol": "PTC",
+      "price_symbol": "PTC",
+      "provider": "YAHOO",
+      "yahooSymbol": "PTC"
+    },
+    {
+      "symbol": "PWR",
+      "price_symbol": "PWR",
+      "provider": "YAHOO",
+      "yahooSymbol": "PWR"
+    },
+    {
+      "symbol": "PYPL",
+      "price_symbol": "PYPL",
+      "provider": "YAHOO",
+      "yahooSymbol": "PYPL"
+    },
+    {
+      "symbol": "Q",
+      "price_symbol": "Q",
+      "provider": "YAHOO",
+      "yahooSymbol": "Q"
+    },
+    {
+      "symbol": "QCOM",
+      "price_symbol": "QCOM",
+      "provider": "YAHOO",
+      "yahooSymbol": "QCOM"
+    },
+    {
+      "symbol": "RCL",
+      "price_symbol": "RCL",
+      "provider": "YAHOO",
+      "yahooSymbol": "RCL"
+    },
+    {
+      "symbol": "RDDT",
+      "price_symbol": "RDDT",
+      "provider": "YAHOO",
+      "yahooSymbol": "RDDT"
+    },
+    {
+      "symbol": "REG",
+      "price_symbol": "REG",
+      "provider": "YAHOO",
+      "yahooSymbol": "REG"
+    },
+    {
+      "symbol": "REGN",
+      "price_symbol": "REGN",
+      "provider": "YAHOO",
+      "yahooSymbol": "REGN"
+    },
+    {
+      "symbol": "RF",
+      "price_symbol": "RF",
+      "provider": "YAHOO",
+      "yahooSymbol": "RF"
+    },
+    {
+      "symbol": "RJF",
+      "price_symbol": "RJF",
+      "provider": "YAHOO",
+      "yahooSymbol": "RJF"
+    },
+    {
+      "symbol": "RKLB",
+      "price_symbol": "RKLB",
+      "provider": "YAHOO",
+      "yahooSymbol": "RKLB"
+    },
+    {
+      "symbol": "RL",
+      "price_symbol": "RL",
+      "provider": "YAHOO",
+      "yahooSymbol": "RL"
+    },
+    {
+      "symbol": "RMD",
+      "price_symbol": "RMD",
+      "provider": "YAHOO",
+      "yahooSymbol": "RMD"
+    },
+    {
+      "symbol": "ROK",
+      "price_symbol": "ROK",
+      "provider": "YAHOO",
+      "yahooSymbol": "ROK"
+    },
+    {
+      "symbol": "ROL",
+      "price_symbol": "ROL",
+      "provider": "YAHOO",
+      "yahooSymbol": "ROL"
+    },
+    {
+      "symbol": "ROP",
+      "price_symbol": "ROP",
+      "provider": "YAHOO",
+      "yahooSymbol": "ROP"
+    },
+    {
+      "symbol": "ROST",
+      "price_symbol": "ROST",
+      "provider": "YAHOO",
+      "yahooSymbol": "ROST"
+    },
+    {
+      "symbol": "RSG",
+      "price_symbol": "RSG",
+      "provider": "YAHOO",
+      "yahooSymbol": "RSG"
+    },
+    {
+      "symbol": "RTX",
+      "price_symbol": "RTX",
+      "provider": "YAHOO",
+      "yahooSymbol": "RTX"
+    },
+    {
+      "symbol": "RVTY",
+      "price_symbol": "RVTY",
+      "provider": "YAHOO",
+      "yahooSymbol": "RVTY"
+    },
+    {
+      "symbol": "SBAC",
+      "price_symbol": "SBAC",
+      "provider": "YAHOO",
+      "yahooSymbol": "SBAC"
+    },
+    {
+      "symbol": "SBUX",
+      "price_symbol": "SBUX",
+      "provider": "YAHOO",
+      "yahooSymbol": "SBUX"
+    },
+    {
+      "symbol": "SCHW",
+      "price_symbol": "SCHW",
+      "provider": "YAHOO",
+      "yahooSymbol": "SCHW"
+    },
+    {
+      "symbol": "SHOP",
+      "price_symbol": "SHOP",
+      "provider": "YAHOO",
+      "yahooSymbol": "SHOP"
+    },
+    {
+      "symbol": "SHW",
+      "price_symbol": "SHW",
+      "provider": "YAHOO",
+      "yahooSymbol": "SHW"
+    },
+    {
+      "symbol": "SJM",
+      "price_symbol": "SJM",
+      "provider": "YAHOO",
+      "yahooSymbol": "SJM"
+    },
+    {
+      "symbol": "SKYD",
+      "price_symbol": "SKYD",
+      "provider": "YAHOO",
+      "yahooSymbol": "SKYD"
+    },
+    {
+      "symbol": "SLB",
+      "price_symbol": "SLB",
+      "provider": "YAHOO",
+      "yahooSymbol": "SLB"
+    },
+    {
+      "symbol": "SMCI",
+      "price_symbol": "SMCI",
+      "provider": "YAHOO",
+      "yahooSymbol": "SMCI"
+    },
+    {
+      "symbol": "SNA",
+      "price_symbol": "SNA",
+      "provider": "YAHOO",
+      "yahooSymbol": "SNA"
+    },
+    {
+      "symbol": "SNDK",
+      "price_symbol": "SNDK",
+      "provider": "YAHOO",
+      "yahooSymbol": "SNDK"
+    },
+    {
+      "symbol": "SNPS",
+      "price_symbol": "SNPS",
+      "provider": "YAHOO",
+      "yahooSymbol": "SNPS"
+    },
+    {
+      "symbol": "SO",
+      "price_symbol": "SO",
+      "provider": "YAHOO",
+      "yahooSymbol": "SO"
+    },
+    {
+      "symbol": "SOLV",
+      "price_symbol": "SOLV",
+      "provider": "YAHOO",
+      "yahooSymbol": "SOLV"
+    },
+    {
+      "symbol": "SPCX",
+      "price_symbol": "SPCX",
+      "provider": "YAHOO",
+      "yahooSymbol": "SPCX"
+    },
+    {
+      "symbol": "SPG",
+      "price_symbol": "SPG",
+      "provider": "YAHOO",
+      "yahooSymbol": "SPG"
+    },
+    {
+      "symbol": "SPGI",
+      "price_symbol": "SPGI",
+      "provider": "YAHOO",
+      "yahooSymbol": "SPGI"
+    },
+    {
+      "symbol": "SRE",
+      "price_symbol": "SRE",
+      "provider": "YAHOO",
+      "yahooSymbol": "SRE"
+    },
+    {
+      "symbol": "STE",
+      "price_symbol": "STE",
+      "provider": "YAHOO",
+      "yahooSymbol": "STE"
+    },
+    {
+      "symbol": "STLD",
+      "price_symbol": "STLD",
+      "provider": "YAHOO",
+      "yahooSymbol": "STLD"
+    },
+    {
+      "symbol": "STT",
+      "price_symbol": "STT",
+      "provider": "YAHOO",
+      "yahooSymbol": "STT"
+    },
+    {
+      "symbol": "STX",
+      "price_symbol": "STX",
+      "provider": "YAHOO",
+      "yahooSymbol": "STX"
+    },
+    {
+      "symbol": "STZ",
+      "price_symbol": "STZ",
+      "provider": "YAHOO",
+      "yahooSymbol": "STZ"
+    },
+    {
+      "symbol": "SW",
+      "price_symbol": "SW",
+      "provider": "YAHOO",
+      "yahooSymbol": "SW"
+    },
+    {
+      "symbol": "SWK",
+      "price_symbol": "SWK",
+      "provider": "YAHOO",
+      "yahooSymbol": "SWK"
+    },
+    {
+      "symbol": "SWKS",
+      "price_symbol": "SWKS",
+      "provider": "YAHOO",
+      "yahooSymbol": "SWKS"
+    },
+    {
+      "symbol": "SYF",
+      "price_symbol": "SYF",
+      "provider": "YAHOO",
+      "yahooSymbol": "SYF"
+    },
+    {
+      "symbol": "SYK",
+      "price_symbol": "SYK",
+      "provider": "YAHOO",
+      "yahooSymbol": "SYK"
+    },
+    {
+      "symbol": "SYY",
+      "price_symbol": "SYY",
+      "provider": "YAHOO",
+      "yahooSymbol": "SYY"
+    },
+    {
+      "symbol": "T",
+      "price_symbol": "T",
+      "provider": "YAHOO",
+      "yahooSymbol": "T"
+    },
+    {
+      "symbol": "TDG",
+      "price_symbol": "TDG",
+      "provider": "YAHOO",
+      "yahooSymbol": "TDG"
+    },
+    {
+      "symbol": "TDY",
+      "price_symbol": "TDY",
+      "provider": "YAHOO",
+      "yahooSymbol": "TDY"
+    },
+    {
+      "symbol": "TECH",
+      "price_symbol": "TECH",
+      "provider": "YAHOO",
+      "yahooSymbol": "TECH"
+    },
+    {
+      "symbol": "TEL",
+      "price_symbol": "TEL",
+      "provider": "YAHOO",
+      "yahooSymbol": "TEL"
+    },
+    {
+      "symbol": "TER",
+      "price_symbol": "TER",
+      "provider": "YAHOO",
+      "yahooSymbol": "TER"
+    },
+    {
+      "symbol": "TFC",
+      "price_symbol": "TFC",
+      "provider": "YAHOO",
+      "yahooSymbol": "TFC"
+    },
+    {
+      "symbol": "TGT",
+      "price_symbol": "TGT",
+      "provider": "YAHOO",
+      "yahooSymbol": "TGT"
+    },
+    {
+      "symbol": "TJX",
+      "price_symbol": "TJX",
+      "provider": "YAHOO",
+      "yahooSymbol": "TJX"
+    },
+    {
+      "symbol": "TKO",
+      "price_symbol": "TKO",
+      "provider": "YAHOO",
+      "yahooSymbol": "TKO"
+    },
+    {
+      "symbol": "TMO",
+      "price_symbol": "TMO",
+      "provider": "YAHOO",
+      "yahooSymbol": "TMO"
+    },
+    {
+      "symbol": "TMUS",
+      "price_symbol": "TMUS",
+      "provider": "YAHOO",
+      "yahooSymbol": "TMUS"
+    },
+    {
+      "symbol": "TPL",
+      "price_symbol": "TPL",
+      "provider": "YAHOO",
+      "yahooSymbol": "TPL"
+    },
+    {
+      "symbol": "TPR",
+      "price_symbol": "TPR",
+      "provider": "YAHOO",
+      "yahooSymbol": "TPR"
+    },
+    {
+      "symbol": "TRGP",
+      "price_symbol": "TRGP",
+      "provider": "YAHOO",
+      "yahooSymbol": "TRGP"
+    },
+    {
+      "symbol": "TRI",
+      "price_symbol": "TRI",
+      "provider": "YAHOO",
+      "yahooSymbol": "TRI"
+    },
+    {
+      "symbol": "TRMB",
+      "price_symbol": "TRMB",
+      "provider": "YAHOO",
+      "yahooSymbol": "TRMB"
+    },
+    {
+      "symbol": "TROW",
+      "price_symbol": "TROW",
+      "provider": "YAHOO",
+      "yahooSymbol": "TROW"
+    },
+    {
+      "symbol": "TRV",
+      "price_symbol": "TRV",
+      "provider": "YAHOO",
+      "yahooSymbol": "TRV"
+    },
+    {
+      "symbol": "TSCO",
+      "price_symbol": "TSCO",
+      "provider": "YAHOO",
+      "yahooSymbol": "TSCO"
+    },
+    {
+      "symbol": "TSLA",
+      "price_symbol": "TSLA",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "TSN",
+      "price_symbol": "TSN",
+      "provider": "YAHOO",
+      "yahooSymbol": "TSN"
+    },
+    {
+      "symbol": "TT",
+      "price_symbol": "TT",
+      "provider": "YAHOO",
+      "yahooSymbol": "TT"
+    },
+    {
+      "symbol": "TTWO",
+      "price_symbol": "TTWO",
+      "provider": "YAHOO",
+      "yahooSymbol": "TTWO"
+    },
+    {
+      "symbol": "TWLO",
+      "price_symbol": "TWLO",
+      "provider": "YAHOO",
+      "yahooSymbol": "TWLO"
+    },
+    {
+      "symbol": "TXN",
+      "price_symbol": "TXN",
+      "provider": "YAHOO",
+      "yahooSymbol": "TXN"
+    },
+    {
+      "symbol": "TXT",
+      "price_symbol": "TXT",
+      "provider": "YAHOO",
+      "yahooSymbol": "TXT"
+    },
+    {
+      "symbol": "TYL",
+      "price_symbol": "TYL",
+      "provider": "YAHOO",
+      "yahooSymbol": "TYL"
+    },
+    {
+      "symbol": "UAL",
+      "price_symbol": "UAL",
+      "provider": "YAHOO",
+      "yahooSymbol": "UAL"
+    },
+    {
+      "symbol": "UBER",
+      "price_symbol": "UBER",
+      "provider": "YAHOO",
+      "yahooSymbol": "UBER"
+    },
+    {
+      "symbol": "UDR",
+      "price_symbol": "UDR",
+      "provider": "YAHOO",
+      "yahooSymbol": "UDR"
+    },
+    {
+      "symbol": "UHS",
+      "price_symbol": "UHS",
+      "provider": "YAHOO",
+      "yahooSymbol": "UHS"
+    },
+    {
+      "symbol": "ULTA",
+      "price_symbol": "ULTA",
+      "provider": "YAHOO",
+      "yahooSymbol": "ULTA"
+    },
+    {
+      "symbol": "UNH",
+      "price_symbol": "UNH",
+      "provider": "YAHOO",
+      "yahooSymbol": "UNH"
+    },
+    {
+      "symbol": "UNP",
+      "price_symbol": "UNP",
+      "provider": "YAHOO",
+      "yahooSymbol": "UNP"
+    },
+    {
+      "symbol": "UPS",
+      "price_symbol": "UPS",
+      "provider": "YAHOO",
+      "yahooSymbol": "UPS"
+    },
+    {
+      "symbol": "URI",
+      "price_symbol": "URI",
+      "provider": "YAHOO",
+      "yahooSymbol": "URI"
+    },
+    {
+      "symbol": "USB",
+      "price_symbol": "USB",
+      "provider": "YAHOO",
+      "yahooSymbol": "USB"
+    },
+    {
+      "symbol": "V",
+      "price_symbol": "V",
+      "provider": "YAHOO",
+      "yahooSymbol": "V"
+    },
+    {
+      "symbol": "VEEV",
+      "price_symbol": "VEEV",
+      "provider": "YAHOO",
+      "yahooSymbol": "VEEV"
+    },
+    {
+      "symbol": "VICI",
+      "price_symbol": "VICI",
+      "provider": "YAHOO",
+      "yahooSymbol": "VICI"
+    },
+    {
+      "symbol": "VLO",
+      "price_symbol": "VLO",
+      "provider": "YAHOO",
+      "yahooSymbol": "VLO"
+    },
+    {
+      "symbol": "VLTO",
+      "price_symbol": "VLTO",
+      "provider": "YAHOO",
+      "yahooSymbol": "VLTO"
+    },
+    {
+      "symbol": "VMC",
+      "price_symbol": "VMC",
+      "provider": "YAHOO",
+      "yahooSymbol": "VMC"
+    },
+    {
+      "symbol": "VMRK",
+      "price_symbol": "VMRK",
+      "provider": "YAHOO",
+      "yahooSymbol": "VMRK"
+    },
+    {
+      "symbol": "VRSK",
+      "price_symbol": "VRSK",
+      "provider": "YAHOO",
+      "yahooSymbol": "VRSK"
+    },
+    {
+      "symbol": "VRSN",
+      "price_symbol": "VRSN",
+      "provider": "YAHOO",
+      "yahooSymbol": "VRSN"
+    },
+    {
+      "symbol": "VRT",
+      "price_symbol": "VRT",
+      "provider": "YAHOO",
+      "yahooSymbol": "VRT"
+    },
+    {
+      "symbol": "VRTX",
+      "price_symbol": "VRTX",
+      "provider": "YAHOO",
+      "yahooSymbol": "VRTX"
+    },
+    {
+      "symbol": "VST",
+      "price_symbol": "VST",
+      "provider": "YAHOO",
+      "yahooSymbol": "VST"
+    },
+    {
+      "symbol": "VTR",
+      "price_symbol": "VTR",
+      "provider": "YAHOO",
+      "yahooSymbol": "VTR"
+    },
+    {
+      "symbol": "VTRS",
+      "price_symbol": "VTRS",
+      "provider": "YAHOO",
+      "yahooSymbol": "VTRS"
+    },
+    {
+      "symbol": "VYLR",
+      "price_symbol": "VYLR",
+      "provider": "YAHOO",
+      "yahooSymbol": "VYLR"
+    },
+    {
+      "symbol": "VZ",
+      "price_symbol": "VZ",
+      "provider": "YAHOO",
+      "yahooSymbol": "VZ"
+    },
+    {
+      "symbol": "WAB",
+      "price_symbol": "WAB",
+      "provider": "YAHOO",
+      "yahooSymbol": "WAB"
+    },
+    {
+      "symbol": "WAT",
+      "price_symbol": "WAT",
+      "provider": "YAHOO",
+      "yahooSymbol": "WAT"
+    },
+    {
+      "symbol": "WDAY",
+      "price_symbol": "WDAY",
+      "provider": "YAHOO",
+      "yahooSymbol": "WDAY"
+    },
+    {
+      "symbol": "WDC",
+      "price_symbol": "WDC",
+      "provider": "YAHOO",
+      "yahooSymbol": "WDC"
+    },
+    {
+      "symbol": "WEC",
+      "price_symbol": "WEC",
+      "provider": "YAHOO",
+      "yahooSymbol": "WEC"
+    },
+    {
+      "symbol": "WELL",
+      "price_symbol": "WELL",
+      "provider": "YAHOO",
+      "yahooSymbol": "WELL"
+    },
+    {
+      "symbol": "WFC",
+      "price_symbol": "WFC",
+      "provider": "YAHOO",
+      "yahooSymbol": "WFC"
+    },
+    {
+      "symbol": "WM",
+      "price_symbol": "WM",
+      "provider": "YAHOO",
+      "yahooSymbol": "WM"
+    },
+    {
+      "symbol": "WMB",
+      "price_symbol": "WMB",
+      "provider": "YAHOO",
+      "yahooSymbol": "WMB"
+    },
+    {
+      "symbol": "WMT",
+      "price_symbol": "WMT",
+      "provider": "TIINGO",
+      "yahooSymbol": null
+    },
+    {
+      "symbol": "WRB",
+      "price_symbol": "WRB",
+      "provider": "YAHOO",
+      "yahooSymbol": "WRB"
+    },
+    {
+      "symbol": "WSM",
+      "price_symbol": "WSM",
+      "provider": "YAHOO",
+      "yahooSymbol": "WSM"
+    },
+    {
+      "symbol": "WST",
+      "price_symbol": "WST",
+      "provider": "YAHOO",
+      "yahooSymbol": "WST"
+    },
+    {
+      "symbol": "WTW",
+      "price_symbol": "WTW",
+      "provider": "YAHOO",
+      "yahooSymbol": "WTW"
+    },
+    {
+      "symbol": "WY",
+      "price_symbol": "WY",
+      "provider": "YAHOO",
+      "yahooSymbol": "WY"
+    },
+    {
+      "symbol": "WYNN",
+      "price_symbol": "WYNN",
+      "provider": "YAHOO",
+      "yahooSymbol": "WYNN"
+    },
+    {
+      "symbol": "XEL",
+      "price_symbol": "XEL",
+      "provider": "YAHOO",
+      "yahooSymbol": "XEL"
+    },
+    {
+      "symbol": "XOM",
+      "price_symbol": "XOM",
+      "provider": "YAHOO",
+      "yahooSymbol": "XOM"
+    },
+    {
+      "symbol": "XYL",
+      "price_symbol": "XYL",
+      "provider": "YAHOO",
+      "yahooSymbol": "XYL"
+    },
+    {
+      "symbol": "XYZ",
+      "price_symbol": "XYZ",
+      "provider": "YAHOO",
+      "yahooSymbol": "XYZ"
+    },
+    {
+      "symbol": "YUM",
+      "price_symbol": "YUM",
+      "provider": "YAHOO",
+      "yahooSymbol": "YUM"
+    },
+    {
+      "symbol": "ZBH",
+      "price_symbol": "ZBH",
+      "provider": "YAHOO",
+      "yahooSymbol": "ZBH"
+    },
+    {
+      "symbol": "ZBRA",
+      "price_symbol": "ZBRA",
+      "provider": "YAHOO",
+      "yahooSymbol": "ZBRA"
+    },
+    {
+      "symbol": "ZTS",
+      "price_symbol": "ZTS",
+      "provider": "YAHOO",
+      "yahooSymbol": "ZTS"
+    }
+  ],
+  "固定范围": "仅复用 10 月 16 日持仓参照，不表示新的基金持仓或官方历史指数成分。",
+  "verification": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v136-20261030/independent-publication-verification.json",
+    "sha256": "dc791875ecb190515a212f51327ff40bf8f42524df460e57f1c55d6d9343e4e3"
+  },
+  "oldFieldsProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v136-20261030/old-fields-after.json",
+    "sha256": "99656cc7cc67522bce0fd7c2c70b3ec262ba548e0f24264c353ce2210026d713"
+  },
+  "sourceVerification": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v136-20261030/independent-source-verification.json",
+    "sha256": "b5ff07fb1e903a8b8892cc99b8f457d3236ba7aa56a7d467609346a289cd49ce"
+  },
+  "aliasUniquenessProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v136-20261030/frozen-yahoo-alias-uniqueness.json",
+    "sha256": "4644fac9b6722ec22b0bffeff97d4d930e57dfa772831acf0f5f3dfd061dfa8b"
+  },
+  "budgetPrefixProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v136-20261030/persistent-budget-old-prefix-proof.json",
+    "sha256": "df80835d693574c75262f0f5c6d3197ef00ccda28371d01e96f48c9042c1675c"
+  },
+  "idempotence": {
+    "checkedAt": "2026-10-30T07:58:48.400001+00:00",
+    "sourceRequests": 0,
+    "newNativeRuns": 0,
+    "formalWrites": 0,
+    "allControlAndWalRowsUnchanged": true
+  },
+  "runtime": {
+    "path": "var/plan-1029/20261030/runtime-us-plan1029-final.json",
+    "sha256": "9ceebedd015182fe28f8f9f528164e470328b9e4e5a9d22d7e5add483f63a586"
+  },
+  "physicalId": 3267,
+  "evidenceDirectory": "var/market-data/scope-review/core-holdings-incremental-v136-20261030"
+}

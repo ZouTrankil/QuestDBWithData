@@ -1,0 +1,81 @@
+{
+  "acceptedAt": "2026-10-30T08:18:53.398646+00:00",
+  "fromDate": "2026-10-26",
+  "throughDate": "2026-10-29",
+  "说明": "仅为原核心范围的新日期验收；旧首批清单和历史实验截止日保持。",
+  "wholeMarketComplete": false,
+  "finalLiveProof": {
+    "path": "var/market-data/scope-review/core-incremental-v131-20261030/cross-asset-final-live-proof.json",
+    "sha256": "0ed5f0c67ccab5a0108a17e16c1339b219106c0ef8d9139e71aaaff1d6923286"
+  },
+  "限制": [
+    "不代表全市场或所有历史完整",
+    "ITCH 保持停用，原件和归档保留",
+    "旧来源失败和未决任务不重发、不解锁，旧预算不清零"
+  ],
+  "market": "US",
+  "businessZone": "America/New_York",
+  "businessDates": [
+    "2026-10-26",
+    "2026-10-27",
+    "2026-10-28",
+    "2026-10-29"
+  ],
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "TLT",
+    "GLD",
+    "USO",
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "TSLA",
+    "AVGO",
+    "JPM",
+    "WMT"
+  ],
+  "newDailyRows": 64,
+  "newRawMinuteRows": 29952,
+  "newRegularMinuteRows": 29952,
+  "newOneMinuteRows": 24960,
+  "newFiveMinuteRows": 4992,
+  "newNativeRuns": 48,
+  "newTasks": 32,
+  "sourceRequests": 32,
+  "receivedBytes": 2731439,
+  "oldDailyRows": 80054,
+  "oldRawMinuteRows": 1579968,
+  "oldRegularMinuteRows": 1527552,
+  "all20Daily13Raw14ViewAndFiveMinuteIndependentExact": true,
+  "allOldFieldsDualReadUnchanged": true,
+  "oldTypedNativeAndTasksUnchanged": true,
+  "calendarSha256": "b708c1b965f85c561692b22aaefa19b74f397aee815152f73f094e5948a89de5",
+  "runtime": {
+    "path": "var/plan-1029/20261030/runtime-us-plan1029-final.json",
+    "sha256": "9ceebedd015182fe28f8f9f528164e470328b9e4e5a9d22d7e5add483f63a586"
+  },
+  "runtimeJarCount": 47,
+  "physicalIds": {
+    "us_equity_daily": 3267,
+    "us_equity_intraday": 3206
+  },
+  "分钟口径": "成交量仅代表 IEX；正常时段视图十四列，原分钟十三列。",
+  "verification": {
+    "path": "var/market-data/scope-review/core-incremental-v131-20261030/independent-verification.json",
+    "sha256": "a129719c65062dfe689ad6d07ce19bae6a69fc8cdd68e59f640529fc05dfe134"
+  },
+  "idempotence": {
+    "checkedAt": "2026-10-30T07:21:49.145191+00:00",
+    "sourceRequests": 0,
+    "newTasks": 0,
+    "newNativeRuns": 0,
+    "formalWrites": 0,
+    "allControlAndWalRowsUnchanged": true
+  },
+  "evidenceDirectory": "var/market-data/scope-review/core-incremental-v131-20261030"
+}

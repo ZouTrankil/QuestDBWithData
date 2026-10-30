@@ -1,0 +1,115 @@
+{
+  "acceptedAt": "2026-10-30T08:18:53.398646+00:00",
+  "fromDate": "2026-10-22",
+  "throughDate": "2026-10-29",
+  "说明": "每条来源各请求一轮；已覆盖键跳过。FRED 两条序列未提供 29 日，保留缺口，不用 CBOE 补写 FRED。",
+  "wholeMarketComplete": false,
+  "finalLiveProof": {
+    "path": "var/market-data/scope-review/core-incremental-v131-20261030/cross-asset-final-live-proof.json",
+    "sha256": "0ed5f0c67ccab5a0108a17e16c1339b219106c0ef8d9139e71aaaff1d6923286"
+  },
+  "限制": [
+    "不代表全市场或所有历史完整",
+    "ITCH 保持停用，原件和归档保留",
+    "旧来源失败和未决任务不重发、不解锁，旧预算不清零"
+  ],
+  "requestedFrom": "2026-10-22",
+  "requestedThrough": "2026-10-29",
+  "sourceRequests": 4,
+  "newRows": 17,
+  "newNativeRuns": 4,
+  "actualCutoffs": [
+    {
+      "provider": "FRED",
+      "series": "NASDAQCOM",
+      "rows": 5240,
+      "through": "2026-10-29"
+    },
+    {
+      "provider": "FRED",
+      "series": "SP500",
+      "rows": 2581,
+      "through": "2026-10-28"
+    },
+    {
+      "provider": "FRED",
+      "series": "VIXCLS",
+      "rows": 5271,
+      "through": "2026-10-28"
+    },
+    {
+      "provider": "CBOE",
+      "series": "VIX",
+      "rows": 5272,
+      "through": "2026-10-29"
+    }
+  ],
+  "sourceGaps": [
+    {
+      "series": "NASDAQCOM",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-10-29",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29"
+      ],
+      "knownSessionDatesNotProvided": [],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    },
+    {
+      "series": "SP500",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-10-29",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-10-29"
+      ],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    },
+    {
+      "series": "VIXCLS",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-10-29",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-10-29"
+      ],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    }
+  ],
+  "all6Fred7CboeSourcePreparedNativeDualReadExact": true,
+  "allOldFieldsAndTypedNativePreserved": true,
+  "oldRowsVerified": {
+    "us_market_daily": 13079,
+    "us_index_daily": 5268
+  },
+  "sourceExistingValuesProof": {
+    "path": "var/market-data/scope-review/core-macro-v138-20261030/source-existing-values-proof.json",
+    "sha256": "2dc7d7123ef47281ca7a4b4ea192fa9e06939e53fb77f95768265a6b9995bb2b"
+  },
+  "verification": {
+    "path": "var/market-data/scope-review/core-macro-v138-20261030/independent-verification.json",
+    "sha256": "896dadf94bee19c209a90efd0d2195efb431d21710c25dd20daf296eed05825c"
+  },
+  "runtime": {
+    "path": "var/plan-1029/20261030/runtime-us-plan1029-final.json",
+    "sha256": "9ceebedd015182fe28f8f9f528164e470328b9e4e5a9d22d7e5add483f63a586"
+  },
+  "evidenceDirectory": "var/market-data/scope-review/core-macro-v138-20261030"
+}
