@@ -1,0 +1,59 @@
+{
+  "说明": "固定10月16日持仓参照的价格增量，不冒充新持仓或官方历史指数成分。",
+  "holdingsAsOf": "2026-10-16",
+  "fromDate": "2026-10-30",
+  "throughDate": "2026-10-30",
+  "priceRoutes": 518,
+  "fetchedRoutes": 508,
+  "reusedCoreRoutes": 10,
+  "checkedAt": "2026-10-31T07:41:09.185210+00:00",
+  "newRows": 508,
+  "reusedCoreRows": 10,
+  "all518WindowRows": 518,
+  "sourceRequests": 508,
+  "newNativeRuns": 1,
+  "runId": "market-e045adc5-3c59-418a-8790-d1d8ffcfc3ea",
+  "preparedSha256": "57514a884b2cc5a2fcedbd5c4e5d8b04c7cc39dce4107ac48e96a96a35f52e57",
+  "sourceBundleSha256": "087e8b1f569473c898dec91c3fedc2d9460f727a065bf1ac7537cc35dbf09ca8",
+  "all20FieldsRawJavaPreparedNativeHttpPgwireExact": true,
+  "allOldTypedNativeUnchanged": true,
+  "routeProviderCounts": {
+    "YAHOO": 507,
+    "TIINGO": 11
+  },
+  "fixedRouteSnapshot": {
+    "path": "docs/snapshots/us-equity-first-delivery-20261016.json",
+    "sha256": "e4e4b69969b80ee947047dc637412bd75a89b6a778cf76ba22917764933e0d03"
+  },
+  "oldRowsVerified": 1250755,
+  "verification": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v146-20261031/independent-publication-verification.json",
+    "sha256": "f2ee785e899c6617c74f50bd4dbc786ed8cda44531626571117128f112106328"
+  },
+  "oldFieldsProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v146-20261031/old-fields-after.json",
+    "sha256": "69b327f1b9c6e8d0fabe71d577112bffd4ed4267a9a1f94cbcd9ca14ff9f472b"
+  },
+  "sourceProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v146-20261031/independent-source-verification.json",
+    "sha256": "e8b0a789479a652ef876cb567fdc5ffbf3bb58a59cc9d0e5db78b4c4c791d536"
+  },
+  "aliasUniquenessProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v146-20261031/frozen-yahoo-alias-uniqueness.json",
+    "sha256": "cdc7567b57814dc3765a014b1e7698698052fd6915d1f32be19e03cdb86bd592"
+  },
+  "budgetPrefixProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v146-20261031/persistent-budget-old-prefix-proof.json",
+    "sha256": "9cf623688d6ac39ac483a9eefc79f0ee5473ee9498592fc3f33a29e890f8c022"
+  },
+  "idempotence": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v146-20261031/idempotence-independent-verification.json",
+    "sha256": "1cb3d12194f8d423d9632cf15ac28ffb1dfe085bd248d5e61ff445824df1f4bf"
+  },
+  "physicalId": 3267,
+  "runtime": {
+    "path": "var/plan-1029/20261030/runtime-us-plan1029-final.json",
+    "sha256": "9ceebedd015182fe28f8f9f528164e470328b9e4e5a9d22d7e5add483f63a586"
+  },
+  "wholeMarketComplete": false
+}

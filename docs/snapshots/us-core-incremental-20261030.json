@@ -1,0 +1,59 @@
+{
+  "说明": "原16核心的十月三十日增量，旧首批及此前增量清单保持。",
+  "acceptedAt": "2026-10-31T07:18:10.974765+00:00",
+  "fromDate": "2026-10-30",
+  "throughDate": "2026-10-30",
+  "businessZone": "America/New_York",
+  "newDailyRows": 16,
+  "newRawMinuteRows": 7488,
+  "newRegularMinuteRows": 7488,
+  "newOneMinuteRows": 6240,
+  "newFiveMinuteRows": 1248,
+  "newNativeRuns": 48,
+  "newTasks": 32,
+  "sourceRequests": 32,
+  "receivedBytes": 683886,
+  "oldDailyRows": 80118,
+  "oldRawMinuteRows": 1609920,
+  "oldRegularMinuteRows": 1557504,
+  "all20Daily13Raw14ViewAndFiveMinuteIndependentExact": true,
+  "allOldFieldsDualReadUnchanged": true,
+  "oldTypedNativeAndTasksUnchanged": true,
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "TLT",
+    "GLD",
+    "USO",
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "TSLA",
+    "AVGO",
+    "JPM",
+    "WMT"
+  ],
+  "calendarSha256": "b708c1b965f85c561692b22aaefa19b74f397aee815152f73f094e5948a89de5",
+  "runtime": {
+    "path": "var/plan-1029/20261030/runtime-us-plan1029-final.json",
+    "sha256": "9ceebedd015182fe28f8f9f528164e470328b9e4e5a9d22d7e5add483f63a586"
+  },
+  "runtimeJarCount": 47,
+  "physicalIds": {
+    "us_equity_daily": 3267,
+    "us_equity_intraday": 3206
+  },
+  "verification": {
+    "path": "var/market-data/scope-review/core-incremental-v144-20261031/independent-verification.json",
+    "sha256": "7e1a6a7c4ca2ea474035658f9da5ea73e6ced050282062e69e7353dbed9ac1a9"
+  },
+  "idempotence": {
+    "path": "var/market-data/scope-review/core-incremental-v144-20261031/idempotence-proof.json",
+    "sha256": "d4c63bb75ffd1237731f070501c038ef7e7407af373dc7ff821be7a634b44125"
+  },
+  "wholeMarketComplete": false
+}

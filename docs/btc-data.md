@@ -33,7 +33,7 @@ Java 下载 Binance Vision 官方 ZIP，正式数据写配置中的远端 QuestD
 
 旧 `collect --through ...` 保留原行为，不接管这六张表。
 
-旧 `crypto_ohlcv` 的跨资产核心范围另行维护：Binance、Bybit 的 BTCUSDT/ETHUSDT 现货及 USDT 永续，小时线和 UTC 日线已验收到 2026-10-29，累计 370998 行。本轮 26—29 日新增 800 行；官方 REST 小时与原生日线原文、完整十三列、旧值、Native 和幂等检查均通过。原两条官方停市小时缺口保留。现有每日任务只继续这八个产品的日期增量，先维护美股核心；见[本轮验收](decisions/2026-10-30-核心增量十月二十九日验收.md)、[新截止日清单](snapshots/crypto-core-incremental-20261029.json)和[只读查询](../tools/sql/crypto-core-incremental-20261029-reference.sql)。原生六表不在该八产品增量范围内，旧历史清单保持。
+旧 `crypto_ohlcv` 的跨资产核心范围单独维护：Binance、Bybit的BTCUSDT/ETHUSDT现货及USDT永续，小时与UTC日线已到2026-10-30，累计371198行。最新200行的原文、全部十三列、旧值、Native与幂等核验通过，两条原官方停市缺口保持。每日任务只维护原八产品，不扩大到原生六表；见[新清单](snapshots/crypto-core-incremental-20261030.json)、[验收](decisions/2026-10-31-核心增量十月三十日验收.md)、[只读查询](../tools/sql/crypto-core-incremental-20261030-reference.sql)。
 
 ## 记录与停止
 
