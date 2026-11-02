@@ -10,11 +10,11 @@
 
 2026-10-27的WAL异常已单独恢复，旧现场保持。10月31日本轮增量后，日线WAL为 `36/36`，币价为 `42/42`，均零缓冲、未挂起。每次继续前仍须实查，不把历史水位当作当前值。见[恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)和[本轮验收](decisions/2026-10-31-核心增量十月三十日验收.md)。
 
-核心指数最新来源截止日：NASDAQCOM 至 2026-10-29；SP500 至 2026-10-28；VIXCLS 至 2026-10-29；VIX 至 2026-10-30。缺口保留：NASDAQCOM 2026-10-30；SP500 2026-10-29,2026-10-30；VIXCLS 2026-10-30。见[最新清单](snapshots/us-core-macro-incremental-20261031.json)、[查询](../tools/sql/us-core-macro-incremental-20261031-reference.sql)。此前缺口和完成凭证保持，不跨源回填。
+核心指数最新来源实查：NASDAQCOM至2026-10-29；SP500至2026-10-28；VIXCLS至2026-10-29；CBOE VIX至2026-10-30。NASDAQCOM缺2026-10-30；SP500缺2026-10-29,2026-10-30；VIXCLS缺2026-10-30。11月2日各FRED只请求一轮，CBOE已有范围跳过请求。见[周末清单](snapshots/us-core-weekend-maintenance-20261102.json)、[查询](../tools/sql/us-core-weekend-maintenance-20261102-reference.sql)，旧缺口凭证保持。
 
 固定SPY/QQQ持仓参照的518个价格路由已到10-30，最新新增508行，复用十只核心股票10行。持仓日期仍为10-16，不冒充新持仓或官方历史指数成分。见[持仓清单](snapshots/us-core-holdings-incremental-20261030.json)、[查询](../tools/sql/us-core-holdings-incremental-20261030-reference.sql)。
 
-BTC/ETH的Binance、Bybit现货及USDT永续已到UTC10-30，最新新增192根小时线和8根日线，累计371198行。原两条停市缺口、旧十三列和Native保持，仅维护原八产品。见[币价清单](snapshots/crypto-core-incremental-20261030.json)、[查询](../tools/sql/crypto-core-incremental-20261030-reference.sql)。
+BTC/ETH的Binance、Bybit现货及USDT永续已到UTC11-01，最新两个日期新增384根小时线和16根日线，累计371598行。原两条停市缺口、全部旧十三列和Native保持，仅维护原八产品。见[新清单](snapshots/crypto-core-incremental-20261101.json)、[查询](../tools/sql/crypto-core-incremental-20261101-reference.sql)、[验收](decisions/2026-11-02-周末核心维护与两日币价验收.md)。
 
 ## 首批从这里读取
 

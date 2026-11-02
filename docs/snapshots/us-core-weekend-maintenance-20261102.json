@@ -1,0 +1,185 @@
+{
+  "说明": "纽约周末复核已验收核心，无新股票或持仓来源请求；三个FRED各一轮，CBOE已覆盖30日而跳过请求。",
+  "checkedAt": "2026-11-02T00:01:47.315235+00:00",
+  "latestReadyTradingDate": "2026-10-30",
+  "weekendDatesSkipped": [
+    "2026-10-31",
+    "2026-11-01"
+  ],
+  "usCoreAndHoldingsSourceRequests": 0,
+  "usCoreAndHoldingsNewTasks": 0,
+  "usCoreAndHoldingsNewNativeRuns": 0,
+  "fredSourceRequests": 3,
+  "fredNewRows": 0,
+  "fredNewNativeRuns": 0,
+  "cboeSourceRequests": 0,
+  "fredSources": [
+    {
+      "series": "NASDAQCOM",
+      "rawSha256": "8579555a2ede497534a6668e6e09edeae713f5ee8631220a49d900be0a7e6bd3",
+      "observedAt": "2026-11-02T00:01:06.106857Z",
+      "bytes": 868,
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29"
+      ],
+      "newRows": 0,
+      "gapFilled": false,
+      "sourceLastDate": "2026-10-29"
+    },
+    {
+      "series": "SP500",
+      "rawSha256": "ae446911ed17e0da651e7e4fc51ee2f6dfff5738c316c3003c3df0019c66bf0d",
+      "observedAt": "2026-11-02T00:01:17.496381Z",
+      "bytes": 763,
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28"
+      ],
+      "newRows": 0,
+      "gapFilled": false,
+      "sourceLastDate": "2026-10-28"
+    },
+    {
+      "series": "VIXCLS",
+      "rawSha256": "55caa283f61ef886aac91fc753bcdc2adb20865a5a4e3e0a700949b0798eeec3",
+      "observedAt": "2026-11-02T00:01:25.128941Z",
+      "bytes": 849,
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29"
+      ],
+      "newRows": 0,
+      "gapFilled": false,
+      "sourceLastDate": "2026-10-29"
+    }
+  ],
+  "fredSourceGaps": [
+    {
+      "series": "NASDAQCOM",
+      "requestedThrough": "2026-10-30",
+      "sourceProvidedDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-10-30"
+      ],
+      "说明": "只列已证明参照日期，不用股票日历推断宏观来源完整。"
+    },
+    {
+      "series": "SP500",
+      "requestedThrough": "2026-10-30",
+      "sourceProvidedDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-10-29",
+        "2026-10-30"
+      ],
+      "说明": "只列已证明参照日期，不用股票日历推断宏观来源完整。"
+    },
+    {
+      "series": "VIXCLS",
+      "requestedThrough": "2026-10-30",
+      "sourceProvidedDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-10-30"
+      ],
+      "说明": "只列已证明参照日期，不用股票日历推断宏观来源完整。"
+    }
+  ],
+  "fredActualCutoffs": [
+    {
+      "series": "NASDAQCOM",
+      "through": "2026-10-29"
+    },
+    {
+      "series": "SP500",
+      "through": "2026-10-28"
+    },
+    {
+      "series": "VIXCLS",
+      "through": "2026-10-29"
+    }
+  ],
+  "cboeThrough": "2026-10-30",
+  "allOldFred6Cboe7FieldsPreserved": true,
+  "oldFredRows": 13093,
+  "oldCboeRows": 5273,
+  "oldTypedNativePreserved": true,
+  "coreChecks": [
+    {
+      "table": "us_equity_daily",
+      "rows": 16,
+      "columns": 20,
+      "allAcceptedPreparedFieldsExact": true
+    },
+    {
+      "table": "us_equity_intraday",
+      "rows": 7488,
+      "columns": 13,
+      "allAcceptedPreparedFieldsExact": true
+    },
+    {
+      "table": "us_equity_intraday_regular",
+      "rows": 7488,
+      "columns": 14,
+      "allAcceptedPreparedFieldsExact": true
+    },
+    {
+      "table": "fixed518_holdings_price_keys",
+      "rows": 518,
+      "columns": 20,
+      "allAcceptedFrozenFieldsExact": true
+    }
+  ],
+  "coreProof": {
+    "path": "var/market-data/scope-review/fred-gap-v150-20261102/weekend-us-core-readonly-proof.json",
+    "sha256": "b036b4e4b68fa7709675c7180cc1f65e5955029309d3ab096b51775f0ad61351"
+  },
+  "fredProof": {
+    "path": "var/market-data/scope-review/fred-gap-v150-20261102/independent-verification.json",
+    "sha256": "1855927a8c6f261e7e91b550bb867a906d4eac28c6db1b9c3cdf617830e39ca9"
+  },
+  "runtime": {
+    "path": "var/plan-1029/20261030/runtime-us-plan1029-final.json",
+    "sha256": "9ceebedd015182fe28f8f9f528164e470328b9e4e5a9d22d7e5add483f63a586"
+  },
+  "runtimeJarCount": 47,
+  "calendarSha256": "b708c1b965f85c561692b22aaefa19b74f397aee815152f73f094e5948a89de5",
+  "calendarVersion": "us-equities-rth-2026-20261019",
+  "itchDisabled": true,
+  "itchArchivesRetained": true,
+  "runtimeAndArchiveProof": {
+    "path": "var/market-data/scope-review/fred-gap-v150-20261102/runtime-and-retention-proof.json",
+    "sha256": "8f5607c9ec8973bbd3ca473928a87ea74309300aa4d2c86b23a6ed8269a19264"
+  },
+  "wholeMarketComplete": false
+}
