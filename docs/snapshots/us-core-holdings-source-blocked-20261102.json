@@ -1,0 +1,85 @@
+{
+  "说明": "原持仓508路来源批次等待失败来源处理；有效原文只缓存，未缩改原范围或正式发布；HTTP200不等于来源日期完整。",
+  "checkedAt": "2026-11-03T07:38:31.450132+00:00",
+  "targetDate": "2026-11-02",
+  "plannedRoutes": 508,
+  "validatedRoutes": 506,
+  "failedRoutes": 2,
+  "sourceRequests": 508,
+  "successfulSourceRequests": 507,
+  "sourceQualityGapCount": 1,
+  "transportOrStatusFailures": 1,
+  "unknownRequestReservations": [
+    {
+      "id": "715b3192-fec1-49cb-a0fd-070a4a17b406",
+      "provider": "yahoo",
+      "symbol": "A",
+      "status": 0,
+      "receivedBytes": 0,
+      "reservedBytes": 2097153
+    }
+  ],
+  "sourceFailures": [
+    {
+      "symbol": "A",
+      "priceSymbol": "A",
+      "provider": "YAHOO",
+      "phase": "FAILED_SOURCE",
+      "error": "IOException: 来源请求未完成：yahoo (HttpConnectTimeoutException)",
+      "sourceCardSha256": "30907c2f51032cf1a832acf99cbd606b38ece8b0c1c267d2622991c319f89cc7"
+    },
+    {
+      "symbol": "KVUE",
+      "priceSymbol": "KVUE",
+      "provider": "YAHOO",
+      "phase": "SOURCE_GAP",
+      "error": "IllegalArgumentException: Yahoo 行情数组不足",
+      "sourceCardSha256": "7ba828202962901bd83580c82628027ae693d325677b44ef1b0ff789cf23b4e6",
+      "raw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\yahoo\\00448efa-3e63-4600-bd97-f7cedeb31751.response",
+      "sha256": "9d02ac157601436d988234397df97120c3e13406dc897240997da2efc3f0275f",
+      "observedAt": "2026-11-03T07:29:33.468575Z"
+    }
+  ],
+  "allSuccessful20FieldsRawJavaExact": true,
+  "allOldTypedNativeUnchanged": true,
+  "oldRequestsAndUnknownReservationsUnchanged": true,
+  "newNativeRuns": 0,
+  "formalWrites": 0,
+  "newRows": 0,
+  "reusedCoreRows": 10,
+  "fullyAcceptedHoldingsThrough": "2026-10-30",
+  "newDateUnpublishedRoutes": 508,
+  "originalBeforeIntentRawAndFailurePreserved": true,
+  "noFailedSourceRetry": true,
+  "noProviderSubstitution": true,
+  "noFormalSubsetPublication": true,
+  "holdingsAsOf": "2026-10-16",
+  "fixedRoutes": 518,
+  "oldRowsVerified": 1251273,
+  "oldFieldsProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v157-20261103/old-fields-after.json",
+    "sha256": "dbf2c5f22de6dd30a5d7b5ac1d6d11e96806e6a193b50af4ee4c5878a08e0f5a"
+  },
+  "sourceCloseout": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v157-20261103/source-failure-closeout.json",
+    "sha256": "3d27d509ded06c10b535aacc724b65cbb11abcd3819d5a60abb5e67cb0453994"
+  },
+  "budgetReservationProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v157-20261103/source-failure-budget-reservation-proof.json",
+    "sha256": "228e05e485cd39e4310d04c75e28da728502bf7bba824674c595b0cc6b527bba"
+  },
+  "sourceSubsetNotPublished": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v157-20261103/validated-source-subset-not-published.json",
+    "sha256": "410947497a0791d1a6a1f9d20efa462291188c88a374305b0b530db940a5ff6d"
+  },
+  "originalSnapshot": {
+    "path": "docs/snapshots/us-equity-first-delivery-20261016.json",
+    "sha256": "e4e4b69969b80ee947047dc637412bd75a89b6a778cf76ba22917764933e0d03"
+  },
+  "runtime": {
+    "path": "var/plan-1029/20261030/runtime-us-plan1029-final.json",
+    "sha256": "9ceebedd015182fe28f8f9f528164e470328b9e4e5a9d22d7e5add483f63a586"
+  },
+  "status": "BLOCKED_SOURCE_FAILURE",
+  "wholeMarketComplete": false
+}
