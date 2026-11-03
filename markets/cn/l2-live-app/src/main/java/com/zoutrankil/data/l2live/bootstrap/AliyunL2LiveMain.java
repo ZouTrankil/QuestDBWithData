@@ -393,7 +393,7 @@ public final class AliyunL2LiveMain {
                         state.put("rawWriter", rawWriter.status());
                         state.put("marketSnapshots", marketSnapshots.status());
                         if (writeFailure != null) state.put("writeFailureCode", writeFailure);
-                        status(config.root, state);
+                        progressStatus(config.root, state);
                         nextStatus = now + Duration.ofSeconds(1).toNanos();
                     }
                     if (n == 0)
@@ -517,6 +517,16 @@ public final class AliyunL2LiveMain {
 
     private static void print(Object value) throws Exception {
         System.out.println(JSON.writeValueAsString(value));
+    }
+
+    private static void progressStatus(Path root, Object value) throws Exception {
+        try {
+            status(root, value);
+        } catch (java.nio.file.AccessDeniedException busyReader) {
+            // Windows 读者可能短暂禁止替换状态文件。状态不是接收账本，不能因此断开 MQTT。
+            // 原状态保留，下一轮重试；启动和最终状态仍使用严格写入路径。
+            System.err.println("L2_STATUS_PUBLISH_DEFERRED: AccessDeniedException");
+        }
     }
 
     private static void status(Path root, Object value) throws Exception {

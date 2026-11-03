@@ -32,6 +32,8 @@ import java.util.concurrent.locks.ReentrantLock;
 /** 原始报文字节和冻结后的归一化事务均持久化，采集器或进程失败后可恢复。 */
 public final class RawJournal implements AutoCloseable {
     public static final int MAX_BATCH_ROWS = 200;
+    // 原文提交独立合批，摊薄机械盘 FULL 同步成本；归一化和 Parquet 仍使用 200 条上限。
+    public static final int MAX_CAPTURE_BATCH_ROWS = 2048;
     private static final int APPLICATION_ID = 0x4c324c56;
     private static final long DEFAULT_RAW_BYTES = 8L * 1024 * 1024 * 1024;
     private final Path database;
@@ -315,10 +317,53 @@ public final class RawJournal implements AutoCloseable {
         return appendBatch(List.of(proposed)).getFirst();
     }
 
+    /** 订阅前初始化接收连接，避免首批行情等待慢盘打开数据库时挤满内存队列。 */
+    public void prepareCapture() {
+        synchronized (captureLock) {
+            try (var write = writer()) {
+                if (closed) throw new IllegalStateException("Raw journal is closed");
+                prepareCaptureConnection();
+            } catch (RuntimeException error) {
+                throw error;
+            } catch (Exception error) {
+                throw failure("Cannot prepare raw capture connection", error);
+            }
+        }
+    }
+
+    private void prepareCaptureConnection() throws Exception {
+        if (captureConnection == null) {
+            var connection = open();
+            try {
+                // 常驻接收连接保留索引页，减少机械盘上随机 capture_id 索引的反复读盘。
+                // 只调整页缓存预算；FULL 提交、原文和摘要核验仍然保留。
+                try (var settings = connection.createStatement()) {
+                    settings.execute("PRAGMA cache_size=-65536");
+                }
+                var totals =
+                        connection.prepareStatement(
+                                "UPDATE journal_totals SET raw_bytes=raw_bytes+?,next_sequence=next_sequence+?,captures=captures+? WHERE singleton=1 AND raw_bytes<=?");
+                var insert =
+                        connection.prepareStatement(
+                                "INSERT INTO raw_capture(sequence,capture_id,session_id,topic,payload,payload_sha256,envelope_sha256,recv_ts,capture_date,qos,retained,duplicate,subscription_authorized) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                captureTotals = totals;
+                captureInsert = insert;
+                captureConnection = connection;
+            } catch (Exception failure) {
+                try {
+                    connection.close();
+                } catch (Exception closeFailure) {
+                    failure.addSuppressed(closeFailure);
+                }
+                throw failure;
+            }
+        }
+    }
+
     /** 单条接口仍同步返回；运行时可将有序报文合并成一次 FULL 提交，提交前不报告已保存。 */
     public List<RawCapture> appendBatch(List<RawCapture> proposed) {
         proposed = List.copyOf(proposed);
-        if (proposed.isEmpty() || proposed.size() > MAX_BATCH_ROWS)
+        if (proposed.isEmpty() || proposed.size() > MAX_CAPTURE_BATCH_ROWS)
             throw new IllegalArgumentException("Bounded raw capture batch required");
         var payloads = proposed.stream().map(RawCapture::payloadBytes).toList();
         long bytes = payloads.stream().mapToLong(payload -> payload.length).sum();
@@ -330,27 +375,7 @@ public final class RawJournal implements AutoCloseable {
                 if (Files.getFileStore(database).getUsableSpace() < 64L * 1024 * 1024 + bytes * 4L)
                     throw new IllegalStateException("L2_STORAGE_HEADROOM：磁盘余量不足，停止接收");
                 // 只复用原始接收连接；Parquet 编码仍可与后续报文落盘并行。
-                if (captureConnection == null) {
-                    var connection = open();
-                    try {
-                        var totals =
-                                connection.prepareStatement(
-                                        "UPDATE journal_totals SET raw_bytes=raw_bytes+?,next_sequence=next_sequence+?,captures=captures+? WHERE singleton=1 AND raw_bytes<=?");
-                        var insert =
-                                connection.prepareStatement(
-                                        "INSERT INTO raw_capture(sequence,capture_id,session_id,topic,payload,payload_sha256,envelope_sha256,recv_ts,capture_date,qos,retained,duplicate,subscription_authorized) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-                        captureTotals = totals;
-                        captureInsert = insert;
-                        captureConnection = connection;
-                    } catch (Exception failure) {
-                        try {
-                            connection.close();
-                        } catch (Exception closeFailure) {
-                            failure.addSuppressed(closeFailure);
-                        }
-                        throw failure;
-                    }
-                }
+                prepareCaptureConnection();
                 var c = captureConnection;
                 c.setAutoCommit(false);
                 try {

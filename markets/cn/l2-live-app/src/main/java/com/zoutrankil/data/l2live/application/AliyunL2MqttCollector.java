@@ -63,6 +63,7 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
             receivedCount,
             persistedCount;
     private long captureFailures, subscriptionFailures, transportCloseFailures;
+    private String captureFailureDetail = "";
     private int authorizedTopics, backoffSeconds = 5, lastMqttReason;
     private Instant lastReceivedAt;
 
@@ -404,6 +405,7 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
                                     synchronized (lifecycle) {
                                         if (error != null) {
                                             captureFailures++;
+                                            captureFailureDetail = captureFailureCode(error);
                                             failLocked("raw_capture_failed", 0);
                                             return;
                                         }
@@ -417,6 +419,7 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
             } catch (RuntimeException captureFailed) {
                 synchronized (lifecycle) {
                     captureFailures++;
+                    captureFailureDetail = captureFailureCode(captureFailed);
                     failLocked("raw_capture_failed", 0);
                 }
                 throw new MqttException(MqttException.REASON_CODE_CLIENT_EXCEPTION);
@@ -427,6 +430,20 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
         public void deliveryComplete(IMqttDeliveryToken token) {
             /* 订阅客户端从不发布消息。 */
         }
+    }
+
+    // 只记录内部错误码和异常类型，避免把外部异常中的凭据写进状态。
+    private static String captureFailureCode(Throwable error) {
+        String result = error.getClass().getSimpleName();
+        for (int depth = 0; error != null && depth < 8; depth++, error = error.getCause()) {
+            String message = error.getMessage();
+            if ("RAW_RECEIVE_QUEUE_FULL".equals(message) || "RAW_WRITER_CLOSED".equals(message))
+                return message;
+            if (error instanceof java.sql.SQLException sql)
+                result = error.getClass().getSimpleName() + ":" + sql.getErrorCode();
+            else if ("RAW_BATCH_COMMIT_FAILED".equals(message)) result = message;
+        }
+        return result;
     }
 
     private void failLocked(String code, int mqttReason) {
@@ -472,6 +489,7 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
             result.put("receivedCount", receivedCount);
             result.put("persistedCount", persistedCount);
             result.put("captureFailureCount", captureFailures);
+            result.put("captureFailureDetail", captureFailureDetail);
             result.put("subscriptionFailureCount", subscriptionFailures);
             result.put("transportCloseFailureCount", transportCloseFailures);
             result.put("lastReceivedAt", lastReceivedAt == null ? "" : lastReceivedAt.toString());

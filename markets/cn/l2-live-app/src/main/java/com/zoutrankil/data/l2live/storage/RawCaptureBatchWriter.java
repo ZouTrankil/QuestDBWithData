@@ -19,15 +19,19 @@ public final class RawCaptureBatchWriter implements AutoCloseable {
     private record Pending(RawCapture capture, long bytes, CompletableFuture<Void> saved) {}
 
     private final RawJournal journal;
-    private final BlockingQueue<Pending> queue = new LinkedBlockingQueue<>(4096);
+    // 容纳开盘突发和数秒磁盘停顿；16MiB 原文预算仍同时生效，提交前不确认持久化。
+    private static final int MAX_QUEUE_ROWS = 32768;
+    private final BlockingQueue<Pending> queue = new LinkedBlockingQueue<>(MAX_QUEUE_ROWS);
     private final Object lifecycle = new Object();
     private final Thread worker;
     private long queuedBytes, inFlight;
     private boolean closing;
     private volatile RuntimeException failure;
+    private volatile long lastCommitMillis, maxCommitMillis;
 
     public RawCaptureBatchWriter(RawJournal journal) {
         this.journal = Objects.requireNonNull(journal);
+        journal.prepareCapture();
         worker = new Thread(this::run, "l2-raw-full-commit");
         // 正常关闭必须排空。不能用 daemon 随主线程退出丢掉尚未落盘的队列。
         worker.start();
@@ -69,23 +73,18 @@ public final class RawCaptureBatchWriter implements AutoCloseable {
 
     public Map<String, Object> status() {
         synchronized (lifecycle) {
-            return Map.of(
-                    "pendingDurability",
-                    inFlight,
-                    "pendingBytes",
-                    queuedBytes,
-                    "failed",
-                    failure != null,
-                    "maxRows",
-                    4096,
-                    "maxBytes",
-                    16L * 1024 * 1024,
-                    "closing",
-                    closing,
-                    "workerAlive",
-                    worker.isAlive(),
-                    "draining",
-                    closing && worker.isAlive() && failure == null);
+            return Map.ofEntries(
+                    Map.entry("lastCommitMillis", lastCommitMillis),
+                    Map.entry("maxCommitMillis", maxCommitMillis),
+                    Map.entry("pendingDurability", inFlight),
+                    Map.entry("pendingBytes", queuedBytes),
+                    Map.entry("failed", failure != null),
+                    Map.entry("maxRows", MAX_QUEUE_ROWS),
+                    Map.entry("maxCommitRows", RawJournal.MAX_CAPTURE_BATCH_ROWS),
+                    Map.entry("maxBytes", 16L * 1024 * 1024),
+                    Map.entry("closing", closing),
+                    Map.entry("workerAlive", worker.isAlive()),
+                    Map.entry("draining", closing && worker.isAlive() && failure == null));
         }
     }
 
@@ -100,8 +99,8 @@ public final class RawCaptureBatchWriter implements AutoCloseable {
                 if (first == null) continue;
                 batch.add(first);
                 long bytes = first.bytes(), deadline = System.nanoTime() + 25_000_000;
-                // 最多等待 25ms 凑批；200 条、4MiB 上限同时保留。
-                while (batch.size() < RawJournal.MAX_BATCH_ROWS && bytes <= 3L * 1024 * 1024) {
+                // 最多等待 25ms 凑批；积压时一次提交最多 2048 条，保留 4MiB 校验。
+                while (batch.size() < RawJournal.MAX_CAPTURE_BATCH_ROWS && bytes <= 3L * 1024 * 1024) {
                     long remaining = deadline - System.nanoTime();
                     if (remaining <= 0) break;
                     var next = queue.poll(remaining, TimeUnit.NANOSECONDS);
@@ -109,7 +108,10 @@ public final class RawCaptureBatchWriter implements AutoCloseable {
                     batch.add(next);
                     bytes += next.bytes();
                 }
+                long commitStarted = System.nanoTime();
                 journal.appendBatch(batch.stream().map(Pending::capture).toList());
+                lastCommitMillis = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - commitStarted);
+                maxCommitMillis = Math.max(maxCommitMillis, lastCommitMillis);
                 for (var pending : batch) {
                     synchronized (lifecycle) {
                         queuedBytes -= pending.bytes();

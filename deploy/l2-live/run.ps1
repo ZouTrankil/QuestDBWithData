@@ -31,7 +31,11 @@ if ($Action -eq 'stop') {
     if (!$process -or $process.Name -notmatch '^java(w)?\.exe$' -or $process.CommandLine -notmatch 'l2-live|AliyunL2LiveMain') {
         '{"phase":"not_running"}'; exit 0
     }
-    [IO.File]::WriteAllText((Join-Path $runtimeRoot 'stop.request'), 'stop', [Text.UTF8Encoding]::new($false))
+    # 控制命令与 supervisor 的 finally 可能同时请求停止。消费者只检查存在性，
+    # 使用共享句柄创建标记，避免两个 WriteAllText 互相触发 sharing violation。
+    $stopMarker = [IO.File]::Open((Join-Path $runtimeRoot 'stop.request'), [IO.FileMode]::OpenOrCreate,
+        [IO.FileAccess]::Write, [IO.FileShare]::ReadWrite)
+    $stopMarker.Dispose()
     Wait-Process -Id $process.ProcessId -Timeout 30 -ErrorAction SilentlyContinue
     if (Get-Process -Id $process.ProcessId -ErrorAction SilentlyContinue) { throw 'Collector is still draining; inspect its status. No forced termination was performed.' }
     '{"phase":"stopped"}'

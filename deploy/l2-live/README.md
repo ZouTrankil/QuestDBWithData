@@ -40,6 +40,8 @@ SQLite 保留原始接收日志和提交账本，保证刚收到但尚未形成 
 
 ## 配置和启动
 
+2026-10-28 针对机械盘开盘拥塞：原始接收队列上限为 32,768 条，同时保留 16 MiB 原文预算。原文 SQLite 单次 FULL 提交最多 2,048 条、4 MiB，最多等待 25ms 凑批；归一化及 Parquet 批次仍为 200 条。仅提交成功才计入 persisted。缓冲只能吸收短时停顿，持续写入不足仍会触发保护；不能把断线期间的 QoS 0 报文当作已恢复。
+
 `--journal-max-bytes` 兼容旧参数，最大 64 GiB，与 `--storage-bytes` 绑定同一容量；同时提供时值必须相同。
 
 通过根 `config/apps/cn-l2-live.yml` 设置标的、路径和会话；入口自动启用 `l2` 与 `market-cn`，公共连接从 `config/application.yml` 继承，供应商账号放 `config/application-local.yml`。既有 `var/l2-live/credentials.env` 仍作为字面量覆盖，随后由进程环境变量和显式 CLI 参数覆盖。账号和密码不会写入计划输出。
@@ -90,6 +92,10 @@ Windows：
 macOS：将 `com.zoutrankil.l2-live.plist.example` 中 `/ABSOLUTE/QuestDBWithData` 全部替换为真实路径，保存至 `~/Library/LaunchAgents/com.zoutrankil.l2-live.plist`，再用 `launchctl bootstrap gui/$(id -u) <plist绝对路径>` 注册。Linux 可用 `55 8 * * * /实际路径/deploy/l2-live/run.sh start --wait-credentials true`。这些文件不会自动注册系统任务。
 
 ## 接收落盘
+
+常驻原始接收连接使用 64 MiB SQLite 页缓存，减少机械盘的索引随机读；仍使用 FULL 事务提交。`rawWriter.lastCommitMillis` 和 `maxCommitMillis` 记录合批落盘耗时（包含写锁等待）。`collector.captureFailureDetail` 区分接收队列满、写入器关闭和 SQLite 错误码，不输出外部异常原文。
+
+接收连接在订阅前初始化，避免首批消息等待打开数据库。周期状态文件临时被 Windows 读者占用时，记录 `L2_STATUS_PUBLISH_DEFERRED` 并在下轮重试，行情接收继续；启动及最终状态仍严格写入。
 
 运行时使用有界接收队列，最多 4,096 条、16 MiB；每批最多 200 条、4 MiB，最多等待 25ms 凑批，再以一次 FULL 事务提交。每条原始报文仍保留独立序号、原文摘要和接收时间。`collector.receivedCount` 是收到回调的数量，`persistedCount` 只在 FULL 提交成功后增加；`rawWriter.pendingDurability` 和 `pendingBytes` 明示尚未持久化的队列。队列不是持久化日志，进程异常终止或断电可能丢失其中尚未提交的报文，不能把它算成完整落盘。
 
