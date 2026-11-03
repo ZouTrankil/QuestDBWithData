@@ -73,13 +73,20 @@ public final class IndexDailyMarketCoverage {
     /** Only same-target, same-code, same-route VERIFIED incremental receipts advance this watermark. */
     public static Optional<Checkpoint> checkpoint(Path ledgerPath, String targetId, String tsCode)
             throws Exception {
+        return checkpoint(ledgerPath, targetId, tsCode, 1);
+    }
+
+    /** 作业版本也是凭证身份，v2不能借用同表名的v1检查点。 */
+    public static Optional<Checkpoint> checkpoint(
+            Path ledgerPath, String targetId, String tsCode, int version) throws Exception {
         var index = requireIndex(tsCode);
         List<Interval> incremental =
                 verifiedIntervals(
                         ledgerPath,
                         targetId,
                         index,
-                        EnumSet.of(SyncJobDefinition.Mode.INCREMENTAL));
+                        EnumSet.of(SyncJobDefinition.Mode.INCREMENTAL),
+                        version);
         if (incremental.isEmpty()) return Optional.empty();
         var byAnchor = new HashMap<LocalDate, List<Interval>>();
         for (var interval : incremental) {
@@ -134,7 +141,8 @@ public final class IndexDailyMarketCoverage {
                         EnumSet.of(
                                 SyncJobDefinition.Mode.INCREMENTAL,
                                 SyncJobDefinition.Mode.BACKFILL,
-                                SyncJobDefinition.Mode.RECONCILE));
+                                SyncJobDefinition.Mode.RECONCILE),
+                        writer.datasetVersion());
         if (actual.isEmpty() && intervals.isEmpty()) return 0;
         if (!actual.isEmpty() && intervals.isEmpty())
             throw new IllegalStateException(
@@ -188,21 +196,21 @@ public final class IndexDailyMarketCoverage {
             Path ledgerPath,
             String targetId,
             IndexDailyMarketUniverse.Index expectedIndex,
-            Set<SyncJobDefinition.Mode> modes)
+            Set<SyncJobDefinition.Mode> modes,
+            int version)
             throws Exception {
         Objects.requireNonNull(ledgerPath);
         Objects.requireNonNull(targetId);
         if (!Files.isRegularFile(ledgerPath) || !hasHistorySchema(ledgerPath)) return List.of();
         var ledger = SyncRunLedger.openReadOnly(ledgerPath);
         var json = JobDefinitionJson.mapper();
-        JsonNode expectedDefinition = json.valueToTree(IndexDailyMarketSyncJobOwner.DEFINITION);
+        var definition = IndexDailyMarketSyncJobOwner.definition(version);
+        JsonNode expectedDefinition = json.valueToTree(definition);
         var found = new ArrayList<Interval>();
         String after = null;
         int seen = 0;
         while (true) {
-            var summaries =
-                    ledger.history(
-                            IndexDailyMarketSyncJobOwner.DEFINITION.jobId(), after, HISTORY_PAGE);
+            var summaries = ledger.history(definition.jobId(), after, HISTORY_PAGE);
             for (var summary : summaries) {
                 if (++seen > MAX_HISTORY)
                     throw new IllegalStateException(
@@ -210,13 +218,11 @@ public final class IndexDailyMarketCoverage {
                 if (!Set.of(SyncRunState.VERIFIED, SyncRunState.VERIFIED_EMPTY)
                                 .contains(summary.state())
                         || !targetId.equals(summary.targetId())
-                        || summary.jobVersion()
-                                != IndexDailyMarketSyncJobOwner.DEFINITION.version()) continue;
+                        || summary.jobVersion() != definition.version()) continue;
                 var run = ledger.getRun(summary.id());
                 if (!targetId.equals(run.targetId())
-                        || !IndexDailyMarketSyncJobOwner.DEFINITION.jobId().equals(run.jobId())
-                        || run.jobVersion() != IndexDailyMarketSyncJobOwner.DEFINITION.version())
-                    continue;
+                        || !definition.jobId().equals(run.jobId())
+                        || run.jobVersion() != definition.version()) continue;
                 JsonNode frozen = json.readTree(run.frozenJson());
                 if (!sameDefinition(expectedDefinition, frozen.path("definition"))) continue;
                 SyncJobDefinition.Mode mode;

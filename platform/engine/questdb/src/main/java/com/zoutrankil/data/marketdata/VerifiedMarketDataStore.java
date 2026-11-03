@@ -5,6 +5,7 @@ import static com.zoutrankil.data.domain.DatasetDefinition.StorageType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.DoubleArrayValues;
 import com.zoutrankil.data.domain.IntervalLockStore;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.Budget;
@@ -152,7 +153,7 @@ public final class VerifiedMarketDataStore {
             throw new IllegalArgumentException("视图不能通过普通表初始化入口建表");
         var columns =
                 definition.columns().stream()
-                        .map(c -> q(c.storageName()) + " " + c.storageType())
+                        .map(c -> q(c.storageName()) + " " + c.storageType().sqlType())
                         .toList();
         query(
                 "CREATE TABLE IF NOT EXISTS "
@@ -185,7 +186,7 @@ public final class VerifiedMarketDataStore {
             var a = actual.get(i);
             var c = d.columns().get(i);
             if (!c.storageName().equals(a.get("column"))
-                    || !c.storageType().name().equals(a.get("type"))
+                    || !c.storageType().sqlType().equals(a.get("type"))
                     || !Objects.equals(d.dedupKey().contains(c.storageName()), a.get("upsertKey"))
                     || !Objects.equals(
                             d.designatedTimestamp().equals(c.storageName()), a.get("designated")))
@@ -792,6 +793,9 @@ public final class VerifiedMarketDataStore {
                             || c.storageType() == StorageType.SYMBOL
                             || c.storageName().equals(d.designatedTimestamp())) continue;
                     switch (c.storageType()) {
+                        case DOUBLE_ARRAY ->
+                                sender.doubleArray(
+                                        c.storageName(), DoubleArrayValues.primitive(value));
                         case DOUBLE ->
                                 sender.doubleColumn(
                                         c.storageName(), ((Number) value).doubleValue());
@@ -2196,6 +2200,7 @@ public final class VerifiedMarketDataStore {
             }
             v =
                     switch (c.storageType()) {
+                        case DOUBLE_ARRAY -> DoubleArrayValues.normalize(v);
                         case DOUBLE -> {
                             double n = ((Number) v).doubleValue();
                             if (!Double.isFinite(n)) throw new IllegalArgumentException("市场数值必须有限");

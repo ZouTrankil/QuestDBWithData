@@ -8,11 +8,15 @@ import com.zoutrankil.data.domain.SyncJobDefinition.Parameter;
 import com.zoutrankil.data.domain.SyncJobDefinition.ParameterType;
 import com.zoutrankil.data.domain.SyncJobDefinition.RetryPolicy;
 import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.data.domain.stock.margin.MarginSecsDataset;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.ZoneId;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -85,6 +89,53 @@ public final class MarginSecsSyncJobOwner implements SyncJobOwner {
                     true,
                     true);
 
+    /** 正式v2只认证请求窗口；v1全表基线和原指纹保持原样。 */
+    public static final SyncJobDefinition FORMAL_DEFINITION = formalDefinition();
+
+    private static SyncJobDefinition formalDefinition() {
+        var d = DEFINITION;
+        var parameters = new LinkedHashMap<>(d.parameters());
+        parameters.put(
+                "baselineScope",
+                new Parameter(ParameterType.STRING, true, 16, 1, Set.of("DATE_WINDOW")));
+        return new SyncJobDefinition(
+                d.jobId(),
+                2,
+                d.datasetId(),
+                d.datasetVersion(),
+                d.owner(),
+                Set.of(Mode.BACKFILL),
+                Mode.BACKFILL,
+                parameters,
+                d.ratePolicyRef(),
+                d.slicePolicyRef(),
+                d.verificationPolicyRef(),
+                d.retry(),
+                d.timeout(),
+                d.budget(),
+                d.revisionDays(),
+                d.dependencies(),
+                d.frequency(),
+                d.zone(),
+                d.enabled(),
+                false);
+    }
+
+    private final boolean formal;
+
+    public MarginSecsSyncJobOwner() {
+        this("java_d030_margin_secs_acceptance");
+    }
+
+    @Autowired
+    public MarginSecsSyncJobOwner(
+            @Value(
+                            "${app.sync.margin-secs-write-table:${app.sync.margin-secs-table:java_d030_margin_secs_acceptance}}")
+                    String table) {
+        MarginSecsDataset.requireExecutionTable(table);
+        formal = "margin_secs".equals(table);
+    }
+
     @Override
     public String datasetId() {
         return "margin_secs";
@@ -92,11 +143,11 @@ public final class MarginSecsSyncJobOwner implements SyncJobOwner {
 
     @Override
     public Set<Mode> supportedSyncModes() {
-        return DEFINITION.supportedModes();
+        return (formal ? FORMAL_DEFINITION : DEFINITION).supportedModes();
     }
 
     @Override
     public List<SyncJobDefinition> syncJobDefinitions() {
-        return List.of(DEFINITION);
+        return List.of(formal ? FORMAL_DEFINITION : DEFINITION);
     }
 }

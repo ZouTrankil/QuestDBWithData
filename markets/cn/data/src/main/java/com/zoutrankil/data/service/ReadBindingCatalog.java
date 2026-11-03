@@ -22,7 +22,17 @@ public final class ReadBindingCatalog {
             int schemaVersion,
             Class<T> rowType,
             Function<DatasetValues, T> mapper,
-            Supplier<String> sourceVersion) {
+            Supplier<String> sourceVersion,
+            boolean verifyAfterRead) {
+        public Registration(
+                String datasetId,
+                int schemaVersion,
+                Class<T> rowType,
+                Function<DatasetValues, T> mapper,
+                Supplier<String> sourceVersion) {
+            this(datasetId, schemaVersion, rowType, mapper, sourceVersion, false);
+        }
+
         public Registration {
             DatasetDefinition.identifier(datasetId);
             if (schemaVersion < 1)
@@ -36,7 +46,8 @@ public final class ReadBindingCatalog {
         }
 
         private ReadGroupReader.Binding<T> bind(DatasetDefinition definition) {
-            return new ReadGroupReader.Binding<>(definition, rowType, mapper, sourceVersion);
+            return new ReadGroupReader.Binding<>(
+                    definition, rowType, mapper, sourceVersion, verifyAfterRead);
         }
     }
 
@@ -83,6 +94,18 @@ public final class ReadBindingCatalog {
             String datasetId, int schemaVersion, Supplier<String> sourceVersion) {
         return new Registration<>(
                 datasetId, schemaVersion, DatasetValues.class, Function.identity(), sourceVersion);
+    }
+
+    /** 只有显式稳定版本供应器才在页前后各求值一次，保留旧注册每页一次的约定。 */
+    public static Registration<DatasetValues> genericStable(
+            String datasetId, int schemaVersion, Supplier<String> sourceVersion) {
+        return new Registration<>(
+                datasetId,
+                schemaVersion,
+                DatasetValues.class,
+                Function.identity(),
+                sourceVersion,
+                true);
     }
 
     public List<Registration<?>> registrations() {

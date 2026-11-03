@@ -1,0 +1,53 @@
+{
+  "dataset": "stk_shock",
+  "version": "stk_shock-v1",
+  "endpoint": "stk_shock",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 1000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 1000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=451; 单证券和明确公告日期；达到单次上限拒绝完整；同物理键多事件阻断，不按空响应推断交易日覆盖",
+  "partitionBy": "YEAR",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "name",
+      "target": "name",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "trade_market",
+      "target": "trade_market",
+      "type": "SYMBOL",
+      "key": false
+    },
+    {
+      "source": "reason",
+      "target": "reason",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "source": "period",
+      "target": "period",
+      "type": "STRING",
+      "key": true
+    }
+  ]
+}

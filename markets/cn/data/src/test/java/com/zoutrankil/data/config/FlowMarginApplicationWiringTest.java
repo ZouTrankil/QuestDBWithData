@@ -18,12 +18,14 @@ import com.zoutrankil.data.flow.application.MoneyflowThsJobService;
 import com.zoutrankil.data.flow.port.MoneyflowHsgtTarget;
 import com.zoutrankil.data.flow.port.MoneyflowTarget;
 import com.zoutrankil.data.flow.port.MoneyflowThsTarget;
+import com.zoutrankil.data.flow.storage.MoneyflowThsReadRepository;
 import com.zoutrankil.data.margin.application.MarginAllJobService;
 import com.zoutrankil.data.margin.application.MarginDetailJobService;
 import com.zoutrankil.data.margin.application.MarginSecsJobService;
 import com.zoutrankil.data.margin.port.MarginAllTarget;
 import com.zoutrankil.data.margin.port.MarginDetailTarget;
 import com.zoutrankil.data.margin.port.MarginSecsTarget;
+import com.zoutrankil.data.margin.storage.MarginSecsReadRepository;
 import com.zoutrankil.data.service.DatasetRegistry;
 import com.zoutrankil.data.service.ReadBindingCatalog;
 
@@ -71,9 +73,10 @@ class FlowMarginApplicationWiringTest {
                             "java_d030_margin_secs_acceptance"));
 
     @ParameterizedTest
-    @ValueSource(booleans = {false, true})
-    void sixTargetsAndOwnersAssembleWithDefaultOrOverriddenTablesWithoutStorageIo(boolean override)
+    @ValueSource(strings = {"default", "legacy", "formal-ths", "formal-secs", "formal-all"})
+    void sixTargetsAndOwnersAssembleWithDefaultOrOverriddenTablesWithoutStorageIo(String variant)
             throws Exception {
+        boolean override = "legacy".equals(variant);
         var dataSource = mock(DataSource.class);
         Path ledger = temp.resolve("must-not-exist.sqlite3");
         Map<String, Object> properties = new LinkedHashMap<>();
@@ -84,6 +87,12 @@ class FlowMarginApplicationWiringTest {
                 properties.put(
                         "app.sync." + binding.property() + "-table",
                         binding.defaultTable().replace("_acceptance", "_wiring"));
+        if ("formal-ths".equals(variant))
+            properties.put("app.sync.moneyflow-ths-write-table", "moneyflow_ths");
+        if ("formal-secs".equals(variant))
+            properties.put("app.sync.margin-secs-write-table", "margin_secs");
+        if ("formal-all".equals(variant))
+            properties.put("app.sync.margin-all-write-table", "margin_all");
         var application = new SpringApplication(QuestDataApplication.class);
         application.setWebApplicationType(WebApplicationType.NONE);
         application.addInitializers(
@@ -101,6 +110,12 @@ class FlowMarginApplicationWiringTest {
                         override
                                 ? binding.defaultTable().replace("_acceptance", "_wiring")
                                 : binding.defaultTable();
+                if ("formal-ths".equals(variant) && binding.type() == MoneyflowThsTarget.class)
+                    expected = "moneyflow_ths";
+                if ("formal-secs".equals(variant) && binding.type() == MarginSecsTarget.class)
+                    expected = "margin_secs";
+                if ("formal-all".equals(variant) && binding.type() == MarginAllTarget.class)
+                    expected = "margin_all";
                 assertEquals(
                         expected,
                         binding.type()
@@ -134,16 +149,22 @@ class FlowMarginApplicationWiringTest {
                         dataset);
             }
 
+            assertEquals(
+                    override ? "java_d025_moneyflow_ths_wiring" : "moneyflow_ths",
+                    context.getBean(MoneyflowThsReadRepository.class).definition().objectName());
+            assertEquals(
+                    override ? "java_d030_margin_secs_wiring" : "margin_secs",
+                    context.getBean(MarginSecsReadRepository.class).definition().objectName());
             var datasets = context.getBean(DatasetRegistry.class);
             assertEquals(
-                    61,
+                    83,
                     datasets.definitions().stream()
                             .filter(
                                     value ->
                                             value.capabilities()
                                                     .contains(DatasetDefinition.Capability.READ))
                             .count());
-            assertEquals(61, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            assertEquals(83, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
             assertFalse(context.getBeanFactory().containsSingleton("questDbClient"));
             verify(dataSource, never()).getConnection();
             verify(dataSource, never()).getConnection(anyString(), anyString());

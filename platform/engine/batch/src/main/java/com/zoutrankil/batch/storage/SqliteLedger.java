@@ -503,6 +503,20 @@ public final class SqliteLedger {
         return Collections.unmodifiableMap(latest);
     }
 
+    /** 旧请求恢复期间不刷新它依赖的静态资料，避免改变原冻结来源。 */
+    public boolean hasUnfinishedJob(String job) {
+        return jdbc.queryForObject(
+                        "SELECT count(*) FROM business_instance b WHERE b.job=? "
+                                + "AND b.business_state IN ('RUNNING','VERIFYING','IN_DOUBT',"
+                                + "'WAITING_SOURCE','WAITING_UPSTREAM','BLOCKED','PARTIAL') "
+                                + "AND NOT EXISTS (SELECT 1 FROM business_instance newer "
+                                + "WHERE newer.job=b.job AND newer.logical_date=b.logical_date "
+                                + "AND newer.created_at>b.created_at)",
+                        Long.class,
+                        job)
+                > 0;
+    }
+
     public List<Map<String, Object>> recent() {
         return jdbc.queryForList(
                 "SELECT instance_id,job,logical_date,business_state,reason,batch_execution_id FROM business_instance ORDER BY created_at DESC LIMIT 100");

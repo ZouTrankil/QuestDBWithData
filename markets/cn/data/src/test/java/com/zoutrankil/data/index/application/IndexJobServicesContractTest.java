@@ -429,6 +429,9 @@ class IndexJobServicesContractTest {
                 case MARKET -> {
                     var t = mock(IndexDailyMarketTarget.class);
                     var w = mock(IndexDailyMarketWriteSession.class);
+                    when(t.datasetVersion()).thenReturn(1);
+                    when(t.forVersion(1)).thenReturn(t);
+                    when(w.datasetVersion()).thenReturn(1);
                     target = t;
                     writer = w;
                     when(t.tableName()).thenReturn(family.table);

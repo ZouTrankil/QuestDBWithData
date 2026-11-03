@@ -52,12 +52,12 @@ public class FinancialDailySync {
             @Value("${app.sync.financial.execution-window:PT4H}") Duration window) {
         if (scope.isBlank()
                 || !sha.matches("[a-f0-9]{64}")
-                || owners.size() != 5
+                || owners.size() != FinancialContract.DATASETS.size()
                 || !owners.stream()
                         .map(FinancialSyncOwner::datasetId)
                         .collect(Collectors.toSet())
                         .equals(FinancialContract.DATASETS))
-            throw new IllegalArgumentException("启用财务日批需五条真实执行器、范围文件及批准 SHA-256");
+            throw new IllegalArgumentException("启用财务日批需全部真实执行器、范围文件及批准 SHA-256");
         this.owners = List.copyOf(owners);
         this.scope = Path.of(scope);
         this.sha = sha;

@@ -27,11 +27,11 @@ class FinancialDailyBudgetTest {
                                         new TushareProperties(),
                                         1_000_000,
                                         Duration.ofHours(12)));
-        assertTrue(failure.getMessage().contains("sourceRequests=125000"));
+        assertTrue(failure.getMessage().contains("sourceRequests=150000"));
     }
 
     @Test
-    void approvedSmallScopeIncludesAllFiveOwnersAndClientRetries() {
+    void approvedSmallScopeIncludesAllSixOwnersAndClientRetries() {
         var estimate =
                 FinancialDailyBudget.requireFits(
                         10,
@@ -40,9 +40,9 @@ class FinancialDailyBudgetTest {
                         new TushareProperties(),
                         1000,
                         Duration.ofHours(4));
-        assertEquals(250, estimate.sourceRequests());
-        assertEquals(750, estimate.maximumAttempts());
-        assertEquals(Duration.ofMinutes(25), estimate.minimumDuration());
+        assertEquals(300, estimate.sourceRequests());
+        assertEquals(900, estimate.maximumAttempts());
+        assertEquals(Duration.ofMinutes(30), estimate.minimumDuration());
         assertThrows(
                 IllegalStateException.class,
                 () ->
@@ -51,7 +51,7 @@ class FinancialDailyBudgetTest {
                                 5,
                                 FinancialContract.DATASETS,
                                 new TushareProperties(),
-                                749,
+                                899,
                                 Duration.ofHours(4)));
     }
 

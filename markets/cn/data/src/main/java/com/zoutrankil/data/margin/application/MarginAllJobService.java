@@ -2,6 +2,7 @@ package com.zoutrankil.data.margin.application;
 
 import static com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 
+import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.stock.margin.MarginAll;
 import com.zoutrankil.data.domain.stock.margin.MarginAllDataset;
@@ -21,14 +22,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /** Bounded plan/run/resume facade for D028; default empty-target bootstrap follows Python's 2026-01-01 fallback. */
 @Service
@@ -60,14 +64,16 @@ public class MarginAllJobService {
     private final MarginAllTarget target;
     private final Path ledgerPath;
     private final String table;
+    private final ExchangeCalendarReadPort calendars;
 
     @Autowired
     public MarginAllJobService(
             @Lazy SyncJobRegistry jobs,
             TusharePageService pages,
             MarginAllTarget target,
-            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath) {
-        this(jobs, pages, target, Path.of(ledgerPath));
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath,
+            ExchangeCalendarReadPort calendars) {
+        this(jobs, pages, target, Path.of(ledgerPath), calendars);
     }
 
     public MarginAllJobService(
@@ -75,12 +81,22 @@ public class MarginAllJobService {
             TusharePageService pages,
             MarginAllTarget target,
             Path ledgerPath) {
+        this(jobs, pages, target, ledgerPath, null);
+    }
+
+    public MarginAllJobService(
+            SyncJobRegistry jobs,
+            TusharePageService pages,
+            MarginAllTarget target,
+            Path ledgerPath,
+            ExchangeCalendarReadPort calendars) {
+        this.calendars = calendars;
         this.jobs = Objects.requireNonNull(jobs);
         this.pages = Objects.requireNonNull(pages);
         this.target = Objects.requireNonNull(target);
         this.ledgerPath = ledgerPath.toAbsolutePath().normalize();
         String table = target.tableName();
-        MarginAllDataset.requireIsolatedTable(table);
+        MarginAllDataset.requireExecutionTable(table);
         this.table = table;
     }
 
@@ -119,10 +135,7 @@ public class MarginAllJobService {
         LocalDate to = DailySyncEndDate.resolve(requestedThrough, now);
         if (to.isAfter(completedCeiling)) to = completedCeiling;
         if (to.isAfter(frozenLogical)) to = frozenLogical;
-        Mode mode =
-                requestedMode == null
-                        ? MarginAllSyncJobOwner.DEFINITION.defaultMode()
-                        : requestedMode;
+        Mode mode = requestedMode == null ? executionDefinition().defaultMode() : requestedMode;
         if (!MarginAllSyncJobOwner.DEFINITION.supportedModes().contains(mode))
             throw new IllegalArgumentException("Unsupported D028 mode");
         if (to == null) throw new IllegalArgumentException("D028 completed --to date is required");
@@ -130,6 +143,10 @@ public class MarginAllJobService {
                 && (requestedFrom == null || requestedThrough == null))
             throw new IllegalArgumentException(
                     "D028 BACKFILL/RECONCILE requires explicit --from and --to");
+        if (formalTarget()) {
+            if (mode != Mode.BACKFILL) throw new IllegalArgumentException("正式汇总只允许显式BACKFILL");
+            return planFormal(requestedFrom, requestedThrough, logicalDate);
+        }
         String logical = targetId();
         var port = target.newWriter(physicalTargetId());
         port.preflight();
@@ -233,6 +250,134 @@ public class MarginAllJobService {
         return new Plan(request, logical, physical, anchor, before, range, bootstrap, capped);
     }
 
+    private boolean formalTarget() {
+        return "margin_all".equals(table);
+    }
+
+    private SyncJobDefinition executionDefinition() {
+        return formalTarget()
+                ? MarginAllSyncJobOwner.FORMAL_DEFINITION
+                : MarginAllSyncJobOwner.DEFINITION;
+    }
+
+    private void requireExecutionRequest(SyncJobDefinition.FrozenRequest request) {
+        if (!executionDefinition().equals(request.definition()))
+            throw new IllegalArgumentException("汇总物理目标与作业版本不匹配");
+        MarginAllSyncAdapter.validateRequest(request);
+    }
+
+    /** 正式v2冻结完整日历和旧多重集合，不用旧最大日期建立增量覆盖。 */
+    private Plan planFormal(LocalDate from, LocalDate to, LocalDate logicalDate) throws Exception {
+        var completed = DailySyncEndDate.resolve(null, ZonedDateTime.now(DailySyncEndDate.ZONE));
+        if (from == null
+                || to == null
+                || from.isAfter(to)
+                || to.isAfter(logicalDate)
+                || to.isAfter(completed)
+                || logicalDate.isAfter(LocalDate.now(DailySyncEndDate.ZONE)))
+            throw new IllegalArgumentException("正式汇总需要明确已完成日期窗");
+        var calendar = new MarginAllCalendar(calendars).read(from, to);
+        requireNoPendingForPlan();
+        String logical = targetId();
+        var full = snapshot();
+        String physical = target.physicalTargetId(table, full.identity());
+        var port = target.newWriter(physical);
+        port.preflight();
+        var range = port.readTargetRange();
+        if (range.rows() != full.rows().size()) throw new IllegalStateException("汇总全表行数与稳定快照不符");
+        var p = new LinkedHashMap<String, Object>();
+        p.put("targetId", logical);
+        p.put("physicalTargetId", physical);
+        p.put("targetRowsBefore", full.rows().size());
+        p.put("targetFingerprint", full.fingerprint());
+        if (range.min() != null) {
+            p.put("targetMinBefore", range.min());
+            p.put("targetMaxBefore", range.max());
+        }
+        p.put("calendarPolicy", MarginAllCalendar.POLICY);
+        p.put("calendarDays", String.join(",", calendar.encoded()));
+        p.put("calendarFingerprint", calendar.fingerprint());
+        var d = executionDefinition();
+        var request = jobs.prepare(d.jobId(), d.version(), Mode.BACKFILL, p, from, to, logicalDate);
+        requireExecutionRequest(request);
+        port.preflight();
+        requireTarget(logical, physical);
+        return new Plan(request, logical, physical, null, null, range, false, false);
+    }
+
+    private void requireNoPendingForPlan() throws Exception {
+        if (Files.exists(ledgerPath)) {
+            new MarginAllPublication(target.newPublicationTables(), ledgerPath)
+                    .requireNoPendingPublication();
+            return;
+        }
+        // 没有账本时也不能接管遗留stage；只读计划不创建新的正式运行账本。
+        var root = ledgerPath.getParent().resolve("sync-evidence");
+        if (!Files.exists(root)) return;
+        if (Files.isSymbolicLink(root) || !Files.isDirectory(root))
+            throw new IllegalStateException("汇总证据目录无效");
+        int count = 0;
+        try (var runs = Files.newDirectoryStream(root)) {
+            for (var dir : runs) {
+                if (++count > 50000) throw new IllegalStateException("汇总遗留stage扫描超预算");
+                if (Files.isSymbolicLink(dir)) continue;
+                if (Files.isDirectory(dir) && MarginAllStaging.hasStageIntent(dir))
+                    throw new IllegalStateException("汇总缺账本且存在未核对stage：" + dir.getFileName());
+            }
+        }
+    }
+
+    /** 单日只读核对日历、来源交易所与旧键，不推进检查点。 */
+    public Map<String, Object> checkSource(LocalDate date, LocalDate logical) throws Exception {
+        if (date == null
+                || logical == null
+                || date.isAfter(logical)
+                || logical.isAfter(LocalDate.now(DailySyncEndDate.ZONE))
+                || date.isAfter(
+                        DailySyncEndDate.resolve(null, ZonedDateTime.now(DailySyncEndDate.ZONE))))
+            throw new IllegalArgumentException("需要明确已完成来源日和业务日");
+        var calendar = new MarginAllCalendar(calendars).read(date, date);
+        var before = snapshot();
+        String id = target.physicalTargetId(table, before.identity());
+        var page =
+                new MarginAllSource(
+                                pages,
+                                ledgerPath
+                                        .getParent()
+                                        .resolve(
+                                                "sync-evidence/margin-all-source-check-"
+                                                        + UUID.randomUUID()))
+                        .fetch(date, () -> Thread.currentThread().isInterrupted());
+        var exchanges = page.rows().stream().map(MarginAll::exchangeId).collect(Collectors.toSet());
+        if (!exchanges.equals(calendar.openExchanges().get(date)))
+            throw new IllegalStateException("来源交易所与完整日历不符");
+        var old = before.rows().stream().filter(r -> r.tradeDate().equals(date)).toList();
+        var keys = page.rows().stream().map(MarginAll::key).collect(Collectors.toSet());
+        long missing = old.stream().filter(r -> !keys.contains(r.key())).count();
+        var after = snapshot();
+        if (!before.identity().equals(after.identity())
+                || !before.fingerprint().equals(after.fingerprint()))
+            throw new IllegalStateException("只读来源检查期间物理代、WAL或完整值改变");
+        var result = new LinkedHashMap<String, Object>();
+        result.put("productionWritten", false);
+        result.put("sourceCoverageVerified", true);
+        result.put("targetDataVerified", false);
+        result.put("date", date);
+        result.put("targetId", id);
+        result.put("sourceRows", page.rows().size());
+        result.put("sourceExchanges", exchanges);
+        result.put("oldScopeRows", old.size());
+        result.put("oldKeysMissingInSource", missing);
+        result.put(
+                "source",
+                Map.of(
+                        "sourceFingerprint",
+                        page.sourceFingerprint(),
+                        "responseEvidence",
+                        page.responseEvidence()));
+        return result;
+    }
+
     public SyncJobRunner.Result run(Plan plan) throws Exception {
         return runRequest(Objects.requireNonNull(plan).request(), null);
     }
@@ -266,8 +411,7 @@ public class MarginAllJobService {
     }
 
     public SyncJobRunner.Result resume(String priorRunId) throws Exception {
-        var restored =
-                FrozenRunRequest.restore(ledgerPath, priorRunId, MarginAllSyncJobOwner.DEFINITION);
+        var restored = FrozenRunRequest.restore(ledgerPath, priorRunId, executionDefinition());
         var request = restored.request();
         String logical = restored.targetId();
         if (new MarginAllPublication(target.newPublicationTables(), ledgerPath)
@@ -291,6 +435,12 @@ public class MarginAllJobService {
                 request);
     }
 
+    /** 与物理恢复分开，完整认证原运行后才解除原锁，不发送任何数据。 */
+    public Map<String, Object> reconcileRun(String runId, boolean writerStopped) throws Exception {
+        return MarginAllRunRecovery.reconcile(
+                target.newPublicationTables(), ledgerPath, table, runId, writerStopped);
+    }
+
     public MarginAllPublication.Result finishInterrupted(String runId, boolean writerStopped)
             throws Exception {
         var publication = new MarginAllPublication(target.newPublicationTables(), ledgerPath);
@@ -309,8 +459,12 @@ public class MarginAllJobService {
         if (!logical.equals(current))
             throw new IllegalStateException("D028 recovery logical target differs");
         publication.discardStageOnly(table, runId, true);
-        throw new IllegalStateException(
-                "D028 unpublished stage safely discarded; rerun the same frozen request through resume after discard reconciliation");
+        // 未发布分支没有journal；返回原布局，原运行已明确取消，不宣称发布成功。
+        return new MarginAllPublication.Result(
+                null,
+                MarginAllPublication.Layout.ORIGINAL,
+                target.newPublicationTables().open(table).snapshot(),
+                null);
     }
 
     public SyncRunLedger.Entry status(String runId) throws Exception {
@@ -327,6 +481,7 @@ public class MarginAllJobService {
     }
 
     private void verifyBaseline(SyncJobDefinition.FrozenRequest request) throws Exception {
+        requireExecutionRequest(request);
         String logical = frozenTarget(request);
         if (!logical.equals(targetId()))
             throw new IllegalStateException("D028 stable logical target changed");
@@ -338,6 +493,7 @@ public class MarginAllJobService {
                         .equals(p.get("physicalTargetId")))
             throw new IllegalStateException(
                     "D028 frozen physical baseline changed; replan or recover first");
+        if (formalTarget()) return;
         var cp = MarginAllCoverage.checkpoint(ledgerPath, logical);
         if (request.mode() == Mode.INCREMENTAL) {
             LocalDate expected = (LocalDate) p.get("checkpointBefore"),
@@ -365,6 +521,7 @@ public class MarginAllJobService {
             String physical,
             SyncJobDefinition.FrozenRequest request)
             throws Exception {
+        requireExecutionRequest(request);
         requireTarget(logical, physical);
         var ledger = new SyncRunLedger(ledgerPath);
         var adapter =
@@ -376,6 +533,9 @@ public class MarginAllJobService {
         var runner =
                 new SyncJobRunner<MarginAll, MarginAllKey>(
                         ledger, new DatasetIntervalLock(ledgerPath));
+        // 丢弃stage后旧分片只保留历史，普通resume和组子任务都必须整窗重抓。
+        if (priorRunId != null && MarginAllStageRecovery.requiresRefetch(ledgerPath, priorRunId))
+            priorRunId = null;
         return priorRunId == null
                 ? runner.run(
                         runId,

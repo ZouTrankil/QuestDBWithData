@@ -1,0 +1,41 @@
+{
+  "dataset": "cyq_chips",
+  "version": "cyq_chips-v1",
+  "endpoint": "cyq_chips",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 1000,
+  "paged": true,
+  "emptyAllowed": true,
+  "maxRows": 32000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=294; 单证券单日，实测 limit=3/offset=0,3 返回不同档位；完整短页结束后按价格排序；来源保存逐档标量，正式表保存对应一维 DOUBLE[] 数组；价格和占比保留原值",
+  "partitionBy": "YEAR",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "price",
+      "target": "price",
+      "type": "DOUBLE",
+      "key": true
+    },
+    {
+      "source": "percent",
+      "target": "percent",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

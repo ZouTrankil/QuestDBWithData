@@ -318,8 +318,19 @@ class SourceStrategyCompatibilityTest {
             var result = new ArrayList<JsonNode>();
             root.forEach(result::add);
             var originalDatasets = new TreeSet<>(SourceContract.SUPPORTED);
-            assertTrue(originalDatasets.remove("sf_month"));
-            // 原 41 条来源仍逐字对照原件；新增社融另做真实样本和正式 owner 回归。
+            for (String added :
+                    Set.of(
+                            "sge_daily",
+                            "cyq_chips",
+                            "stk_alert",
+                            "broker_recommend",
+                            "sf_month",
+                            "pledge_stat",
+                            "stk_holdernumber",
+                            "stk_holdertrade",
+                            "stk_shock",
+                            "stk_high_shock")) assertTrue(originalDatasets.remove(added));
+            // 原 41 条来源仍逐字对照原件；新增来源另做明确字段和正式 owner 回归。
             assertEquals(
                     originalDatasets,
                     new TreeSet<>(result.stream().map(n -> n.path("dataset").asText()).toList()));

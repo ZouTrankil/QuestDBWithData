@@ -31,9 +31,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Collectors;
 
 /** D030 bounded per-table plan/run/resume facade. */
 @Service
@@ -91,7 +93,7 @@ public final class MarginSecsJobService {
         this.target = Objects.requireNonNull(target);
         this.ledgerPath = ledgerPath.toAbsolutePath().normalize();
         String table = target.tableName();
-        MarginSecsDataset.requireIsolatedTable(table);
+        MarginSecsDataset.requireExecutionTable(table);
         this.table = table;
     }
 
@@ -113,6 +115,16 @@ public final class MarginSecsJobService {
 
     public String physicalTargetId() {
         return targetId();
+    }
+
+    // 正式旧行不提供覆盖证据，只允许显式补数，恢复和组执行也须守同一入口。
+    private boolean formalTarget() {
+        return "margin_secs".equals(table);
+    }
+
+    private void requireExecutionMode(Mode mode) {
+        if (formalTarget() && mode != Mode.BACKFILL)
+            throw new IllegalArgumentException("正式标的名单只允许显式BACKFILL，旧行不能建立增量覆盖");
     }
 
     /** Bootstrap is explicit; established incrementals re-fetch five calendar days of revisions. */
@@ -139,19 +151,24 @@ public final class MarginSecsJobService {
         if ((mode == Mode.BACKFILL || mode == Mode.RECONCILE)
                 && (bootstrapFrom == null || requestedTo == null))
             throw new IllegalArgumentException("D030 repairs require explicit --from and --to");
+        requireExecutionMode(mode);
+        if (formalTarget()) return planFormal(bootstrapFrom, to, logicalDate);
         String logical = targetId(), physical = physicalTargetId();
         var port = target.newWriter(physical);
         port.preflight();
-        var snapshot = target.snapshot();
         var range = port.readTargetRange();
+        var snapshot = target.snapshot();
         if (snapshot.rows().size() != range.rows())
             throw new IllegalStateException("D030 bounded snapshot/count mismatch");
         if (!snapshot.rows().isEmpty()
                 && (range.max().isAfter(logicalDate) || range.max().isAfter(completed)))
             throw new IllegalStateException(
                     "D030 target extends beyond the completed source ceiling");
-        var checkpoint = MarginSecsCoverage.checkpoint(ledgerPath, logical);
-        int checked = MarginSecsCoverage.validateTarget(ledgerPath, logical, snapshot);
+        var checkpoint = formalTarget() ? null : MarginSecsCoverage.checkpoint(ledgerPath, logical);
+        int checked =
+                formalTarget()
+                        ? 0
+                        : MarginSecsCoverage.validateTarget(ledgerPath, logical, snapshot);
         LocalDate from = bootstrapFrom, anchor = null, before = null;
         boolean bootstrap = false;
         if (mode == Mode.INCREMENTAL) {
@@ -179,11 +196,11 @@ public final class MarginSecsJobService {
             }
         } else {
             from = Objects.requireNonNull(bootstrapFrom);
-            if (checkpoint == null)
+            if (!formalTarget() && checkpoint == null)
                 throw new IllegalStateException(
                         "D030 historical correction requires a receipt-backed incremental checkpoint");
-            anchor = checkpoint.anchor();
-            if (from.isBefore(anchor) || to.isAfter(checkpoint.through()))
+            if (!formalTarget()) anchor = checkpoint.anchor();
+            if (!formalTarget() && (from.isBefore(anchor) || to.isAfter(checkpoint.through())))
                 throw new IllegalArgumentException(
                         "D030 repair must remain within verified incremental coverage");
         }
@@ -244,14 +261,127 @@ public final class MarginSecsJobService {
         return new Plan(request, logical, physical, before, anchor, range, bootstrap, checked);
     }
 
+    private SyncJobDefinition executionDefinition() {
+        return formalTarget()
+                ? MarginSecsSyncJobOwner.FORMAL_DEFINITION
+                : MarginSecsSyncJobOwner.DEFINITION;
+    }
+
+    /** 正式历史已超百万行，v2仅冻结并复核本次日期窗，外部历史不被认证或改写。 */
+    private Plan planFormal(LocalDate from, LocalDate to, LocalDate logicalDate) throws Exception {
+        if (from == null
+                || to == null
+                || from.isAfter(to)
+                || ChronoUnit.DAYS.between(from, to) + 1 > MarginSecsSyncJobOwner.MAX_WINDOW_DAYS)
+            throw new IllegalArgumentException("正式名单需要1到31天的明确范围");
+        var calendar = new MarginSecsTradingDates(calendars).read(from, to);
+        if (calendar.openDates().isEmpty()) throw new IllegalArgumentException("正式范围没有完整开市日证据");
+        String id = targetId();
+        var port = target.newWriter(id);
+        port.preflight();
+        var snapshot = target.snapshot(from, to);
+        var min =
+                snapshot.rows().stream()
+                        .map(MarginSecs::tradeDate)
+                        .min(LocalDate::compareTo)
+                        .orElse(null);
+        var max =
+                snapshot.rows().stream()
+                        .map(MarginSecs::tradeDate)
+                        .max(LocalDate::compareTo)
+                        .orElse(null);
+        var range = new MarginSecsState.TargetRange(min, max, snapshot.rows().size());
+        var p = new LinkedHashMap<String, Object>();
+        p.put("targetId", id);
+        p.put("physicalTargetId", id);
+        p.put("baselineScope", "DATE_WINDOW");
+        p.put("targetRowsBefore", snapshot.rows().size());
+        p.put("targetFingerprint", snapshot.fingerprint());
+        if (!range.empty()) {
+            p.put("targetMinBefore", min);
+            p.put("targetMaxBefore", max);
+        }
+        p.put("calendarDays", String.join(",", calendar.encodedCalendarDays()));
+        p.put("calendarFingerprint", calendar.fingerprint());
+        p.put(
+                "tradeDates",
+                String.join(
+                        ",",
+                        calendar.openDates().stream()
+                                .map(d -> d.format(DateTimeFormatter.BASIC_ISO_DATE))
+                                .toList()));
+        var d = executionDefinition();
+        var request = jobs.prepare(d.jobId(), d.version(), Mode.BACKFILL, p, from, to, logicalDate);
+        MarginSecsSyncAdapter.validateRequest(request);
+        port.preflight();
+        if (!id.equals(targetId())) throw new IllegalStateException("正式名单计划期间目标改变");
+        return new Plan(request, id, id, null, null, range, false, 0);
+    }
+
+    /** 只读检查来源和原日范围，不创建运行账本或推断历史覆盖。 */
+    public Map<String, Object> checkSource(LocalDate date, LocalDate logical) throws Exception {
+        if (date == null
+                || logical == null
+                || date.isAfter(logical)
+                || logical.isAfter(LocalDate.now(DailySyncEndDate.ZONE))
+                || date.isAfter(
+                        DailySyncEndDate.resolve(null, ZonedDateTime.now(DailySyncEndDate.ZONE))))
+            throw new IllegalArgumentException("需要明确已完成的来源日与业务日");
+        if (!new MarginSecsTradingDates(calendars)
+                .read(date, date)
+                .openDates()
+                .equals(List.of(date))) throw new IllegalArgumentException("核查日没有完整开市日证据");
+        String id = targetId();
+        var writer = target.newWriter(id);
+        writer.preflight();
+        var page =
+                new MarginSecsSource(
+                                pages,
+                                ledgerPath
+                                        .getParent()
+                                        .resolve(
+                                                "sync-evidence/margin-secs-source-check-"
+                                                        + UUID.randomUUID()))
+                        .fetch(date, () -> Thread.currentThread().isInterrupted());
+        var actual = writer.readDateBefore(date);
+        var keys = page.rows().stream().map(MarginSecs::key).collect(Collectors.toSet());
+        long missing = actual.stream().filter(r -> !keys.contains(r.key())).count();
+        writer.preflight();
+        if (!id.equals(targetId())) throw new IllegalStateException("只读检查期间目标改变");
+        return Map.of(
+                "dataset",
+                "margin_secs",
+                "date",
+                date,
+                "targetId",
+                id,
+                "sourceRows",
+                page.rows().size(),
+                "oldScopeRows",
+                actual.size(),
+                "oldKeysMissingInSource",
+                missing,
+                "sourceCoverageVerified",
+                true,
+                "targetDataVerified",
+                false,
+                "productionWritten",
+                false,
+                "source",
+                Map.of(
+                        "sourceFingerprint",
+                        page.sourceFingerprint(),
+                        "responseEvidence",
+                        page.responseEvidence()));
+    }
+
     public SyncJobRunner.Result run(Plan plan) throws Exception {
         return execute(
                 "margin-secs-" + UUID.randomUUID(), null, null, Objects.requireNonNull(plan));
     }
 
     public SyncJobRunner.Result resume(String priorRunId) throws Exception {
-        var restored =
-                FrozenRunRequest.restore(ledgerPath, priorRunId, MarginSecsSyncJobOwner.DEFINITION);
+        var restored = FrozenRunRequest.restore(ledgerPath, priorRunId, executionDefinition());
         var state = SyncRunLedger.openReadOnly(ledgerPath).get(priorRunId);
         if (state.state() == SyncRunState.VERIFIED || state.state() == SyncRunState.VERIFIED_EMPTY)
             throw new IllegalStateException("D030 run already completed");
@@ -259,7 +389,9 @@ public final class MarginSecsJobService {
             throw new IllegalStateException(
                     "D030 unknown write outcome requires explicit reconciliation; source replay is blocked");
         var plan = restorePlan(restored.request(), restored.targetId());
-        MarginSecsCoverage.validateTarget(ledgerPath, restored.targetId(), target.snapshot());
+        requireExecutionMode(restored.request().mode());
+        if (!formalTarget())
+            MarginSecsCoverage.validateTarget(ledgerPath, restored.targetId(), target.snapshot());
         return execute("margin-secs-" + UUID.randomUUID(), null, priorRunId, plan);
     }
 
@@ -287,21 +419,27 @@ public final class MarginSecsJobService {
                 (LocalDate) p.get("checkpointBefore"),
                 (LocalDate) p.get("checkpointAnchor"),
                 new MarginSecsState.TargetRange(min, max, rows),
-                p.get("checkpointBefore") == null,
+                !formalTarget() && p.get("checkpointBefore") == null,
                 0);
     }
 
     private SyncJobRunner.Result execute(String runId, String parent, String priorRunId, Plan plan)
             throws Exception {
+        requireExecutionMode(plan.request().mode());
+        if (!executionDefinition().equals(plan.request().definition()))
+            throw new IllegalArgumentException("标的名单请求版本与物理目标不匹配");
         MarginSecsSyncAdapter.validateRequest(plan.request());
         if (!plan.targetId().equals(targetId())
                 || !plan.physicalTargetId().equals(physicalTargetId()))
             throw new IllegalStateException("Frozen D030 target identity changed");
-        if (plan.request().mode() != Mode.INCREMENTAL)
+        if (!formalTarget() && plan.request().mode() != Mode.INCREMENTAL)
             validateCorrection(plan.request(), plan.targetId());
         var port = target.newWriter(plan.physicalTargetId());
         if (priorRunId == null) {
-            var now = target.snapshot();
+            var now =
+                    formalTarget()
+                            ? target.snapshot(plan.request().from(), plan.request().to())
+                            : target.snapshot();
             if (!Objects.equals(
                             now.rows().size(), plan.request().parameters().get("targetRowsBefore"))
                     || !now.fingerprint()

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-/** 五条正式财务源的显式列契约；保留原表三列业务键，不合并不同报表类别。 */
+/** 正式财务源的显式列契约；保留原表三列业务键，不合并不同报表类别。 */
 public record FinancialContract(String dataset, List<Field> fields) {
     public record Field(String name, String type, boolean key, String source) {
         public Field {
@@ -46,7 +46,7 @@ public record FinancialContract(String dataset, List<Field> fields) {
     }
 
     public static final Set<String> DATASETS =
-            Set.of("cashflow", "income", "express", "forecast", "fina_indicator");
+            Set.of("cashflow", "income", "express", "forecast", "fina_indicator", "balance");
 
     public FinancialContract {
         if (!DATASETS.contains(dataset)) throw new IllegalArgumentException("未知财务源");
@@ -83,12 +83,21 @@ public record FinancialContract(String dataset, List<Field> fields) {
                                                                                 + " 原单位字段："
                                                                                 + f.name()
                                                                         : "历史本地列；增量保留原值，不推断计算含义"),
-                                                f.name().equals("ann_date") ? date : null))
+                                                f.name().equals("ann_date")
+                                                        ? date
+                                                        : f.name().equals("update_time")
+                                                                ? new TemporalContract(
+                                                                        TemporalKind.INSTANT,
+                                                                        "ISO_INSTANT",
+                                                                        "UTC",
+                                                                        "MICROS",
+                                                                        "历史技术时刻原值保留；新行缺失时不补造")
+                                                                : null))
                         .toList();
         return new DatasetDefinition(
                 dataset,
                 1,
-                "tushare." + dataset,
+                "tushare." + endpoint(),
                 "financial_owner",
                 dataset,
                 ObjectKind.TABLE,
@@ -100,7 +109,14 @@ public record FinancialContract(String dataset, List<Field> fields) {
                 true,
                 Set.of(Capability.READ, Capability.WRITE),
                 List.of(),
-                "保留正式 YEAR/WAL 表；income/cashflow 只接合并报表 report_type=1，其他类别另建契约");
+                dataset.equals("balance")
+                        ? "保留正式 YEAR/WAL 表；balancesheet 只接合并报表 report_type=1，保留历史技术列"
+                        : "保留正式 YEAR/WAL 表；income/cashflow 只接合并报表 report_type=1，其他类别另建契约");
+    }
+
+    /** balance 是原表名，供应商接口为 balancesheet；原五表请求保持原名。 */
+    public String endpoint() {
+        return dataset.equals("balance") ? "balancesheet" : dataset;
     }
 
     /** 公告区间与报告期含义不同；按证券和报告期重查才能捕获晚到及旧季度修订。 */
@@ -110,7 +126,7 @@ public record FinancialContract(String dataset, List<Field> fields) {
         var p = new LinkedHashMap<String, Object>();
         p.put("ts_code", code);
         p.put("period", period.format(DateTimeFormatter.BASIC_ISO_DATE));
-        if (Set.of("cashflow", "income").contains(dataset)) p.put("report_type", "1");
+        if (Set.of("cashflow", "income", "balance").contains(dataset)) p.put("report_type", "1");
         return p;
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +16,15 @@ public final class DatasetValues {
         var copy = new LinkedHashMap<String, Object>();
         values.forEach(
                 (key, value) ->
-                        copy.put(key, value instanceof byte[] bytes ? bytes.clone() : value));
+                        copy.put(
+                                key,
+                                value instanceof byte[] bytes
+                                        ? bytes.clone()
+                                        : value instanceof double[] numbers
+                                                ? numbers.clone()
+                                                : value instanceof List<?> list
+                                                        ? List.copyOf(list)
+                                                        : value));
         this.values = Collections.unmodifiableMap(copy);
     }
 
@@ -27,7 +36,12 @@ public final class DatasetValues {
         if (!type.isInstance(value))
             throw new IllegalArgumentException(
                     "Wrong Java type for " + column + ": expected " + type.getSimpleName());
-        return type.cast(value instanceof byte[] bytes ? bytes.clone() : value);
+        return type.cast(
+                value instanceof byte[] bytes
+                        ? bytes.clone()
+                        : value instanceof double[] numbers
+                                ? numbers.clone()
+                                : value instanceof List<?> list ? List.copyOf(list) : value);
     }
 
     public Set<String> columns() {
@@ -39,7 +53,15 @@ public final class DatasetValues {
         var copy = new LinkedHashMap<String, Object>();
         values.forEach(
                 (key, value) ->
-                        copy.put(key, value instanceof byte[] bytes ? bytes.clone() : value));
+                        copy.put(
+                                key,
+                                value instanceof byte[] bytes
+                                        ? bytes.clone()
+                                        : value instanceof double[] numbers
+                                                ? numbers.clone()
+                                                : value instanceof List<?> list
+                                                        ? List.copyOf(list)
+                                                        : value));
         return Collections.unmodifiableMap(copy);
     }
 }

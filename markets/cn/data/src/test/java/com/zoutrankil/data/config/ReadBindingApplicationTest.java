@@ -226,6 +226,38 @@ class ReadBindingApplicationTest {
                             "cn_m",
                             "cn_gdp",
                             "sf_month");
+            var observationIds =
+                    Set.of(
+                            "balance",
+                            "fut_basic",
+                            "disclosure_date",
+                            "share_float",
+                            "dividend",
+                            "fina_audit",
+                            "fina_mainbz",
+                            "pledge_stat",
+                            "stk_holdernumber",
+                            "stk_holdertrade",
+                            "broker_recommend",
+                            "stk_alert",
+                            "fut_holding",
+                            "cyq_chips",
+                            "sge_daily",
+                            "repurchase",
+                            "block_trade",
+                            "cyq_perf",
+                            "fut_daily",
+                            "fut_mapping",
+                            "fut_settle",
+                            "ft_limit");
+            var guardedIds =
+                    Set.of(
+                            "margin_all",
+                            "broker_recommend",
+                            "stk_alert",
+                            "sge_daily",
+                            "repurchase",
+                            "block_trade");
             var referenceIds =
                     Set.of("stk_shock", "stk_high_shock", "shibor", "hibor", "shibor_lpr");
             var readableIds =
@@ -233,12 +265,17 @@ class ReadBindingApplicationTest {
             assertEquals(
                     historicalIds,
                     readableIds.stream()
-                            .filter(id -> !addedIds.contains(id) && !referenceIds.contains(id))
+                            .filter(
+                                    id ->
+                                            !addedIds.contains(id)
+                                                    && !referenceIds.contains(id)
+                                                    && !observationIds.contains(id))
                             .collect(Collectors.toSet()));
             assertTrue(readableIds.containsAll(addedIds));
             assertTrue(readableIds.containsAll(referenceIds));
-            assertEquals(61, readable.size());
-            assertEquals(61, catalog.registrations().size());
+            assertTrue(readableIds.containsAll(observationIds));
+            assertEquals(83, readable.size());
+            assertEquals(83, catalog.registrations().size());
             assertEquals(readable.size(), bound.size());
             for (var id : addedIds) {
                 var registration =
@@ -250,7 +287,8 @@ class ReadBindingApplicationTest {
                 assertEquals(DatasetValues.class, registration.rowType());
                 var row = new DatasetValues(Map.of("explicit-generic", id));
                 assertSame(row, registration.mapper().apply(row));
-                assertNull(registration.sourceVersion().get());
+                if (!guardedIds.contains(id)) assertNull(registration.sourceVersion().get());
+                if (id.equals("margin_all")) assertTrue(registration.verifyAfterRead());
             }
             for (var id : referenceIds) {
                 var registration =
@@ -276,7 +314,10 @@ class ReadBindingApplicationTest {
                         expectedTyped.getOrDefault(
                                 definition.datasetId(), DatasetValues.class.getName()),
                         binding.rowType().getName());
-                assertNull(binding.sourceVersion().get());
+                if (!guardedIds.contains(definition.datasetId()))
+                    assertNull(binding.sourceVersion().get());
+                if (Set.of("margin_all", "repurchase", "block_trade")
+                        .contains(definition.datasetId())) assertTrue(binding.verifyAfterRead());
             }
             assertEquals(
                     DatasetValues.class,

@@ -92,10 +92,12 @@ public final class MarginSecsSource {
             }
             throw failure;
         }
-        if (completed.pages() != 1 || completed.rows() != raw.size() || raw.size() >= API_ROW_CAP) {
-            var failure =
-                    new IllegalStateException(
-                            "D030 unpaged margin_secs response is incomplete or reached the conservative 6000-row cap");
+        // 开市日全市场名单为空时无法认证覆盖，原件留为失败证据。
+        if (completed.pages() != 1
+                || completed.rows() != raw.size()
+                || raw.isEmpty()
+                || raw.size() >= API_ROW_CAP) {
+            var failure = new IllegalStateException("标的名单为空、不完整或达到6000行保守上限");
             persistIncomplete(date, parameters, raw, failure);
             throw failure;
         }

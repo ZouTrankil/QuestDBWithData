@@ -43,12 +43,12 @@ public final class IndexDailyMarketSyncAdapter
     @Override
     public void preflight(SyncJobDefinition.FrozenRequest request) {
         if (request == null
-                || !request.definition().equals(IndexDailyMarketSyncJobOwner.DEFINITION)
+                || !request.definition()
+                        .equals(IndexDailyMarketSyncJobOwner.definition(port.datasetVersion()))
                 || !request.definition()
                         .datasetId()
                         .equals(IndexDailyMarketDataset.DEFINITION.datasetId())
-                || request.definition().datasetVersion()
-                        != IndexDailyMarketDataset.LEGACY_ISOLATED_DEFINITION.schemaVersion()
+                || request.definition().datasetVersion() != port.datasetVersion()
                 || !Set.of(Mode.INCREMENTAL, Mode.BACKFILL, Mode.RECONCILE).contains(request.mode())
                 || request.from() == null
                 || request.to() == null

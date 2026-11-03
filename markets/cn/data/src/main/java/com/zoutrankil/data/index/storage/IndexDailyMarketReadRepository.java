@@ -9,10 +9,10 @@ import com.zoutrankil.data.domain.index.IndexDailyMarket;
 import com.zoutrankil.data.domain.index.IndexDailyMarketDataset;
 import com.zoutrankil.data.domain.index.IndexDailyMarketKey;
 import com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse;
-import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.index.mapper.IndexDailyMarketMapper;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -30,21 +30,29 @@ public class IndexDailyMarketReadRepository implements DatasetImplementation {
                     .map(DatasetDefinition.Column::logicalName)
                     .toList();
     private final QuestDbBoundedReader reader;
+    private final int version;
     private final String table;
     private final IndexDailyMarketMapper mapper = new IndexDailyMarketMapper();
 
+    public IndexDailyMarketReadRepository(QuestDbBoundedReader reader, String table) {
+        this(reader, table, 1);
+    }
+
+    @Autowired
     public IndexDailyMarketReadRepository(
             QuestDbBoundedReader reader,
             @Value("${app.sync.index-daily-market-table:java_d019_index_daily_market_acceptance}")
-                    String table) {
+                    String table,
+            @Value("${app.sync.index-daily-market-schema-version:1}") int version) {
         this.reader = Objects.requireNonNull(reader);
-        IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
+        IndexDailyMarketDataset.requireTarget(table, version);
         this.table = table;
+        this.version = version;
     }
 
     @Override
     public DatasetDefinition definition() {
-        return IndexDailyMarketDataset.legacyIsolatedDefinition(table);
+        return IndexDailyMarketDataset.definition(table, version);
     }
 
     public DatasetReadPage<IndexDailyMarket> findByKey(IndexDailyMarketKey key) {

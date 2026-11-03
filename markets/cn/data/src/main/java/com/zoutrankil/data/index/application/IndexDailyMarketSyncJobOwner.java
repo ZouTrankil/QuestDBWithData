@@ -10,6 +10,8 @@ import com.zoutrankil.data.domain.SyncJobDefinition.ParameterType;
 import com.zoutrankil.data.domain.SyncJobDefinition.RetryPolicy;
 import com.zoutrankil.data.domain.shared.SyncJobOwner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -63,6 +65,47 @@ public final class IndexDailyMarketSyncJobOwner implements SyncJobOwner {
                     true,
                     true);
 
+    private final int version;
+
+    public IndexDailyMarketSyncJobOwner() {
+        this(1);
+    }
+
+    @Autowired
+    public IndexDailyMarketSyncJobOwner(
+            @Value("${app.sync.index-daily-market-schema-version:1}") int version) {
+        definition(version);
+        this.version = version;
+    }
+
+    /** v1常量保持原样；新请求单独登记作业v2与数据契约v2。 */
+    public static SyncJobDefinition definition(int version) {
+        if (version == 1) return DEFINITION;
+        if (version != 2) throw new IllegalArgumentException("指数日线作业版本不支持");
+        var d = DEFINITION;
+        return new SyncJobDefinition(
+                d.jobId(),
+                2,
+                d.datasetId(),
+                2,
+                d.owner(),
+                d.supportedModes(),
+                d.defaultMode(),
+                d.parameters(),
+                d.ratePolicyRef(),
+                d.slicePolicyRef(),
+                d.verificationPolicyRef(),
+                d.retry(),
+                d.timeout(),
+                d.budget(),
+                d.revisionDays(),
+                d.dependencies(),
+                d.frequency(),
+                d.zone(),
+                d.enabled(),
+                d.dailyEligible());
+    }
+
     @Override
     public String datasetId() {
         return "index_daily_market";
@@ -75,6 +118,6 @@ public final class IndexDailyMarketSyncJobOwner implements SyncJobOwner {
 
     @Override
     public List<SyncJobDefinition> syncJobDefinitions() {
-        return List.of(DEFINITION);
+        return List.of(definition(version));
     }
 }

@@ -73,7 +73,7 @@ class FinancialSyncTest {
         m.put("ts_code", new TextNode("600000.SH"));
         m.put("ann_date", new TextNode(ann));
         m.put("end_date", new TextNode("20260630"));
-        if (Set.of("cashflow", "income").contains(c.dataset()))
+        if (Set.of("cashflow", "income", "balance").contains(c.dataset()))
             m.put("report_type", new TextNode("1"));
         c.fields().stream()
                 .filter(f -> f.type().equals("DOUBLE"))
@@ -90,7 +90,8 @@ class FinancialSyncTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"cashflow", "income", "express", "forecast", "fina_indicator"})
+    @ValueSource(
+            strings = {"cashflow", "income", "express", "forecast", "fina_indicator", "balance"})
     void newAnnouncementsLateDisclosureAndHistoricalCorrectionsUseTheSameVerifiedOwner(String name)
             throws Exception {
         var c = FinancialSyncConfiguration.contract(name);
@@ -115,6 +116,29 @@ class FinancialSyncTest {
         var expected = new FinancialMapper(c).normalize(raw.getFirst(), "600000.SH", PERIOD, DAY);
         assertEquals(expected, target.rows.get(expected.key()));
         assertTrue(Files.isDirectory(root.resolve("sync-evidence")));
+    }
+
+    @Test
+    void balanceUsesBalancesheetEndpointAndPreservesTheLegacyTechnicalColumnContract() {
+        var c = FinancialSyncConfiguration.contract("balance");
+        assertEquals("balancesheet", c.endpoint());
+        assertEquals("1", c.parameters("600000.SH", PERIOD).get("report_type"));
+        assertTrue(
+                c.fields().stream()
+                        .anyMatch(f -> f.name().equals("update_time") && !f.collected()));
+        var raw = row(c, "20260820", 1);
+        raw.put("report_type", new TextNode("2"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new FinancialMapper(c).normalize(raw, "600000.SH", PERIOD, DAY));
+        raw.put("report_type", new TextNode("1"));
+        raw.put("update_flag", new TextNode("0"));
+        var revised = new LinkedHashMap<>(raw);
+        revised.put("update_flag", new TextNode("1"));
+        revised.put("total_assets", new DoubleNode(123));
+        assertEquals(
+                List.of(revised),
+                new FinancialMapper(c).revisions(List.of(raw, revised), "600000.SH", PERIOD, DAY));
     }
 
     @Test

@@ -131,7 +131,7 @@ class EtfApplicationWiringTest {
                     jobs.definitions().size(),
                     jobs.definitions().stream().map(SyncJobDefinition::jobId).distinct().count());
             assertEquals(
-                    61,
+                    83,
                     datasets.definitions().stream()
                             .filter(
                                     d ->
@@ -139,7 +139,7 @@ class EtfApplicationWiringTest {
                                                     .contains(DatasetDefinition.Capability.READ))
                             .count());
             var bindings = catalog.bind(datasets);
-            assertEquals(61, bindings.size());
+            assertEquals(83, bindings.size());
             for (String dataset : tables.keySet()) {
                 var familyOwners =
                         owners.stream().filter(owner -> owner.datasetId().equals(dataset)).toList();

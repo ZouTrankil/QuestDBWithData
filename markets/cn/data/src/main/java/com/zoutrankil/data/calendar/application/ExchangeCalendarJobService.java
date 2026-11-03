@@ -167,6 +167,11 @@ public class ExchangeCalendarJobService implements SyncJobOwner {
         return execute(plan(exchanges, bootstrapFrom, end, logicalDate, mode), null);
     }
 
+    /** 编排方先耐久保存运行编号，再沿原执行器提交；不恢复或重发未决任务。 */
+    public SyncJobRunner.Result executeRecorded(String runId, Plan plan) throws Exception {
+        return execute(runId, null, plan, null);
+    }
+
     public SyncJobRunner.Result execute(Plan plan, String priorRun) throws Exception {
         return execute("calendar-" + UUID.randomUUID(), null, plan, priorRun);
     }

@@ -52,6 +52,7 @@ public class DatasetConfiguration {
                                 "interest.observation_days31",
                                 "cyq_perf.explicit_codes_day",
                                 "futures.explicit_contract_days31",
+                                "contract_table.explicit_scope1",
                                 "cn_bond_yield_curve.range31",
                                 "stock_basic.snapshot",
                                 "exchange_calendar.year",

@@ -1,0 +1,207 @@
+{
+  "schema": "cn.moneyflow-ths.phase.v1",
+  "checkedAt": "2026-10-21T12:41:23.028391+00:00",
+  "scope": "同花顺资金流精确正式有界准入、单日真实来源和旧范围只读核查、私有完整日发布；未正式写入或启用调度",
+  "productionWritten": false,
+  "formalCompleted": 0,
+  "sourceAndTarget": {
+    "sourceRows": 5219,
+    "oldScopeRows": 5209,
+    "oldKeysMissingInSource": 0,
+    "productionWritten": false,
+    "targetId": "static-v2-93b85e3bf65c8a095fda419e1f7df03cf106cf5a30763bca79435e501d441744",
+    "dataset": "moneyflow_ths",
+    "date": "2026-09-18",
+    "targetDataVerified": false,
+    "sourceCoverageVerified": true
+  },
+  "evidence": {
+    "sourceProof": {
+      "path": "var/cn-ths-formal-check-20261021/source-check.json",
+      "sha256": "0b767546b3b41b2257a3b82d0c52682d78825bda6f7210777f045eeaf36cea1b"
+    },
+    "sourceLog": {
+      "path": "var/cn-ths-formal-check-20261021/source-check.log",
+      "sha256": "729adfb4811983e325d0afc090698a26d73fc2b1cbe5dd7b9071d2e1533d018f"
+    },
+    "rawSource": {
+      "path": "var/sync-evidence/moneyflow-ths-source-check-f1d891e4-bc66-4e8c-bac7-279d65d1ec45/moneyflow-ths-20260918-770338a2d98f181a21695d46f90ea2522a1bd0b8957b90b55d1ee0a67226dffc.json",
+      "sha256": "770338a2d98f181a21695d46f90ea2522a1bd0b8957b90b55d1ee0a67226dffc"
+    }
+  },
+  "privateAcceptance": {
+    "proof": {
+      "path": "var/cn-ths-formal-check-20261021/private-ths-5a03faf0c62349cfbb13862f85b0c342/acceptance.json",
+      "sha256": "0e3b24449279a923485970e62ee8ba7aff73c6d8b60e33f5110a86897b2f1fd5"
+    },
+    "process": {
+      "path": "var/cn-ths-formal-check-20261021/private-ths-5a03faf0c62349cfbb13862f85b0c342/server.json",
+      "sha256": "7b15c5e65819ab8d340695bfc579c3d5fd7940ff402b54f7fa0d9db62763ae72"
+    },
+    "stopped": {
+      "path": "var/cn-ths-formal-check-20261021/private-ths-5a03faf0c62349cfbb13862f85b0c342/server-stopped.json",
+      "sha256": "3a3849b1fcf1af0249197faf8b2b1b62f61ed65250e1f057d5d1c70d37328624"
+    },
+    "result": {
+      "schema": "cn.moneyflow-ths.private.v1",
+      "productionWritten": false,
+      "sourceRows": 5219,
+      "sourceArtifact": "/Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/sync-evidence/moneyflow-ths-source-check-f1d891e4-bc66-4e8c-bac7-279d65d1ec45/moneyflow-ths-20260918-770338a2d98f181a21695d46f90ea2522a1bd0b8957b90b55d1ee0a67226dffc.json",
+      "sourceSha256": "770338a2d98f181a21695d46f90ea2522a1bd0b8957b90b55d1ee0a67226dffc",
+      "calendarAndOutsideRowsAreFixtures": true,
+      "revisionAndPriorDayAreFixtures": true,
+      "first": {
+        "runId": "moneyflow-ths-f86a0383-f30d-41db-9eb8-936a3ebb3d11",
+        "state": "VERIFIED",
+        "sourceRows": 5219,
+        "verifiedRows": 5219,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "revision": {
+        "runId": "moneyflow-ths-cac84d13-a7a0-4f36-bb99-494fca45e919",
+        "state": "VERIFIED",
+        "sourceRows": 5219,
+        "verifiedRows": 5219,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "partial": {
+        "runId": "moneyflow-ths-ba8b9c49-9d34-4124-8cb7-42369deb7ff4",
+        "state": "PARTIAL",
+        "sourceRows": 5219,
+        "verifiedRows": 5219,
+        "errorCode": "Incomplete",
+        "reusedRows": 0
+      },
+      "resumed": {
+        "runId": "moneyflow-ths-7adc3f5c-9cc6-4116-9d4f-f220f5e2163b",
+        "state": "VERIFIED",
+        "sourceRows": 10438,
+        "verifiedRows": 10438,
+        "errorCode": null,
+        "reusedRows": 5219
+      },
+      "outsideUnchanged": true,
+      "publicReadVerified": true,
+      "incrementalRejected": true
+    },
+    "scopeNote": "全部5219行使用真实单日冻结来源；修订、前一日来源、日历及范围外旧行为夹具，不代表供应商真实多日覆盖或正式写入"
+  },
+  "legacyV1Compatibility": {
+    "path": "var/cn-ths-formal-check-20261021/legacy-v1-compat.json",
+    "sha256": "7279336dd0a919c18ce6900ea444cbbd1c4b3c47ce450e2887976789d5a79028"
+  },
+  "tests": {
+    "total": 100,
+    "failures": 0,
+    "errors": 0,
+    "reports": [
+      {
+        "class": "com.zoutrankil.data.flow.application.UpsertAdapterEvidenceContractTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-ths-formal-check-20261021/validation/TEST-com.zoutrankil.data.flow.application.UpsertAdapterEvidenceContractTest.xml",
+          "sha256": "312961929f358b6e34260bcc5e86e007ccebc4ef365583cf9e07fcda0c6a352f"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.bootstrap.ProjectConfigurationTest",
+        "tests": 35,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-ths-formal-check-20261021/validation/TEST-com.zoutrankil.data.bootstrap.ProjectConfigurationTest.xml",
+          "sha256": "06ba5a1951f7c7f52f83a1af0847a65c5767acc80919710cb2836d5c6db9c9b2"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.cli.CliCommandRegistryTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-ths-formal-check-20261021/validation/TEST-com.zoutrankil.data.cli.CliCommandRegistryTest.xml",
+          "sha256": "651fa76e156338416b39d57f5f5ebc3f5507e0600ec9ac6c6dec17e21c1e0a8a"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.flow.application.UpsertSourceContractTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-ths-formal-check-20261021/validation/TEST-com.zoutrankil.data.flow.application.UpsertSourceContractTest.xml",
+          "sha256": "558a7f3fc7515dcc49041f0f3f033bc02509f709b66d969718ff7d37dab376dd"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.flow.application.UpsertOwnerPortContractTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-ths-formal-check-20261021/validation/TEST-com.zoutrankil.data.flow.application.UpsertOwnerPortContractTest.xml",
+          "sha256": "7dc011bbd0a25c92e1d119164ea2fe80da7537d31326d2993b6933fa47278b92"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.flow.storage.UpsertTargetContractTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-ths-formal-check-20261021/validation/TEST-com.zoutrankil.data.flow.storage.UpsertTargetContractTest.xml",
+          "sha256": "92f1b2b163feaf7caab049fafb273b7fb4cca771eb388d999f5831779d308a0a"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.FlowMarginApplicationWiringTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-ths-formal-check-20261021/validation/TEST-com.zoutrankil.data.config.FlowMarginApplicationWiringTest.xml",
+          "sha256": "d473c4155d3f88bf505b9b589eacdc5ca9b4e271863bb064c3c41808f9e09234"
+        }
+      }
+    ]
+  },
+  "checks": {
+    "architectureTest": "通过",
+    "verifyModuleBoundaries": "通过",
+    ":markets:cn:data-app:distZip": "通过",
+    "publicConfigurationAndCredentialScan": "通过",
+    "formatImportsLiterals": "变更 Java 文件格式、import 和字面量核对通过： 114",
+    "logs": [
+      {
+        "path": "var/cn-ths-formal-check-20261021/validation/cn-ths-formal-delivery.log",
+        "sha256": "20fa985befc76412dd8792f0ceb5aae48c27d409604cf01b43bfbfc390c456e7"
+      },
+      {
+        "path": "var/cn-ths-formal-check-20261021/validation/cn-ths-formal-format.log",
+        "sha256": "3b102024e0733f01835333b7e94906091fd5d8047828a2b5549bc50a824f672b"
+      },
+      {
+        "path": "var/cn-ths-formal-check-20261021/validation/cn-ths-formal-public-config.log",
+        "sha256": "8d7cae6a90bde5726da0ebe5bb306f140d8cde57d3655bea20d73f13aea46ba3"
+      }
+    ]
+  },
+  "remaining": [
+    "默认writer仍隔离，正式只放行显式BACKFILL；不从旧行推导历史增量覆盖",
+    "原生产运行/锁及唯一writer绑定仍缺，不能把本机无进程当作停写证明",
+    "正式来源范围补数、周期调度、下一次真实更新和消费者验收未完成",
+    "来源遗漏旧键先拒绝发送；整日回读失败保持IN_DOUBT，不自动重发或解锁",
+    "新writer配置兼容回退旧配置；部署曾覆盖旧读取目标时须明确核对两端"
+  ]
+}

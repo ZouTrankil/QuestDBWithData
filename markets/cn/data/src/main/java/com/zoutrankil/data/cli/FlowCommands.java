@@ -6,7 +6,10 @@ import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.flow.application.MoneyflowHsgtJobService;
 import com.zoutrankil.data.flow.application.MoneyflowJobService;
 import com.zoutrankil.data.flow.application.MoneyflowThsJobService;
+import com.zoutrankil.data.margin.application.MarginAllJobService;
 import com.zoutrankil.data.margin.application.MarginDetailJobService;
+import com.zoutrankil.data.margin.application.MarginSecsJobService;
+import com.zoutrankil.data.service.SyncJobRunner.Result;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
@@ -25,10 +28,19 @@ import java.util.Set;
 public final class FlowCommands implements CliCommandFamily {
     private static final Set<String> COMMANDS =
             Set.of(
+                    "check-margin-all-source",
+                    "plan-margin-all-job",
+                    "run-margin-all-job",
+                    "finish-margin-all-publication",
+                    "reconcile-margin-all-run",
+                    "check-margin-secs-source",
+                    "plan-margin-secs-job",
+                    "run-margin-secs-job",
                     "plan-margin-detail-job",
                     "run-margin-detail-job",
                     "plan-moneyflow-hsgt-job",
                     "run-moneyflow-hsgt-job",
+                    "check-moneyflow-ths-source",
                     "plan-moneyflow-ths-job",
                     "run-moneyflow-ths-job",
                     "plan-moneyflow-job",
@@ -42,17 +54,40 @@ public final class FlowCommands implements CliCommandFamily {
     private final MoneyflowJobService moneyflowService;
 
     private final MarginDetailJobService marginDetailService;
+    private final MarginSecsJobService marginSecsService;
+    private final MarginAllJobService marginAllService;
 
     @Autowired
     public FlowCommands(
             @Nullable MoneyflowHsgtJobService moneyflowHsgtService,
             @Nullable MoneyflowThsJobService moneyflowThsService,
             @Nullable MoneyflowJobService moneyflowService,
-            @Nullable MarginDetailJobService marginDetailService) {
+            @Nullable MarginDetailJobService marginDetailService,
+            @Nullable MarginSecsJobService marginSecsService,
+            @Nullable MarginAllJobService marginAllService) {
         this.moneyflowHsgtService = moneyflowHsgtService;
         this.moneyflowThsService = moneyflowThsService;
         this.moneyflowService = moneyflowService;
         this.marginDetailService = marginDetailService;
+        this.marginSecsService = marginSecsService;
+        this.marginAllService = marginAllService;
+    }
+
+    public FlowCommands(
+            @Nullable MoneyflowHsgtJobService hsgt,
+            @Nullable MoneyflowThsJobService ths,
+            @Nullable MoneyflowJobService flow,
+            @Nullable MarginDetailJobService detail,
+            @Nullable MarginSecsJobService secs) {
+        this(hsgt, ths, flow, detail, secs, null);
+    }
+
+    public FlowCommands(
+            @Nullable MoneyflowHsgtJobService hsgt,
+            @Nullable MoneyflowThsJobService ths,
+            @Nullable MoneyflowJobService flow,
+            @Nullable MarginDetailJobService detail) {
+        this(hsgt, ths, flow, detail, null);
     }
 
     public FlowCommands(
@@ -70,6 +105,115 @@ public final class FlowCommands implements CliCommandFamily {
     @Override
     public void execute(String command, Map<String, String> options) throws Exception {
         switch (command) {
+            case "check-margin-all-source" -> {
+                if (marginAllService == null
+                        || !options.keySet().equals(Set.of("--date", "--logical-date")))
+                    throw new IllegalArgumentException("汇总来源核查需要明确日期和业务日");
+                CliOutput.printJson(
+                        marginAllService.checkSource(
+                                LocalDate.parse(options.get("--date")),
+                                LocalDate.parse(options.get("--logical-date"))),
+                        CliOutput.Profile.JOB_DEFINITION,
+                        true);
+            }
+            case "plan-margin-all-job", "run-margin-all-job" -> {
+                if (marginAllService == null) throw new IllegalStateException("汇总owner不可用");
+                if (options.containsKey("--resume-from")) {
+                    if (!command.equals("run-margin-all-job")
+                            || !options.keySet().equals(Set.of("--resume-from")))
+                        throw new IllegalArgumentException("汇总恢复只接受原运行编号");
+                    printMarginAllResult(marginAllService.resume(options.get("--resume-from")));
+                    return;
+                }
+                if (!options.keySet().equals(Set.of("--mode", "--from", "--to", "--logical-date")))
+                    throw new IllegalArgumentException("汇总计划需要明确模式、起止日和业务日");
+                var plan =
+                        marginAllService.plan(
+                                Mode.valueOf(options.get("--mode").toUpperCase(Locale.ROOT)),
+                                LocalDate.parse(options.get("--from")),
+                                LocalDate.parse(options.get("--to")),
+                                LocalDate.parse(options.get("--logical-date")));
+                if (command.equals("plan-margin-all-job"))
+                    CliOutput.printJson(
+                            Map.of("executed", false, "dataVerified", false, "plan", plan),
+                            CliOutput.Profile.JOB_DEFINITION,
+                            true);
+                else printMarginAllResult(marginAllService.run(plan));
+            }
+            case "reconcile-margin-all-run" -> {
+                if (marginAllService == null
+                        || !options.keySet().equals(Set.of("--run", "--writer-stopped"))
+                        || !"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("原运行收尾需要原运行编号及明确停止writer的证据");
+                CliOutput.printJson(
+                        marginAllService.reconcileRun(options.get("--run"), true),
+                        CliOutput.Profile.JOB_DEFINITION,
+                        true);
+            }
+            case "finish-margin-all-publication" -> {
+                if (marginAllService == null
+                        || !options.keySet().equals(Set.of("--run", "--writer-stopped"))
+                        || !"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("汇总发布恢复需要原运行编号和明确停止writer的证据");
+                var recovered = marginAllService.finishInterrupted(options.get("--run"), true);
+                CliOutput.printJson(
+                        recovered.entry() == null
+                                ? Map.of(
+                                        "runId",
+                                        options.get("--run"),
+                                        "state",
+                                        "CANCELLED",
+                                        "stageDiscarded",
+                                        true,
+                                        "sourceRefetchRequired",
+                                        true)
+                                : recovered,
+                        CliOutput.Profile.JOB_DEFINITION,
+                        true);
+            }
+            case "check-margin-secs-source" -> {
+                if (marginSecsService == null
+                        || !options.keySet().equals(Set.of("--date", "--logical-date")))
+                    throw new IllegalArgumentException("名单来源核查只接受明确日期和业务日");
+                CliOutput.printJson(
+                        marginSecsService.checkSource(
+                                LocalDate.parse(options.get("--date")),
+                                LocalDate.parse(options.get("--logical-date"))),
+                        CliOutput.Profile.JOB_DEFINITION,
+                        true);
+            }
+            case "plan-margin-secs-job", "run-margin-secs-job" -> {
+                if (marginSecsService == null) throw new IllegalStateException("标的名单owner不可用");
+                if (options.containsKey("--resume-from")) {
+                    if (!command.equals("run-margin-secs-job")
+                            || !options.keySet().equals(Set.of("--resume-from")))
+                        throw new IllegalArgumentException("恢复只接受原运行编号");
+                    var result = marginSecsService.resume(options.get("--resume-from"));
+                    printMarginSecsResult(result);
+                    return;
+                }
+                if (!options.keySet().containsAll(Set.of("--to", "--logical-date"))
+                        || !Set.of("--from", "--to", "--logical-date", "--mode")
+                                .containsAll(options.keySet()))
+                    throw new IllegalArgumentException("需要明确结束日和业务日，可指定起始日和模式");
+                var plan =
+                        marginSecsService.plan(
+                                options.containsKey("--mode")
+                                        ? Mode.valueOf(
+                                                options.get("--mode").toUpperCase(Locale.ROOT))
+                                        : null,
+                                options.containsKey("--from")
+                                        ? LocalDate.parse(options.get("--from"))
+                                        : null,
+                                LocalDate.parse(options.get("--to")),
+                                LocalDate.parse(options.get("--logical-date")));
+                if (command.equals("plan-margin-secs-job"))
+                    CliOutput.printJson(
+                            Map.of("executed", false, "dataVerified", false, "plan", plan),
+                            CliOutput.Profile.JOB_DEFINITION,
+                            true);
+                else printMarginSecsResult(marginSecsService.run(plan));
+            }
             case "discard-moneyflow-hsgt-stage" -> {
                 if (moneyflowHsgtService == null
                         || !options.keySet().equals(Set.of("--run", "--writer-stopped"))
@@ -233,6 +377,17 @@ public final class FlowCommands implements CliCommandFamily {
                 }
             }
 
+            case "check-moneyflow-ths-source" -> {
+                if (moneyflowThsService == null
+                        || !options.keySet().equals(Set.of("--date", "--logical-date")))
+                    throw new IllegalArgumentException("来源核查只接受明确日期与业务日");
+                CliOutput.printJson(
+                        moneyflowThsService.checkSource(
+                                LocalDate.parse(options.get("--date")),
+                                LocalDate.parse(options.get("--logical-date"))),
+                        CliOutput.Profile.JOB_DEFINITION,
+                        true);
+            }
             case "plan-moneyflow-ths-job", "run-moneyflow-ths-job" -> {
                 if (options.containsKey("--resume-from")) {
                     if (moneyflowThsService == null
@@ -391,5 +546,23 @@ public final class FlowCommands implements CliCommandFamily {
             }
             default -> throw new IllegalArgumentException(CliUsage.text());
         }
+    }
+
+    private static void printMarginSecsResult(Result result) throws Exception {
+        CliOutput.printJson(result, CliOutput.Profile.JOB_DEFINITION, true);
+        if (result.errorCode() != null
+                || !Set.of(SyncRunState.VERIFIED, SyncRunState.VERIFIED_EMPTY)
+                        .contains(result.state()))
+            throw new IncompleteCommandException(
+                    "标的名单未完成：" + result.state() + "；run=" + result.runId());
+    }
+
+    private static void printMarginAllResult(Result result) throws Exception {
+        CliOutput.printJson(result, CliOutput.Profile.JOB_DEFINITION, true);
+        if (result.errorCode() != null
+                || !Set.of(SyncRunState.VERIFIED, SyncRunState.VERIFIED_EMPTY)
+                        .contains(result.state()))
+            throw new IncompleteCommandException(
+                    "汇总未完成：" + result.state() + "；run=" + result.runId());
     }
 }

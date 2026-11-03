@@ -4,6 +4,7 @@ import static com.zoutrankil.data.repository.ReferencePublicationJournal.State;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
+import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.domain.stock.margin.MarginAll;
@@ -14,7 +15,6 @@ import com.zoutrankil.data.margin.port.MarginAllTables;
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.repository.ReferencePublicationJournal;
 import com.zoutrankil.data.repository.SyncRunLedger;
-import com.zoutrankil.data.service.DatasetIntervalLock;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
@@ -27,6 +27,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,6 +35,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Collectors;
 
 /** D028 stage/backup rename journal; every generation retains YEAR/WAL/DEDUP=false. */
 public final class MarginAllPublication {
@@ -194,6 +196,18 @@ public final class MarginAllPublication {
         }
     }
 
+    /** 收尾只读核对原发布，调用方持有同一操作锁；这里不再执行重命名。 */
+    public Result verifiedPublication(Operation operation, String runId) throws Exception {
+        if (operation == null || operation.owner != this || operation.closed)
+            throw new IllegalArgumentException("需要原发布操作锁");
+        var entry = journal.forRun(runId);
+        var layout = inspect(entry);
+        if (entry.state() != State.VERIFIED || layout != Layout.PUBLISHED)
+            throw new IllegalStateException("原物理发布尚未完整恢复并核验");
+        verifyJournalReceipt(entry, layout);
+        return verifyPublished(entry);
+    }
+
     public Result finish(String runId, boolean writerStopped) throws Exception {
         if (!writerStopped)
             throw new IllegalStateException(
@@ -247,7 +261,7 @@ public final class MarginAllPublication {
             var run = ledger.getRun(runId);
             var runEntry = ledger.get(runId);
             if (!MarginAllSyncJobOwner.DEFINITION.jobId().equals(run.jobId())
-                    || run.jobVersion() != MarginAllSyncJobOwner.DEFINITION.version()
+                    || !Set.of(1, 2).contains(run.jobVersion())
                     || !tables.logicalTargetId(target).equals(run.targetId())
                     || !Set.of(
                                     SyncRunState.IN_DOUBT,
@@ -257,21 +271,7 @@ public final class MarginAllPublication {
                             .contains(runEntry.state()))
                 throw new IllegalStateException(
                         "D028 stage discard requires a stopped failed/cancelled/partial run for this logical target");
-            Path evidence = ledgerPath.getParent().resolve("sync-evidence").resolve(runId);
-            MarginAllStaging.discardUnpublished(tables, target, runId, evidence, ledgerPath, true);
-            JsonNode frozen = JobDefinitionJson.mapper().readTree(run.frozenJson());
-            LocalDate from = LocalDate.parse(frozen.path("from").asText()),
-                    to = LocalDate.parse(frozen.path("to").asText());
-            var locks = new DatasetIntervalLock(ledgerPath);
-            var scope = new DatasetIntervalLock.Scope("margin_all", from, to);
-            var lease = locks.findOwned(runId, scope);
-            if (lease != null) {
-                if (!lease.inDoubt()) {
-                    locks.retainInDoubt(lease);
-                    lease = locks.findOwned(runId, scope);
-                }
-                locks.releaseAfterReconciliation(lease, true, true);
-            }
+            MarginAllStageRecovery.discard(tables, ledgerPath, target, runId);
         }
     }
 
@@ -378,6 +378,7 @@ public final class MarginAllPublication {
                                                         "D028 verified stage receipt escaped its run evidence root")));
         var p = verified.prepared();
         var run = SyncRunLedger.openReadOnly(ledgerPath).getRun(p.runId());
+        verifyFormalCalendar(run.id(), run.jobVersion(), verified.authoritativeRows());
         if (!"margin_all".equals(proof.path("dataset").asText())
                 || !proof.path("sourceComplete").asBoolean(false)
                 || proof.path("dedup").asBoolean(true)
@@ -478,11 +479,51 @@ public final class MarginAllPublication {
         }
         if (!next.equals(to.plusDays(1)) || sourceRows.size() != proof.path("sourceRows").asInt(-1))
             throw new IllegalStateException("D028 journal raw-source evidence is incomplete");
+        var originalName =
+                layout == Layout.ORIGINAL ? entry.intent().target() : entry.intent().backup();
+        var sourceKeys = sourceRows.stream().map(MarginAll::key).collect(Collectors.toSet());
+        for (var old : tables.open(originalName).window(from, to).rows())
+            if (!sourceKeys.contains(old.key()))
+                throw new IllegalStateException("原来源遗漏旧业务键，不能认证删除");
+        verifyFormalCalendar(run.id(), run.jobVersion(), sourceRows);
         String replacement =
                 layout == Layout.PUBLISHED ? entry.intent().target() : entry.intent().stage();
         if (!MarginAllRows.sameRows(sourceRows, tables.open(replacement).window(from, to).rows()))
             throw new IllegalStateException(
                     "D028 staged/published window differs from its reopened source receipts");
+    }
+
+    /** 发布和恢复都重验冻结日历，不能只相信收集器曾检查过交易所范围。 */
+    private void verifyFormalCalendar(String runId, int version, List<MarginAll> rows)
+            throws Exception {
+        if (version != 2) return;
+        var saved =
+                JobDefinitionJson.mapper()
+                        .readTree(
+                                SyncRunLedger.openReadOnly(ledgerPath).getRun(runId).frozenJson());
+        if (!JobDefinitionJson.mapper()
+                        .treeToValue(saved.path("definition"), SyncJobDefinition.class)
+                        .equals(MarginAllSyncJobOwner.FORMAL_DEFINITION)
+                || !"BACKFILL".equals(saved.path("mode").asText())
+                || !MarginAllCalendar.POLICY.equals(
+                        saved.path("parameters").path("calendarPolicy").asText()))
+            throw new IllegalStateException("汇总发布冻结定义或日历规则不符");
+        var calendar =
+                MarginAllCalendar.validate(
+                        LocalDate.parse(saved.path("from").asText()),
+                        LocalDate.parse(saved.path("to").asText()),
+                        List.of(
+                                saved.path("parameters")
+                                        .path("calendarDays")
+                                        .asText()
+                                        .split(",", -1)),
+                        saved.path("parameters").path("calendarFingerprint").asText());
+        for (var entry : calendar.openExchanges().entrySet()) {
+            MarginAllCalendar.requireCoverage(
+                    calendar,
+                    entry.getKey(),
+                    rows.stream().filter(r -> r.tradeDate().equals(entry.getKey())).toList());
+        }
     }
 
     private void rename(String source, String target) {

@@ -1,0 +1,235 @@
+{
+  "schema": "cn.margin-secs.phase.v1",
+  "checkedAt": "2026-10-21T13:00:24.663777+00:00",
+  "scope": "标的名单精确正式v2窗口准入、真实单日来源和旧范围只读核查、私有完整日发布；未正式写入或启用调度",
+  "productionWritten": false,
+  "formalCompleted": 0,
+  "sourceAndTarget": {
+    "targetId": "static-v2-cb31fb9bc2c1f6ef97e3af887ab58160b533ee0f7899ffa3affc272b311a2ad9",
+    "dataset": "margin_secs",
+    "date": "2026-09-18",
+    "targetDataVerified": false,
+    "sourceCoverageVerified": true,
+    "sourceRows": 4475,
+    "oldScopeRows": 2370,
+    "oldKeysMissingInSource": 0,
+    "productionWritten": false
+  },
+  "realFormalPlanning": {
+    "fullTargetRows": 1618079,
+    "scopeRows": 2370,
+    "scope": "2026-09-18单日",
+    "jobVersion": 2,
+    "baselineScope": "DATE_WINDOW",
+    "planValidated": true,
+    "priorV1FullSnapshotBoundExceeded": true,
+    "proof": {
+      "path": "var/cn-margin-secs-check-20261021/formal-plan.json",
+      "sha256": "d640f0ae6305b38298672416994ac79b995da69e383f69bbbc52e1d8a101d31c"
+    },
+    "log": {
+      "path": "var/cn-margin-secs-check-20261021/formal-plan.log",
+      "sha256": "fc13cf5262bc169bde77db7006039e73283d7ea81d72f8bbe356daa1c1667a20"
+    },
+    "priorBoundProof": {
+      "path": "var/cn-margin-secs-check-20261021/formal-plan-v1-bound.json",
+      "sha256": "cbbdca322796ad91ed54a1b087fedacbb1f34daa426c94f07150a63af1df01d3"
+    }
+  },
+  "evidence": {
+    "sourceProof": {
+      "path": "var/cn-margin-secs-check-20261021/source-check.json",
+      "sha256": "8b7cf1316eb29addad648dbac63e433e59bf1374d394bc79778bba46f5f2eea6"
+    },
+    "sourceLog": {
+      "path": "var/cn-margin-secs-check-20261021/source-check.log",
+      "sha256": "46a1c2fa06313be63e0c0ba48e111ddcb933c1605bb085132ffc22fb837dfb37"
+    },
+    "rawSource": {
+      "path": "var/sync-evidence/margin-secs-source-check-456f78f3-e19d-4479-a1ca-08e5ea5a494c/margin-secs-20260918-fb1057118c84d2d43a108426d292f383ed6b98f059c298dc4fa38304d8e505e8.json",
+      "sha256": "fb1057118c84d2d43a108426d292f383ed6b98f059c298dc4fa38304d8e505e8"
+    }
+  },
+  "privateAcceptance": {
+    "proof": {
+      "path": "var/cn-margin-secs-check-20261021/private-margin-secs-5788217c552a45bf87b470d9f4ed8d98/acceptance.json",
+      "sha256": "29a1dfb69ac9ea119f8d5180049a60ad563071b61bcc69fe74e460ca861964ad"
+    },
+    "process": {
+      "path": "var/cn-margin-secs-check-20261021/private-margin-secs-5788217c552a45bf87b470d9f4ed8d98/server.json",
+      "sha256": "c5f1e850f7331b46baeb2773568f0cf57a479e44d7934f96a002902ee6a7a6ea"
+    },
+    "stopped": {
+      "path": "var/cn-margin-secs-check-20261021/private-margin-secs-5788217c552a45bf87b470d9f4ed8d98/server-stopped.json",
+      "sha256": "027b4926d82cd59e5341ba6f365cc43fb1e49c58c357f1e1615606be0665eea4"
+    },
+    "frozenRequests": {
+      "path": "var/cn-margin-secs-check-20261021/private-margin-secs-5788217c552a45bf87b470d9f4ed8d98/frozen-requests-readonly.json",
+      "sha256": "7c740ab9d651a6f729f47a4658b2b2b4db8bdc3bc983d7923405b53a1869f335"
+    },
+    "result": {
+      "schema": "cn.margin-secs.private.v1",
+      "productionWritten": false,
+      "sourceRows": 4475,
+      "oldCurrentNameIsFixture": true,
+      "jobVersion": 2,
+      "sourceArtifact": "/Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/sync-evidence/margin-secs-source-check-456f78f3-e19d-4479-a1ca-08e5ea5a494c/margin-secs-20260918-fb1057118c84d2d43a108426d292f383ed6b98f059c298dc4fa38304d8e505e8.json",
+      "sourceSha256": "fb1057118c84d2d43a108426d292f383ed6b98f059c298dc4fa38304d8e505e8",
+      "calendarAndOutsideRowsAreFixtures": true,
+      "revisionAndPriorDayAreFixtures": true,
+      "first": {
+        "runId": "margin-secs-a7c36016-14e4-4bf3-ac33-9f4fb7a85c56",
+        "state": "VERIFIED",
+        "sourceRows": 4475,
+        "verifiedRows": 4475,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "revision": {
+        "runId": "margin-secs-017ab28a-3b87-4b65-94a8-70ab2c81606d",
+        "state": "VERIFIED",
+        "sourceRows": 4475,
+        "verifiedRows": 4475,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "partial": {
+        "runId": "margin-secs-7ad82095-e880-4c43-8c5c-49052b8d5b21",
+        "state": "PARTIAL",
+        "sourceRows": 4475,
+        "verifiedRows": 4475,
+        "errorCode": "Incomplete",
+        "reusedRows": 0
+      },
+      "resumed": {
+        "runId": "margin-secs-80ddfbd6-5a6d-435a-a4ed-721ceb5d7eb6",
+        "state": "VERIFIED",
+        "sourceRows": 8950,
+        "verifiedRows": 8950,
+        "errorCode": null,
+        "reusedRows": 4475
+      },
+      "outsideUnchanged": true,
+      "publicReadVerified": true,
+      "incrementalRejected": true
+    },
+    "scopeNote": "全部4475行使用真实单日冻结来源；旧值、修订、前一日来源、日历及范围外旧行为夹具，不代表供应商真实多日覆盖或正式写入"
+  },
+  "legacyV1Compatibility": {
+    "path": "var/cn-margin-secs-check-20261021/legacy-v1-compat.json",
+    "sha256": "0136e0d661fe3664b52c26cce3586678dd67b75843e52d15369d066000b0c9da"
+  },
+  "tests": {
+    "total": 74,
+    "failures": 0,
+    "errors": 0,
+    "reports": [
+      {
+        "class": "com.zoutrankil.data.margin.application.MarginSecsContractTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-secs-check-20261021/validation/TEST-com.zoutrankil.data.margin.application.MarginSecsContractTest.xml",
+          "sha256": "22530924b2f15da85344c3dd43552cae0230996cf4faedd908312e7f41f62916"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.bootstrap.ProjectConfigurationTest",
+        "tests": 37,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-secs-check-20261021/validation/TEST-com.zoutrankil.data.bootstrap.ProjectConfigurationTest.xml",
+          "sha256": "a630297f0fe79a35c24d1b81d9b6e26ff78ab869ac86961436b2269c774453ef"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.flow.storage.FlowMarginTargetContractTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-secs-check-20261021/validation/TEST-com.zoutrankil.data.flow.storage.FlowMarginTargetContractTest.xml",
+          "sha256": "7dcf2522502ec199e10702e8ae53b4f366ed5d0542ace03929724d17afbe06ed"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.cli.CliCommandRegistryTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-secs-check-20261021/validation/TEST-com.zoutrankil.data.cli.CliCommandRegistryTest.xml",
+          "sha256": "7fdce40ec6feddc3497b41064d0312ffbe7503dea25f12faed1ba6333fc1849f"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.margin.application.MarginSecsStableWindowReadTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-secs-check-20261021/validation/TEST-com.zoutrankil.data.margin.application.MarginSecsStableWindowReadTest.xml",
+          "sha256": "0f2902212d031a580d3d722712a8512bc4e9fb5559bdd8ca55728a183465de35"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.FlowMarginApplicationWiringTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-secs-check-20261021/validation/TEST-com.zoutrankil.data.config.FlowMarginApplicationWiringTest.xml",
+          "sha256": "8cd5859b7db9a82f7532fc5545619e1f8276e1626923e7e4bf9577d19455a634"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.margin.application.MarginSecsFormalAdmissionTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-secs-check-20261021/validation/TEST-com.zoutrankil.data.margin.application.MarginSecsFormalAdmissionTest.xml",
+          "sha256": "510b16187e9c6e0d3f285fc2411d12b67808d6ece5295971c221dc17c13b12ed"
+        }
+      }
+    ]
+  },
+  "checks": {
+    "architectureTest": "通过",
+    "verifyModuleBoundaries": "通过",
+    ":markets:cn:data-app:distZip": "通过",
+    "publicConfigurationAndCredentialScan": "通过",
+    "formatImportsLiterals": "变更 Java 文件格式、import 和字面量核对通过： 128",
+    "logs": [
+      {
+        "path": "var/cn-margin-secs-check-20261021/validation/cn-margin-secs-delivery.log",
+        "sha256": "c11cbb9c43bde43a3555735d3625759820f5eed0c79bd9285eb664011f57a7bc"
+      },
+      {
+        "path": "var/cn-margin-secs-check-20261021/validation/cn-margin-secs-format.log",
+        "sha256": "2eac052d4976af8a88f787c74505535db4d7d82bc11a786d0a52d08f08e5a7db"
+      },
+      {
+        "path": "var/cn-margin-secs-check-20261021/validation/cn-margin-secs-public-config.log",
+        "sha256": "8d7cae6a90bde5726da0ebe5bb306f140d8cde57d3655bea20d73f13aea46ba3"
+      }
+    ]
+  },
+  "remaining": [
+    "默认仍为隔离v1；正式v2只放行显式BACKFILL，窗口外历史没有被认证",
+    "原生产运行/锁及唯一writer绑定仍缺，不能把本机无进程当作停写证明",
+    "正式来源范围补数、周期调度、下一次真实更新和消费者验收未完成",
+    "来源遗漏旧键先拒绝发送；整日回读失败保持IN_DOUBT，不自动重发或解锁",
+    "新writer配置兼容回退旧配置；部署曾覆盖旧读取目标时须明确核对两端",
+    "融资融券汇总的非去重发布正式准入仍待继续，不归为来源不可得"
+  ]
+}

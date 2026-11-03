@@ -21,7 +21,7 @@ public final class QuestDbMarginAllTarget extends QuestDbMarginAllTables
     public QuestDbMarginAllTarget(String table, JdbcTemplate jdbc, QuestDB questdb) {
         super(jdbc, false);
         this.questdb = Objects.requireNonNull(questdb);
-        MarginAllDataset.requireIsolatedTable(table);
+        MarginAllDataset.requireExecutionTable(table);
         this.table = table;
     }
 

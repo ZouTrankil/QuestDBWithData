@@ -31,10 +31,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.LinkedHashMap;
@@ -44,6 +47,7 @@ import java.util.Objects;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Stream;
 
 /** Real SQLite and durable source/stage evidence; only physical table operations are fake. */
 class MarginAllProtocolContractTest {
@@ -111,6 +115,22 @@ class MarginAllProtocolContractTest {
         int renames = h.tables.renames;
         assertEquals(result, h.publication.finish(RUN, true));
         assertEquals(renames, h.tables.renames);
+    }
+
+    @ParameterizedTest
+    @EnumSource(Fault.class)
+    void formalV2RecoversEveryRenameLayoutAndRetainsTheOriginalRunState(Fault fault)
+            throws Exception {
+        var h = new Harness(temp, true);
+        h.tables.fault = fault;
+        assertThrows(MarginAllPublication.Uncertain.class, () -> h.publish(() -> false));
+        h.tables.fault = null;
+        var finished = h.publication.finish(RUN, true);
+        assertEquals(ReferencePublicationJournal.State.VERIFIED, finished.entry().state());
+        assertEquals(h.staged, h.tables.data.get("margin_all"));
+        assertEquals(h.before, finished.backup());
+        assertEquals(2, h.ledger.getRun(RUN).jobVersion());
+        assertEquals(SyncRunState.RUNNING, h.ledger.get(RUN).state());
     }
 
     @Test
@@ -201,7 +221,11 @@ class MarginAllProtocolContractTest {
         assertEquals(0, h.tables.renames);
         assertEquals(h.before, h.tables.data.get(TARGET));
         assertNull(locks.findOwned(RUN, lease.scope()));
-        assertEquals(SyncRunState.IN_DOUBT, h.ledger.get(RUN).state());
+        assertEquals(SyncRunState.CANCELLED, h.ledger.get(RUN).state());
+        assertTrue(MarginAllStageRecovery.requiresRefetch(h.path, RUN));
+        long revision = h.ledger.get(RUN).revision();
+        h.publication.discardStageOnly(TARGET, RUN, true);
+        assertEquals(revision, h.ledger.get(RUN).revision());
         assertFalse(MarginAllStaging.hasStageIntent(h.root));
         var proof = JobDefinitionJson.mapper().readTree(h.intent.toFile());
         assertEquals("DISCARDED", proof.path("phase").asText());
@@ -312,8 +336,19 @@ class MarginAllProtocolContractTest {
         final Verified verified;
         final Snapshot before, staged;
         final SyncJobRunner.Page<MarginAll> page;
+        final List<SyncJobRunner.Page<MarginAll>> pages;
 
         Harness(Path temp) throws Exception {
+            this(temp, false);
+        }
+
+        Harness(Path temp, boolean formal) throws Exception {
+            this(temp, formal, false, false);
+        }
+
+        Harness(Path temp, boolean formal, boolean closedSecond, boolean emptyFirst)
+                throws Exception {
+            String target = formal ? "margin_all" : TARGET;
             path = temp.resolve("ledger.sqlite3");
             root = temp.resolve("sync-evidence").resolve(RUN);
             Files.createDirectories(root.resolve("source"));
@@ -321,11 +356,12 @@ class MarginAllProtocolContractTest {
             before =
                     snapshot(
                             new Identity(1, "generation-1", 7),
-                            List.of(row(DAY.minusDays(1), 2), row(DAY, 3)));
-            tables.data.put(TARGET, before);
-            var request =
-                    MarginAllSyncJobOwner.DEFINITION.freeze(
-                            SyncJobDefinition.Mode.BACKFILL,
+                            emptyFirst
+                                    ? List.of(row(DAY.minusDays(1), 2))
+                                    : List.of(row(DAY.minusDays(1), 2), row(DAY, 3)));
+            tables.data.put(target, before);
+            var params =
+                    new LinkedHashMap<String, Object>(
                             Map.of(
                                     "targetId",
                                     LOGICAL,
@@ -334,17 +370,37 @@ class MarginAllProtocolContractTest {
                                     "targetRowsBefore",
                                     before.rows().size(),
                                     "targetFingerprint",
-                                    before.fingerprint()),
-                            DAY,
-                            DAY,
-                            DAY);
+                                    before.fingerprint()));
+            if (formal) {
+                String encoded =
+                        "20250701:"
+                                + (emptyFirst ? "0" : "7")
+                                + (closedSecond ? ",20250702:0" : "");
+                params.put("calendarPolicy", MarginAllCalendar.POLICY);
+                params.put("calendarDays", encoded);
+                params.put(
+                        "calendarFingerprint",
+                        FileEvidenceStore.sha256(
+                                (encoded.replace(",", "\n") + "\n")
+                                        .getBytes(StandardCharsets.UTF_8)));
+            }
+            var request =
+                    (formal
+                                    ? MarginAllSyncJobOwner.FORMAL_DEFINITION
+                                    : MarginAllSyncJobOwner.DEFINITION)
+                            .freeze(
+                                    SyncJobDefinition.Mode.BACKFILL,
+                                    params,
+                                    DAY,
+                                    closedSecond ? DAY.plusDays(1) : DAY,
+                                    closedSecond ? DAY.plusDays(1) : DAY);
             ledger = new SyncRunLedger(path);
             ledger.createRun(RUN, null, LOGICAL, request);
             ledger.transition(RUN, 0, SyncRunState.RUNNING, "{}");
             staging = new MarginAllStaging(tables);
             publication = new MarginAllPublication(tables, path);
             journal = new ReferencePublicationJournal(path, "margin_all");
-            prepared = staging.prepare(TARGET, LOGICAL, PHYSICAL, RUN, request, root, () -> false);
+            prepared = staging.prepare(target, LOGICAL, PHYSICAL, RUN, request, root, () -> false);
             intent = root.resolve("stage").resolve(prepared.stage() + "-intent.json");
             var typed = row(DAY, 5);
             var rawRow = new LinkedHashMap<String, Object>(MarginAllRows.values(typed).asMap());
@@ -357,8 +413,17 @@ class MarginAllProtocolContractTest {
             body.put("fields", MarginAllSource.FIELDS);
             body.put("tradeDate", DAY);
             body.put("apiMaximumRows", MarginAllSource.API_ROW_CAP);
-            body.put("returnedRows", 1);
-            body.put("rawRows", List.of(rawRow));
+            var rawRows = new ArrayList<Map<String, Object>>();
+            if (!emptyFirst) rawRows.add(rawRow);
+            if (formal && !emptyFirst)
+                for (String exchange : List.of("BSE", "SZSE")) {
+                    var item = new LinkedHashMap<>(rawRow);
+                    item.put("exchange_id", exchange);
+                    rawRows.add(item);
+                }
+            rawRows.sort(Comparator.comparing(r -> (String) r.get("exchange_id")));
+            body.put("returnedRows", rawRows.size());
+            body.put("rawRows", rawRows);
             body.put("sourceComplete", true);
             byte[] bytes = JobDefinitionJson.canonicalMapper().writeValueAsBytes(body);
             raw = root.resolve("source/raw.json");
@@ -368,9 +433,26 @@ class MarginAllProtocolContractTest {
             staged =
                     snapshot(
                             new Identity(2, "generation-2", 8),
-                            List.of(row(DAY.minusDays(1), 2), typed));
+                            Stream.concat(Stream.of(row(DAY.minusDays(1), 2)), page.rows().stream())
+                                    .toList());
             tables.data.put(prepared.stage(), staged);
-            verified = staging.verify(prepared, List.of(page), () -> false);
+            var collected = new ArrayList<SyncJobRunner.Page<MarginAll>>();
+            collected.add(page);
+            if (closedSecond) {
+                var emptyBody = new LinkedHashMap<>(body);
+                emptyBody.put("tradeDate", DAY.plusDays(1));
+                emptyBody.put("parameters", Map.of("trade_date", "20250702"));
+                emptyBody.put("rawRows", List.of());
+                emptyBody.put("returnedRows", 0);
+                byte[] empty = JobDefinitionJson.canonicalMapper().writeValueAsBytes(emptyBody);
+                var file = root.resolve("source/empty.json");
+                Files.write(file, empty);
+                collected.add(
+                        MarginAllSource.reopen(
+                                file, FileEvidenceStore.sha256(empty), DAY.plusDays(1)));
+            }
+            pages = List.copyOf(collected);
+            verified = staging.verify(prepared, pages, () -> false);
         }
 
         MarginAllPublication.Result publish(BooleanSupplier cancelled) throws Exception {
@@ -485,9 +567,11 @@ class MarginAllProtocolContractTest {
                                                 .toFile());
                 sawPreparingIntent = "PREPARING".equals(proof.path("phase").asText());
                 assertTrue(sawPreparingIntent);
-                assertEquals("2025-07-01T00:00:00.000000Z", lower);
-                assertEquals("2025-07-02T00:00:00.000000Z", upper);
-                var outside = open(target).outside(DAY, DAY);
+                var from = LocalDate.parse(proof.path("windowFrom").asText());
+                var to = LocalDate.parse(proof.path("windowTo").asText());
+                assertEquals(from + "T00:00:00.000000Z", lower);
+                assertEquals(to.plusDays(1) + "T00:00:00.000000Z", upper);
+                var outside = open(target).outside(from, to);
                 data.put(stage, snapshot(new Identity(2, "generation-2", 8), outside.rows()));
             } catch (Exception error) {
                 throw new IllegalStateException(error);

@@ -22,7 +22,9 @@ public class MarginConfiguration {
     MarginAllTarget marginAllTarget(
             JdbcTemplate jdbc,
             @Lazy QuestDB questdb,
-            @Value("${app.sync.margin-all-table:java_d028_margin_all_acceptance}") String table) {
+            @Value(
+                            "${app.sync.margin-all-write-table:${app.sync.margin-all-table:java_d028_margin_all_acceptance}}")
+                    String table) {
         return new QuestDbMarginAllTarget(table, jdbc, questdb);
     }
 
@@ -39,7 +41,9 @@ public class MarginConfiguration {
     MarginSecsTarget marginSecsTarget(
             JdbcTemplate jdbc,
             @Lazy QuestDB questdb,
-            @Value("${app.sync.margin-secs-table:java_d030_margin_secs_acceptance}") String table) {
+            @Value(
+                            "${app.sync.margin-secs-write-table:${app.sync.margin-secs-table:java_d030_margin_secs_acceptance}}")
+                    String table) {
         return new QuestDbMarginSecsTarget(table, jdbc, questdb);
     }
 }

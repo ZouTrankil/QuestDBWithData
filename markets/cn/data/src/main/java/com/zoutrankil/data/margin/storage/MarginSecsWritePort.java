@@ -63,7 +63,7 @@ public final class MarginSecsWritePort implements MarginSecsWriteSession {
     private volatile boolean senderStopped;
 
     public MarginSecsWritePort(String table, String targetId, JdbcTemplate jdbc, QuestDB questdb) {
-        MarginSecsDataset.requireIsolatedTable(table);
+        MarginSecsDataset.requireExecutionTable(table);
         if (targetId == null || !targetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen D030 physical target identity required");
         this.table = table;
@@ -85,7 +85,8 @@ public final class MarginSecsWritePort implements MarginSecsWriteSession {
     @Override
     public void preflight() {
         requireTarget();
-        QuestDbWriteChecks.preflight(jdbc, table, MarginSecsDataset.isolatedWriteDefinition(table));
+        QuestDbWriteChecks.preflight(
+                jdbc, table, MarginSecsDataset.executionWriteDefinition(table));
         requireTarget();
     }
 
@@ -97,7 +98,7 @@ public final class MarginSecsWritePort implements MarginSecsWriteSession {
         preflight();
         senderStopped = false;
         DatasetWritePreparation.prepare(
-                MarginSecsDataset.isolatedWriteDefinition(table),
+                MarginSecsDataset.executionWriteDefinition(table),
                 rows,
                 mapper::values,
                 new DatasetWritePreparation.Limits(MAX_BATCH_ROWS, MAX_BATCH_BYTES));
@@ -168,6 +169,11 @@ public final class MarginSecsWritePort implements MarginSecsWriteSession {
 
     public List<MarginSecs> readDate(LocalDate date) {
         requireTarget();
+        if ("margin_secs".equals(table)) {
+            var rows = new MarginSecsStorage(jdbc, table).readDate(date);
+            requireTarget();
+            return rows;
+        }
         var rows =
                 jdbc.query(
                         select()

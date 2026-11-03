@@ -1,0 +1,247 @@
+{
+  "schema": "cn.margin-all.phase.v1",
+  "checkedAt": "2026-10-21T13:28:18.755649+00:00",
+  "scope": "正式v2非去重范围发布、冻结日历和三交易所预算、正式只读计划及私有物理故障恢复；未正式写入或启用调度",
+  "productionWritten": false,
+  "formalCompleted": 0,
+  "realSourceAndTarget": {
+    "fullTargetRows": 4722,
+    "duplicateBusinessKeyGroups": 2289,
+    "duplicateValuesNotAutomaticallyDeduplicated": true,
+    "planValidated": true,
+    "jobVersion": 2,
+    "calendarPolicy": "TUSHARE_CN_A_SHARED_V1",
+    "calendarRowsChecked": 4,
+    "sourceSlices": [
+      {
+        "date": "2026-09-18",
+        "sourceRows": 3,
+        "sourceExchanges": [
+          "BSE",
+          "SSE",
+          "SZSE"
+        ],
+        "oldScopeRows": 0,
+        "rawSource": {
+          "path": "var/cn-margin-all-check-20261021/source/margin-all-20260918-1a04ebf7ae5de23bff31e272f91404932957f46b3ed28bc1e689600926bb321d.json",
+          "sha256": "1a04ebf7ae5de23bff31e272f91404932957f46b3ed28bc1e689600926bb321d"
+        }
+      },
+      {
+        "date": "2026-09-19",
+        "sourceRows": 0,
+        "sourceExchanges": [],
+        "oldScopeRows": 0,
+        "rawSource": {
+          "path": "var/cn-margin-all-check-20261021/source/margin-all-20260919-b7f0005cdf63ab451cb9ca7b3866a4803803080c92cc52afdbf3af9f0d68f51e.json",
+          "sha256": "b7f0005cdf63ab451cb9ca7b3866a4803803080c92cc52afdbf3af9f0d68f51e"
+        }
+      }
+    ],
+    "proof": {
+      "path": "var/cn-margin-all-check-20261021/source-check.json",
+      "sha256": "0de9154c18aed5528395a2da6604d09d36fa9ed8cf2053c750326f09f9fcb463"
+    },
+    "sourceLog": {
+      "path": "var/cn-margin-all-check-20261021/source-check.log",
+      "sha256": "1018c4793f20ae734e1da499f6c237f2611d20036aa763777fffd69f20e33114"
+    },
+    "metadataAndFormalPlan": {
+      "path": "var/cn-margin-all-check-20261021/metadata-check.json",
+      "sha256": "53ae8b5c4d691da59a464d8875f45bbb3cb6b4d60ef797e1a471dc52c102d669"
+    },
+    "metadataLog": {
+      "path": "var/cn-margin-all-check-20261021/metadata-check.log",
+      "sha256": "b6456a15b256afa08e7d6c62c8be72e5328a9811ff772709f937d6051e414480"
+    }
+  },
+  "calendarSourcePolicy": {
+    "url": "https://tushare.pro/document/2?doc_id=26",
+    "checkedDate": "2026-10-21",
+    "rule": "沪深日历逐日齐备且一致，北交所按官方说明参考沪深；不伪造独立BSE日历行",
+    "maxFrozenDays": 366,
+    "maxSourceRows": 1098,
+    "v1BudgetUnchanged": 366
+  },
+  "privateAcceptance": {
+    "proof": {
+      "path": "var/cn-margin-all-check-20261021/private-margin-all-33562f910ab1451798aaea00998661a3/acceptance.json",
+      "sha256": "eef858fa7d8fc9226230c0beb50e4ace25106169f72ffbfab32398b8d22354c6"
+    },
+    "process": {
+      "path": "var/cn-margin-all-check-20261021/private-margin-all-33562f910ab1451798aaea00998661a3/server.json",
+      "sha256": "add0fe983c1cc55e3c917c399a2dae1b84a6a7e0ba0eb5a720d1dbc8c2f60c00"
+    },
+    "stopped": {
+      "path": "var/cn-margin-all-check-20261021/private-margin-all-33562f910ab1451798aaea00998661a3/server-stopped.json",
+      "sha256": "02f01e3cdfca65e24de34d36b7a2ebbb08b9ad6aaa8d3d18fe3a7eecb18cb16e"
+    },
+    "frozenRequests": {
+      "path": "var/cn-margin-all-check-20261021/private-margin-all-33562f910ab1451798aaea00998661a3/frozen-requests-readonly.json",
+      "sha256": "11a6854d647a49401c267dbc03fbb245929ef578a6b5cbbfaf39e20508fc4b00"
+    },
+    "result": {
+      "schema": "cn.margin-all.private.v2",
+      "productionWritten": false,
+      "jobVersion": 2,
+      "sourceRows": 3,
+      "sourceArtifact": "/Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/cn-margin-all-check-20261021/source/margin-all-20260918-1a04ebf7ae5de23bff31e272f91404932957f46b3ed28bc1e689600926bb321d.json",
+      "sourceSha256": "1a04ebf7ae5de23bff31e272f91404932957f46b3ed28bc1e689600926bb321d",
+      "calendarOldDuplicatesAndRevisionAreFixtures": true,
+      "first": {
+        "runId": "margin-all-f84a1f7a-cfcc-478d-ad8f-1bca4df6f93a",
+        "state": "VERIFIED",
+        "sourceRows": 3,
+        "verifiedRows": 3,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "revision": {
+        "runId": "margin-all-6ad571d3-ac8b-4e8f-b14d-b180e4391e63",
+        "state": "VERIFIED",
+        "sourceRows": 3,
+        "verifiedRows": 3,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "interrupted": {
+        "runId": "margin-all-0661c37b-84b4-4e4a-90f4-307152bc9f51",
+        "state": "IN_DOUBT",
+        "sourceRows": 3,
+        "verifiedRows": 3,
+        "errorCode": "Uncertain",
+        "reusedRows": 0
+      },
+      "physicalRecoveryState": "VERIFIED",
+      "runRemainsInDoubt": true,
+      "outsideMultiplicityPreserved": true,
+      "insideDuplicatesReplaced": true,
+      "staleCursorRejected": true,
+      "pendingReadBlocked": true
+    },
+    "scopeNote": "三交易所来源使用真实单日原件；日历、旧重复行、修订和故障为夹具；物理恢复不认证原运行或解锁"
+  },
+  "legacyV1Compatibility": {
+    "path": "var/cn-margin-all-finalization-check-20261021/legacy-v1-compat.json",
+    "sha256": "d6f666742b4fbda83f87469adad518237135ae4bb0bc7a2547daf269c8690daf"
+  },
+  "tests": {
+    "total": 94,
+    "failures": 0,
+    "errors": 0,
+    "reports": [
+      {
+        "class": "com.zoutrankil.data.bootstrap.ProjectConfigurationTest",
+        "tests": 39,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-check-20261021/validation/TEST-com.zoutrankil.data.bootstrap.ProjectConfigurationTest.xml",
+          "sha256": "b8343a6ac874f05f40dba074c8d06f759dfdc97447ce0a2c428377906f9179d9"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.flow.storage.FlowMarginTargetContractTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-check-20261021/validation/TEST-com.zoutrankil.data.flow.storage.FlowMarginTargetContractTest.xml",
+          "sha256": "d3ac13e703fcbef8ec5fd57568072aa4ef2759a2c9eeb05352a927d79d680748"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.cli.CliCommandRegistryTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-check-20261021/validation/TEST-com.zoutrankil.data.cli.CliCommandRegistryTest.xml",
+          "sha256": "203b141afd00d1445b397b9951cdeb8c33a0d26f380e3bc25845f9848bbaaa96"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.margin.application.MarginAllCalendarTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-check-20261021/validation/TEST-com.zoutrankil.data.margin.application.MarginAllCalendarTest.xml",
+          "sha256": "581e3eb7be2d2d6c248a32dde08b452e3dbbd550c2485383c018c5ba055b2075"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.margin.application.MarginAllProtocolContractTest",
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-check-20261021/validation/TEST-com.zoutrankil.data.margin.application.MarginAllProtocolContractTest.xml",
+          "sha256": "a20627546570a812f40aa146086ea3727506f12730b97e913e2c9a62c131dd91"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.ReadBindingApplicationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-check-20261021/validation/TEST-com.zoutrankil.data.config.ReadBindingApplicationTest.xml",
+          "sha256": "50a570febf5905cb22195243a343bb684644e6a4e2664ad7b473d8bd65649b11"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.FlowMarginApplicationWiringTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-check-20261021/validation/TEST-com.zoutrankil.data.config.FlowMarginApplicationWiringTest.xml",
+          "sha256": "5ff8c0753776e0fba45a571a3b56e291dc5a392a05d2e2efd5a2335571d9270a"
+        }
+      }
+    ]
+  },
+  "checks": {
+    "architectureTest": "通过",
+    "verifyModuleBoundaries": "通过",
+    ":markets:cn:data-app:distZip": "通过",
+    "publicConfigurationAndCredentialScan": "通过",
+    "formatImportsLiterals": "变更 Java 文件格式、import 和字面量核对通过： 141",
+    "logs": [
+      {
+        "path": "var/cn-margin-all-check-20261021/validation/cn-margin-all-delivery.log",
+        "sha256": "739946273b950a3b38b54f9230007815bbea6d29160aa246bdf086122efb9dbf"
+      },
+      {
+        "path": "var/cn-margin-all-check-20261021/validation/cn-margin-all-format.log",
+        "sha256": "e18ddcc7252a1ce2e97d703d9ac66f89f9f6fffd5334e2773fe7dcc4688c66c0"
+      },
+      {
+        "path": "var/cn-margin-all-check-20261021/validation/cn-margin-all-public-config.log",
+        "sha256": "8d7cae6a90bde5726da0ebe5bb306f140d8cde57d3655bea20d73f13aea46ba3"
+      }
+    ]
+  },
+  "remaining": [
+    "原运行最终认证和明确解锁仍属开发待办；物理恢复后保持原IN_DOUBT和锁，不能启动新请求绕过",
+    "默认仍隔离v1，正式v2只放行明确BACKFILL且不进入自动日批",
+    "原生产运行/锁、实际调度及唯一writer绑定仍缺，不能把本机无进程当作停写证明",
+    "正式范围补数、周期队列、下一次真实更新、全部重复历史及消费者未验收",
+    "历史缺少指定交易所来源时须单列范围，不缩成沪深后算全表完成"
+  ],
+  "legacyV1CompatibilityHistory": {
+    "previousPath": "var/cn-margin-all-check-20261021/legacy-v1-compat.json",
+    "previousSha256": "3a7bed6c2bec1039158f05729122df1b4652b798cdf038691900d6f305d9b9fa",
+    "previousDigestVerifiable": false,
+    "reason": "本轮兼容检查重跑覆盖同名文件，旧内容无法按原摘要恢复；本项改引用单独归档的复核凭证，不更改真实来源及私有验收原件",
+    "correctedAt": "2026-10-21T14:01:59.249176+00:00"
+  }
+}

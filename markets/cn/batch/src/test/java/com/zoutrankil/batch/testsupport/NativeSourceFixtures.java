@@ -16,6 +16,45 @@ public final class NativeSourceFixtures {
     private NativeSourceFixtures() {}
 
     public static Map<String, JsonNode> row(String dataset, String code) {
+        if (dataset.equals("sge_daily")) {
+            var row = new LinkedHashMap<String, JsonNode>();
+            for (var column : SourceContract.load(dataset).businessColumns())
+                row.put(
+                        column.source(),
+                        column.type().equals("DOUBLE")
+                                ? Json.MAPPER.valueToTree(10.25)
+                                : Json.MAPPER.valueToTree(
+                                        column.source().equals("ts_code")
+                                                ? "Au(T+D)"
+                                                : column.source().equals("trade_date")
+                                                        ? "20260928"
+                                                        : "空支付给多"));
+            return row;
+        }
+        if (dataset.equals("stk_alert"))
+            return new LinkedHashMap<>(
+                    Map.of(
+                            "ts_code",
+                            Json.MAPPER.valueToTree(code),
+                            "start_date",
+                            Json.MAPPER.valueToTree("20260928"),
+                            "end_date",
+                            Json.MAPPER.valueToTree("20261009"),
+                            "type",
+                            Json.MAPPER.valueToTree("交易所重点提示证券"),
+                            "name",
+                            Json.MAPPER.valueToTree("测试证券")));
+        if (dataset.equals("broker_recommend"))
+            return new LinkedHashMap<>(
+                    Map.of(
+                            "month",
+                            Json.MAPPER.valueToTree("202609"),
+                            "broker",
+                            Json.MAPPER.valueToTree("测试券商"),
+                            "ts_code",
+                            Json.MAPPER.valueToTree(code),
+                            "name",
+                            Json.MAPPER.valueToTree("测试证券")));
         if (dataset.equals("dividend")) {
             var dividend = new LinkedHashMap<String, JsonNode>();
             dividend.put("ts_code", Json.MAPPER.valueToTree(code));
@@ -325,6 +364,14 @@ public final class NativeSourceFixtures {
                                 case "TIMESTAMP", "TIMESTAMP_NS" -> "20260928";
                                 default -> 12.25;
                             }));
+        if (dataset.equals("stk_holdernumber"))
+            row.put("end_date", Json.MAPPER.valueToTree("20260630"));
+        if (dataset.equals("stk_holdertrade")) {
+            row.put("in_de", Json.MAPPER.valueToTree("IN"));
+            row.put("holder_type", Json.MAPPER.valueToTree("P"));
+            row.put("begin_date", Json.MAPPER.valueToTree("20260901"));
+            row.put("close_date", Json.MAPPER.valueToTree("20260928"));
+        }
         if (Set.of("daily", "daily_basic", "etf_daily").contains(dataset))
             row.put(
                     switch (dataset) {
@@ -337,6 +384,9 @@ public final class NativeSourceFixtures {
     }
 
     public static SourceCollector.Request request(String dataset, Set<String> codes) {
+        if (dataset.equals("broker_recommend"))
+            return new SourceCollector.Request(
+                    dataset, LocalDate.of(2026, 9, 1), Set.of(), "fixture-v1", null);
         if (dataset.equals("exchange_calendar") && codes.isEmpty()) codes = Set.of("SSE");
         if (Set.of("disclosure_date", "ths_index", "etf_share").contains(dataset)) codes = Set.of();
         if (dataset.equals("fut_holding") && codes.isEmpty()) codes = Set.of("IF");

@@ -1,0 +1,283 @@
+{
+  "schema": "cn.etf.directory.phase.v1",
+  "checkedAt": "2026-10-21T12:23:47.312409+00:00",
+  "scope": "ETF目录精确正式目标、完整来源和旧目录只读核查、私有全量发布；未正式写入或启用调度",
+  "productionWritten": false,
+  "formalCompleted": 0,
+  "sourceAndTarget": {
+    "sourceRows": 2997,
+    "oldRows": 2958,
+    "retainedLegacyRows": 3,
+    "sourceKeysAbsentFromTarget": 42,
+    "targetId": "static-v2-c04910b943204f5803c018a3aa10b3772c799821720e27048524969d7821902c",
+    "sourceCoverageVerified": true,
+    "targetDataVerified": false,
+    "sourceProof": {
+      "path": "var/cn-etf-directory-check-20261021/formal-source-check.json",
+      "sha256": "14c2b293819c0fdad00352aba1a7df2aed6fe61edfd2b1bbee63551aa5887bce"
+    },
+    "sourceLog": {
+      "path": "var/cn-etf-directory-check-20261021/formal-source-check.log",
+      "sha256": "d01ad9a1aef6eab898423c44714eda4fc40d53de098f0af6643b30e160c281f1"
+    },
+    "rawSource": {
+      "path": "var/sync-evidence/etf-basic-source-check-e73c4b4d-6217-466c-9674-17f241bdec39/source-f5bcf8fb-c872-4cb4-9ceb-952487cb78de.json",
+      "sha256": "1fcf5236ea84c1a81f12e5b40a478a75498625775ebe31951e0dc625e48db5ac"
+    },
+    "retainedValuesRead": {
+      "path": "var/cn-etf-directory-check-20261021/retained-directory-read.json",
+      "sha256": "c473b78bdc49f24ec44d0641735c273ab5ab7920dfc7424a3e06f155a253b2ea"
+    },
+    "retainedCodes": [
+      "1500201.SZ",
+      "1500211.SZ",
+      "5012011.SH"
+    ],
+    "retainedCodeIdentityStatus": "三项均为7位数字前缀，当前来源未确认身份，不截断、映射或宣称当前有效"
+  },
+  "privateAcceptance": {
+    "proof": {
+      "path": "var/cn-etf-directory-check-20261021/private-etf-77448ee904124d2bb57acb477d9465e6/acceptance.json",
+      "sha256": "abda2cf7f589bb5df5aea758c8b82ac8fe3fa8cf69c45b875c9daef45c19c22b"
+    },
+    "process": {
+      "path": "var/cn-etf-directory-check-20261021/private-etf-77448ee904124d2bb57acb477d9465e6/server.json",
+      "sha256": "45ba488928cf7d272add5fa7ff9e439d63c74aee701652db91802cb9ed789111"
+    },
+    "stopped": {
+      "path": "var/cn-etf-directory-check-20261021/private-etf-77448ee904124d2bb57acb477d9465e6/server-stopped.json",
+      "sha256": "b84e1bdfe2acaf1949c9606dcfd51fd9a64f2ac6ebd2de929d78a37529f917c3"
+    },
+    "result": {
+      "schema": "cn.etf.directory.private.v1",
+      "first": {
+        "runId": "etf-basic-4c6d3216-3c45-433b-9c90-81cde2696547",
+        "state": "VERIFIED",
+        "sourceRows": 2997,
+        "verifiedRows": 2997,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "sourceArtifact": "/Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/sync-evidence/etf-basic-source-check-e73c4b4d-6217-466c-9674-17f241bdec39/source-f5bcf8fb-c872-4cb4-9ceb-952487cb78de.json",
+      "emptySourceRejected": true,
+      "revisionIsFixture": true,
+      "productionWritten": false,
+      "oldRetainedIsFixture": true,
+      "sourceSha256": "1fcf5236ea84c1a81f12e5b40a478a75498625775ebe31951e0dc625e48db5ac",
+      "revision": {
+        "runId": "etf-basic-c37d3a80-dc3c-4b63-b2f3-17cb65d2a11b",
+        "state": "VERIFIED",
+        "sourceRows": 2997,
+        "verifiedRows": 2997,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "sourceRows": 2997
+    },
+    "scopeNote": "全部2997行使用真实冻结来源；保留旧行及修订为私有夹具，不代表供应商真实修订或正式写入"
+  },
+  "legacyV1Compatibility": {
+    "path": "var/cn-etf-directory-check-20261021/legacy-v1-compat.json",
+    "sha256": "a21b290fd2377b6e029e6076e4a0b41368e485df5c66d9c3e7c704ce716cfc36"
+  },
+  "tests": {
+    "total": 115,
+    "failures": 0,
+    "errors": 0,
+    "reports": [
+      {
+        "class": "com.zoutrankil.data.config.StockCalendarApplicationWiringTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.config.StockCalendarApplicationWiringTest.xml",
+          "sha256": "c8e3d7b130f0341cfde839bad3eb53079ffaf06008cf3c01ce6caa1429c2548c"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.cli.CliFamilyContractTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.cli.CliFamilyContractTest.xml",
+          "sha256": "f0ea1986557003c27c42066a1ac5584ad232edf32e513f8e61209cf3ea95a107"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.etf.application.EtfOtherJobServiceContractTest",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.etf.application.EtfOtherJobServiceContractTest.xml",
+          "sha256": "c9ebb8f80eb03c8d7683011a11e90317450a2f13bfc86c903856a6e723d6fdc2"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.etf.storage.EtfAdditionalTargetTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.etf.storage.EtfAdditionalTargetTest.xml",
+          "sha256": "636efa99c3c4315b22eace31a35744b767b19a6218b51d266f2ae8422d8a0927"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.etf.application.EtfApplicationWiringTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.etf.application.EtfApplicationWiringTest.xml",
+          "sha256": "d7df5fcbabbfeb22a86d173813356390679eced494758fee5fe10ea3371b18d5"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.bootstrap.ProjectConfigurationTest",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.bootstrap.ProjectConfigurationTest.xml",
+          "sha256": "8e1f142a204d3a2d714c0adc7bc39c5a3969af546941d6aa5da535fe52652cae"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.NativeDerivedApplicationWiringTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.config.NativeDerivedApplicationWiringTest.xml",
+          "sha256": "650be750c56e00772abe69eb04d4e6f702e8f8ed5cbec5b577db679643f5c1a1"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.cli.CliCommandRegistryTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.cli.CliCommandRegistryTest.xml",
+          "sha256": "fb690fd04a0ac23a84f33d9ee6d85be4b7c40f4a5f5d117b78943f341cf49143"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.ReadBindingApplicationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.config.ReadBindingApplicationTest.xml",
+          "sha256": "a623c73068e229280b24a855e4db3e5ecc47c6127672865062ab8bddb26c50a6"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.L2ApplicationWiringTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.config.L2ApplicationWiringTest.xml",
+          "sha256": "dedb2f897c75a66b8e6949fda44d36cf4be322b1602aa7cdccea895362fe2f6a"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.IndexApplicationWiringTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.config.IndexApplicationWiringTest.xml",
+          "sha256": "63980528855f2ecc255ee1fd12694e51fe073c0809e1ceecc56a9f191dfa4705"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.etf.application.EtfAdditionalApplicationWiringTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.etf.application.EtfAdditionalApplicationWiringTest.xml",
+          "sha256": "a6e28ad81d13ad095650d05be312079e03c8fdda156a44f4f19979e495ccf50f"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.etf.application.EtfBasicFullDirectoryTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.etf.application.EtfBasicFullDirectoryTest.xml",
+          "sha256": "4d7762260abf280522a36a7ea189f015ce3d5cb15ab9539ad6770879802f48f7"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.FlowMarginApplicationWiringTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.config.FlowMarginApplicationWiringTest.xml",
+          "sha256": "09b272fcba898a4c016766948bc58b6fcc3b98b2112b53d3450fa841dc785f1f"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.DerivedApplicationWiringTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-etf-directory-check-20261021/validation/TEST-com.zoutrankil.data.config.DerivedApplicationWiringTest.xml",
+          "sha256": "825bd6276b9d95ea6e9b60a5dcf293d6782366640c38a10ff6c9a6ba8db2724e"
+        }
+      }
+    ]
+  },
+  "checks": {
+    "architectureTest": "通过",
+    "verifyModuleBoundaries": "通过",
+    "cnDataDistZip": "通过",
+    "publicConfigurationAndCredentialScan": "通过",
+    "formatImportsLiterals": "变更 Java 文件格式、import 和字面量核对通过： 102",
+    "logs": [
+      {
+        "path": "var/cn-etf-directory-check-20261021/validation/cn-etf-directory-delivery-checks.log",
+        "sha256": "e2c1a81b1d25f22a07645e9f24560ed16a0273c9eb772fbf4f3242016bc13a95"
+      },
+      {
+        "path": "var/cn-etf-directory-check-20261021/validation/cn-etf-directory-format-delivery.log",
+        "sha256": "4b15bb478c0e64f7a7111a07e4bceea7126c3fe07a8d95b0b9208b4771dd8a8c"
+      },
+      {
+        "path": "var/cn-etf-directory-check-20261021/validation/cn-etf-directory-public-config.log",
+        "sha256": "8d7cae6a90bde5726da0ebe5bb306f140d8cde57d3655bea20d73f13aea46ba3"
+      }
+    ]
+  },
+  "remaining": [
+    "默认目标仍为原隔离表；显式正式配置未启用生产写入",
+    "生产原运行/锁和唯一writer绑定仍缺，不能把本机无进程当作停写证明",
+    "周期任务、下一次真实更新和消费者验收未完成；现有Frequency.WEEKLY不等于已有托管调度",
+    "保留旧键不属于当前来源覆盖；消费者须使用原凭证sourceCurrentKeys，不能用全表行数认定当前名单",
+    "全目录意图后失败保持原锁，不自动重发或解除未决；跨观察日不重抓当前来源认证旧观察时点"
+  ]
+}

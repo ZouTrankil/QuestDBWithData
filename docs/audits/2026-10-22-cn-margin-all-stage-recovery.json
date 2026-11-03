@@ -1,0 +1,322 @@
+{
+  "schema": "cn.margin-all.stage-recovery.phase.v1",
+  "checkedAt": "2026-10-22T01:41:52.515993+00:00",
+  "scope": "未发布stage显式取消及原冻结请求整窗重采；不复用已丢弃stage分片",
+  "productionWritten": false,
+  "formalCompleted": 0,
+  "privateAcceptance": {
+    "proof": {
+      "path": "var/cn-margin-all-stage-check-20261022/private-margin-all-stage-37a12c5df062410db56a13ad03b64095/acceptance.json",
+      "sha256": "6e69d2033770d385ee7ede524ce0cca87e96dfccbc5b8a139e4675db4a5368a6"
+    },
+    "process": {
+      "path": "var/cn-margin-all-stage-check-20261022/private-margin-all-stage-37a12c5df062410db56a13ad03b64095/server.json",
+      "sha256": "4465b43eba189bde445039a31db5e2d7171eb5be8bfcb5d2e8765450f27de64c"
+    },
+    "stopped": {
+      "path": "var/cn-margin-all-stage-check-20261022/private-margin-all-stage-37a12c5df062410db56a13ad03b64095/server-stopped.json",
+      "sha256": "954d039feccf10422ecb3355d7457bf9274fdf075f3c3c33c155834d27c00b29"
+    },
+    "ledgerReadOnlyProof": {
+      "path": "var/cn-margin-all-stage-check-20261022/private-margin-all-stage-37a12c5df062410db56a13ad03b64095/frozen-requests-readonly.json",
+      "sha256": "603e477b7063087284f14fa8eda97500d7eb780b7d686b7aea3cf7fe808e3644"
+    },
+    "helper": {
+      "path": "var/cn-margin-all-stage-check-20261022/MarginAllStageNativeAcceptance.java",
+      "sha256": "03f6f6b33af55bab529ef5b39a56b22c7d0054c806ec8d777ed65bba99a8689d"
+    },
+    "result": {
+      "schema": "cn.margin-all.stage-discard.private.v1",
+      "stageFailure": {
+        "runId": "margin-all-46bc544d-12ee-48cd-88f5-0bdcf0a27596",
+        "state": "IN_DOUBT",
+        "sourceRows": 3,
+        "verifiedRows": 3,
+        "errorCode": "Incomplete",
+        "reusedRows": 0
+      },
+      "discardedOriginalState": "CANCELLED",
+      "discardKeptTargetUnchanged": true,
+      "discardCancelledAllOriginalEntries": true,
+      "discardReleasedOriginalLease": true,
+      "resume": {
+        "runId": "margin-all-b82b30b9-465d-43f7-88df-6597ddf3214f",
+        "state": "VERIFIED",
+        "sourceRows": 3,
+        "verifiedRows": 3,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "resumeFrozenRequestAndParentPreserved": true,
+      "discardedCheckpointsNotReused": true,
+      "productionWritten": false,
+      "jobVersion": 2,
+      "sourceRows": 3,
+      "sourceArtifact": "/Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/cn-margin-all-check-20261021/source/margin-all-20260918-1a04ebf7ae5de23bff31e272f91404932957f46b3ed28bc1e689600926bb321d.json",
+      "sourceSha256": "1a04ebf7ae5de23bff31e272f91404932957f46b3ed28bc1e689600926bb321d",
+      "calendarOldDuplicatesAndRevisionAreFixtures": true,
+      "first": {
+        "runId": "margin-all-920854f5-328c-4ed8-b8e6-653e9c0ce95b",
+        "state": "VERIFIED",
+        "sourceRows": 3,
+        "verifiedRows": 3,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "revision": {
+        "runId": "margin-all-0a9d8d8d-3c0c-4a44-a61e-ef42c37b159b",
+        "state": "VERIFIED",
+        "sourceRows": 3,
+        "verifiedRows": 3,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "interrupted": {
+        "runId": "margin-all-574d7007-ef35-4d76-b7b3-66f29a300d11",
+        "state": "IN_DOUBT",
+        "sourceRows": 3,
+        "verifiedRows": 3,
+        "errorCode": "Uncertain",
+        "reusedRows": 0
+      },
+      "physicalRecoveryState": "VERIFIED",
+      "physicalRecoveryLeftRunInDoubt": true,
+      "originalRunFinalized": true,
+      "originalLeaseReleased": true,
+      "finalization": {
+        "state": "VERIFIED",
+        "productionDataResent": false,
+        "sourceRows": 3,
+        "originalLeaseReleased": true,
+        "evidence": "/Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/cn-margin-all-stage-check-20261022/private-margin-all-stage-37a12c5df062410db56a13ad03b64095/sync-evidence/margin-all-574d7007-ef35-4d76-b7b3-66f29a300d11/ledger-finalization-verified.json",
+        "runId": "margin-all-574d7007-ef35-4d76-b7b3-66f29a300d11",
+        "publicationId": "margin-all-publication-823cfc1b-4c6d-4c18-a5e7-576674153cd7"
+      },
+      "nextUpdate": {
+        "runId": "margin-all-3971b3a1-86c1-46a6-99a8-14962e343c1a",
+        "state": "VERIFIED",
+        "sourceRows": 3,
+        "verifiedRows": 3,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "finalizationIdempotent": true,
+      "epilogueFailure": {
+        "runId": "margin-all-epilogue-18835736-f27e-4270-9651-9d9278246c8a",
+        "state": "IN_DOUBT",
+        "sourceRows": 0,
+        "verifiedRows": 0,
+        "errorCode": "FileAlreadyExistsException",
+        "reusedRows": 0
+      },
+      "emptyFinalization": {
+        "state": "VERIFIED_EMPTY",
+        "productionDataResent": false,
+        "sourceRows": 0,
+        "originalLeaseReleased": true,
+        "evidence": "/Users/Apple/orca/workspaces/QuestDBWithData/cn_data/var/cn-margin-all-stage-check-20261022/private-margin-all-stage-37a12c5df062410db56a13ad03b64095/sync-evidence/margin-all-epilogue-18835736-f27e-4270-9651-9d9278246c8a/ledger-finalization-verified.json",
+        "runId": "margin-all-epilogue-18835736-f27e-4270-9651-9d9278246c8a",
+        "publicationId": "margin-all-publication-2530bcd3-02f4-4090-8911-35252da24003"
+      },
+      "verifiedPublicationEpilogueKeptLease": true,
+      "outsideMultiplicityPreserved": true,
+      "insideDuplicatesReplaced": true,
+      "staleCursorRejected": true,
+      "pendingReadBlocked": true
+    },
+    "scopeNote": "三交易所来源使用既存真实单日原件；日历、旧重复行、修订、来源中断及物理故障为夹具。没有真实全历史或下一次真实更新证明"
+  },
+  "tests": {
+    "total": 146,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "reports": [
+      {
+        "class": "com.zoutrankil.data.service.SyncJobRunnerTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.service.SyncJobRunnerTest.xml",
+          "sha256": "1c38b3820e21ea90ccac51cd75415d0ef4e00047b50b5e942266f3f5de358cc7"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.bootstrap.ProjectConfigurationTest",
+        "tests": 39,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.bootstrap.ProjectConfigurationTest.xml",
+          "sha256": "98564b14513040495edc419a7bc31a01f02a136b6b07368849d5c8ed26b8b69e"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.flow.storage.FlowMarginTargetContractTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.flow.storage.FlowMarginTargetContractTest.xml",
+          "sha256": "53d84d5f0c0da6e920be5d98c1acc78128c743d9fd6436d55100ece9e34e06f1"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.service.SyncJobRunnerKeyBoundaryTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.service.SyncJobRunnerKeyBoundaryTest.xml",
+          "sha256": "b9e8a28c09f05de14623d0255683029e66fb4eee12c92e3e3400bc859d13f20c"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.cli.CliCommandRegistryTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.cli.CliCommandRegistryTest.xml",
+          "sha256": "c805dd592f231d3beaef0aa5d6225949b50dbfc628ed8203d34ac1c96a0338aa"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.margin.application.MarginAllCalendarTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.margin.application.MarginAllCalendarTest.xml",
+          "sha256": "a9357c06d1d96456ef7d0ffc2f3126783af766503e6e07c876749acc1c34dd20"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.margin.application.MarginAllProtocolContractTest",
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.margin.application.MarginAllProtocolContractTest.xml",
+          "sha256": "45c3341e31874f53c72d4ef0ba5e9bf15d9b49dd5f7cf970bbb75c778173ce3e"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.margin.application.MarginAllStageRecoveryTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.margin.application.MarginAllStageRecoveryTest.xml",
+          "sha256": "0ee187569b27f235ea217115e6cd9f3d08dd4cda86ae70a342b3156b517f923d"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.margin.application.MarginAllRunRecoveryTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.margin.application.MarginAllRunRecoveryTest.xml",
+          "sha256": "49ace13455beda5d8d6c3cdc66c816dfa7dee6788a1dbaf623eebb2313599676"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.ReadBindingApplicationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.config.ReadBindingApplicationTest.xml",
+          "sha256": "af09041517ca11f35042c661d025e4d453de716ef9d6357a617bb5b2dd544052"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.service.SyncJobRunnerBoundaryTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.service.SyncJobRunnerBoundaryTest.xml",
+          "sha256": "bc407b2181283d5c0d23b661b012354793776732286198a04fa1aed99fdb5b17"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.repository.SyncRunLedgerSubmissionTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.repository.SyncRunLedgerSubmissionTest.xml",
+          "sha256": "06702ef05988de11dd98ba5e8442f138fe13f4aeb00f6b6c95bf5dc9cd293937"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.repository.SyncRunLedgerTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.repository.SyncRunLedgerTest.xml",
+          "sha256": "6b6461b3e3af535fa409bb198367a39d7659000ac3714b2c126cbb7be526b1dd"
+        }
+      },
+      {
+        "class": "com.zoutrankil.data.config.FlowMarginApplicationWiringTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "evidence": {
+          "path": "var/cn-margin-all-stage-check-20261022/validation/TEST-com.zoutrankil.data.config.FlowMarginApplicationWiringTest.xml",
+          "sha256": "6b60e8506fa4072299eff18b194605ccaf163b691d25a47069609ffbb6437ab2"
+        }
+      }
+    ]
+  },
+  "checks": {
+    "architectureTest": "通过",
+    "verifyModuleBoundaries": "通过",
+    ":markets:cn:data-app:distZip": "通过",
+    "publicConfigurationAndDistributionCredentialScan": "通过",
+    "rootProductionLedgerAbsent": true,
+    "logs": [
+      {
+        "path": "var/cn-margin-all-stage-check-20261022/validation/cn-margin-all-stage-delivery.log",
+        "sha256": "c6a6ff3e1884326f07d434c3f98f0a28dc8292b2c48243f8c53e560802e277bb"
+      },
+      {
+        "path": "var/cn-margin-all-stage-check-20261022/validation/cn-margin-all-stage-format.log",
+        "sha256": "9bb032e37583676d464b306c6e55fe68c2acbad8f16ddaf763485ccf3346750e"
+      },
+      {
+        "path": "var/cn-margin-all-stage-check-20261022/validation/cn-margin-all-stage-public-config-package.log",
+        "sha256": "8d7cae6a90bde5726da0ebe5bb306f140d8cde57d3655bea20d73f13aea46ba3"
+      },
+      {
+        "path": "var/cn-margin-all-stage-check-20261022/validation/cn-margin-all-stage-native-final.log",
+        "sha256": "4ed2009cfca6542e7998ee528de4127d4446009dadc1dc242f76512ff71fffcd"
+      }
+    ]
+  },
+  "remaining": [
+    "正式唯一writer及原生产运行/锁归属仍需核实",
+    "正式范围队列、周期调度、补数及下一次真实更新未验收",
+    "原表重复历史与消费者尚未完成；不计正式完成",
+    "缺失原租约或原冻结证明的旧FAILED/PARTIAL等历史不自动接管"
+  ]
+}

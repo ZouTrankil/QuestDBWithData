@@ -11,12 +11,16 @@ import com.zoutrankil.data.domain.stock.margin.MarginAllDataset;
 import com.zoutrankil.data.domain.stock.margin.MarginAllKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.margin.mapper.MarginAllMapper;
+import com.zoutrankil.data.repository.DatasetPublicationReadModel;
+import com.zoutrankil.data.repository.DatasetPublicationReadModel.State;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -37,15 +41,40 @@ public class MarginAllReadRepository implements DatasetImplementation {
     private final String table;
     private final QuestDbBoundedReader bounded;
     private final MarginAllMapper mapper = new MarginAllMapper();
+    private final Path ledger;
 
+    @Autowired
     public MarginAllReadRepository(
             JdbcTemplate jdbc,
             @Value("${app.sync.margin-all-table:margin_all}") String table,
-            QuestDbBoundedReader bounded) {
+            QuestDbBoundedReader bounded,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledger) {
+        this.ledger = Path.of(ledger);
         this.jdbc = queryJdbc(jdbc);
         DatasetDefinition.identifier(table);
         this.table = table;
         this.bounded = Objects.requireNonNull(bounded);
+    }
+
+    public MarginAllReadRepository(JdbcTemplate jdbc, String table, QuestDbBoundedReader bounded) {
+        this(jdbc, table, bounded, "var/sync-ledger.sqlite3");
+    }
+
+    /** 页面前后固定物理代和WAL版本，发布或原锁未决时拒绝新读取。 */
+    public String sourceVersion() {
+        if (!"margin_all".equals(table)) return null;
+        try {
+            if (DatasetPublicationReadModel.read(ledger, "margin_all") != State.CLEAR)
+                throw new IllegalStateException("汇总仍有原锁或未决发布");
+            var identity = new MarginAllStorage(jdbc, table).preflight();
+            return MarginAllStorage.physicalTargetId(jdbc, table, identity)
+                    + ":"
+                    + identity.writerTxn();
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new IllegalStateException("汇总读取版本不可用", e);
+        }
     }
 
     @Override
@@ -57,7 +86,11 @@ public class MarginAllReadRepository implements DatasetImplementation {
         if (query.columns().size() != FIELDS.size()
                 || !new HashSet<>(query.columns()).equals(new HashSet<>(FIELDS)))
             throw new IllegalArgumentException("D028 reads require all nine columns");
-        return bounded.read(definition(), query, null, mapper::fromValues);
+        String before = sourceVersion();
+        var result = bounded.read(definition(), query, before, mapper::fromValues);
+        if (!Objects.equals(before, sourceVersion()))
+            throw new IllegalStateException("汇总分页期间物理代或WAL版本改变");
+        return result;
     }
 
     public DatasetReadPage<MarginAll> findByKey(MarginAllKey key) {

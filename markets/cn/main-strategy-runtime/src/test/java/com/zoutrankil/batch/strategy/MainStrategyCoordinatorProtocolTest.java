@@ -115,6 +115,8 @@ class MainStrategyCoordinatorProtocolTest {
                         .instanceId());
         verify(work).inputFingerprint(DAY, legacy ? "3" : "4");
         verify(work, never()).inputFingerprint(DAY);
+        if (legacy) verify(work, never()).prepareReferenceData(any(Clock.class));
+        else verify(work).prepareReferenceData(any(Clock.class));
     }
 
     @Test

@@ -9,6 +9,7 @@ import com.zoutrankil.data.margin.domain.MarginSecsRows;
 import com.zoutrankil.data.margin.domain.MarginSecsState.Snapshot;
 import com.zoutrankil.data.margin.domain.MarginSecsState.TargetRange;
 import com.zoutrankil.data.margin.mapper.MarginSecsMapper;
+import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,7 +32,7 @@ public final class MarginSecsStorage {
     private final MarginSecsMapper mapper = new MarginSecsMapper();
 
     public MarginSecsStorage(JdbcTemplate jdbc, String table) {
-        MarginSecsDataset.requireIsolatedTable(table);
+        MarginSecsDataset.requireExecutionTable(table);
         this.jdbc = new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());
         this.jdbc.setQueryTimeout(30);
         this.jdbc.setMaxRows(MAX_ROWS + 1);
@@ -39,6 +40,7 @@ public final class MarginSecsStorage {
     }
 
     public Snapshot snapshot() {
+        var before = formalReadVersion();
         var rows =
                 jdbc.query(
                         select() + " ORDER BY trade_date,ts_code LIMIT " + (MAX_ROWS + 1),
@@ -63,11 +65,14 @@ public final class MarginSecsStorage {
                 throw new IllegalStateException(
                         "D030 target snapshot exceeds the 256 MiB canonical byte bound");
         }
-        return new Snapshot(List.copyOf(sorted), MarginSecsRows.fingerprint(sorted));
+        var result = new Snapshot(List.copyOf(sorted), MarginSecsRows.fingerprint(sorted));
+        requireSameVersion(before);
+        return result;
     }
 
     public List<MarginSecs> readDate(LocalDate date) {
         Objects.requireNonNull(date);
+        var before = formalReadVersion();
         var rows =
                 jdbc.query(
                         select()
@@ -80,12 +85,14 @@ public final class MarginSecsStorage {
         for (int i = 1; i < rows.size(); i++)
             if (rows.get(i - 1).key().equals(rows.get(i).key()))
                 throw new IllegalStateException("D030 duplicate physical natural key");
+        requireSameVersion(before);
         return List.copyOf(rows);
     }
 
     public List<MarginSecs> readRange(LocalDate from, LocalDate to, int maxRows) {
         if (from == null || to == null || from.isAfter(to) || maxRows < 1 || maxRows > MAX_ROWS)
             throw new IllegalArgumentException("D030 bounded range required");
+        var before = formalReadVersion();
         var rows =
                 jdbc.query(
                         select()
@@ -99,6 +106,7 @@ public final class MarginSecsStorage {
         for (int i = 1; i < rows.size(); i++)
             if (rows.get(i - 1).key().equals(rows.get(i).key()))
                 throw new IllegalStateException("D030 duplicate physical natural key");
+        requireSameVersion(before);
         return List.copyOf(rows);
     }
 
@@ -136,6 +144,24 @@ public final class MarginSecsStorage {
                 || !(rows.getFirst().get("directoryName") instanceof String directory))
             throw new IllegalStateException("Exact D030 physical target identity required");
         return StaticTargetIdentity.identify(jdbc, table, id.longValue(), directory);
+    }
+
+    private record ReadVersion(String targetId, long writerTxn) {}
+
+    /** 正式全表和整日读取必须跨同一物理代及稳定WAL，不能只比较行数。 */
+    private ReadVersion formalReadVersion() {
+        if (!"margin_secs".equals(table)) return null;
+        if (!QuestDbWriteChecks.walSettled(jdbc, table))
+            throw new IllegalStateException("标的名单WAL未稳定");
+        var wal = jdbc.queryForList("SELECT writerTxn FROM wal_tables() WHERE name=?", table);
+        if (wal.size() != 1 || !(wal.getFirst().get("writerTxn") instanceof Number n))
+            throw new IllegalStateException("标的名单WAL版本缺失");
+        return new ReadVersion(physicalTargetId(jdbc, table), n.longValue());
+    }
+
+    private void requireSameVersion(ReadVersion before) {
+        if (before != null && !before.equals(formalReadVersion()))
+            throw new IllegalStateException("标的名单完整回读期间物理代或WAL版本改变");
     }
 
     private String select() {

@@ -15,6 +15,7 @@ import io.questdb.client.Sender;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -110,6 +111,7 @@ public final class FinancialWritePort implements FinancialTarget {
                     if (v == null || f.name().equals("ann_date") || f.type().equals("SYMBOL"))
                         continue;
                     switch (f.type()) {
+                        case "TIMESTAMP" -> target.timestampColumn(f.name(), (Instant) v);
                         case "STRING" -> target.stringColumn(f.name(), v.toString());
                         case "DOUBLE" -> target.doubleColumn(f.name(), ((Number) v).doubleValue());
                         case "INT", "LONG" -> target.longColumn(f.name(), ((Number) v).longValue());
@@ -137,7 +139,19 @@ public final class FinancialWritePort implements FinancialTarget {
         }
         String names =
                 String.join(
-                        ",", contract.fields().stream().map(f -> "\"" + f.name() + "\"").toList());
+                        ",",
+                        contract.fields().stream()
+                                .map(
+                                        f ->
+                                                contract.dataset().equals("balance")
+                                                                && f.type().equals("TIMESTAMP")
+                                                        ? "cast(\""
+                                                                + f.name()
+                                                                + "\" AS long) AS \""
+                                                                + f.name()
+                                                                + "\""
+                                                        : "\"" + f.name() + "\"")
+                                .toList());
         return jdbc.query(
                 "SELECT "
                         + names
@@ -152,13 +166,34 @@ public final class FinancialWritePort implements FinancialTarget {
                     for (var f : contract.fields()) {
                         Object v =
                                 switch (f.type()) {
-                                    case "TIMESTAMP" ->
-                                            rs.getTimestamp(f.name()) == null
+                                    case "TIMESTAMP" -> {
+                                        // balance 同时含日期和真实技术时刻；按微秒回读，不能把技术时刻压成日期。
+                                        if (contract.dataset().equals("balance")) {
+                                            long micros = rs.getLong(f.name());
+                                            Instant instant =
+                                                    rs.wasNull()
+                                                            ? null
+                                                            : Instant.ofEpochSecond(
+                                                                    Math.floorDiv(
+                                                                            micros, 1_000_000L),
+                                                                    Math.floorMod(
+                                                                                    micros,
+                                                                                    1_000_000L)
+                                                                            * 1000);
+                                            yield instant == null
                                                     ? null
-                                                    : rs.getTimestamp(f.name())
-                                                            .toInstant()
-                                                            .atZone(ZoneOffset.UTC)
-                                                            .toLocalDate();
+                                                    : f.name().equals("ann_date")
+                                                            ? instant.atOffset(ZoneOffset.UTC)
+                                                                    .toLocalDate()
+                                                            : instant;
+                                        }
+                                        yield rs.getTimestamp(f.name()) == null
+                                                ? null
+                                                : rs.getTimestamp(f.name())
+                                                        .toInstant()
+                                                        .atZone(ZoneOffset.UTC)
+                                                        .toLocalDate();
+                                    }
                                     case "DOUBLE" -> rs.getObject(f.name(), Double.class);
                                     case "INT" -> rs.getObject(f.name(), Integer.class);
                                     case "LONG" -> rs.getObject(f.name(), Long.class);

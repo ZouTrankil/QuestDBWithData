@@ -485,7 +485,10 @@ class MainStrategyDataServiceTest {
     @Test
     void statusAndPlanInspectionOnMissingArtifactsRemainReadOnly() throws Exception {
         var service = service();
-        assertEquals(3, ((List<?>) service.status().get("missingArtifacts")).size());
+        var status = service.status();
+        assertEquals(3, ((List<?>) status.get("missingArtifacts")).size());
+        assertEquals("current-process-configured-paths", status.get("runtimeScope"));
+        assertEquals(false, status.get("sourceSynchronizationRequiresPromotedArtifacts"));
         assertEquals("missing", service.inspectPlans().integrityCheck());
         assertFalse(Files.exists(root.resolve("plans.sqlite3")));
         assertFalse(Files.exists(root.resolve("artifacts")));

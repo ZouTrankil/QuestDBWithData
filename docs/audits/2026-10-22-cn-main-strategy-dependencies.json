@@ -1,0 +1,113 @@
+{
+  "schema": "cn.main-strategy.dependency-review.v1",
+  "checkedAt": "2026-10-22T08:52:26.959777+00:00",
+  "ready": false,
+  "productionWritten": false,
+  "schedulerStarted": false,
+  "scope": "真实常驻入口配置在bean初始化前截取；有限status命令；代码依赖核查；正式库连接超时，未签发数据完整凭证",
+  "automaticSources": [
+    "daily",
+    "daily_basic",
+    "stk_factor",
+    "stk_suspend",
+    "stk_st_daily",
+    "stk_limit",
+    "moneyflow",
+    "moneyflow_hsgt",
+    "margin_detail",
+    "etf_daily",
+    "etf_adj",
+    "etf_factor",
+    "etf_portfolio",
+    "cn_bond_yield_curve"
+  ],
+  "externalPrerequisites": [
+    "exchange_calendar",
+    "stock_detail_info",
+    "etf_basic"
+  ],
+  "pipelineProducts": [
+    "market_sentiment_daily",
+    "regime_features_monitor_daily",
+    "mv_backtest_daily",
+    "l2_daily_features"
+  ],
+  "etfShareDirectlyReadByCurrentScoreReader": false,
+  "schedule": {
+    "entry": "./gradlew mainStrategyRun",
+    "startupCatchup": true,
+    "cronShanghai": "20:35",
+    "retryShanghai": "21:00—23:45 每15分钟",
+    "maxLookbackNaturalDays": 31,
+    "defaultRevisionNaturalDays": 3,
+    "note": "自动补跑是有界执行，不代表全部历史、全证券或所有75表自动增量；已有Quartz暂停和未决状态仍生效"
+  },
+  "findings": [
+    {
+      "type": "FORMAL_TARGET_NOT_BOUND",
+      "table": "stk_suspend",
+      "actualTarget": "stk_suspend_d011_isolated",
+      "requiredTarget": "stk_suspend",
+      "effect": "Sources阶段要求同名正式绑定，默认常驻配置不满足；仅Spring低优先级默认值不能覆盖市场配置",
+      "fixed": false
+    },
+    {
+      "type": "EXTERNAL_INPUTS_NOT_SCHEDULED",
+      "tables": [
+        "exchange_calendar",
+        "stock_detail_info",
+        "etf_basic"
+      ],
+      "effect": "流水线读取这些来源，未调用它们的同步owner，启动主策略不能自动保证其更新"
+    },
+    {
+      "type": "PRODUCTION_ARTIFACTS_MISSING",
+      "status": {
+        "producer": "java.main_strategy.data",
+        "scoreStart": "2025-07-01",
+        "configuredInputSchema": "java.strategy.inputs.v1",
+        "promotedRecipe": "/Users/Apple/orca/workspaces/QuestDBWithData/back-monitor/artifacts/factor_research/l2/etf_only_top2_promoted_recipe/promoted_recipe.json",
+        "recipePins": "/Users/Apple/orca/workspaces/QuestDBWithData/back-monitor/artifacts/factor_research/l2/etf_only_top2_promoted_recipe/accepted-sha256.json",
+        "planDatabase": "/Users/Apple/orca/workspaces/QuestDBWithData/back-monitor/artifacts/factor_research/l2/etf_only_fusion_main_daily/etf_only_paper/main_strategy_plans.sqlite3",
+        "missingArtifacts": [
+          "/Users/Apple/orca/workspaces/QuestDBWithData/back-monitor/artifacts/factor_research/l2/etf_only_top2_promoted_recipe/promoted_recipe.json",
+          "/Users/Apple/orca/workspaces/QuestDBWithData/back-monitor/artifacts/factor_research/l2/etf_only_top2_promoted_recipe/accepted-sha256.json",
+          "/Users/Apple/orca/workspaces/QuestDBWithData/back-monitor/artifacts/factor_research/l2/etf_only_fusion_main_daily/etf_only_paper/main_strategy_plans.sqlite3"
+        ],
+        "sourceCoverage": "评分需要已批准的 source-coverage 文件和 SHA-256，不能仅凭日期有数据发布",
+        "dataReadiness": "Java score catalog is absent: /Users/Apple/orca/workspaces/QuestDBWithData/back-monitor/artifacts/quant_platform/_catalog/resource_catalog.sqlite3"
+      }
+    },
+    {
+      "type": "DATABASE_CONNECT_TIMEOUT",
+      "effect": "本轮未取得正式表最新范围、WAL和逐键值；不沿用旧读数当作当前已验收"
+    }
+  ],
+  "configurationProof": {
+    "path": "var/cn-main-strategy-dependencies-20261022/configuration-check.json",
+    "sha256": "b04e2e7fea34a1d1f1fb3878b6e23db9ffa388c63d7e00719fffe853ee7da932"
+  },
+  "configurationLog": {
+    "path": "var/cn-main-strategy-dependencies-20261022/configuration-check.log",
+    "sha256": "88aa41d215339d1b596773092bafe54082b074448b1a2e697cb16fd7a8a4e996"
+  },
+  "statusProof": {
+    "path": "var/cn-main-strategy-dependencies-20261022/main-strategy-status.log",
+    "sha256": "d96f6586ae5df1f5b12283038631f3b2f94f9162797e76899b92cd3f18599454"
+  },
+  "databaseFailureLog": {
+    "path": "var/cn-main-strategy-dependencies-20261022/dependency-check.log",
+    "sha256": "c10da7d2317df4f63c47080a2ea1eda65d8118779d2344ba7fed4cbf0f3d2553"
+  },
+  "checkHelper": {
+    "path": "var/cn-main-strategy-dependencies-20261022/MainStrategyDependencyCheck.java",
+    "sha256": "a997292677a7a516fe0c7e628804d81f3ab6cbcf591397c7cfb778354d3e7d43"
+  },
+  "next": [
+    "先确认原策略实际运行配置、唯一writer及账本锁；修复停牌读写绑定并核实实际布局，不直接切换数据库",
+    "安排日历、股票资料和ETF目录的唯一采集任务，不因读取依赖而增加第二writer",
+    "定位真实批准方案、训练原件、计划库和来源覆盖文件；原目录相邻back-monitor的默认路径也未找到这四份目标文件",
+    "正式库恢复可读后，按明确范围验核心来源、派生结果和下一次真实增量",
+    "主策略依赖通过后再转其他表"
+  ]
+}

@@ -49,6 +49,16 @@ public final class MarginAllDataset {
 
     public static DatasetDefinition isolatedWriteDefinition(String table) {
         requireIsolatedTable(table);
+        return writeDefinition(table);
+    }
+
+    /** 原隔离定义保持严格，正式执行只放行精确同名目标。 */
+    public static DatasetDefinition executionWriteDefinition(String table) {
+        requireExecutionTable(table);
+        return writeDefinition(table);
+    }
+
+    private static DatasetDefinition writeDefinition(String table) {
         return new DatasetDefinition(
                 "margin_all",
                 1,
@@ -103,6 +113,10 @@ public final class MarginAllDataset {
                 false,
                 meaning + "; source must be non-null and finite",
                 null);
+    }
+
+    public static void requireExecutionTable(String table) {
+        if (!"margin_all".equals(table)) requireIsolatedTable(table);
     }
 
     public static void requireIsolatedTable(String table) {

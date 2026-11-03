@@ -94,14 +94,14 @@ class NativeDerivedApplicationWiringTest {
                     RegimeFeaturesMonitorDailyJobService.SOURCES.contains("cn_bond_yield_curve"));
             var datasets = context.getBean(DatasetRegistry.class);
             assertEquals(
-                    61,
+                    83,
                     datasets.definitions().stream()
                             .filter(
                                     value ->
                                             value.capabilities()
                                                     .contains(DatasetDefinition.Capability.READ))
                             .count());
-            assertEquals(61, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            assertEquals(83, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
             // 公告仍只读；利率由新接入的唯一正式 owner 提供读写契约。
             for (var id : Set.of("stk_shock", "stk_high_shock"))
                 assertEquals(

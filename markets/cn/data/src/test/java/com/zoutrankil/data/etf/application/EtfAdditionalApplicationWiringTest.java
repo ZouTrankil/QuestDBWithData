@@ -164,7 +164,7 @@ class EtfAdditionalApplicationWiringTest {
             var jobs = context.getBean(SyncJobRegistry.class);
             var datasets = context.getBean(DatasetRegistry.class);
             var bindings = context.getBean(ReadBindingCatalog.class).bind(datasets);
-            assertEquals(61, bindings.size());
+            assertEquals(83, bindings.size());
             // 公告仍只读；利率由新接入的唯一正式 owner 提供读写契约。
             for (var id : List.of("stk_shock", "stk_high_shock"))
                 assertEquals(
@@ -184,7 +184,7 @@ class EtfAdditionalApplicationWiringTest {
                         id);
             }
             assertEquals(
-                    61,
+                    83,
                     datasets.definitions().stream()
                             .filter(
                                     d ->

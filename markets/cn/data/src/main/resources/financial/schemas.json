@@ -2084,5 +2084,803 @@
       "key": false,
       "source": "legacy:preserve"
     }
+  ],
+  "balance": [
+    {
+      "name": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "name": "ann_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "name": "f_ann_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "end_date",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "name": "report_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "comp_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "end_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "total_share",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cap_rese",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "undistr_porfit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "surplus_rese",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "special_rese",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "money_cap",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "trad_asset",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "notes_receiv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "accounts_receiv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_receiv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "prepayment",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "div_receiv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "int_receiv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "inventories",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "amor_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "nca_within_1y",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "sett_rsrv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "loanto_oth_bank_fi",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "premium_receiv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "reinsur_receiv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "reinsur_res_receiv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "pur_resale_fa",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_cur_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_cur_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fa_avail_for_sale",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "htm_invest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "lt_eqt_invest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "invest_real_estate",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "time_deposits",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "lt_rec",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fix_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cip",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "const_materials",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fixed_assets_disp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "produc_bio_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oil_and_gas_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "intan_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "r_and_d",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "goodwill",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "lt_amor_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "defer_tax_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "decr_in_disbur",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_nca",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_nca",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cash_reser_cb",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "depos_in_oth_bfi",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "prec_metals",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "deriv_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "rr_reins_une_prem",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "rr_reins_outstd_cla",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "rr_reins_lins_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "rr_reins_lthins_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "refund_depos",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ph_pledge_loans",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "refund_cap_depos",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "indep_acct_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "client_depos",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "client_prov",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "transac_seat_fee",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "invest_as_receiv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "lt_borr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "st_borr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cb_borr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "depos_ib_deposits",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "loan_oth_bank",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "trading_fl",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "notes_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "acct_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "adv_receipts",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "sold_for_repur_fa",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "comm_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "payroll_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "taxes_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "int_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "div_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "acc_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "deferred_inc",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "st_bonds_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "payable_to_reinsurer",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "rsrv_insur_cont",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "acting_trading_sec",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "acting_uw_sec",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "non_cur_liab_due_1y",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_cur_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_cur_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "bond_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "lt_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "specific_payables",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "estimated_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "defer_tax_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "defer_inc_non_cur_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_ncl",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_ncl",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "depos_oth_bfi",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "deriv_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "depos",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "agency_bus_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "prem_receiv_adva",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "depos_received",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ph_invest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "reser_une_prem",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "reser_outstd_claims",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "reser_lins_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "reser_lthins_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "indept_acc_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "pledge_borr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "indem_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "policy_div_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "treasury_share",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ordin_risk_reser",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "forex_differ",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "invest_loss_unconf",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "minority_int",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_hldr_eqy_exc_min_int",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_hldr_eqy_inc_min_int",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_liab_hldr_eqy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "lt_payroll_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_comp_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_eqt_tools",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_eqt_tools_p_shr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "lending_funds",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "acc_receivable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "st_fin_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "payables",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "hfs_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "hfs_sales",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cost_fin_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fair_value_fin_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cip_total",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_pay_total",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "long_pay_total",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "debt_invest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_debt_invest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_eq_invest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_illiq_fin_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_eq_ppbond",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "receiv_financing",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "use_right_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "lease_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "contract_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "contract_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "accounts_receiv_bill",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "accounts_pay",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_rcv_total",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fix_assets_total",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "update_flag",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "update_time",
+      "type": "TIMESTAMP",
+      "key": false,
+      "source": "legacy:preserve"
+    }
   ]
 }

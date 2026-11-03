@@ -38,7 +38,9 @@ public final class FinancialDailyBudget {
             int rate =
                     Math.min(
                             quota.getGlobalPerMinute(),
-                            limits.getOrDefault(dataset, quota.getEndpointPerMinute()));
+                            limits.getOrDefault(
+                                    dataset.equals("balance") ? "balancesheet" : dataset,
+                                    quota.getEndpointPerMinute()));
             if (rate < 1) throw new IllegalArgumentException("财务来源配额必须大于零：" + dataset);
             millis =
                     Math.addExact(

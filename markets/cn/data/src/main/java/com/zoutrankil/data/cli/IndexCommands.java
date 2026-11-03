@@ -46,6 +46,7 @@ public final class IndexCommands implements CliCommandFamily {
                     "finish-index-catalog-publication",
                     "plan-dc-index-job",
                     "run-dc-index-job",
+                    "check-index-daily-market-source",
                     "plan-index-daily-market-job",
                     "run-index-daily-market-job",
                     "plan-index-monthly-job",
@@ -312,6 +313,20 @@ public final class IndexCommands implements CliCommandFamily {
                                         + "; run="
                                         + result.runId());
                 }
+            }
+            case "check-index-daily-market-source" -> {
+                if (indexDailyMarketService == null
+                        || !options.keySet()
+                                .equals(Set.of("--ts-code", "--from", "--to", "--logical-date")))
+                    throw new IllegalArgumentException("来源核查只接受明确证券、起止日期和业务日");
+                CliOutput.printJson(
+                        indexDailyMarketService.checkSource(
+                                options.get("--ts-code"),
+                                LocalDate.parse(options.get("--from")),
+                                LocalDate.parse(options.get("--to")),
+                                LocalDate.parse(options.get("--logical-date"))),
+                        CliOutput.Profile.JOB_DEFINITION,
+                        true);
             }
             case "plan-index-daily-market-job", "run-index-daily-market-job" -> {
                 if (options.containsKey("--resume-from")) {

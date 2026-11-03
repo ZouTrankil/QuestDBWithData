@@ -56,15 +56,19 @@ public final class MarginAllStaging {
             Path runEvidence,
             BooleanSupplier cancelled)
             throws Exception {
-        MarginAllDataset.requireIsolatedTable(target);
+        MarginAllDataset.requireExecutionTable(target);
         Objects.requireNonNull(request);
+        if ("margin_all".equals(target) != (request.definition().version() == 2))
+            throw new IllegalArgumentException("汇总目标与stage请求版本不匹配");
+        MarginAllSyncAdapter.validateRequest(request);
         check(cancelled);
         Path root = runEvidence.toAbsolutePath().normalize();
         Files.createDirectories(root);
         if (Files.isSymbolicLink(root))
             throw new IOException("D028 evidence root cannot be symlinked");
         String requestFingerprint = SyncRequestIdentity.fingerprint(request, logicalTargetId);
-        if (!request.definition().equals(MarginAllSyncJobOwner.DEFINITION)
+        if (!(request.definition().equals(MarginAllSyncJobOwner.DEFINITION)
+                        || request.definition().equals(MarginAllSyncJobOwner.FORMAL_DEFINITION))
                 || !"margin_all".equals(request.definition().datasetId())
                 || !logicalTargetId.equals(request.parameters().get("targetId"))
                 || !physicalTargetId.equals(request.parameters().get("physicalTargetId"))
@@ -305,7 +309,7 @@ public final class MarginAllStaging {
             throw new IllegalStateException("D028 stage intent belongs to another run/target");
         var run = SyncRunLedger.openReadOnly(ledgerPath).getRun(runId);
         if (!MarginAllSyncJobOwner.DEFINITION.jobId().equals(run.jobId())
-                || run.jobVersion() != MarginAllSyncJobOwner.DEFINITION.version()
+                || !Set.of(1, 2).contains(run.jobVersion())
                 || !run.targetId().equals(intent.path("logicalTargetId").asText())
                 || !intent.path("requestFingerprint")
                         .asText()
@@ -323,8 +327,8 @@ public final class MarginAllStaging {
                         .equals(intent.path("physicalTargetBefore").asText()))
             throw new IllegalStateException(
                     "D028 stage request/date/mode/physical target differs from frozen request");
-        if ("DISCARDED".equals(intent.path("phase").asText())) return;
-        if (!Set.of("PREPARING", "READY").contains(intent.path("phase").asText()))
+        boolean discarded = "DISCARDED".equals(intent.path("phase").asText());
+        if (!Set.of("PREPARING", "READY", "DISCARDED").contains(intent.path("phase").asText()))
             throw new IllegalStateException("D028 stage intent phase is not discardable");
         JsonNode before = intent.path("before"), identity = before.path("identity");
         var current = tables.open(target).snapshot();
@@ -345,6 +349,11 @@ public final class MarginAllStaging {
         var discard = tables.newDiscardSession();
         int named = discard.namedStageCount(stage);
         if (named > 1) throw new IllegalStateException("D028 stage name is ambiguous");
+        if (discarded) {
+            if (named != 0 || !intent.path("discardedWithStoppedWriter").asBoolean())
+                throw new IllegalStateException("已丢弃stage重新出现或缺少停写证明");
+            return;
+        }
         if (named == 1) {
             var staged = tables.open(stage).snapshot();
             String stageId = tables.physicalTargetId(stage, staged.identity());
@@ -356,6 +365,9 @@ public final class MarginAllStaging {
             if (discard.stageExists(stage))
                 throw new IllegalStateException("D028 stage drop did not settle");
         }
+        // DROP 完成后再次验原表，防止期间发生正式写入却释放原租约。
+        var afterDrop = tables.open(target).snapshot();
+        if (!current.equals(afterDrop)) throw new IllegalStateException("丢弃stage期间原目标变化");
         var body = json.convertValue(intent, LinkedHashMap.class);
         body.put("phase", "DISCARDED");
         body.put("discardedWithStoppedWriter", true);

@@ -172,6 +172,11 @@ public final class EtfBasicDataset {
                 + ") TIMESTAMP(timestamp) PARTITION BY YEAR WAL DEDUP UPSERT KEYS(ts_code, timestamp)";
     }
 
+    /** 只接原同名正式表；隔离建表工具继续使用原严格校验。 */
+    public static void requireExecutionTable(String table) {
+        if (!"etf_basic".equals(table)) requireIsolatedTable(table);
+    }
+
     public static void requireIsolatedTable(String table) {
         DatasetDefinition.identifier(table);
         if (!table.startsWith(ISOLATED_PREFIX) || table.length() <= ISOLATED_PREFIX.length())

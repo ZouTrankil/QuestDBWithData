@@ -25,7 +25,16 @@ public final class ReadGroupReader {
             DatasetDefinition definition,
             Class<T> rowType,
             Function<DatasetValues, T> mapper,
-            Supplier<String> sourceVersion) {
+            Supplier<String> sourceVersion,
+            boolean verifyAfterRead) {
+        public Binding(
+                DatasetDefinition definition,
+                Class<T> rowType,
+                Function<DatasetValues, T> mapper,
+                Supplier<String> sourceVersion) {
+            this(definition, rowType, mapper, sourceVersion, false);
+        }
+
         public Binding {
             Objects.requireNonNull(definition);
             Objects.requireNonNull(rowType);
@@ -35,14 +44,22 @@ public final class ReadGroupReader {
         }
 
         DatasetReadPage<T> read(QuestDbBoundedReader reader, DatasetReadQuery query) {
-            return reader.read(
-                    definition,
-                    query,
-                    sourceVersion.get(),
-                    values ->
-                            rowType.cast(
-                                    Objects.requireNonNull(
-                                            mapper.apply(values), "Null typed row")));
+            String before = sourceVersion.get();
+            if (verifyAfterRead && before == null)
+                throw new IllegalStateException("稳定版本供应器不能返回空版本");
+            var page =
+                    reader.read(
+                            definition,
+                            query,
+                            before,
+                            values ->
+                                    rowType.cast(
+                                            Objects.requireNonNull(
+                                                    mapper.apply(values), "Null typed row")));
+            // 显式版本供应器也在查询后核对，防止整表切换发生在版本读取与 SELECT 之间。
+            if (verifyAfterRead && !before.equals(sourceVersion.get()))
+                throw new IllegalStateException("读取过程中来源版本改变");
+            return page;
         }
     }
 

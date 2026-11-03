@@ -77,19 +77,14 @@ class MarginTargetContractTest {
     }
 
     @Test
-    void targetRejectsFormalTablesAndWriterRejectsDirectFormalSendBeforeIo() throws Exception {
+    void formalTargetAllowsConstructionButRejectsDirectSendBeforeIo() throws Exception {
         var jdbc = mock(JdbcTemplate.class);
         var quest = mock(QuestDB.class);
         when(jdbc.getDataSource()).thenReturn(mock(DataSource.class));
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> {
-                    new QuestDbMarginAllTarget("margin_all", jdbc, quest);
-                });
         try (var clients = mockConstruction(JdbcTemplate.class)) {
             {
                 var writer =
-                        new QuestDbMarginAllTarget("java_d028_margin_all_contract", jdbc, quest)
+                        new QuestDbMarginAllTarget("margin_all", jdbc, quest)
                                 .newWriter(PHYSICAL);
                 assertThrows(
                         IllegalStateException.class,

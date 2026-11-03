@@ -20,7 +20,7 @@ public final class QuestDbMoneyflowThsTarget implements MoneyflowThsTarget {
     public QuestDbMoneyflowThsTarget(String table, JdbcTemplate jdbc, QuestDB questdb) {
         this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb);
-        MoneyflowThsDataset.requireIsolatedTable(table);
+        MoneyflowThsDataset.requireExecutionTable(table);
         this.table = table;
     }
 
@@ -31,7 +31,7 @@ public final class QuestDbMoneyflowThsTarget implements MoneyflowThsTarget {
 
     @Override
     public String targetId() {
-        MoneyflowThsDataset.requireIsolatedTable(table);
+        MoneyflowThsDataset.requireExecutionTable(table);
         var rows =
                 jdbc.queryForList(
                         "SELECT id,directoryName FROM tables() WHERE table_name=?", table);

@@ -104,10 +104,12 @@ public final class MoneyflowThsSource {
             }
             throw failure;
         }
-        if (completed.pages() != 1 || completed.rows() != raw.size() || raw.size() >= API_ROW_CAP) {
-            var failure =
-                    new IllegalStateException(
-                            "D025 moneyflow_ths response is incomplete or reaches the 6000-row cap");
+        // 开市日的全市场资金流不能用空响应或容量上限认证完整。
+        if (completed.pages() != 1
+                || completed.rows() != raw.size()
+                || raw.isEmpty()
+                || raw.size() >= API_ROW_CAP) {
+            var failure = new IllegalStateException("同花顺全市场资金流响应为空、不完整或达到6000行上限");
             try {
                 persistUnverified(date, parameters, raw, completed.sourceVersion(), failure);
             } catch (Exception evidenceFailure) {

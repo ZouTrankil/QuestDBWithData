@@ -1,0 +1,41 @@
+{
+  "dataset": "stk_holdernumber",
+  "version": "stk_holdernumber-v1",
+  "endpoint": "stk_holdernumber",
+  "dateParameter": "ann_date",
+  "sourceDate": "ann_date",
+  "timestampColumn": "ann_date",
+  "pageSize": 3000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 3000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=166; 单证券、明确来源日期；达到单次上限拒绝完整；整数原值及公告日/统计期分别保留",
+  "partitionBy": "YEAR",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "ann_date",
+      "target": "ann_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "end_date",
+      "target": "end_date",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "source": "holder_num",
+      "target": "holder_num",
+      "type": "LONG",
+      "key": false
+    }
+  ]
+}

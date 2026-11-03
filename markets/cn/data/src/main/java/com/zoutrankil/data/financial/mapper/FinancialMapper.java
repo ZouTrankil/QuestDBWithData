@@ -90,7 +90,7 @@ public final class FinancialMapper {
                 || !row.key().period().equals(period.format(DateTimeFormatter.BASIC_ISO_DATE))
                 || row.key().announcement().isAfter(logicalDate))
             throw new IllegalArgumentException("财务响应超出冻结范围");
-        if (Set.of("cashflow", "income").contains(contract.dataset())
+        if (Set.of("cashflow", "income", "balance").contains(contract.dataset())
                 && !"1".equals(values.get("report_type")))
             throw new IllegalArgumentException("现有业务键不能容纳多个报表类别");
         return row;

@@ -41,7 +41,7 @@ public final class FinancialSource {
         var parameters = contract.parameters(code, period);
         var policy =
                 new PageContract(
-                        contract.dataset(),
+                        contract.endpoint(),
                         fields,
                         List.of("ts_code", "ann_date", "end_date"),
                         parameters.keySet(),
@@ -74,7 +74,7 @@ public final class FinancialSource {
                                                     .writeValueAsBytes(
                                                             Map.of(
                                                                     "endpoint",
-                                                                    contract.dataset(),
+                                                                    contract.endpoint(),
                                                                     "parameters",
                                                                     parameters,
                                                                     "fields",

@@ -80,7 +80,7 @@ public final class MoneyflowThsWritePort implements MoneyflowThsWriteSession {
 
     public MoneyflowThsWritePort(
             String table, String targetId, JdbcTemplate jdbc, QuestDB questdb) {
-        MoneyflowThsDataset.requireIsolatedTable(table);
+        MoneyflowThsDataset.requireExecutionTable(table);
         if (targetId == null || !targetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException(
                     "Frozen D025 isolated physical target identity required");

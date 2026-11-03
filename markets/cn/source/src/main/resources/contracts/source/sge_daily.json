@@ -1,0 +1,101 @@
+{
+  "dataset": "sge_daily",
+  "version": "sge_daily-v1",
+  "endpoint": "sge_daily",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 2000,
+  "maxBytes": 16777216,
+  "partitionBy": "YEAR",
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=285; 单日全部现货合约；当日白盘和前一夜盘归来源交易日，成交量和金额双向计量，保留来源单位；单日达到2000行即拒绝完整；原表无去重键，须显式修复后才允许发送",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "close",
+      "target": "close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "open",
+      "target": "open",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "high",
+      "target": "high",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "low",
+      "target": "low",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "price_avg",
+      "target": "price_avg",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "change",
+      "target": "change",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pct_change",
+      "target": "pct_change",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "vol",
+      "target": "vol",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "amount",
+      "target": "amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "oi",
+      "target": "oi",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "settle_vol",
+      "target": "settle_vol",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "settle_dire",
+      "target": "settle_dire",
+      "type": "STRING",
+      "key": false
+    }
+  ]
+}

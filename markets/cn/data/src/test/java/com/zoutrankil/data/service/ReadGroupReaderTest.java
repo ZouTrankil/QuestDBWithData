@@ -105,6 +105,21 @@ class ReadGroupReaderTest {
     }
 
     @Test
+    void explicitVersionMustRemainStableUntilPageReturns() {
+        var backend = new Reader();
+        var version = new AtomicInteger(1);
+        backend.afterRead = version::incrementAndGet;
+        var binding =
+                new ReadGroupReader.Binding<>(
+                        StockBasicDataset.DEFINITION,
+                        String.class,
+                        row -> row.get("ts_code", String.class),
+                        () -> "v" + version.get(),
+                        true);
+        assertThrows(IllegalStateException.class, () -> binding.read(backend, query(1, Map.of())));
+    }
+
+    @Test
     void heterogeneousRowsKeepTheirOwnQueriesVersionsAndCursors() {
         var backend = new Reader();
         var reader = reader(backend);

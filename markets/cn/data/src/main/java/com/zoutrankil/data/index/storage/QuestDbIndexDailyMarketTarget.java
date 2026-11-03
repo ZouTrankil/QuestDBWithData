@@ -1,6 +1,6 @@
 package com.zoutrankil.data.index.storage;
 
-import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
+import com.zoutrankil.data.domain.index.IndexDailyMarketDataset;
 import com.zoutrankil.data.index.port.IndexDailyMarketTarget;
 import com.zoutrankil.data.index.port.IndexDailyMarketWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
@@ -13,15 +13,32 @@ import java.util.Objects;
 
 /** Concrete storage assembly; construction does not query or mutate the target. */
 public final class QuestDbIndexDailyMarketTarget implements IndexDailyMarketTarget {
+    private final int version;
     private final String table;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
 
     public QuestDbIndexDailyMarketTarget(String table, JdbcTemplate jdbc, QuestDB questdb) {
+        this(table, jdbc, questdb, 1);
+    }
+
+    public QuestDbIndexDailyMarketTarget(
+            String table, JdbcTemplate jdbc, QuestDB questdb, int version) {
+        IndexDailyMarketDataset.requireTarget(table, version);
+        this.version = version;
         this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb);
-        IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
         this.table = table;
+    }
+
+    @Override
+    public int datasetVersion() {
+        return version;
+    }
+
+    @Override
+    public IndexDailyMarketTarget forVersion(int version) {
+        return new QuestDbIndexDailyMarketTarget(table, jdbc, questdb, version);
     }
 
     @Override
@@ -31,7 +48,7 @@ public final class QuestDbIndexDailyMarketTarget implements IndexDailyMarketTarg
 
     @Override
     public String targetId() {
-        IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
+        IndexDailyMarketDataset.requireTarget(table, version);
         var rows =
                 jdbc.queryForList(
                         "SELECT id,directoryName FROM tables() WHERE table_name = ?", table);
@@ -44,6 +61,6 @@ public final class QuestDbIndexDailyMarketTarget implements IndexDailyMarketTarg
 
     @Override
     public IndexDailyMarketWriteSession newWriter(String frozenTargetId) {
-        return new IndexDailyMarketWritePort(table, frozenTargetId, jdbc, questdb);
+        return new IndexDailyMarketWritePort(table, frozenTargetId, jdbc, questdb, version);
     }
 }

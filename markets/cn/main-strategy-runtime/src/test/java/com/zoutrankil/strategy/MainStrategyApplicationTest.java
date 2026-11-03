@@ -55,6 +55,11 @@ class MainStrategyApplicationTest {
                     "main-strategy",
                     context.getEnvironment().getProperty("spring.application.name"));
             assertEquals(
+                    "stk_suspend",
+                    context.getEnvironment().getProperty("app.sync.stk-suspend-table"));
+            assertEquals(
+                    "etf_basic", context.getEnvironment().getProperty("app.sync.etf-basic-table"));
+            assertEquals(
                     "8081", ProjectConfiguration.load("main-strategy").getProperty("server.port"));
             var runtime = context.getBean(MainStrategyDailyBatchRuntime.class);
             var status = runtime.status();

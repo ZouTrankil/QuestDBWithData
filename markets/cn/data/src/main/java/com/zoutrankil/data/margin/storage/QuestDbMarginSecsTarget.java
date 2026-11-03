@@ -1,6 +1,8 @@
 package com.zoutrankil.data.margin.storage;
 
 import com.zoutrankil.data.domain.stock.margin.MarginSecsDataset;
+import com.zoutrankil.data.margin.domain.MarginSecsLimits;
+import com.zoutrankil.data.margin.domain.MarginSecsRows;
 import com.zoutrankil.data.margin.domain.MarginSecsState.Snapshot;
 import com.zoutrankil.data.margin.port.MarginSecsTarget;
 import com.zoutrankil.data.margin.port.MarginSecsWriteSession;
@@ -10,6 +12,8 @@ import io.questdb.client.QuestDB;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 /** Configured D030 target with operation-scoped writer state. */
@@ -19,7 +23,7 @@ public final class QuestDbMarginSecsTarget implements MarginSecsTarget {
     private final QuestDB questdb;
 
     public QuestDbMarginSecsTarget(String table, JdbcTemplate jdbc, QuestDB questdb) {
-        MarginSecsDataset.requireIsolatedTable(table);
+        MarginSecsDataset.requireExecutionTable(table);
         this.table = table;
         this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb);
@@ -45,6 +49,19 @@ public final class QuestDbMarginSecsTarget implements MarginSecsTarget {
     @Override
     public Snapshot snapshot() {
         return new MarginSecsStorage(jdbc, table).snapshot();
+    }
+
+    @Override
+    public Snapshot snapshot(LocalDate from, LocalDate to) {
+        if (from == null
+                || to == null
+                || from.isAfter(to)
+                || ChronoUnit.DAYS.between(from, to) + 1 > 31)
+            throw new IllegalArgumentException("正式名单快照必须为1到31天");
+        var rows =
+                new MarginSecsStorage(jdbc, table)
+                        .readRange(from, to, 31 * MarginSecsLimits.API_ROW_CAP);
+        return new Snapshot(rows, MarginSecsRows.fingerprint(rows));
     }
 
     @Override
