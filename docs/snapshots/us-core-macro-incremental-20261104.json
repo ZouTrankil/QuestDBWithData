@@ -1,0 +1,192 @@
+{
+  "说明": "各源各一轮，只补来源已提供的实际缺失业务键，尾日缺口独立保留。",
+  "checkedAt": "2026-11-04T07:31:11.985733+00:00",
+  "sourceRequests": 4,
+  "newRows": 4,
+  "newNativeRuns": 4,
+  "actualCutoffs": [
+    {
+      "provider": "FRED",
+      "series": "NASDAQCOM",
+      "rows": 5243,
+      "through": "2026-11-03"
+    },
+    {
+      "provider": "FRED",
+      "series": "SP500",
+      "rows": 2584,
+      "through": "2026-11-02"
+    },
+    {
+      "provider": "FRED",
+      "series": "VIXCLS",
+      "rows": 5274,
+      "through": "2026-11-02"
+    },
+    {
+      "provider": "CBOE",
+      "series": "VIX",
+      "rows": 5275,
+      "through": "2026-11-03"
+    }
+  ],
+  "sourceGaps": [
+    {
+      "series": "NASDAQCOM",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-11-03",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03"
+      ],
+      "knownSessionDatesNotProvided": [],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    },
+    {
+      "series": "SP500",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-11-03",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-11-03"
+      ],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    },
+    {
+      "series": "VIXCLS",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-11-03",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-11-03"
+      ],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    }
+  ],
+  "all6Fred7CboeSourcePreparedNativeDualReadExact": true,
+  "allOldFieldsAndTypedNativePreserved": true,
+  "requestedFrom": "2026-10-22",
+  "requestedThrough": "2026-11-03",
+  "sources": [
+    {
+      "provider": "fred",
+      "series": "NASDAQCOM",
+      "sha256": "75955c617539e9b3f3ce7d8291ee2b51a8bfa3af6bed00da7de2aa0bfcfdb27a",
+      "observedAt": "2026-11-04T07:30:28.078526Z",
+      "bytes": 1162,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 9,
+      "fullSourceLastDate": "2026-11-03"
+    },
+    {
+      "provider": "fred",
+      "series": "SP500",
+      "sha256": "06aedb1c8cc2bf437bed508f39da7496dfb98adfc984baab4bf136515cdbe401",
+      "observedAt": "2026-11-04T07:30:36.065234Z",
+      "bytes": 1056,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 8,
+      "fullSourceLastDate": "2026-11-02"
+    },
+    {
+      "provider": "fred",
+      "series": "VIXCLS",
+      "sha256": "c1383e25ed4d8100a4c5dc0e1952fe5fd02ab24a4dab5dc8edb5ac0fb7e80ada",
+      "observedAt": "2026-11-04T07:30:43.778813Z",
+      "bytes": 1041,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 8,
+      "fullSourceLastDate": "2026-11-02"
+    },
+    {
+      "provider": "cboe",
+      "series": "VIX",
+      "sha256": "e5d1e436c05c0e346387984c9750daf5d8da140ba6e34bca79d81b326510a62b",
+      "observedAt": "2026-11-04T07:30:52.784557Z",
+      "bytes": 474451,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 9308,
+      "fullSourceLastDate": "2026-11-03"
+    }
+  ],
+  "oldRowsVerified": {
+    "us_market_daily": 13098,
+    "us_index_daily": 5274
+  },
+  "verification": {
+    "path": "var/market-data/scope-review/core-macro-v162-20261104/independent-verification.json",
+    "sha256": "f17dfa21fb7fef5ce933a218114fd4cc92772b45deab68fc0ae48d20599a3e74"
+  },
+  "runtime": {
+    "path": "var/plan-1029/20261030/runtime-us-plan1029-final.json",
+    "sha256": "9ceebedd015182fe28f8f9f528164e470328b9e4e5a9d22d7e5add483f63a586"
+  },
+  "wholeMarketComplete": false
+}

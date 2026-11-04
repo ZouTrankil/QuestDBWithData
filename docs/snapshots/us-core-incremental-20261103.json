@@ -1,0 +1,66 @@
+{
+  "说明": "原16核心十一月三日，纽约冬令时UTC14:30至21:00，分钟14:30至20:59完整390格点；旧首批不改。",
+  "checkedAt": "2026-11-04T07:29:49.636951+00:00",
+  "fromDate": "2026-11-03",
+  "throughDate": "2026-11-03",
+  "newDailyRows": 16,
+  "newRawMinuteRows": 7488,
+  "newRegularMinuteRows": 7488,
+  "newOneMinuteRows": 6240,
+  "newFiveMinuteRows": 1248,
+  "newNativeRuns": 48,
+  "newTasks": 32,
+  "sourceRequests": 32,
+  "oldDailyRows": 80150,
+  "oldRawMinuteRows": 1624896,
+  "oldRegularMinuteRows": 1572480,
+  "all20Daily13Raw14ViewAndFiveMinuteIndependentExact": true,
+  "allOldFieldsDualReadUnchanged": true,
+  "oldTypedNativeAndTasksUnchanged": true,
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "TLT",
+    "GLD",
+    "USO",
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "TSLA",
+    "AVGO",
+    "JPM",
+    "WMT"
+  ],
+  "calendarSha256": "b708c1b965f85c561692b22aaefa19b74f397aee815152f73f094e5948a89de5",
+  "runtime": {
+    "path": "var/plan-1029/20261030/runtime-us-plan1029-final.json",
+    "sha256": "9ceebedd015182fe28f8f9f528164e470328b9e4e5a9d22d7e5add483f63a586"
+  },
+  "runtimeJarCount": 47,
+  "physicalIds": {
+    "us_equity_daily": 3267,
+    "us_equity_intraday": 3206
+  },
+  "verification": {
+    "path": "var/market-data/scope-review/core-incremental-v161-20261104/independent-verification.json",
+    "sha256": "2c8a11eeff12f7fe0c43243074b609b804961d4e37570d0d0df54f82f6d5d9f2"
+  },
+  "idempotence": {
+    "path": "var/market-data/scope-review/core-incremental-v161-20261104/idempotence-proof.json",
+    "sha256": "2e90d255e6bbf5e23b6917626cac94cdd9408f470407e751c5930c5487156526"
+  },
+  "wholeMarketComplete": false,
+  "nextRuntimeManifest": {
+    "path": "var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-us-v168.json",
+    "sha256": "727547a459df4e824e861f2e7f06542883cce6b320ccff42343727129f76570f"
+  },
+  "nextRuntimeReadiness": {
+    "path": "var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-readiness-v168.json",
+    "sha256": "e1b3c42e7d184dfe4cdf5b1e12730509744ca8cfd47e8fa19fa2b55a77644876"
+  },
+  "currentAcceptanceRuntimeUnchanged": true
+}

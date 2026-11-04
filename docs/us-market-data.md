@@ -6,15 +6,15 @@
 
 当前先交付核心范围，不再等待全市场长尾。日线优先核心 16 个标的、固定 SPY/QQQ 持仓和已验收的当前挂牌候选，优先近十年；不足时保留明确的五年或实际短来源。OTC、退市股、历史成分及非核心特殊证券后续单独处理，首批不继续扩大。
 
-核心后续按日增量补齐，固定首批清单保留原截止日。16个核心日线及当年1/5分钟已到2026-11-02；最新新增16行日线、7488行分钟，纽约冬令时会话UTC14:30—21:00。见[核心清单](snapshots/us-core-incremental-20261102.json)、[查询](../tools/sql/us-core-incremental-20261102-reference.sql)、[本轮验收与来源失败](decisions/2026-11-03-核心增量与持仓来源失败留证.md)。长尾与ITCH保持停止，归档保留。
+核心后续按日增量补齐，固定首批清单保留原截止日。16个核心日线及当年1/5分钟已到2026-11-03；最新新增16行日线、7488行分钟。纽约冬令时会话UTC14:30—21:00，IEX分钟量不代表全市场。见[核心清单](snapshots/us-core-incremental-20261103.json)、[查询](../tools/sql/us-core-incremental-20261103-reference.sql)、[本轮验收](decisions/2026-11-04-核心增量与持仓来源缺口留证.md)。长尾与ITCH保持停止，归档保留。
 
-2026-10-27的WAL异常已单独恢复，旧现场保持。11月3日本轮增量后，日线WAL为 `52/52`，分钟为 `603/603`，币价为 `66/66`，均零缓冲、未挂起。每次继续前仍须实查，不把历史水位当作当前值。见[恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)和[本轮验收](decisions/2026-11-03-核心增量与持仓来源失败留证.md)。
+2026-10-27的WAL异常已单独恢复，旧现场保持。11月4日本轮增量后，日线WAL为 `68/68`，分钟为 `635/635`，币价为 `74/74`，均零缓冲、未挂起。每次继续前仍须实查，不把历史水位当作当前值。见[恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)和[本轮验收](decisions/2026-11-04-核心增量与持仓来源缺口留证.md)。
 
-核心指数本轮新增6行：FRED NASDAQCOM至2026-11-02；FRED SP500至2026-10-30；FRED VIXCLS至2026-10-30；CBOE VIX至2026-11-02。SP500缺2026-11-02；VIXCLS缺2026-11-02。旧SP500的29、30日缺口及VIXCLS30日已补；新尾日继续保留。见[新清单](snapshots/us-core-macro-incremental-20261103.json)、[查询](../tools/sql/us-core-macro-incremental-20261103-reference.sql)。
+核心指数本轮新增4行：FRED NASDAQCOM至2026-11-03；FRED SP500至2026-11-02；FRED VIXCLS至2026-11-02；CBOE VIX至2026-11-03。SP500缺2026-11-03；VIXCLS缺2026-11-03。见[新清单](snapshots/us-core-macro-incremental-20261104.json)、[查询](../tools/sql/us-core-macro-incremental-20261104-reference.sql)，旧缺口凭证保持。
 
-固定518个持仓价格路由的整批截止仍是10-30，11-02复用十个核心价格；其余508路因来源失败或报价数组不足未正式发布。506路成功原文已独立核对并缓存，失败及未知请求预留保留，不重发或改提供者。见[来源阻断清单](snapshots/us-core-holdings-source-blocked-20261102.json)、[当前窗口查询](../tools/sql/us-core-holdings-source-blocked-20261102-reference.sql)。持仓参照日期仍10-16。
+固定518个持仓价格路由的连续完整截止仍是10-30，11-02原157的508路未发布范围及失败预留保持。十一月三日508路来源中507路原文及二十列独立通过，1路留待核：KVUE：IllegalArgumentException: Yahoo 行情数组不足。整批508路正式行与Native均为零，成功原文仅缓存。见[新窗口清单](snapshots/us-core-holdings-source-blocked-20261103.json)、[查询](../tools/sql/us-core-holdings-source-blocked-20261103-reference.sql)。持仓参照日期仍10-16，不冒充新持仓或历史官方成分。
 
-BTC/ETH的Binance、Bybit现货及USDT永续已到UTC11-02，最新新增192小时线和8日线，累计371798行。旧十三列、Native和两条官方停市缺口保持，仅维护原八产品。见[新清单](snapshots/crypto-core-incremental-20261102.json)、[查询](../tools/sql/crypto-core-incremental-20261102-reference.sql)。
+BTC/ETH的Binance、Bybit现货及USDT永续已到UTC11-03，最新新增192小时线和8日线，累计371998行。旧十三列、Native和两条官方停市缺口保持，仅维护原八产品。见[新清单](snapshots/crypto-core-incremental-20261103.json)、[查询](../tools/sql/crypto-core-incremental-20261103-reference.sql)。
 
 ## 首批从这里读取
 
@@ -1123,3 +1123,5 @@ PHNGF、PTCO 2 份尾段缺字段，原价和失败保留。核心维护及原�
 先实查核心日线和分钟仍到 10 月 23 日，再继续原历史队列。本批 124 份完整可用响应新增 413513 行，另 11 个完整五年段新增 13805 行，共 427318 行、22 个 Native；全部二十列、OHLC 边界、WAL 和同一运行只读复验通过。4 份缓存待核、207 个来源失败保留，五年段不推进原全历史任务。
 
 历史截止日仍为 2026-10-16，短来源、提前结束、零量和身份限制逐项保留。旧 3512 条冲突及固定首批七条例外保持，核心增量和每日维护范围保持；实际范围、查询及剩余任务见[清单](snapshots/us-expanded-history-thirtieth-20261025.json)、[查询](../tools/sql/us-expanded-history-thirtieth-20261025-reference.sql)及[验收](decisions/2026-10-25-扩批历史队列第三十组验收.md)。全市场仍未完成。
+
+2026-11-04合并上游公共存储更新后，后续美股使用 `var/market-data/runtime/us-data-20261104-v168-shared-array`，先核 `var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-us-v168.json` 与 `runtime-readiness-v168.json`。相关204项测试和8211行保留样本通过，各运行包47个JAR；本轮数据仍保留原包身份，新日期仍须独立来源及正式验收。

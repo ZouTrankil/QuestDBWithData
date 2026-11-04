@@ -33,7 +33,7 @@ Java 下载 Binance Vision 官方 ZIP，正式数据写配置中的远端 QuestD
 
 旧 `collect --through ...` 保留原行为，不接管这六张表。
 
-旧 `crypto_ohlcv` 的跨资产核心范围单独维护：Binance、Bybit的BTCUSDT/ETHUSDT现货及USDT永续，小时与UTC日线已到2026-11-02，累计371798行、672来源任务。最新200行的双频原文、全部十三列、旧值、Native及幂等核验通过，两条原停市缺口保持。仅维护原八产品，不加入原生六表；见[新清单](snapshots/crypto-core-incremental-20261102.json)、[验收与来源失败边界](decisions/2026-11-03-核心增量与持仓来源失败留证.md)、[查询](../tools/sql/crypto-core-incremental-20261102-reference.sql)。
+旧 `crypto_ohlcv` 的跨资产核心范围单独维护：Binance、Bybit的BTCUSDT/ETHUSDT现货及USDT永续，小时与UTC日线已到2026-11-03，累计371998行、680来源任务。最新200行的双频原文、全部十三列、旧值、Native及幂等核验通过，两条原停市缺口保持。仅维护原八产品，不加入原生六表；见[新清单](snapshots/crypto-core-incremental-20261103.json)、[验收与来源缺口](decisions/2026-11-04-核心增量与持仓来源缺口留证.md)、[查询](../tools/sql/crypto-core-incremental-20261103-reference.sql)。
 
 ## 记录与停止
 
@@ -201,3 +201,5 @@ uv run --script tools/btc_quality_review.py repair --plan PLAN.json --report REP
 修复保留原截止日，不计作新一天的日更。旧批次计划不能覆盖后来发布的新鲜版本；连接恢复后先核对当前指针。显式修复不由现有日更自动接管。最新结果见[缺口核对与补齐](audits/2026-10-22-btc-缺口核对与补齐.md)。
 
 只读查询故障会记录阶段、表、查询指纹、超时与耗时、异常类型和调用位置，便于区分来源等待和数据库故障；不复制 SQL、连接地址或凭据。正式写入前的目标核对失败状态为 `BLOCKED_TARGET`，来源失败仍为 `SKIPPED_SOURCE`，`PUBLISHING` 仍须原运行恢复。
+
+2026-11-04合并公共存储更新后，原八产品的后续包为 `var/crypto-market-data/runtime/btc-data-20261104-v168-shared-array`，须核自己的 `var/crypto-market-data/scope-review/runtime-refresh-v168-20261104/runtime-btc-v168.json`；不以美股清单替代。测试及保留样本复验不代表新日期已采集，原v6运行和验收证明保持。
