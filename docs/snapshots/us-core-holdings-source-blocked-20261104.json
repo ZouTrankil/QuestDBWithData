@@ -1,0 +1,78 @@
+{
+  "说明": "固定持仓十一月四日单独窗口；十一月二日原157未发布范围不重取、不改签或冲抵。HTTP200只证明响应返回，不代表行情日期与字段完整。",
+  "status": "BLOCKED_SOURCE_FAILURE",
+  "holdingsAsOf": "2026-10-16",
+  "fixedRoutes": 518,
+  "fromDate": "2026-11-04",
+  "throughDate": "2026-11-04",
+  "fullyAcceptedContiguousThrough": "2026-10-30",
+  "newWindowAccepted": false,
+  "plannedRoutes": 508,
+  "validatedRoutes": 507,
+  "failedRoutes": 1,
+  "sourceRequests": 508,
+  "successfulSourceRequests": 508,
+  "sourceQualityGapCount": 1,
+  "transportOrStatusFailures": 0,
+  "unknownRequestReservations": [],
+  "sourceFailures": [
+    {
+      "symbol": "KVUE",
+      "priceSymbol": "KVUE",
+      "provider": "YAHOO",
+      "phase": "SOURCE_GAP",
+      "error": "IllegalArgumentException: Yahoo 行情数组不足",
+      "sourceCardSha256": "c440b9cd788e50ddd977cde274d4f61eba21432e817833e93800ee767ca7db65",
+      "raw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\yahoo\\16e93383-5105-4269-91ad-191774124b74.response",
+      "sha256": "88e7882ca65c41792b919b9086b1c2507500e468afe9abefd383424bbb656577",
+      "observedAt": "2026-11-05T07:30:31.866480Z"
+    }
+  ],
+  "allSuccessful20FieldsRawJavaExact": true,
+  "allOldTypedNativeUnchanged": true,
+  "oldRequestsAndUnknownReservationsUnchanged": true,
+  "newNativeRuns": 0,
+  "formalWrites": 0,
+  "newRows": 0,
+  "reusedCoreRows": 10,
+  "newDateUnpublishedRoutes": 508,
+  "originalBeforeIntentRawAndFailurePreserved": true,
+  "noFailedSourceRetry": true,
+  "noProviderSubstitution": true,
+  "noFormalSubsetPublication": true,
+  "original163Scope": "2026-11-03",
+  "original163Snapshot": {
+    "path": "docs/snapshots/us-core-holdings-source-blocked-20261103.json",
+    "sha256": "e558fdae1102a4038e80f06b1193ac8dccd3a36925129fd26604a9b33b9896c4"
+  },
+  "original157Scope": "2026-11-02",
+  "original157StillUnpublishedRoutes": 508,
+  "original157EvidenceUnchanged": true,
+  "original157ReservationBytes": 2097153,
+  "original157Snapshot": {
+    "path": "docs/snapshots/us-core-holdings-source-blocked-20261102.json",
+    "sha256": "bee17f850a1e488a99f51f68186105556604cb447cc36ff3cc0cf872b235d86e"
+  },
+  "nonOverlap": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v171-20261105/old-held-nonoverlap-proof.json",
+    "sha256": "29abeefd01e9f1e539708e4c12bdf3a2b9890f066a7acd06f1b0a0f814c9e2a8"
+  },
+  "oldRowsVerified": 1251293,
+  "oldFieldsProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v171-20261105/old-fields-after.json",
+    "sha256": "d21b783b881c27a3de29cc658c19624902d2bf211316bf944a7db5de897a3e57"
+  },
+  "verification": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v171-20261105/source-failure-closeout.json",
+    "sha256": "5d9748b81fb05336c5c83bc84e7e26a75c4a31e9f342eca54ed58ded0c49b334"
+  },
+  "sourceGapProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v171-20261105/first-new-source-gap-proof.json",
+    "sha256": "24a25ce48d3a9b7af32c4d566dc6aec4cc1295b7b3fe148dfc045517f5e1e1ca"
+  },
+  "runtime": {
+    "path": "var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-us-v168.json",
+    "sha256": "727547a459df4e824e861f2e7f06542883cce6b320ccff42343727129f76570f"
+  },
+  "wholeMarketComplete": false
+}

@@ -1,0 +1,57 @@
+{
+  "说明": "原16核心十一月四日，纽约冬令时UTC14:30至21:00，分钟14:30至20:59完整390格点；旧首批不改。",
+  "checkedAt": "2026-11-05T07:16:13.341408+00:00",
+  "fromDate": "2026-11-04",
+  "throughDate": "2026-11-04",
+  "newDailyRows": 16,
+  "newRawMinuteRows": 7488,
+  "newRegularMinuteRows": 7488,
+  "newOneMinuteRows": 6240,
+  "newFiveMinuteRows": 1248,
+  "newNativeRuns": 48,
+  "newTasks": 32,
+  "sourceRequests": 32,
+  "oldDailyRows": 80166,
+  "oldRawMinuteRows": 1632384,
+  "oldRegularMinuteRows": 1579968,
+  "all20Daily13Raw14ViewAndFiveMinuteIndependentExact": true,
+  "allOldFieldsDualReadUnchanged": true,
+  "oldTypedNativeAndTasksUnchanged": true,
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "TLT",
+    "GLD",
+    "USO",
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "TSLA",
+    "AVGO",
+    "JPM",
+    "WMT"
+  ],
+  "calendarSha256": "b708c1b965f85c561692b22aaefa19b74f397aee815152f73f094e5948a89de5",
+  "runtime": {
+    "path": "var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-us-v168.json",
+    "sha256": "727547a459df4e824e861f2e7f06542883cce6b320ccff42343727129f76570f"
+  },
+  "runtimeJarCount": 47,
+  "physicalIds": {
+    "us_equity_daily": 3267,
+    "us_equity_intraday": 3206
+  },
+  "verification": {
+    "path": "var/market-data/scope-review/core-incremental-v169-20261105/independent-verification.json",
+    "sha256": "c5bedc8112a26d0342c57f43a5d51a8817820a006d90b431f21f5363a1c8e170"
+  },
+  "idempotence": {
+    "path": "var/market-data/scope-review/core-incremental-v169-20261105/idempotence-proof.json",
+    "sha256": "99c55854a994153679e224472e43883829ea23d0aa413bb937f5bedbd4cee56a"
+  },
+  "wholeMarketComplete": false
+}
