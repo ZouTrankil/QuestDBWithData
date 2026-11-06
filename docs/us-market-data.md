@@ -6,15 +6,15 @@
 
 当前先交付核心范围，不再等待全市场长尾。日线优先核心 16 个标的、固定 SPY/QQQ 持仓和已验收的当前挂牌候选，优先近十年；不足时保留明确的五年或实际短来源。OTC、退市股、历史成分及非核心特殊证券后续单独处理，首批不继续扩大。
 
-核心后续按日增量补齐，固定首批清单保留原截止日。16个核心日线及当年1/5分钟已到2026-11-04；最新新增16行日线、7488行分钟。纽约冬令时会话UTC14:30—21:00，IEX分钟量不代表全市场。见[核心清单](snapshots/us-core-incremental-20261104.json)、[查询](../tools/sql/us-core-incremental-20261104-reference.sql)、[本轮验收](decisions/2026-11-05-核心增量与持仓来源缺口留证.md)。长尾与ITCH保持停止，归档保留。
+核心后续按日增量补齐，固定首批清单保留原截止日。16个核心日线及当年1/5分钟已到2026-11-05；最新新增16行日线、7488行分钟。纽约冬令时会话UTC14:30—21:00，IEX分钟量不代表全市场。见[核心清单](snapshots/us-core-incremental-20261105.json)、[查询](../tools/sql/us-core-incremental-20261105-reference.sql)、[本轮验收](decisions/2026-11-06-核心增量与持仓来源缺口留证.md)。长尾与ITCH保持停止，归档保留。
 
-2026-10-27的WAL异常已单独恢复，旧现场保持。11月5日本轮增量后，日线WAL为 `84/84`，分钟为 `667/667`，币价为 `82/82`，均零缓冲、未挂起。每次继续前仍须实查，不把历史水位当作当前值。见[恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)和[本轮验收](decisions/2026-11-05-核心增量与持仓来源缺口留证.md)。
+2026-10-27的WAL异常已单独恢复，旧现场保持。11月6日本轮增量后，日线WAL为 `100/100`，分钟为 `699/699`，币价为 `90/90`，均零缓冲、未挂起。每次继续前仍须实查，不把历史水位当作当前值。见[恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)和[本轮验收](decisions/2026-11-06-核心增量与持仓来源缺口留证.md)。
 
-核心指数本轮新增4行：FRED NASDAQCOM至2026-11-04；FRED SP500至2026-11-03；FRED VIXCLS至2026-11-03；CBOE VIX至2026-11-04。SP500缺2026-11-04；VIXCLS缺2026-11-04。见[新清单](snapshots/us-core-macro-incremental-20261105.json)、[查询](../tools/sql/us-core-macro-incremental-20261105-reference.sql)，旧缺口凭证保持。
+核心指数本轮新增4行：FRED NASDAQCOM至2026-11-05；FRED SP500至2026-11-04；FRED VIXCLS至2026-11-04；CBOE VIX至2026-11-05。SP500缺2026-11-05；VIXCLS缺2026-11-05。见[新清单](snapshots/us-core-macro-incremental-20261106.json)、[查询](../tools/sql/us-core-macro-incremental-20261106-reference.sql)，旧缺口凭证保持。
 
-固定518个持仓价格路由的连续完整截止仍是10-30，11-02原157的508路未发布范围及失败预留保持。十一月四日508路来源中507路原文及二十列独立通过，1路留待核：KVUE：IllegalArgumentException: Yahoo 行情数组不足。整批508路正式行与Native均为零，成功原文仅缓存。见[新窗口清单](snapshots/us-core-holdings-source-blocked-20261104.json)、[查询](../tools/sql/us-core-holdings-source-blocked-20261104-reference.sql)。持仓参照日期仍10-16，不冒充新持仓或历史官方成分。
+固定518个持仓价格路由的连续完整截止仍是10-30，11-02原157的508路未发布范围及失败预留保持。十一月五日508路来源中507路原文及二十列独立通过，1路留待核：KVUE：IllegalArgumentException: Yahoo 行情数组不足。整批508路正式行与Native均为零，成功原文仅缓存。见[新窗口清单](snapshots/us-core-holdings-source-blocked-20261105.json)、[查询](../tools/sql/us-core-holdings-source-blocked-20261105-reference.sql)。持仓参照日期仍10-16，不冒充新持仓或历史官方成分。
 
-BTC/ETH的Binance、Bybit现货及USDT永续已到UTC11-04，最新新增192小时线和8日线，累计372198行。旧十三列、Native和两条官方停市缺口保持，仅维护原八产品。见[新清单](snapshots/crypto-core-incremental-20261104.json)、[查询](../tools/sql/crypto-core-incremental-20261104-reference.sql)。
+BTC/ETH的Binance、Bybit现货及USDT永续已到UTC11-05，最新新增192小时线和8日线，累计372398行。旧十三列、Native和两条官方停市缺口保持，仅维护原八产品。见[新清单](snapshots/crypto-core-incremental-20261105.json)、[查询](../tools/sql/crypto-core-incremental-20261105-reference.sql)。
 
 ## 首批从这里读取
 

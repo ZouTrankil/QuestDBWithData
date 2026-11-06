@@ -1,0 +1,69 @@
+{
+  "说明": "原16核心十一月五日，纽约冬令时UTC14:30至21:00，分钟14:30至20:59完整390格点；旧首批不改。",
+  "checkedAt": "2026-11-06T07:15:15.598492+00:00",
+  "fromDate": "2026-11-05",
+  "throughDate": "2026-11-05",
+  "newDailyRows": 16,
+  "newRawMinuteRows": 7488,
+  "newRegularMinuteRows": 7488,
+  "newOneMinuteRows": 6240,
+  "newFiveMinuteRows": 1248,
+  "newNativeRuns": 48,
+  "newTasks": 32,
+  "sourceRequests": 32,
+  "oldDailyRows": 80182,
+  "oldRawMinuteRows": 1639872,
+  "oldRegularMinuteRows": 1587456,
+  "all20Daily13Raw14ViewAndFiveMinuteIndependentExact": true,
+  "allOldFieldsDualReadUnchanged": true,
+  "oldTypedNativeAndTasksUnchanged": true,
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "TLT",
+    "GLD",
+    "USO",
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "TSLA",
+    "AVGO",
+    "JPM",
+    "WMT"
+  ],
+  "calendarSha256": "b708c1b965f85c561692b22aaefa19b74f397aee815152f73f094e5948a89de5",
+  "runtime": {
+    "path": "var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-us-v168.json",
+    "sha256": "727547a459df4e824e861f2e7f06542883cce6b320ccff42343727129f76570f"
+  },
+  "runtimeJarCount": 47,
+  "preflight": {
+    "path": "var/market-data/scope-review/daily-preflight-v182-20261106/preflight.json",
+    "sha256": "9720c75b555425fc6916cff3aa0834c2698b44e90b93e91e0005300d3cd10966"
+  },
+  "helperBinding": {
+    "path": "var/market-data/scope-review/daily-preflight-v182-20261106/single-date-helper-binding.json",
+    "sha256": "0ff278bc2e586066896f96204e29aaae1f6edebd06899a22dd992492bb039ad0"
+  },
+  "failedPreflightZeroEffects": {
+    "path": "var/market-data/scope-review/daily-preflight-v182-20261106/failed-preflight-zero-side-effects.json",
+    "sha256": "41776674b4e4fe17a1bedfe36985d7e1d5eb2e0a6abdddfbe2ffe4ffda989c17"
+  },
+  "physicalIds": {
+    "us_equity_daily": 3267,
+    "us_equity_intraday": 3206
+  },
+  "verification": {
+    "path": "var/market-data/scope-review/core-incremental-v175-20261106/independent-verification.json",
+    "sha256": "2f74a810f28f4a1ff6bef419a27f5d1a2b22479948b7b6e926f1dbd53a15390f"
+  },
+  "idempotence": {
+    "path": "var/market-data/scope-review/core-incremental-v175-20261106/idempotence-proof.json",
+    "sha256": "8a8fb55eff4826164576cee543b61aa96f62d042a47979df7f546af9c1ad9548"
+  },
+  "wholeMarketComplete": false
+}
