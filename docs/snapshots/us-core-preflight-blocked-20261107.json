@@ -1,0 +1,200 @@
+{
+  "说明": "仅确认写前进程身份阻塞，不是六日新增验收。原控制行、Native、物理对象及稳定WAL保持。",
+  "checkedAt": "2026-11-07T07:08:21.539619+00:00",
+  "status": "BLOCKED_PROCESS_IDENTITY",
+  "sourceRequests": 0,
+  "newTasks": 0,
+  "newNative": 0,
+  "formalWrites": 0,
+  "marketLongWindowReads": 0,
+  "unknownProcess": {
+    "ProcessId": 6708,
+    "ParentProcessId": 29860,
+    "CreationDate": "/Date(1793981224170)/",
+    "HandleCount": 0,
+    "CommandLine": null
+  },
+  "originalParentAbsent": true,
+  "commandLineAndExitStateNotReadable": true,
+  "queryAndSynchronizeAccessDeniedWin32": 5,
+  "locks": [
+    {
+      "path": "F:\\repo\\engine\\data\\var\\market-data\\cboe-vix-collector.lock",
+      "readProbeAvailable": true,
+      "bytesAndMtimeUnchanged": true
+    },
+    {
+      "path": "F:\\repo\\engine\\data\\var\\market-data\\fred-collector.lock",
+      "readProbeAvailable": true,
+      "bytesAndMtimeUnchanged": true
+    },
+    {
+      "path": "F:\\repo\\engine\\data\\var\\market-data\\ledger-writer.lock",
+      "readProbeAvailable": true,
+      "bytesAndMtimeUnchanged": true
+    },
+    {
+      "path": "F:\\repo\\engine\\data\\var\\market-data\\us-broad.lock",
+      "readProbeAvailable": true,
+      "bytesAndMtimeUnchanged": true
+    },
+    {
+      "path": "F:\\repo\\engine\\data\\var\\market-data\\us-collector.lock",
+      "readProbeAvailable": true,
+      "bytesAndMtimeUnchanged": true
+    },
+    {
+      "path": "F:\\repo\\engine\\data\\var\\market-data\\us-itch-source.lock",
+      "readProbeAvailable": true,
+      "bytesAndMtimeUnchanged": true
+    },
+    {
+      "path": "F:\\repo\\engine\\data\\var\\crypto-market-data\\collector.lock",
+      "readProbeAvailable": true,
+      "bytesAndMtimeUnchanged": true
+    },
+    {
+      "path": "F:\\repo\\engine\\data\\var\\crypto-market-data\\ledger-writer.lock",
+      "readProbeAvailable": true,
+      "bytesAndMtimeUnchanged": true
+    }
+  ],
+  "native": [
+    {
+      "path": "F:\\repo\\engine\\data\\var\\market-data\\sync-ledger.sqlite3",
+      "runs": 3569,
+      "intervalLocks": 0,
+      "unresolved": 0
+    },
+    {
+      "path": "F:\\repo\\engine\\data\\var\\crypto-market-data\\sync-ledger.sqlite3",
+      "runs": 700,
+      "intervalLocks": 0,
+      "unresolved": 0
+    }
+  ],
+  "physical": [
+    {
+      "id": 3268,
+      "table_name": "crypto_ohlcv",
+      "directoryName": "crypto_ohlcv~3268"
+    },
+    {
+      "id": 3267,
+      "table_name": "us_equity_daily",
+      "directoryName": "us_equity_daily~3267"
+    },
+    {
+      "id": 3206,
+      "table_name": "us_equity_intraday",
+      "directoryName": "us_equity_intraday~3206"
+    }
+  ],
+  "wal": [
+    {
+      "name": "crypto_data_gap_events",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "crypto_ohlcv",
+      "writerTxn": 90,
+      "sequencerTxn": 90,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_daily",
+      "writerTxn": 100,
+      "sequencerTxn": 100,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_equity_intraday",
+      "writerTxn": 699,
+      "sequencerTxn": 699,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_etf_equity_holdings",
+      "writerTxn": 2,
+      "sequencerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_index_daily",
+      "writerTxn": 10,
+      "sequencerTxn": 10,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_market_daily",
+      "writerTxn": 33,
+      "sequencerTxn": 33,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_history_catalog",
+      "writerTxn": 11,
+      "sequencerTxn": 11,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_identifiers",
+      "writerTxn": 35,
+      "sequencerTxn": 35,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    {
+      "name": "us_security_universe",
+      "writerTxn": 15,
+      "sequencerTxn": 15,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    }
+  ],
+  "allControlRowsEqualLastAccepted178": true,
+  "original157ReservationUnchanged": true,
+  "runtime": [
+    {
+      "manifest": "var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-us-v168.json",
+      "sha256": "727547a459df4e824e861f2e7f06542883cce6b320ccff42343727129f76570f",
+      "jarCount": 47,
+      "allJarsSourcesAndConfigExact": true
+    },
+    {
+      "manifest": "var/crypto-market-data/scope-review/runtime-refresh-v168-20261104/runtime-btc-v168.json",
+      "sha256": "c6789847c14d7f0f5119cebb728d621c4835c9910ae1c61f3b7d6b8984d4a33e",
+      "jarCount": 47,
+      "allJarsSourcesAndConfigExact": true
+    }
+  ],
+  "oldAcceptedUsCoreThrough": "2026-11-05",
+  "oldAcceptedCryptoThrough": "2026-11-05",
+  "holdingsContinuousThrough": "2026-10-30",
+  "noBeforeOrCollectIntentGenerated": true,
+  "noNewDateCollectionStarted": true,
+  "noAutoRestartUnlockResendOrBudgetReset": true,
+  "wholeMarketComplete": false,
+  "verification": {
+    "path": "var/market-data/scope-review/daily-preflight-v188-20261107/blocked-readonly-closeout-v189.json",
+    "sha256": "968f88e674e23476a33760c48f9c14d049db391d5f6d882ff68027d92975331b"
+  },
+  "previousAcceptance": "docs/decisions/2026-11-06-核心增量与持仓来源缺口留证.md",
+  "plannedHelpersNotExecuted": [
+    183,
+    184,
+    185,
+    186
+  ],
+  "itchDisabledArchivesRetained": true
+}

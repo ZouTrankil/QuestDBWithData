@@ -10,6 +10,8 @@
 
 2026-10-27的WAL异常已单独恢复，旧现场保持。11月6日本轮增量后，日线WAL为 `100/100`，分钟为 `699/699`，币价为 `90/90`，均零缓冲、未挂起。每次继续前仍须实查，不把历史水位当作当前值。见[恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)和[本轮验收](decisions/2026-11-06-核心增量与持仓来源缺口留证.md)。
 
+2026-11-07写前检查因PID 6708用途及退出状态无法确认而停止，本轮零新增来源、任务、Native和正式写入；6日尚未开始新增验收，原截止保持。见[进程身份留证](decisions/2026-11-07-核心采集写前进程身份待核.md)。
+
 核心指数本轮新增4行：FRED NASDAQCOM至2026-11-05；FRED SP500至2026-11-04；FRED VIXCLS至2026-11-04；CBOE VIX至2026-11-05。SP500缺2026-11-05；VIXCLS缺2026-11-05。见[新清单](snapshots/us-core-macro-incremental-20261106.json)、[查询](../tools/sql/us-core-macro-incremental-20261106-reference.sql)，旧缺口凭证保持。
 
 固定518个持仓价格路由的连续完整截止仍是10-30，11-02原157的508路未发布范围及失败预留保持。十一月五日508路来源中507路原文及二十列独立通过，1路留待核：KVUE：IllegalArgumentException: Yahoo 行情数组不足。整批508路正式行与Native均为零，成功原文仅缓存。见[新窗口清单](snapshots/us-core-holdings-source-blocked-20261105.json)、[查询](../tools/sql/us-core-holdings-source-blocked-20261105-reference.sql)。持仓参照日期仍10-16，不冒充新持仓或历史官方成分。
