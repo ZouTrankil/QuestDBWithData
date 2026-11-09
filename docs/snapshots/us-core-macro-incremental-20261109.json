@@ -1,0 +1,209 @@
+{
+  "说明": "独立来源各一轮，按各序列实际日期验收。",
+  "checkedAt": "2026-11-09T07:18:45.178963+00:00",
+  "sourceRequests": 4,
+  "newRows": 4,
+  "newNativeRuns": 4,
+  "actualCutoffs": [
+    {
+      "provider": "FRED",
+      "series": "NASDAQCOM",
+      "rows": 5246,
+      "through": "2026-11-06"
+    },
+    {
+      "provider": "FRED",
+      "series": "SP500",
+      "rows": 2587,
+      "through": "2026-11-05"
+    },
+    {
+      "provider": "FRED",
+      "series": "VIXCLS",
+      "rows": 5277,
+      "through": "2026-11-05"
+    },
+    {
+      "provider": "CBOE",
+      "series": "VIX",
+      "rows": 5278,
+      "through": "2026-11-06"
+    }
+  ],
+  "sourceGaps": [
+    {
+      "series": "NASDAQCOM",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-11-06",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06"
+      ],
+      "knownSessionDatesNotProvided": [],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    },
+    {
+      "series": "SP500",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-11-06",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-11-06"
+      ],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    },
+    {
+      "series": "VIXCLS",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-11-06",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-11-06"
+      ],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    }
+  ],
+  "all6Fred7CboeSourcePreparedNativeDualReadExact": true,
+  "allOldFieldsAndTypedNativePreserved": true,
+  "requestedFrom": "2026-10-22",
+  "requestedThrough": "2026-11-06",
+  "sources": [
+    {
+      "provider": "fred",
+      "series": "NASDAQCOM",
+      "sha256": "2c02f711789167f096e378a2c9fe8fefb9a58518f95248d1070a5b7385d4bfd5",
+      "observedAt": "2026-11-09T07:18:04.140720Z",
+      "bytes": 1457,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 12,
+      "fullSourceLastDate": "2026-11-06"
+    },
+    {
+      "provider": "fred",
+      "series": "SP500",
+      "sha256": "d3a05c010c29859cc09d3a6b639c10cc1f76af19bebb6529b1b56c82f82d799a",
+      "observedAt": "2026-11-09T07:18:12.441788Z",
+      "bytes": 1351,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 11,
+      "fullSourceLastDate": "2026-11-05"
+    },
+    {
+      "provider": "fred",
+      "series": "VIXCLS",
+      "sha256": "a3044fcbf6c247dca2cfa32d62fcef103f9994290bb35f534120d80ac868599f",
+      "observedAt": "2026-11-09T07:18:24.336188Z",
+      "bytes": 1330,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 11,
+      "fullSourceLastDate": "2026-11-05"
+    },
+    {
+      "provider": "cboe",
+      "series": "VIX",
+      "sha256": "7e647d50a872b4aa64deaef1dfd17b0e1e3b88887cedc4c1fa861d242ecb7383",
+      "observedAt": "2026-11-09T07:18:31.902261Z",
+      "bytes": 474604,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 9311,
+      "fullSourceLastDate": "2026-11-06"
+    }
+  ],
+  "verification": {
+    "path": "var/market-data/scope-review/core-macro-v199-20261109/independent-verification.json",
+    "sha256": "0e8b40842108669018c7153278d35ca2b7344205cb5d56fb43d3f31d8558025f"
+  },
+  "runtime": {
+    "path": "var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-us-v168.json",
+    "sha256": "727547a459df4e824e861f2e7f06542883cce6b320ccff42343727129f76570f"
+  },
+  "wholeMarketComplete": false
+}
