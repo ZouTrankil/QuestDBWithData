@@ -1,5 +1,7 @@
 # 配置和启动
 
+小体积研究工具另有根配置 [`config/research-playbook.properties`](../config/research-playbook.properties)，由 Java 下载器和 Python 准备器显式读取，不导入 Spring profile、不改变生产来源。数据容量、固定窗口和来源清单在该文件中；运行方式见[研究 Playbook](../research/README.md)。
+
 运行配置都在根 `config/`。入口文件是 [application.yml](../config/application.yml)，日志格式是 [logback-spring.xml](../config/logback-spring.xml)。公共、市场和进程设置分开维护，程序自动按 profile 加载。
 
 | 文件 | 放什么 | 自动加载条件 |

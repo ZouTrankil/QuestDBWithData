@@ -1,0 +1,34 @@
+{
+  "scope": "2024年报列示的2022—2024财政年度；网页人工逐项核对，不是SEC API下载或历史PIT数据。金额为百万美元，空白为本表未录入，不是零。",
+  "checked_on": "2026-11-07",
+  "sources": {
+    "msft_ar24": {
+      "url": "https://www.microsoft.com/investor/reports/ar24/",
+      "locator": "Income Statements；Cash Flows Statements，2024/2023/2022三列",
+      "da_scope": "折旧、摊销及其他；不能称为纯服务器折旧",
+      "capex_scope": "现金购建固定资产，不含非现金融资租赁新增",
+      "fiscal_end": "06-30"
+    },
+    "amzn_10k24": {
+      "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872425000004/amzn-20241231.htm",
+      "locator": "Consolidated Statements of Cash Flows p36；Statements of Operations p37；FCF reconciliation p28",
+      "da_scope": "含固定资产、资本化内容、经营租赁资产及其他，不能横比为纯折旧",
+      "capex_scope": "记录总现金购置及出售/激励收入；公司FCF采用净购置口径",
+      "fiscal_end": "12-31"
+    },
+    "goog_10k24": {
+      "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm",
+      "locator": "Consolidated Statements of Income；Consolidated Statements of Cash Flows，2022/2023/2024三列",
+      "da_scope": "固定资产折旧，不等同于其他公司的折旧摊销及其他合计",
+      "capex_scope": "现金购置固定资产，不含未付及非现金融资",
+      "fiscal_end": "12-31"
+    },
+    "meta_10k24": {
+      "url": "https://www.sec.gov/Archives/edgar/data/1326801/000132680125000017/meta-20241231.htm",
+      "locator": "Statements of Income p87；Statements of Cash Flows p90；FCF reconciliation p77",
+      "da_scope": "折旧与摊销",
+      "capex_scope": "现金购置固定资产；公司FCF另扣融资租赁本金",
+      "fiscal_end": "12-31"
+    }
+  }
+}

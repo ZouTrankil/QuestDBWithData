@@ -15,6 +15,7 @@
 - `platform/runtime-support`：配置、日志和启动支持。
 - `platform/app-support`：公共鉴权、数据目录和 schema 配置支持库，没有市场启动入口。
 - `markets/cn/data-app`：A 股数据 API / CLI 入口，常驻服务按配置托管 Batch；`markets/cn/batch` 保存任务与管理能力。
+- `research`：[小体积研究 Playbook](research/README.md)，包含中文 Notebook、研究报告和有限数据准备；与正式采集分开，数据上限 300 MB。
 
 ## 怎么启动
 

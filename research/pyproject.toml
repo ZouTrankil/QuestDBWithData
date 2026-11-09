@@ -1,0 +1,14 @@
+[project]
+name = "questdb-research-playbook"
+version = "0.1.0"
+description = "小体积、可复查的跨资产研究教学"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "numpy>=2,<3", "pandas>=2.2,<3", "pyarrow>=18,<24",
+  "matplotlib>=3.9,<4", "nbformat>=5.10,<6", "nbclient>=0.10,<1",
+  "nbconvert>=7.16,<8", "ipykernel>=6.29,<8", "jupyterlab>=4.3,<5",
+  "PyYAML>=6,<7", "exchange-calendars==4.13.2",
+]
+
+[tool.uv]
+package = false

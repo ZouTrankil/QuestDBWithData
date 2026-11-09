@@ -135,6 +135,8 @@ A 股业务日和会话用 `Asia/Shanghai`。美股交易日和会话用 `Americ
 
 Python 对 QuestDB 只读。同一个正式产物只保留一个写入方；正式评分或方案按现有 Java/Python 交接约定写入，不能只看文件在哪个仓库就决定归谁写。
 
+`research/` 保存小体积研究教材和报告；`tools/research_playbook/` 只准备本地快照及离线分析，复用原基线回放器。有限外部原件由 `tools/ResearchSourceFetch.java` 下载，配置在 `config/research-playbook.properties`，不接管正式来源或检查点。原件、派生数据和质量证据放 `var/research-playbook/data/`，总上限 300 MB；缺源必须明确记录，不能用教学示例代替真实验收。使用与验证见[研究入口](../research/README.md)。
+
 Java 调用失败时，Python 不能偷偷启用另一套正式计算或写入。真实市场逐笔数据与自己的交易记录要分清。
 
 实时 L2 备份、恢复要同时保留 SQLite 和它引用的 Parquet。MQTT QoS 0 丢失的输入不能补成“完整”。
