@@ -1,0 +1,69 @@
+{
+  "说明": "纽约十一月九日16核心日线及分钟线，UTC14:30至21:00正常时段。",
+  "checkedAt": "2026-11-10T07:20:23.580227+00:00",
+  "fromDate": "2026-11-09",
+  "throughDate": "2026-11-09",
+  "newDailyRows": 16,
+  "newRawMinuteRows": 7488,
+  "newRegularMinuteRows": 7488,
+  "newOneMinuteRows": 6240,
+  "newFiveMinuteRows": 1248,
+  "newNativeRuns": 48,
+  "newTasks": 32,
+  "sourceRequests": 32,
+  "oldDailyRows": 80214,
+  "oldRawMinuteRows": 1654848,
+  "oldRegularMinuteRows": 1602432,
+  "all20Daily13Raw14ViewAndFiveMinuteIndependentExact": true,
+  "allOldFieldsDualReadUnchanged": true,
+  "oldTypedNativeAndTasksUnchanged": true,
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "TLT",
+    "GLD",
+    "USO",
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "TSLA",
+    "AVGO",
+    "JPM",
+    "WMT"
+  ],
+  "calendarSha256": "b708c1b965f85c561692b22aaefa19b74f397aee815152f73f094e5948a89de5",
+  "runtime": {
+    "path": "var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-us-v168.json",
+    "sha256": "727547a459df4e824e861f2e7f06542883cce6b320ccff42343727129f76570f"
+  },
+  "runtimeJarCount": 47,
+  "preflight": {
+    "path": "var/market-data/scope-review/daily-preflight-v207-20261110/preflight.json",
+    "sha256": "52ff06691c44c03a9bfabb139aac10c4021e6edfc71ee3893a5b90015eafdd0e"
+  },
+  "helperBinding": {
+    "path": "var/market-data/scope-review/daily-preflight-v207-20261110/single-date-helper-binding.json",
+    "sha256": "305959eed72b86df881fa9ad0d2703c8240e3d5c393fdcbd36570745ff907406"
+  },
+  "failedBefore": {
+    "path": "var/market-data/scope-review/daily-preflight-v201-20261110/zero-side-effects-v207.json",
+    "sha256": "cc83dd451bbd3fb1852f19cc18de6d76ecabeb94c0db0f94c3fca9519e6082e5"
+  },
+  "verification": {
+    "path": "var/market-data/scope-review/core-incremental-v202-20261110/independent-verification.json",
+    "sha256": "919960301fc7a525437c04bed1822aaf9fcad757d96839c6270ad1e1f0afda3a"
+  },
+  "idempotence": {
+    "path": "var/market-data/scope-review/core-incremental-v202-20261110/idempotence-proof.json",
+    "sha256": "bef240cddb1894608660814dcd9f0f90dc8a74a6d4fd058b7529d7c479b7aa21"
+  },
+  "physicalIds": {
+    "us_equity_daily": 3267,
+    "us_equity_intraday": 3206
+  },
+  "wholeMarketComplete": false
+}

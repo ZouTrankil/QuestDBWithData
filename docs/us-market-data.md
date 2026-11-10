@@ -6,17 +6,17 @@
 
 当前先交付核心范围，不再等待全市场长尾。日线优先核心 16 个标的、固定 SPY/QQQ 持仓和已验收的当前挂牌候选，优先近十年；不足时保留明确的五年或实际短来源。OTC、退市股、历史成分及非核心特殊证券后续单独处理，首批不继续扩大。
 
-16个核心的日线及当年1/5分钟已验收到2026-11-06。本轮新增16行日线、7488行分钟。分钟量仅代表IEX。见[核心清单](snapshots/us-core-incremental-20261106.json)、[查询](../tools/sql/us-core-incremental-20261106-reference.sql)及[验收](decisions/2026-11-09-核心采集恢复与周末币价补齐.md)。
+16个核心的日线及当年1/5分钟已验收到2026-11-09。本轮新增16行日线、7488行分钟。分钟量仅代表IEX。见[核心清单](snapshots/us-core-incremental-20261109.json)、[查询](../tools/sql/us-core-incremental-20261109-reference.sql)及[验收](decisions/2026-11-10-核心行情单日增量验收.md)。
 
-11月9日验收后，日线、分钟和币价WAL分别为 `116/116`、`731/731`、`114/114`。十表零缓冲且未挂起。写前以当轮实查为准。见[历史恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)及[本轮验收](decisions/2026-11-09-核心采集恢复与周末币价补齐.md)。
+11月10日验收后，日线、分钟和币价WAL分别为 `132/132`、`763/763`、`122/122`。十表零缓冲且未挂起。写前以当轮实查为准。见[历史恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)及[本轮验收](decisions/2026-11-10-核心行情单日增量验收.md)。
 
 2026-11-07的进程身份阻塞在11月9日只读预检中解除，原证据保留。见[阻塞留证](decisions/2026-11-07-核心采集写前进程身份待核.md)及[恢复验收](decisions/2026-11-09-核心采集恢复与周末币价补齐.md)。
 
-指数新增4行。FRED NASDAQCOM至2026-11-06、FRED SP500至2026-11-05、FRED VIXCLS至2026-11-05、CBOE VIX至2026-11-06。SP500缺2026-11-06。VIXCLS缺2026-11-06。见[指数清单](snapshots/us-core-macro-incremental-20261109.json)和[查询](../tools/sql/us-core-macro-incremental-20261109-reference.sql)。
+指数新增3行。FRED NASDAQCOM至2026-11-09、FRED SP500至2026-11-05、FRED VIXCLS至2026-11-06、CBOE VIX至2026-11-09。SP500缺2026-11-06,2026-11-09。VIXCLS缺2026-11-09。见[指数清单](snapshots/us-core-macro-incremental-20261110.json)和[查询](../tools/sql/us-core-macro-incremental-20261110-reference.sql)。
 
-固定518路的连续完整截止仍是10月30日。六日窗口已验证507路原文，1路待核。KVUE SOURCE_GAP IllegalArgumentException: Yahoo 行情数组不足。有效原文保存在缓存，整批正式发布为零。见[持仓清单](snapshots/us-core-holdings-source-blocked-20261106.json)和[查询](../tools/sql/us-core-holdings-source-blocked-20261106-reference.sql)。
+固定518路的连续完整截止仍是10月30日。九日窗口已验证507路原文，1路待核。KVUE SOURCE_GAP IllegalArgumentException: Yahoo 行情数组不足。有效原文保存在缓存，整批正式发布为零。见[持仓清单](snapshots/us-core-holdings-source-blocked-20261109.json)和[查询](../tools/sql/us-core-holdings-source-blocked-20261109-reference.sql)。
 
-`crypto_ohlcv`的原八个产品已验收到UTC 2026-11-08，累计372998行、720个来源任务。6至8日新增576行小时线和24行日线。见[币价清单](snapshots/crypto-core-incremental-20261108.json)和[查询](../tools/sql/crypto-core-incremental-20261108-reference.sql)。
+`crypto_ohlcv`的原八个产品已验收到UTC 2026-11-09，累计373198行、728个来源任务。新增192行小时线和8行日线。见[币价清单](snapshots/crypto-core-incremental-20261109.json)和[查询](../tools/sql/crypto-core-incremental-20261109-reference.sql)。
 
 ## 首批从这里读取
 

@@ -33,7 +33,7 @@ Java 下载 Binance Vision 官方 ZIP，正式数据写配置中的远端 QuestD
 
 旧 `collect --through ...` 保留原行为，不接管这六张表。
 
-`crypto_ohlcv`的原八个产品已验收到UTC 2026-11-08，累计372998行、720个来源任务。6至8日新增576行小时线和24行日线。见[币价清单](snapshots/crypto-core-incremental-20261108.json)和[查询](../tools/sql/crypto-core-incremental-20261108-reference.sql)。
+`crypto_ohlcv`的原八个产品已验收到UTC 2026-11-09，累计373198行、728个来源任务。新增192行小时线和8行日线。见[币价清单](snapshots/crypto-core-incremental-20261109.json)和[查询](../tools/sql/crypto-core-incremental-20261109-reference.sql)。
 
 ## 记录与停止
 
