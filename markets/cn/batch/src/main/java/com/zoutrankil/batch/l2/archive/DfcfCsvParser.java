@@ -2,12 +2,10 @@ package com.zoutrankil.batch.l2.archive;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.io.BufferedReader;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PushbackReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
@@ -319,6 +317,9 @@ public final class DfcfCsvParser {
                                     production
                                             ? quantity(row, ix, "成交数量", true)
                                             : BigDecimal.valueOf(integer(row, ix, "成交数量", true));
+                    // 负成交数量会污染成交量及占比；生产计算必须保留现场并拒绝该证券。
+                    if (production && volume.signum() < 0)
+                        throw new IOException("Negative DFCF deal quantity: " + code + " " + date);
                     String
                             buy =
                                     production
@@ -636,9 +637,8 @@ public final class DfcfCsvParser {
         if (maxBytes < 1) throw new IllegalArgumentException("Positive CSV byte bound required");
         var bounded = new BoundedInputStream(Objects.requireNonNull(input), maxBytes);
         try (var reader =
-                new PushbackReader(
-                        new BufferedReader(new InputStreamReader(bounded, ENCODING), 64 * 1024),
-                        1)) {
+                new DfcfCsvInspector.BufferedPushbackReader(
+                        new InputStreamReader(bounded, ENCODING))) {
             List<String> header = DfcfCsvInspector.readRecord(reader);
             if (header == null) throw new IOException("DFCF CSV is empty");
             if (!header.isEmpty() && header.getFirst().startsWith("\uFEFF"))

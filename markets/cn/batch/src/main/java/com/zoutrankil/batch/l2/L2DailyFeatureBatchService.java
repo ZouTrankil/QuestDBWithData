@@ -34,6 +34,7 @@ public final class L2DailyFeatureBatchService {
     private static final ObjectMapper JSON = new ObjectMapper();
     private static final String CHECKPOINT_VERSION = "l2-native-batch-v1";
     private final L2DailyFeatureSource sourceReader;
+    private final String parserVersion;
     private final L2CheckpointStore store;
 
     public L2DailyFeatureBatchService() {
@@ -42,6 +43,8 @@ public final class L2DailyFeatureBatchService {
 
     L2DailyFeatureBatchService(L2DailyFeatureSource source, L2CheckpointStore store) {
         this.sourceReader = Objects.requireNonNull(source);
+        this.parserVersion = Objects.requireNonNull(source.parserVersion());
+        if (parserVersion.isBlank()) throw new IllegalArgumentException("Blank parser version");
         this.store = Objects.requireNonNull(store);
     }
 
@@ -59,7 +62,10 @@ public final class L2DailyFeatureBatchService {
                         ? null
                         : universe(Path.of(requiredSymbolsFile(request.symbolsFile())));
         store.createDirectory(outputRoot);
-        String computeFingerprint = L2ComputationFingerprint.computeFingerprint();
+        // 固定来源版本并纳入检查点，来源语义变化后必须重算。
+        var digest = L2FeatureFiles.digest();
+        L2FeatureFiles.update(digest, L2ComputationFingerprint.computeFingerprint() + "\n" + parserVersion);
+        String computeFingerprint = L2FeatureFiles.hex(digest);
         boolean allComplete = true;
         try (var lock = store.lock(outputRoot)) {
             for (LocalDate date : request.dates()) {
@@ -410,7 +416,7 @@ public final class L2DailyFeatureBatchService {
                 resultText =
                         JSON.writeValueAsString(
                                         L2DailyFeaturePipeline.output(
-                                                L2DailyFeaturePipeline.compute(parsed)))
+                                                L2DailyFeaturePipeline.compute(parsed, parserVersion)))
                                 + "\n";
             for (Path alias : job.sources())
                 if (!sourceReader
@@ -512,16 +518,20 @@ public final class L2DailyFeatureBatchService {
                         if (!outcome.status().equals("SUCCESS")) continue;
                         Path result =
                                 output.resolve("features").resolve(outcome.symbol() + ".json");
-                        if (!store.hash(result).equals(outcome.resultSha256()))
+                        // 对实际聚合的内容计算摘要，避免两次打开之间内容发生变化。
+                        String resultText = store.readText(result);
+                        var digest = L2FeatureFiles.digest();
+                        L2FeatureFiles.update(digest, resultText);
+                        if (!L2FeatureFiles.hex(digest).equals(outcome.resultSha256()))
                             throw new IOException(
                                     "Feature result changed before aggregation: " + result);
-                        writer.write(store.readText(result).strip());
+                        writer.write(resultText.strip());
                         writer.newLine();
                     }
                 });
     }
 
-    private static Map<String, Object> manifest(
+    private Map<String, Object> manifest(
             Path source,
             LocalDate date,
             int workers,
@@ -544,7 +554,7 @@ public final class L2DailyFeatureBatchService {
         manifest.put("sourceDirectory", source.toString());
         manifest.put("computeFingerprint", fingerprint);
         manifest.put("featureVersion", L2DailyFeaturePipeline.FEATURE_VERSION);
-        manifest.put("parserVersion", L2DailyFeaturePipeline.PARSER_VERSION);
+        manifest.put("parserVersion", parserVersion);
         manifest.put("workers", workers);
         manifest.put("startedAt", started.toString());
         manifest.put("updatedAt", Instant.now().toString());

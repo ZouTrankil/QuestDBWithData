@@ -278,6 +278,16 @@ tasks.register('l2DailyFeatureBatch', JavaExec) {
     jvmArgs '-Xms1g', "-Xmx${providers.gradleProperty('l2BatchHeap').getOrElse('24g')}"
 }
 
+tasks.register('l2NewSourceDailyFeatureBatch', JavaExec) {
+    group = 'application'
+    description = '按显式交易所映射清洗新格式 L2 日特征。'
+    dependsOn batch.tasks.named('classes')
+    classpath = batch.sourceSets.main.output + batch.configurations.l2RuntimeClasspath
+    mainClass = 'com.zoutrankil.batch.l2.L2NewSourceBatchCli'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }
+    jvmArgs '-Xms1g', "-Xmx${providers.gradleProperty('l2BatchHeap').getOrElse('24g')}"
+}
+
 tasks.register('mainStrategyRun', JavaExec) {
     group = 'application'
     description = 'Start the independent main strategy scheduler and its control API.'

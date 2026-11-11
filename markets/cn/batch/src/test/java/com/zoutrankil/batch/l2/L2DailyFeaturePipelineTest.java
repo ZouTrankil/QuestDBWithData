@@ -32,6 +32,23 @@ class L2DailyFeaturePipelineTest {
     @TempDir Path directory;
 
     @Test
+    void sourceParserVersionIsRecordedWithoutChangingOtherFields() throws Exception {
+        Path source = copyFixture("510300.SZ");
+        var parsed = DfcfCsvParser.readProductionDay(source, "510300.SZ", DATE, MAX_BYTES);
+        var legacy = L2DailyFeaturePipeline.output(L2DailyFeaturePipeline.compute(parsed));
+        var alternate =
+                new java.util.LinkedHashMap<>(
+                        L2DailyFeaturePipeline.output(
+                                L2DailyFeaturePipeline.compute(parsed, "vendor_raw_csv_v1")));
+        assertEquals(L2DailyFeaturePipeline.PARSER_VERSION, legacy.get("parser_version"));
+        assertEquals("vendor_raw_csv_v1", alternate.get("parser_version"));
+        alternate.put("parser_version", legacy.get("parser_version"));
+        assertEquals(legacy, alternate);
+        assertThrows(IllegalArgumentException.class, () -> L2DailyFeaturePipeline.compute(parsed, " "));
+        assertThrows(IllegalArgumentException.class, () -> L2DailyFeaturePipeline.compute(parsed, null));
+    }
+
+    @Test
     void completeShanghaiEtfPipelineMatchesAllFrozenPythonFields() throws Exception {
         Path source = copyFixture("510300.SZ");
         var parsed = DfcfCsvParser.readProductionDay(source, "510300.SZ", DATE, MAX_BYTES);
@@ -64,6 +81,24 @@ class L2DailyFeaturePipelineTest {
                 "Cancellation prices are reconstructed from submitted orders");
         assertFeatures(
                 "159915.SZ", L2DailyFeaturePipeline.output(L2DailyFeaturePipeline.compute(parsed)));
+    }
+
+    @Test
+    void changingOnlyQuoteTickTimeDiffDoesNotChangeDailyFeatures() throws Exception {
+        Path source = copyFixture("159915.SZ");
+        var day = DfcfCsvParser.readProductionDay(source, "159915.SZ", DATE, MAX_BYTES);
+        var quotes = day.quotes().stream()
+                .map(q -> new DfcfCsvParser.Quote(
+                        q.symbol(), q.tradeDate(), q.time(), q.tickTimeDiff() + 12345,
+                        q.priceCny(), q.volume(), q.sourceTurnover(), q.totalVolume(),
+                        q.sourceTotalTurnover(), q.totalBidVolume(), q.totalAskVolume(),
+                        q.weightedBidPriceCny(), q.weightedAskPriceCny(), q.levels()))
+                .toList();
+        var changed = new DfcfCsvParser.ProductionDay(
+                day.symbol(), day.tradeDate(), day.deals(), day.orders(), quotes,
+                day.rawDealRows(), day.rawOrderRows(), day.rawQuoteRows());
+        assertEquals(L2DailyFeaturePipeline.output(L2DailyFeaturePipeline.compute(day)),
+                L2DailyFeaturePipeline.output(L2DailyFeaturePipeline.compute(changed)));
     }
 
     @Test

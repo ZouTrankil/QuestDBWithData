@@ -7,6 +7,7 @@ import static com.zoutrankil.batch.l2.L2FeatureFiles.update;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.batch.l2.archive.DfcfCsvParser;
+import com.zoutrankil.batch.l2.archive.NewSourceCsvParser;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
 import com.zoutrankil.data.domain.l2.L2DailyFeatures;
@@ -36,6 +37,9 @@ final class L2ComputationFingerprint {
                         L2DailyFeatureCli.class,
                         L2DailyFeatureSource.class,
                         L2DailyFeatureFileSource.class,
+                        L2NewSourceFileSource.class,
+                        L2NewSourceBatchCli.class,
+                        NewSourceCsvParser.class,
                         L2CheckpointStore.class,
                         L2FileCheckpointStore.class,
                         L2BatchState.class,

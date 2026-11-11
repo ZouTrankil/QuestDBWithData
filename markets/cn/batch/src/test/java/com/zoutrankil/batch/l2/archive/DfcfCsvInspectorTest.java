@@ -6,11 +6,47 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PushbackReader;
+import java.io.StringReader;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Random;
 
 class DfcfCsvInspectorTest {
     private final DfcfCsvInspector inspector = new DfcfCsvInspector();
+
+    @Test
+    void bufferedReaderMatchesOriginalForQuotesBoundariesAndMalformedRecords() {
+        var cases = new ArrayList<>(java.util.List.of(
+                "", "a,b\r\n", "\"a\"\"b\",c\r\nx,y", "\"a\nb\",c\rZ",
+                "\"unterminated", "a\"b", "\"x\"z", ",,\n",
+                "x".repeat(65535) + "\r\ny", "\"" + "a".repeat(65534) + "\"\"b\",c",
+                "a,".repeat(256) + "z", "x".repeat(2_000_001)));
+        var random = new Random(23);
+        String alphabet = "a,\"\r\n中";
+        for (int i = 0; i < 10000; i++) {
+            var text = new StringBuilder();
+            for (int n = random.nextInt(100); n > 0; n--)
+                text.append(alphabet.charAt(random.nextInt(alphabet.length())));
+            cases.add(text.toString());
+        }
+        for (String text : cases) assertEquals(parse(text, false), parse(text, true));
+    }
+
+    private static String parse(String text, boolean buffered) {
+        try (PushbackReader reader = buffered
+                ? new DfcfCsvInspector.BufferedPushbackReader(new StringReader(text))
+                : new PushbackReader(new BufferedReader(new StringReader(text), 65536), 1)) {
+            var rows = new ArrayList<java.util.List<String>>();
+            java.util.List<String> row;
+            while ((row = DfcfCsvInspector.readRecord(reader)) != null) rows.add(row);
+            return "OK:" + rows;
+        } catch (IOException failure) {
+            return "ERROR:" + failure.getMessage();
+        }
+    }
 
     @Test
     void streamsGb18030CsvWithQuotedDelimiterAndMultilineField() throws Exception {

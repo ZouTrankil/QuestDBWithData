@@ -21,7 +21,6 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
 final class L2FileCheckpointStore implements L2CheckpointStore {
     private static final ObjectMapper JSON = new ObjectMapper();
@@ -144,11 +143,7 @@ final class L2FileCheckpointStore implements L2CheckpointStore {
                 action.write(writer);
             }
             force(temp);
-            Files.move(
-                    temp,
-                    destination,
-                    StandardCopyOption.ATOMIC_MOVE,
-                    StandardCopyOption.REPLACE_EXISTING);
+            L2FeatureFiles.replaceAtomically(temp, destination);
             return sha256(destination);
         } finally {
             Files.deleteIfExists(temp);

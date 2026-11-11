@@ -28,6 +28,26 @@ class DfcfCsvParserTest {
     private static final LocalDate DATE = LocalDate.of(2026, 9, 2);
 
     @Test
+    void productionRejectsNegativeDealQuantityButRawScannerPreservesIt() throws Exception {
+        String csv =
+                "自然日,时间,成交编号,成交价格,成交数量,BS标志,叫买序号,叫卖序号\n"
+                        + "20260902,91500007,-21,0,-894880892,,0,11\n";
+        var raw = new ArrayList<DfcfCsvParser.Deal>();
+        DfcfCsvParser.scanDeals(stream(csv), "510590.SH", DATE, 4096, raw::add);
+        assertEquals(new BigDecimal("-894880892"), raw.getFirst().volume());
+        var folder = Files.createTempDirectory("dfcf-negative-deal-");
+        try {
+            Files.writeString(folder.resolve("逐笔成交.csv"), csv, GB18030);
+            IOException error = assertThrows(IOException.class,
+                    () -> DfcfCsvParser.readProductionDay(folder, "510590.SH", DATE, 4096));
+            assertTrue(error.getMessage().contains("Negative DFCF deal quantity"));
+        } finally {
+            Files.deleteIfExists(folder.resolve("逐笔成交.csv"));
+            Files.deleteIfExists(folder);
+        }
+    }
+
+    @Test
     void dealMappingScalesPriceAndRetainsCancelsAndUnclassifiedRows() throws Exception {
         String csv =
                 "自然日,时间,成交编号,成交价格,成交数量,BS标志,叫买序号,叫卖序号\n"

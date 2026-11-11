@@ -30,6 +30,14 @@ public final class L2DailyFeaturePipeline {
     }
 
     public static L2DailyFeatures compute(DfcfCsvParser.ProductionDay day) throws IOException {
+        return compute(day, PARSER_VERSION);
+    }
+
+    /** 解析版本随来源记录，避免把不同来源的结果误认成旧格式。 */
+    public static L2DailyFeatures compute(DfcfCsvParser.ProductionDay day, String parserVersion)
+            throws IOException {
+        if (parserVersion == null || parserVersion.isBlank())
+            throw new IllegalArgumentException("Missing parser version");
         L2FeatureData data = featureData(day);
         var wide = L2WideFeatures.compute(data);
         var features = new LinkedHashMap<String, Object>(wide.features());
@@ -43,7 +51,7 @@ public final class L2DailyFeaturePipeline {
         merge(features, L2GmmFeatures.compute(data));
         merge(features, L2IntensityFeatures.compute(data, wide.wide()));
         features.put("feature_version", FEATURE_VERSION);
-        features.put("parser_version", PARSER_VERSION);
+        features.put("parser_version", parserVersion);
         var typed = new EnumMap<L2DailyFeatureField, Object>(L2DailyFeatureField.class);
         for (var field : L2DailyFeatureField.values())
             if (!field.identity()) typed.put(field, features.remove(field.fieldName()));

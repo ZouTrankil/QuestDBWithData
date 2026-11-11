@@ -281,8 +281,13 @@ class L2DailyFeatureBatchExecutionTest {
         }
         var actual = new L2DailyFeatureFileSource();
         var parses = new AtomicInteger();
+        var version = new AtomicReference<>(L2DailyFeaturePipeline.PARSER_VERSION);
         L2DailyFeatureSource counting =
                 new L2DailyFeatureSource() {
+                    public String parserVersion() {
+                        return version.get();
+                    }
+
                     public List<Job> discover(Path p, List<String> ignored) throws IOException {
                         return actual.discover(p, ignored);
                     }
@@ -353,6 +358,41 @@ class L2DailyFeatureBatchExecutionTest {
         assertEquals(
                 recomputedHash,
                 L2FeatureFiles.sha256(dayOutput.resolve("l2_daily_features.jsonl")));
+        version.set("new_source_test_v1");
+        var changed = new L2DailyFeatureBatchService(counting, new L2FileCheckpointStore());
+        changed.execute(request);
+        assertEquals(4, parses.get());
+        var changedManifest = json.readTree(dayOutput.resolve("manifest.json").toFile());
+        assertEquals("new_source_test_v1", changedManifest.path("parserVersion").asText());
+        assertEquals(0, changedManifest.path("counts").path("resumed").asInt());
+        assertNotEquals(first.path("computeFingerprint"), changedManifest.path("computeFingerprint"));
+        var changedRow = json.readTree(dayOutput.resolve("features/159915.SZ.json").toFile());
+        assertEquals("new_source_test_v1", changedRow.path("parser_version").asText());
+        changed.execute(request);
+        assertEquals(4, parses.get());
+        assertEquals(2, json.readTree(dayOutput.resolve("manifest.json").toFile())
+                .path("counts").path("resumed").asInt());
+
+        String validAggregateHash = L2FeatureFiles.sha256(dayOutput.resolve("l2_daily_features.jsonl"));
+        L2CheckpointStore physical = new L2FileCheckpointStore();
+        L2CheckpointStore alteredRead =
+                (L2CheckpointStore)
+                        Proxy.newProxyInstance(
+                                getClass().getClassLoader(),
+                                new Class[] {L2CheckpointStore.class},
+                                (proxy, method, args) -> {
+                                    try {
+                                        Object value = method.invoke(physical, args);
+                                        if (method.getName().equals("readText")) return value + "x";
+                                        return value;
+                                    } catch (InvocationTargetException e) {
+                                        throw e.getCause();
+                                    }
+                                });
+        var inconsistent = new L2DailyFeatureBatchService(counting, alteredRead);
+        assertThrows(IOException.class, () -> inconsistent.execute(request));
+        assertEquals(validAggregateHash, L2FeatureFiles.sha256(dayOutput.resolve("l2_daily_features.jsonl")));
+        assertEquals("FAILED", json.readTree(dayOutput.resolve("manifest.json").toFile()).path("status").asText());
     }
 
     private static void await(CountDownLatch latch) throws IOException {

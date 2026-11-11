@@ -1,11 +1,11 @@
 package com.zoutrankil.batch.l2.archive;
 
-import java.io.BufferedReader;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.time.LocalDate;
@@ -39,9 +39,7 @@ final class DfcfCsvInspector {
                 };
         var stream = new DigestCountingInputStream(source, maxBytes);
         try (var reader =
-                new PushbackReader(
-                        new BufferedReader(new InputStreamReader(stream, ENCODING), 64 * 1024),
-                        1)) {
+                new BufferedPushbackReader(new InputStreamReader(stream, ENCODING))) {
             List<String> header = readRecord(reader);
             if (header == null) throw new IOException("DFCF CSV is empty: " + filename);
             if (!header.isEmpty() && header.getFirst().startsWith("\uFEFF"))
@@ -140,6 +138,53 @@ final class DfcfCsvInspector {
                 addField(row, field);
                 return row;
             } else field.append(c);
+        }
+    }
+
+    // CSV 状态机只回退一个字符。批量取字符，避免逐字符跨多层同步 Reader。
+    static final class BufferedPushbackReader extends PushbackReader {
+        private final Reader source;
+        private final char[] buffer = new char[64 * 1024];
+        private int position, limit, pushed = -1;
+        private boolean closed;
+
+        BufferedPushbackReader(Reader source) {
+            super(source, 1);
+            this.source = source;
+        }
+
+        @Override
+        public int read() throws IOException {
+            if (closed) throw new IOException("Stream closed");
+            if (pushed >= 0) {
+                int result = pushed;
+                pushed = -1;
+                return result;
+            }
+            if (limit < 0) return -1;
+            if (position == limit) {
+                do {
+                    limit = source.read(buffer, 0, buffer.length);
+                } while (limit == 0);
+                position = 0;
+                if (limit < 0) return -1;
+            }
+            return buffer[position++];
+        }
+
+        @Override
+        public void unread(int value) throws IOException {
+            if (closed) throw new IOException("Stream closed");
+            if (pushed >= 0) throw new IOException("Pushback buffer overflow");
+            pushed = value & 0xffff;
+        }
+
+        @Override
+        public void close() throws IOException {
+            if (!closed) {
+                closed = true;
+                super.close();
+            }
         }
     }
 

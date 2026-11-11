@@ -71,6 +71,8 @@ public final class L2NativeDailyFeaturesJsonlSource {
         String manifestSha256 = sha256(manifestBytes);
         JsonNode manifest = JSON.readTree(manifestBytes);
         validateManifest(manifest, day);
+        String parserVersion = requiredText(manifest, "parserVersion");
+        String featureVersion = requiredText(manifest, "featureVersion");
         String aggregateSha256 = hashFile(aggregatePath);
         if (!aggregateSha256.equals(requiredText(manifest, "aggregateSha256")))
             throw new IOException(
@@ -131,7 +133,19 @@ public final class L2NativeDailyFeaturesJsonlSource {
                         || !symbolNode.isTextual())
                     throw new IOException(
                             "Native L2 aggregate row has an invalid date or symbol key");
+                // 结果与清单必须属于同一版本，不能把不同来源的行混入正式批次。
+                if (!parserVersion.equals(requiredText(row, "parser_version"))
+                        || !featureVersion.equals(requiredText(row, "feature_version")))
+                    throw new IOException("Native L2 row version differs from its manifest");
                 String symbol = symbolNode.textValue();
+                // GMM 成交量占比必须落在有效范围；保留极小的浮点误差，不修正异常来源。
+                for (String field : List.of("gmm_main_force_ratio", "gmm_hft_ratio", "gmm_retail_ratio")) {
+                    JsonNode value = row.get(field);
+                    if (value != null && !value.isNull()
+                            && (!value.isNumber() || !Double.isFinite(value.doubleValue())
+                                    || value.doubleValue() < -1e-9 || value.doubleValue() > 1 + 1e-9))
+                        throw new IOException("Invalid native L2 GMM ratio: " + symbol + " " + field);
+                }
                 String expectedRowHash = successfulSymbols.get(symbol);
                 if (expectedRowHash == null
                         || !rowSymbols.add(symbol)

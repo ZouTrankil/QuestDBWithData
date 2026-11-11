@@ -10,7 +10,9 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
@@ -35,13 +37,45 @@ final class L2FeatureFiles {
                 while (bytes.hasRemaining()) channel.write(bytes);
                 channel.force(true);
             }
-            Files.move(
-                    temp,
-                    target,
-                    StandardCopyOption.ATOMIC_MOVE,
-                    StandardCopyOption.REPLACE_EXISTING);
+            replaceAtomically(temp, target);
         } finally {
             Files.deleteIfExists(temp);
+        }
+    }
+
+    @FunctionalInterface
+    interface AtomicMove {
+        void move(Path source, Path target) throws IOException;
+    }
+
+    static void replaceAtomically(Path source, Path target) throws IOException {
+        replaceAtomically(
+                source,
+                target,
+                (from, to) ->
+                        Files.move(
+                                from,
+                                to,
+                                StandardCopyOption.ATOMIC_MOVE,
+                                StandardCopyOption.REPLACE_EXISTING));
+    }
+
+    static void replaceAtomically(Path source, Path target, AtomicMove move) throws IOException {
+        // Windows 短暂共享锁会拒绝替换；只在临时文件仍存在时有限重试。
+        for (int attempt = 0; ; attempt++) {
+            try {
+                move.move(source, target);
+                return;
+            } catch (AccessDeniedException denied) {
+                if (attempt >= 4 || !Files.isRegularFile(source, LinkOption.NOFOLLOW_LINKS))
+                    throw denied;
+                try {
+                    Thread.sleep(50L << attempt);
+                } catch (InterruptedException interrupted) {
+                    Thread.currentThread().interrupt();
+                    throw new IOException("Interrupted while replacing feature file", interrupted);
+                }
+            }
         }
     }
 
