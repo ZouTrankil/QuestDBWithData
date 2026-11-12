@@ -94,7 +94,7 @@ public class ResearchSourceFetch {
                 Path part = root.resolve("raw/" + id + ".part");
                 URI url = URI.create(config.getProperty(id + ".url"));
                 if (!"https".equals(url.getScheme()) || url.getUserInfo() != null
-                        || !Set.of("data.sec.gov", "fred.stlouisfed.org", "stablecoins.llama.fi", "raw.githubusercontent.com", "api.github.com").contains(url.getHost()))
+                        || !Set.of("data.sec.gov", "fred.stlouisfed.org", "stablecoins.llama.fi", "raw.githubusercontent.com", "api.github.com", "query1.finance.yahoo.com").contains(url.getHost()))
                     throw new IllegalArgumentException("来源不在已核对的公开域名中");
                 boolean createdPart = false;
                 try {

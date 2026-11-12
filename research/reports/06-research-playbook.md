@@ -60,3 +60,7 @@ ETF 新回放先导入原输入，校验摘要及公司行动证据。BTC 新试
 改公共逻辑后运行定向测试和 `python -m tools.research_playbook.render`，检查表格单位、图例和输出；不是只检查 Python 无语法错误。准备器改变会导致 manifest 摘要变化，执行回执应同步更新。原件不可静默覆写，生产来源继续由原 Java 链路管理。
 
 Notebook 是教学入口，公共函数只抽取确有多个消费者的规则。不要复制整个 ML4Trading 框架，也不要把财务业务规则塞进 `utils`。报告数值更新必须引用新数据版本，说明比较窗口是否改变。
+
+## 已落地的长期验证例子
+
+[QQQ 研究方案](07-qqq-risk-and-timing-playbook.md)把“盈亏同源”拆成四个可证伪假设；[首轮长期结果](08-qqq-long-term-results.md)给出 2000—2025 实际近似回放，包含与原直觉不同的结果。先读口径与限制，再看 [Notebook 09](../notebooks/09_qqq_long_term_timing.ipynb)。

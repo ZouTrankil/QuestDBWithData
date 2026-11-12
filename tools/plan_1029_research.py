@@ -81,7 +81,8 @@ def event_time(day, kind, market, hours):
 
 
 def simulate(
-    opens, closes, rule, start, through, cost, market, hours=None, capital=100000
+    opens, closes, rule, start, through, cost, market, hours=None, capital=100000,
+    targets=None, cash_returns=None,
 ):
     if not opens.index.equals(closes.index) or not opens.columns.equals(closes.columns):
         raise ValueError("开收盘范围不一致")
@@ -93,6 +94,16 @@ def simulate(
     ):
         raise ValueError("研究输入含缺失或非法价格")
     score = opens.loc[start:through]
+    # 可选目标已按执行日对齐；全空行表示不调仓，避免固定仓位变成每日再平衡。
+    if targets is not None:
+        if not targets.index.equals(score.index) or not targets.columns.equals(opens.columns):
+            raise ValueError("目标仓位与评分窗口不一致")
+        active = targets.dropna(how="all")
+        if active.isna().any().any() or not np.isfinite(active.to_numpy()).all() or (active < 0).any().any() or (active.sum(axis=1) > 1).any():
+            raise ValueError("目标仓位非法")
+    if cash_returns is not None:
+        if not cash_returns.index.equals(score.index) or not np.isfinite(cash_returns.to_numpy()).all() or (cash_returns <= -1).any():
+            raise ValueError("现金回报与评分窗口不一致或非法")
     cash = float(capital)
     units = np.zeros(len(opens.columns))
     daily = []
@@ -100,6 +111,9 @@ def simulate(
     trades = []
     previous = capital
     for i, day in enumerate(score.index):
+        # 仅已有现金赚取上一估值日至本日的利息；开盘卖出所得不能倒赚隔夜利息。
+        if cash_returns is not None and i > 0:
+            cash *= 1 + float(cash_returns.loc[day])
         hist = closes.loc[closes.index < day]
         previous_day = (
             opens.index[opens.index.get_loc(day) - 1]
@@ -117,9 +131,11 @@ def simulate(
         )
         if rule in ["hold", "cash"] and i > 0:
             scheduled = False
+        if targets is not None:
+            scheduled = not targets.loc[day].isna().all()
         turnover = fees_today = 0.0
         if scheduled:
-            target = target_weights(hist, rule).to_numpy()
+            target = (target_weights(hist, rule) if targets is None else targets.loc[day]).to_numpy()
             price = opens.loc[day].to_numpy()
             cash, units, delta, fees = rebalance(cash, units, price, target, cost)
             turnover = float(np.abs(delta).sum())

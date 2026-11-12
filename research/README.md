@@ -1,8 +1,10 @@
 # 小体积数据与研究 Playbook
 
-先读数据地图，再做一个完整研究。这里有 **9 本可执行中文 Notebook、20 幅图、6 篇研究报告**；数据原件、派生表与质量证据合计约 **36.2 MB**，硬上限 300 MB。没有下载全套 ML4Trading、Level 2 或机器学习模型。
+先读数据地图，再做一个完整研究。原教材有 9 本 Notebook、20 幅图、6 篇报告；2026-11-10 新增 QQQ 长期研究，现有 **10 本 Notebook、26 幅图、8 篇报告**。原数据目录约 37.6 MB，QQQ 回放输出另约 10.3 MB，仍在 300 MB 预算内。没有下载全套 ML4Trading、Level 2 或机器学习模型。
 
-本次检查日期：2026-11-07。研究快照不是正式库的新验收，也不是最新投资建议。BTC 现货在本机重新回放；ETF 使用原验收摘要，逐日重算仍缺本机原快照；财报先用四家公司 2022—2024 年度数据。具体缺口见[数据报告](reports/02-data-readiness.md)。
+新增：[QQQ 长期验证方案](reports/07-qqq-risk-and-timing-playbook.md)、[25.8 年实际结果](reports/08-qqq-long-term-results.md)、[已执行 Notebook](notebooks/09_qqq_long_term_timing.ipynb)、[本机 HTML](../var/research-playbook/html/09_qqq_long_term_timing.html)。这是新取得的供应商复权近似回放，与下述原 ETF 快照缺口分开。
+
+原九本教材检查日期：2026-11-07。研究快照不是正式库的新验收，也不是最新投资建议。BTC 现货在本机重新回放；ETF 使用原验收摘要，逐日重算仍缺本机原快照；财报先用四家公司 2022—2024 年度数据。具体缺口见[数据报告](reports/02-data-readiness.md)。
 
 ## 直接看成果
 
@@ -19,6 +21,7 @@
 | 06 | [验证与不确定性](notebooks/06_validation_and_uncertainty.ipynb) | 分阶段、块抽样、标签泄漏、试验账 |
 | 07 | [ML4Trading 真实面板](notebooks/07_ml4t_real_panel_quality.ipynb) | 63.6 万行日线的证券身份、日历及异常 |
 | 08 | [证据优先的财报研究](notebooks/08_evidence_first_research.ipynb) | 检索、计算、引用、证据不足时拒答 |
+| 09 | [QQQ 长期择时](notebooks/09_qqq_long_term_timing.ipynb) | MACD、风险交换、同风险对照、长期反例 |
 
 报告：[目标项目源码研究](reports/01-ml4t-methods.md)、[数据准备与缺口](reports/02-data-readiness.md)、[ETF/BTC 基线](reports/03-baselines.md)、[AI 现金流](reports/04-ai-cashflow.md)、[宏观与链上](reports/05-macro-onchain.md)、[研究执行手册](reports/06-research-playbook.md)。每本 Notebook 都有研究问题、代码、图表解读、限制和练习。
 
@@ -39,7 +42,7 @@ var/research-playbook-env/bin/python -m unittest tools.tests.test_research_playb
 var/research-playbook-env/bin/jupyter lab research/notebooks
 ```
 
-本次验证：9 本、45 个代码单元格全部执行通过，嵌入 20 幅图，无单元格错误或 stderr；18 项 Python 测试通过。Java 离线验证通过精确容量上限、流式超限、空响应及保留旧 `.part` 的失败路径。图表已抽检，研究文档本地链接无断链。原回放器单元测试仍有 NumPy 时间单位弃用提示，不影响本次结果；没有修改该既有逻辑。下载器测试入口：
+原九本教材验证：9 本、45 个代码单元格全部执行通过，嵌入 20 幅图，无单元格错误或 stderr；18 项 Python 测试通过。Java 离线验证通过精确容量上限、流式超限、空响应及保留旧 `.part` 的失败路径。图表已抽检，研究文档本地链接无断链。原回放器单元测试仍有 NumPy 时间单位弃用提示，不影响本次结果；没有修改该既有逻辑。下载器测试入口：
 
 ```sh
 mkdir -p var/research-playbook/java-tests
@@ -73,3 +76,7 @@ BTC 使用配置指定的原有固定批次，严格按 OHLC 和实际资金费�
 - 原 `tools/plan_1029_research.py` 继续承担基线执行，`tools/btc_research_data.py` 继续承担 BTC 严格准入，没有另造回测器。
 
 图中真实样本、历史摘要和合成教学示例明确区分。ML4Trading/AlgoSeek 数据保留其原数据权利；Coin Metrics 社区数据为 CC BY-NC 4.0。原件没有纳入 Git，也没有对外分享。请连同来源与适用许可使用，不能认为代码许可等于数据许可。
+
+## QQQ 长期研究复现
+
+先按[结果报告](reports/08-qqq-long-term-results.md#复现与交付)下载两份小源并运行 `python -m tools.research_playbook.qqq_timing`，再执行 Notebook 09。它复用原回放器的显式目标仓位和现金计息接口，旧参数默认行为保持。2026-11-10 新 Notebook 的 7 个代码单元、6 幅图执行通过，23 项相关 Python 测试通过；原九本未在本轮重新执行。
