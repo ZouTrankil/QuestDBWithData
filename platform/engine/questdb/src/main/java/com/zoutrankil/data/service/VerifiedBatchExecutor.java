@@ -63,6 +63,14 @@ public final class VerifiedBatchExecutor<T, K> {
         UNKNOWN_UNRESOLVED
     }
 
+    public enum WalState {
+        SETTLED,
+        PENDING,
+        SUSPENDED,
+        REVERSED,
+        UNAVAILABLE
+    }
+
     public record Receipt(
             int batch,
             int submittedRows,
@@ -143,6 +151,11 @@ public final class VerifiedBatchExecutor<T, K> {
 
         /** 只有相关 WAL 进度已经稳定时，才返回 true。 */
         boolean walSettled() throws Exception;
+
+        /** 旧端口保留原判断；支持状态诊断的端口可区分积压和异常。 */
+        default WalState walState() throws Exception {
+            return walSettled() ? WalState.SETTLED : WalState.UNAVAILABLE;
+        }
 
         /** 显式证明结果未决的发送方不会继续追加写入。 */
         default boolean uncertainSenderStopped() throws Exception {
@@ -264,28 +277,48 @@ public final class VerifiedBatchExecutor<T, K> {
             String digest = digest(keys, expected);
             // 发送后不再走普通失败重试：异常可能发生在服务端已接收数据之后。
             boolean acknowledged = true;
+            String sendFailure = "none";
             try {
                 port.send(List.copyOf(rows));
             } catch (Exception unknown) {
                 if (unknown instanceof InterruptedException) Thread.currentThread().interrupt();
                 acknowledged = false;
+                sendFailure = unknown.getClass().getSimpleName();
             }
             submitted += rows.size();
             long deadline = System.nanoTime() + policy.visibilityTimeout().toNanos();
             boolean matched = false;
+            String stage = "sender";
+            String failure = "none";
+            long delayMillis = policy.pollInterval().toMillis();
             do {
                 try {
-                    // 三个条件缺一不可：发送已确认或已停止、业务键和值精确匹配、相关 WAL 已稳定。
-                    matched =
-                            (acknowledged || port.uncertainSenderStopped())
-                                    && exactMatch(keys, expectedRows, port.readback(keys))
-                                    && port.walSettled();
+                    // WAL 尚在应用时先等待，避免对同一大批次反复扫描。
+                    stage = "sender";
+                    boolean stopped = acknowledged || port.uncertainSenderStopped();
+                    if (stopped) {
+                        stage = "wal";
+                        var wal = port.walState();
+                        stage = "wal_" + wal.name();
+                        if (wal == WalState.SETTLED) {
+                            stage = "readback";
+                            if (exactMatch(keys, expectedRows, port.readback(keys))) {
+                                stage = "wal_after_readback";
+                                matched = port.walSettled();
+                            }
+                        }
+                    }
                 } catch (Exception transientReadFailure) {
                     matched = false;
+                    failure = transientReadFailure.getClass().getSimpleName();
+                    if (transientReadFailure instanceof InterruptedException)
+                        Thread.currentThread().interrupt();
                 }
                 if (matched || System.nanoTime() >= deadline) break;
                 try {
-                    Thread.sleep(policy.pollInterval().toMillis());
+                    long remainingMillis = Math.max(1, (deadline - System.nanoTime()) / 1_000_000);
+                    Thread.sleep(Math.min(delayMillis, remainingMillis));
+                    delayMillis = Math.min(2000, delayMillis * 2);
                 } catch (InterruptedException interrupted) {
                     Thread.currentThread().interrupt();
                     receipts.add(
@@ -322,7 +355,13 @@ public final class VerifiedBatchExecutor<T, K> {
                         submitted,
                         verified,
                         receipts,
-                        "batch values or WAL frontier not verified before deadline; do not replay");
+                        "batch not verified; stage="
+                                + stage
+                                + ", send="
+                                + sendFailure
+                                + ", error="
+                                + failure
+                                + "; do not replay");
             }
             verified += rows.size();
             receipts.add(

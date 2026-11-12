@@ -508,7 +508,7 @@ class VerifiedMarketDataPublicationPageTest {
                                 List.of(
                                         true,
                                         false,
-                                        1,
+                                        stage == 6 ? 3 : 1,
                                         stage == 1 || stage == 5 ? 2 : 1,
                                         stage == 2,
                                         stage == 3 ? 1 : 0));
@@ -565,6 +565,17 @@ class VerifiedMarketDataPublicationPageTest {
                             "",
                             root);
             var page = new VerifiedMarketDataStore.PublicationPage(rowCount, byteLimit);
+            for (int stage : List.of(1, 2, 3, 6, 0)) {
+                walStage.set(stage);
+                var expectedState =
+                        switch (stage) {
+                            case 1, 3 -> VerifiedBatchExecutor.WalState.PENDING;
+                            case 2 -> VerifiedBatchExecutor.WalState.SUSPENDED;
+                            case 6 -> VerifiedBatchExecutor.WalState.REVERSED;
+                            default -> VerifiedBatchExecutor.WalState.SETTLED;
+                        };
+                assertEquals(expectedState, store.walState("page_test"));
+            }
             var port =
                     new VerifiedBatchExecutor.Port<Map<String, Object>, String>() {
                         public void preflight() {}

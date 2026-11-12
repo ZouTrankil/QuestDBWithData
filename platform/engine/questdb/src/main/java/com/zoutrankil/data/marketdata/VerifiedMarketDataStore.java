@@ -213,21 +213,34 @@ public final class VerifiedMarketDataStore {
     }
 
     public boolean settled(String table) throws Exception {
+        return walState(table) == VerifiedBatchExecutor.WalState.SETTLED;
+    }
+
+    /** 区分正常追赶与反向水位；不能用零缓冲代替事务水位。 */
+    public VerifiedBatchExecutor.WalState walState(String table) throws Exception {
         DatasetDefinition.identifier(table);
         var rows =
                 query(
                         "SELECT t.walEnabled,t.table_suspended,w.writerTxn,w.sequencerTxn,w.suspended,w.bufferedTxnSize FROM tables() t JOIN wal_tables() w ON w.name=t.table_name WHERE t.table_name="
                                 + literal(table));
-        if (rows.size() != 1) return false;
+        if (rows.size() != 1) return VerifiedBatchExecutor.WalState.UNAVAILABLE;
         var row = rows.getFirst();
-        return Boolean.TRUE.equals(row.get("walEnabled"))
-                && Boolean.FALSE.equals(row.get("table_suspended"))
-                && Boolean.FALSE.equals(row.get("suspended"))
-                && row.get("writerTxn") instanceof Number a
-                && row.get("sequencerTxn") instanceof Number b
-                && a.longValue() == b.longValue()
-                && row.get("bufferedTxnSize") instanceof Number c
-                && c.longValue() == 0;
+        if (!Boolean.TRUE.equals(row.get("walEnabled"))
+                || !(row.get("table_suspended") instanceof Boolean)
+                || !(row.get("suspended") instanceof Boolean)
+                || !(row.get("writerTxn") instanceof Number a)
+                || !(row.get("sequencerTxn") instanceof Number b)
+                || !(row.get("bufferedTxnSize") instanceof Number c)
+                || a.longValue() < 0
+                || b.longValue() < 0
+                || c.longValue() < 0) return VerifiedBatchExecutor.WalState.UNAVAILABLE;
+        if (Boolean.TRUE.equals(row.get("table_suspended"))
+                || Boolean.TRUE.equals(row.get("suspended")))
+            return VerifiedBatchExecutor.WalState.SUSPENDED;
+        if (a.longValue() > b.longValue()) return VerifiedBatchExecutor.WalState.REVERSED;
+        if (a.longValue() < b.longValue() || c.longValue() != 0)
+            return VerifiedBatchExecutor.WalState.PENDING;
+        return VerifiedBatchExecutor.WalState.SETTLED;
     }
 
     public SyncJobRunner.Result publish(
@@ -473,8 +486,24 @@ public final class VerifiedMarketDataStore {
                                 || !shaFile(raw).equals(expectedSha))
                             throw new IllegalStateException("物理目标或冻结来源发生变化，停止发布");
                         requireSchema(d);
-                        if (!settled(d.objectName()))
-                            throw new IllegalStateException("市场目标 WAL 尚未结清，禁止继续发送");
+                        // 仅普通追赶可等待；异常水位或目标变化不能被当作可重试的积压。
+                        long deadline = System.nanoTime() + Duration.ofSeconds(30).toNanos();
+                        long delay = 100;
+                        var state = VerifiedMarketDataStore.this.walState(d.objectName());
+                        while (state == VerifiedBatchExecutor.WalState.PENDING
+                                && System.nanoTime() < deadline) {
+                            Thread.sleep(delay);
+                            delay = Math.min(2000, delay * 2);
+                            if (!identity(d).equals(target))
+                                throw new IllegalStateException("等待 WAL 时物理目标发生变化");
+                            state = VerifiedMarketDataStore.this.walState(d.objectName());
+                        }
+                        if (state != VerifiedBatchExecutor.WalState.SETTLED)
+                            throw new IllegalStateException("市场目标 WAL 未就绪：" + state);
+                        if (!identity(d).equals(target)
+                                || !sha(Files.readAllBytes(prepared)).equals(preparedSha)
+                                || !shaFile(raw).equals(expectedSha))
+                            throw new IllegalStateException("等待 WAL 后目标或冻结来源发生变化");
                     }
 
                     public void send(List<Map<String, Object>> batch) throws Exception {
@@ -495,6 +524,12 @@ public final class VerifiedMarketDataStore {
 
                     public boolean walSettled() throws Exception {
                         return identity(d).equals(target) && settled(d.objectName());
+                    }
+
+                    public VerifiedBatchExecutor.WalState walState() throws Exception {
+                        return identity(d).equals(target)
+                                ? VerifiedMarketDataStore.this.walState(d.objectName())
+                                : VerifiedBatchExecutor.WalState.UNAVAILABLE;
                     }
 
                     public boolean uncertainSenderStopped() {

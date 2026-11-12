@@ -466,6 +466,10 @@ public final class SyncJobRunner<T, K> {
                         return port.walSettled();
                     }
 
+                    public VerifiedBatchExecutor.WalState walState() throws Exception {
+                        return port.walState();
+                    }
+
                     public boolean uncertainSenderStopped() throws Exception {
                         return port.uncertainSenderStopped();
                     }
