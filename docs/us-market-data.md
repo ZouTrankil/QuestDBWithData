@@ -6,17 +6,17 @@
 
 当前先交付核心范围，不再等待全市场长尾。日线优先核心 16 个标的、固定 SPY/QQQ 持仓和已验收的当前挂牌候选，优先近十年；不足时保留明确的五年或实际短来源。OTC、退市股、历史成分及非核心特殊证券后续单独处理，首批不继续扩大。
 
-16个核心的日线及当年1/5分钟已验收到2026-11-09。本轮新增16行日线、7488行分钟。分钟量仅代表IEX。见[核心清单](snapshots/us-core-incremental-20261109.json)、[查询](../tools/sql/us-core-incremental-20261109-reference.sql)及[验收](decisions/2026-11-10-核心行情单日增量验收.md)。
+16个核心的日线及当年1/5分钟已验收到2026-11-11。本轮10、11日新增32行日线、14976行分钟，分钟量仅代表IEX。见[核心清单](snapshots/us-core-incremental-20261111.json)、[查询](../tools/sql/us-core-incremental-20261111-reference.sql)和[验收](decisions/2026-11-12-核心两日增量及指定指数缺口验收.md)。
 
-11月10日验收后，日线、分钟和币价WAL分别为 `132/132`、`763/763`、`122/122`。十表零缓冲且未挂起。写前以当轮实查为准。见[历史恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)及[本轮验收](decisions/2026-11-10-核心行情单日增量验收.md)。
+11月12日验收后，日线、分钟及币价WAL分别为`164/164`、`827/827`、`138/138`。十表结清，写前仍须当轮实查。见[本轮验收](decisions/2026-11-12-核心两日增量及指定指数缺口验收.md)。
 
 2026-11-07的进程身份阻塞在11月9日只读预检中解除，原证据保留。见[阻塞留证](decisions/2026-11-07-核心采集写前进程身份待核.md)及[恢复验收](decisions/2026-11-09-核心采集恢复与周末币价补齐.md)。
 
-指数新增3行。FRED NASDAQCOM至2026-11-09、FRED SP500至2026-11-05、FRED VIXCLS至2026-11-06、CBOE VIX至2026-11-09。SP500缺2026-11-06,2026-11-09。VIXCLS缺2026-11-09。见[指数清单](snapshots/us-core-macro-incremental-20261110.json)和[查询](../tools/sql/us-core-macro-incremental-20261110-reference.sql)。
+指数新增7行。已验收截止：FRED NASDAQCOM至2026-11-11、FRED SP500至2026-11-10、FRED VIXCLS至2026-11-10、CBOE VIX至2026-11-09。SP500缺2026-11-11。VIXCLS缺2026-11-11。CBOE本轮连接超时，原211失败及4194305字节未知预留保持，不自动重试。指定缺口：SP500 2026-11-06已补齐；SP500 2026-11-09已补齐；VIXCLS 2026-11-09已补齐。见[指数清单](snapshots/us-core-macro-incremental-20261112.json)和[查询](../tools/sql/us-core-macro-incremental-20261112-reference.sql)。
 
-固定518路的连续完整截止仍是10月30日。九日窗口已验证507路原文，1路待核。KVUE SOURCE_GAP IllegalArgumentException: Yahoo 行情数组不足。有效原文保存在缓存，整批正式发布为零。见[持仓清单](snapshots/us-core-holdings-source-blocked-20261109.json)和[查询](../tools/sql/us-core-holdings-source-blocked-20261109-reference.sql)。
+固定518路的连续完整截止仍是10月30日。2026-11-10窗口507路原文通过，1路待核，508路整批未发布。KVUE SOURCE_GAP IllegalArgumentException: Yahoo 行情数组不足。2026-11-11窗口507路原文通过，1路待核，508路整批未发布。KVUE SOURCE_GAP IllegalArgumentException: Yahoo 行情数组不足。见[十日清单](snapshots/us-core-holdings-source-blocked-20261110.json)和[十一日清单](snapshots/us-core-holdings-source-blocked-20261111.json)。
 
-`crypto_ohlcv`的原八个产品已验收到UTC 2026-11-09，累计373198行、728个来源任务。新增192行小时线和8行日线。见[币价清单](snapshots/crypto-core-incremental-20261109.json)和[查询](../tools/sql/crypto-core-incremental-20261109-reference.sql)。
+`crypto_ohlcv`的原八个产品已验收到UTC 2026-11-11，累计373598行、744个来源任务。10、11日新增384行小时线和16行日线。见[币价清单](snapshots/crypto-core-incremental-20261111.json)和[查询](../tools/sql/crypto-core-incremental-20261111-reference.sql)。
 
 ## 首批从这里读取
 

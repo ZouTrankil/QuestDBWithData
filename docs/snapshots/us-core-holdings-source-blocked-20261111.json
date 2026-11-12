@@ -1,0 +1,97 @@
+{
+  "说明": "2026-11-11窗口507路原文通过，1路待核，508路整批未发布。KVUE SOURCE_GAP IllegalArgumentException: Yahoo 行情数组不足。",
+  "status": "BLOCKED_SOURCE_FAILURE",
+  "newRows": 0,
+  "reusedCoreRows": 10,
+  "sourceRequests": 508,
+  "newNativeRuns": 0,
+  "plannedRoutes": 508,
+  "validatedRoutes": 507,
+  "failedRoutes": 1,
+  "sourceFailures": [
+    {
+      "symbol": "KVUE",
+      "priceSymbol": "KVUE",
+      "provider": "YAHOO",
+      "phase": "SOURCE_GAP",
+      "error": "IllegalArgumentException: Yahoo 行情数组不足",
+      "sourceCardSha256": "6a3018887bb5ae8a6d1f675bca0bcbddb54083b51a29f31bb8d00ad0d32ccd44",
+      "raw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\yahoo\\14e4e6d2-168e-4d4b-b04a-736494c855c8.response",
+      "sha256": "2c925747b14e4d926e27cbfe8d6a0556d1a1712790663b84499bebe9f7d6aa08",
+      "observedAt": "2026-11-12T09:06:58.584162Z"
+    }
+  ],
+  "successfulSourceRequests": 508,
+  "unknownRequestReservations": [],
+  "formalWrites": 0,
+  "newDateUnpublishedRoutes": 508,
+  "holdingsAsOf": "2026-10-16",
+  "fixedRoutes": 518,
+  "fromDate": "2026-11-11",
+  "throughDate": "2026-11-11",
+  "fullyAcceptedContiguousThrough": "2026-10-30",
+  "newWindowAccepted": false,
+  "originalUnpublishedWindows": [
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261102.json",
+      "sha256": "bee17f850a1e488a99f51f68186105556604cb447cc36ff3cc0cf872b235d86e"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261103.json",
+      "sha256": "e558fdae1102a4038e80f06b1193ac8dccd3a36925129fd26604a9b33b9896c4"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261104.json",
+      "sha256": "a14fc3e29ee147a67ca9a3c132d6dde2e382b5409a0ea44934813d4e4369375e"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261105.json",
+      "sha256": "38776e6bf16f1dd233096891867a4c0b016b52d69c9723dbc7b89f48b3f93bbe"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261106.json",
+      "sha256": "78891c21f78f1cd549973c8d848b2954c573604c4a437237db7875069f4bb107"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261109.json",
+      "sha256": "acf3ec6d5491f3642f3e44baac06820800da14a4d1ab4d02305bd4ac6033ed57"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261110.json",
+      "sha256": "a270c89d849815db16f3261e8369fb4c6274538915a5704a6309f6ec78897d00"
+    }
+  ],
+  "samePlanHelperBinding": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v212-20261112/same-plan-helper-binding-v219-v220.json",
+    "sha256": "b2c928fd69a35411cd9d2ef2fdbc631a50c5f601c19c3779b2a8c3507e52d8be"
+  },
+  "controllerBinding": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v212-20261112/controller-and-crypto-wrapper-binding-v224.json",
+    "sha256": "0fc092d2caa188b37aed59de08089212d0d9b7a2a6560ea9075973dcded22451"
+  },
+  "readonlyContinuation": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v212-20261112/readonly-child-closed-and-resume-v226.json",
+    "sha256": "a83d338d5f7db8eb041198096fe87b4942c6e06ab7b6f60b758806d24e499f90"
+  },
+  "oldFieldsProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v213-20261112/old-fields-after.json",
+    "sha256": "55e4f8b11e8d7337ad505724f7bb95e5085d19286798b2497444fd07206a12f2"
+  },
+  "nonOverlap": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v213-20261112/old-held-nonoverlap-proof.json",
+    "sha256": "db503e7ebe60a88a481fc7cbab92dcbe1ce69c51496903cccadbe06ef1a3259e"
+  },
+  "verification": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v213-20261112/source-failure-closeout.json",
+    "sha256": "8f1447dee516d9a2ff41af3f26f817bea0a17c08a493f422877a9de19d3f30c3"
+  },
+  "runtime": {
+    "path": "var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-us-v168.json",
+    "sha256": "727547a459df4e824e861f2e7f06542883cce6b320ccff42343727129f76570f"
+  },
+  "sourceGapProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v213-20261112/first-new-source-gap-proof.json",
+    "sha256": "95cac3eb5d6ef39e0390cd520d0399b555b1f5b42cc8a631810272f11b386236"
+  },
+  "wholeMarketComplete": false
+}

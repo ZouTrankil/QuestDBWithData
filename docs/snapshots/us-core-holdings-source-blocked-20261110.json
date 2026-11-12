@@ -1,0 +1,93 @@
+{
+  "说明": "2026-11-10窗口507路原文通过，1路待核，508路整批未发布。KVUE SOURCE_GAP IllegalArgumentException: Yahoo 行情数组不足。",
+  "status": "BLOCKED_SOURCE_FAILURE",
+  "newRows": 0,
+  "reusedCoreRows": 10,
+  "sourceRequests": 508,
+  "newNativeRuns": 0,
+  "plannedRoutes": 508,
+  "validatedRoutes": 507,
+  "failedRoutes": 1,
+  "sourceFailures": [
+    {
+      "symbol": "KVUE",
+      "priceSymbol": "KVUE",
+      "provider": "YAHOO",
+      "phase": "SOURCE_GAP",
+      "error": "IllegalArgumentException: Yahoo 行情数组不足",
+      "sourceCardSha256": "04edc88542ed849ee63e660963290b0a8e031ea5859c820a836b9c3fb9d43b7b",
+      "raw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\yahoo\\747560c5-099a-4cf3-9260-dfecec0a420d.response",
+      "sha256": "1422eaaac96259b130674e9688f0903cc812f56dad3558894661a0031f631b1b",
+      "observedAt": "2026-11-12T08:46:09.034891Z"
+    }
+  ],
+  "successfulSourceRequests": 508,
+  "unknownRequestReservations": [],
+  "formalWrites": 0,
+  "newDateUnpublishedRoutes": 508,
+  "holdingsAsOf": "2026-10-16",
+  "fixedRoutes": 518,
+  "fromDate": "2026-11-10",
+  "throughDate": "2026-11-10",
+  "fullyAcceptedContiguousThrough": "2026-10-30",
+  "newWindowAccepted": false,
+  "originalUnpublishedWindows": [
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261102.json",
+      "sha256": "bee17f850a1e488a99f51f68186105556604cb447cc36ff3cc0cf872b235d86e"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261103.json",
+      "sha256": "e558fdae1102a4038e80f06b1193ac8dccd3a36925129fd26604a9b33b9896c4"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261104.json",
+      "sha256": "a14fc3e29ee147a67ca9a3c132d6dde2e382b5409a0ea44934813d4e4369375e"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261105.json",
+      "sha256": "38776e6bf16f1dd233096891867a4c0b016b52d69c9723dbc7b89f48b3f93bbe"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261106.json",
+      "sha256": "78891c21f78f1cd549973c8d848b2954c573604c4a437237db7875069f4bb107"
+    },
+    {
+      "path": "docs/snapshots/us-core-holdings-source-blocked-20261109.json",
+      "sha256": "acf3ec6d5491f3642f3e44baac06820800da14a4d1ab4d02305bd4ac6033ed57"
+    }
+  ],
+  "samePlanHelperBinding": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v212-20261112/same-plan-helper-binding-v219-v220.json",
+    "sha256": "b2c928fd69a35411cd9d2ef2fdbc631a50c5f601c19c3779b2a8c3507e52d8be"
+  },
+  "controllerBinding": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v212-20261112/controller-and-crypto-wrapper-binding-v224.json",
+    "sha256": "0fc092d2caa188b37aed59de08089212d0d9b7a2a6560ea9075973dcded22451"
+  },
+  "readonlyContinuation": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v212-20261112/readonly-child-closed-and-resume-v226.json",
+    "sha256": "a83d338d5f7db8eb041198096fe87b4942c6e06ab7b6f60b758806d24e499f90"
+  },
+  "oldFieldsProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v212-20261112/old-fields-after.json",
+    "sha256": "490a0297e42b910f2aa8616632f03400eedcd66e18bb5852daef67e755a02093"
+  },
+  "nonOverlap": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v212-20261112/old-held-nonoverlap-proof.json",
+    "sha256": "336266913cdc79758a89f54ff7e7b0e3d86616188ca905575c1758275ad6d65f"
+  },
+  "verification": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v212-20261112/source-failure-closeout.json",
+    "sha256": "8cd95c336d3a67b096309b0515c71541a7db63a0064cf70513767e9b96f8c110"
+  },
+  "runtime": {
+    "path": "var/market-data/scope-review/runtime-refresh-v168-20261104/runtime-us-v168.json",
+    "sha256": "727547a459df4e824e861f2e7f06542883cce6b320ccff42343727129f76570f"
+  },
+  "sourceGapProof": {
+    "path": "var/market-data/scope-review/core-holdings-incremental-v212-20261112/first-new-source-gap-proof.json",
+    "sha256": "1a0e080fd74a63377ca10ba7e9dd75197abc2a8cf786ee0446f5c02b9c8cf7d0"
+  },
+  "wholeMarketComplete": false
+}
