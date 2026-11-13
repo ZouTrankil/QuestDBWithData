@@ -2,21 +2,23 @@
 
 目标是保存可复核的基础数据：美股约 20 年日线、核心标的当年分钟线、六只参照 ETF、BTC/ETH 现货和合约日线及小时线。Nasdaq ITCH 已按用户要求退出，原样本另行归档。数据不足时按实际上市或来源日期记录，不补造历史。
 
+2026-11-13起的新范围使用233运行包；US为`var/market-data/runtime/us-data-20261113-v233-wal-wait`，BTC为`var/crypto-market-data/runtime/btc-data-20261113-v233-wal-wait`，各自47个JAR及清单见本轮清单。206项测试、架构/边界及8211行保留复验通过后才用于本轮真实来源。旧168运行和Native保持原身份。
+
 2026-10-30 已按明确授权完成两张核心表 WAL 恢复及 ITCH 退出：日线与币价的新物理身份分别为 3267、3268，恢复时 WAL 均为 `2/2`。完整备份、原值、原 Native 和物理迁移单独留证；旧异常及旧成功凭证保持原样。ITCH 的 450836 条十六列及纳秒完整归档后移出正式库，`itch-enabled: false` 默认阻止采集／导入，原停止标记保留。原固定首批清单仍是历史凭证，其中 ITCH 查询须针对归档，不再表示正式表可读。见[恢复与退出决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)及[1029执行结果](plan/1029/results.md)。
 
 当前先交付核心范围，不再等待全市场长尾。日线优先核心 16 个标的、固定 SPY/QQQ 持仓和已验收的当前挂牌候选，优先近十年；不足时保留明确的五年或实际短来源。OTC、退市股、历史成分及非核心特殊证券后续单独处理，首批不继续扩大。
 
-16个核心的日线及当年1/5分钟已验收到2026-11-11。本轮10、11日新增32行日线、14976行分钟，分钟量仅代表IEX。见[核心清单](snapshots/us-core-incremental-20261111.json)、[查询](../tools/sql/us-core-incremental-20261111-reference.sql)和[验收](decisions/2026-11-12-核心两日增量及指定指数缺口验收.md)。
+16个核心的日线及当年1/5分钟已验收到2026-11-12。本轮新增16行日线、7488行分钟。分钟量仅代表IEX。见[核心清单](snapshots/us-core-incremental-20261112.json)、[查询](../tools/sql/us-core-incremental-20261112-reference.sql)及[验收](decisions/2026-11-13-核心行情单日增量验收.md)。
 
-11月12日验收后，日线、分钟及币价WAL分别为`164/164`、`827/827`、`138/138`。十表结清，写前仍须当轮实查。见[本轮验收](decisions/2026-11-12-核心两日增量及指定指数缺口验收.md)。
+11月13日验收后，日线、分钟和币价WAL分别为 `180/180`、`859/859`、`146/146`。十表零缓冲且未挂起。写前以当轮实查为准。见[历史恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)及[本轮验收](decisions/2026-11-13-核心行情单日增量验收.md)。
 
 2026-11-07的进程身份阻塞在11月9日只读预检中解除，原证据保留。见[阻塞留证](decisions/2026-11-07-核心采集写前进程身份待核.md)及[恢复验收](decisions/2026-11-09-核心采集恢复与周末币价补齐.md)。
 
-指数新增7行。已验收截止：FRED NASDAQCOM至2026-11-11、FRED SP500至2026-11-10、FRED VIXCLS至2026-11-10、CBOE VIX至2026-11-09。SP500缺2026-11-11。VIXCLS缺2026-11-11。CBOE本轮连接超时，原211失败及4194305字节未知预留保持，不自动重试。指定缺口：SP500 2026-11-06已补齐；SP500 2026-11-09已补齐；VIXCLS 2026-11-09已补齐。见[指数清单](snapshots/us-core-macro-incremental-20261112.json)和[查询](../tools/sql/us-core-macro-incremental-20261112-reference.sql)。
+指数新增3行。已验收截止：FRED NASDAQCOM至2026-11-12、FRED SP500至2026-11-11、FRED VIXCLS至2026-11-11、CBOE VIX至2026-11-09。SP500缺2026-11-12。VIXCLS缺2026-11-12。见[指数清单](snapshots/us-core-macro-incremental-20261113.json)和[查询](../tools/sql/us-core-macro-incremental-20261113-reference.sql)。
 
-固定518路的连续完整截止仍是10月30日。2026-11-10窗口507路原文通过，1路待核，508路整批未发布。KVUE SOURCE_GAP IllegalArgumentException: Yahoo 行情数组不足。2026-11-11窗口507路原文通过，1路待核，508路整批未发布。KVUE SOURCE_GAP IllegalArgumentException: Yahoo 行情数组不足。见[十日清单](snapshots/us-core-holdings-source-blocked-20261110.json)和[十一日清单](snapshots/us-core-holdings-source-blocked-20261111.json)。
+固定518路的连续完整截止仍是10月30日。十二日窗口已验证507路原文，1路待核。KVUE SOURCE_GAP IllegalArgumentException: Yahoo 行情数组不足。有效原文保存在缓存，整批正式发布为零。见[持仓清单](snapshots/us-core-holdings-source-blocked-20261112.json)和[查询](../tools/sql/us-core-holdings-source-blocked-20261112-reference.sql)。
 
-`crypto_ohlcv`的原八个产品已验收到UTC 2026-11-11，累计373598行、744个来源任务。10、11日新增384行小时线和16行日线。见[币价清单](snapshots/crypto-core-incremental-20261111.json)和[查询](../tools/sql/crypto-core-incremental-20261111-reference.sql)。
+`crypto_ohlcv`的原八个产品已验收到UTC 2026-11-12，累计373798行、752个来源任务。新增192行小时线和8行日线。见[币价清单](snapshots/crypto-core-incremental-20261112.json)和[查询](../tools/sql/crypto-core-incremental-20261112-reference.sql)。
 
 ## 首批从这里读取
 

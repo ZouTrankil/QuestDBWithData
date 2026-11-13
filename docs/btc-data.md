@@ -2,6 +2,8 @@
 
 Java 下载 Binance Vision 官方 ZIP，正式数据写配置中的远端 QuestDB。Python 只读，研究文件可以导出到本地。
 
+2026-11-13起的新范围使用233运行包；US为`var/market-data/runtime/us-data-20261113-v233-wal-wait`，BTC为`var/crypto-market-data/runtime/btc-data-20261113-v233-wal-wait`，各自47个JAR及清单见本轮清单。206项测试、架构/边界及8211行保留复验通过后才用于本轮真实来源。旧168运行和Native保持原身份。
+
 2026-10-30 的[1029库存核查](plan/1029/results.md)已定位原生六表的小时线缺口及未知资金费周期；日线基线与多表就绪分开报告。本机原生六表的原 ZIP／Native 根目录尚未找到，不把实库读取当作官方原文重验。跨资产 `crypto_ohlcv` 则沿本地 610 份原文与原 Native 完整核对，并在明确授权下恢复 WAL，新物理身份 3268、水位 `2/2`；旧凭证保持，见[恢复决定](decisions/2026-10-30-核心WAL恢复与ITCH退出.md)。本轮没有补造缺失 K 线或启动资金费策略。
 
 ## 六张表
@@ -33,7 +35,7 @@ Java 下载 Binance Vision 官方 ZIP，正式数据写配置中的远端 QuestD
 
 旧 `collect --through ...` 保留原行为，不接管这六张表。
 
-`crypto_ohlcv`的原八个产品已验收到UTC 2026-11-11，累计373598行、744个来源任务。10、11日新增384行小时线和16行日线。见[币价清单](snapshots/crypto-core-incremental-20261111.json)和[查询](../tools/sql/crypto-core-incremental-20261111-reference.sql)。
+`crypto_ohlcv`的原八个产品已验收到UTC 2026-11-12，累计373798行、752个来源任务。新增192行小时线和8行日线。见[币价清单](snapshots/crypto-core-incremental-20261112.json)和[查询](../tools/sql/crypto-core-incremental-20261112-reference.sql)。
 
 ## 记录与停止
 

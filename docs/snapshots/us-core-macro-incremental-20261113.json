@@ -1,0 +1,302 @@
+{
+  "说明": "独立来源各一轮，按各序列实际日期验收。",
+  "checkedAt": "2026-11-13T07:36:09.683878+00:00",
+  "sourceRequests": 3,
+  "newRows": 3,
+  "newNativeRuns": 3,
+  "actualCutoffs": [
+    {
+      "provider": "FRED",
+      "series": "NASDAQCOM",
+      "rows": 5250,
+      "through": "2026-11-12"
+    },
+    {
+      "provider": "FRED",
+      "series": "SP500",
+      "rows": 2591,
+      "through": "2026-11-11"
+    },
+    {
+      "provider": "FRED",
+      "series": "VIXCLS",
+      "rows": 5281,
+      "through": "2026-11-11"
+    },
+    {
+      "provider": "CBOE",
+      "series": "VIX",
+      "rows": 5279,
+      "through": "2026-11-09"
+    }
+  ],
+  "sourceGaps": [
+    {
+      "series": "SP500",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-11-12",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-11-12"
+      ],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    },
+    {
+      "series": "VIXCLS",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-11-12",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11"
+      ],
+      "knownSessionDatesNotProvided": [
+        "2026-11-12"
+      ],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    },
+    {
+      "series": "NASDAQCOM",
+      "requestedFrom": "2026-10-22",
+      "requestedThrough": "2026-11-12",
+      "sourceValidDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12"
+      ],
+      "knownSessionDatesNotProvided": [],
+      "note": "只列已证明的股票参照日期，不据股票日历断言宏观来源完整"
+    }
+  ],
+  "allOldFieldsAndTypedNativePreserved": true,
+  "requestedFrom": "2026-10-22",
+  "requestedThrough": "2026-11-12",
+  "fredAll6FieldsSourcePreparedNativeDualReadExact": true,
+  "cboeSourceRequests": 0,
+  "cboeNewSourceAccepted": false,
+  "cboeOld211NotRetried": true,
+  "priorityDates": [
+    {
+      "series": "SP500",
+      "date": "2026-11-11",
+      "before": [],
+      "sourceObservations": [
+        {
+          "realtime_start": "2026-11-13",
+          "realtime_end": "2026-11-13",
+          "date": "2026-11-11",
+          "value": "7619.38"
+        }
+      ],
+      "after": [
+        {
+          "ts_code": "SP500.US",
+          "trade_date": "2026-11-11T00:00:00+00:00",
+          "close": 7619.38,
+          "source_id": "SP500",
+          "source_url": "https://fred.stlouisfed.org/series/SP500",
+          "update_time": "2026-11-13T07:35:33.848391+00:00"
+        }
+      ],
+      "status": "FILLED_AND_VERIFIED",
+      "sourceSha256": "4f823e165f758d5fc6ccf7ccdce6ce6838c330be575f72461fcc4efb2b6884ac",
+      "observedAt": "2026-11-13T07:35:33.848391Z",
+      "newRows": 1,
+      "sourceRaw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\fred\\cc6659ba-6f8b-4af3-afed-0d3ae438e0ca.response",
+      "completeSixColumnsDualRead": true
+    },
+    {
+      "series": "SP500",
+      "date": "2026-11-12",
+      "before": [],
+      "sourceObservations": [],
+      "after": [],
+      "status": "SOURCE_GAP_RETAINED",
+      "sourceSha256": "4f823e165f758d5fc6ccf7ccdce6ce6838c330be575f72461fcc4efb2b6884ac",
+      "observedAt": "2026-11-13T07:35:33.848391Z",
+      "newRows": 0,
+      "sourceRaw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\fred\\cc6659ba-6f8b-4af3-afed-0d3ae438e0ca.response",
+      "completeSixColumnsDualRead": true
+    },
+    {
+      "series": "VIXCLS",
+      "date": "2026-11-11",
+      "before": [],
+      "sourceObservations": [
+        {
+          "realtime_start": "2026-11-13",
+          "realtime_end": "2026-11-13",
+          "date": "2026-11-11",
+          "value": "17.49"
+        }
+      ],
+      "after": [
+        {
+          "ts_code": "VIXCLS.US",
+          "trade_date": "2026-11-11T00:00:00+00:00",
+          "close": 17.49,
+          "source_id": "VIXCLS",
+          "source_url": "https://fred.stlouisfed.org/series/VIXCLS",
+          "update_time": "2026-11-13T07:35:42.891252+00:00"
+        }
+      ],
+      "status": "FILLED_AND_VERIFIED",
+      "sourceSha256": "692f93f31866352b6de0540d7fd7941e516899202f6656a20ae895808049480d",
+      "observedAt": "2026-11-13T07:35:42.891252Z",
+      "newRows": 1,
+      "sourceRaw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\fred\\4266ab32-69e4-497e-881b-2c81f333469d.response",
+      "completeSixColumnsDualRead": true
+    },
+    {
+      "series": "VIXCLS",
+      "date": "2026-11-12",
+      "before": [],
+      "sourceObservations": [],
+      "after": [],
+      "status": "SOURCE_GAP_RETAINED",
+      "sourceSha256": "692f93f31866352b6de0540d7fd7941e516899202f6656a20ae895808049480d",
+      "observedAt": "2026-11-13T07:35:42.891252Z",
+      "newRows": 0,
+      "sourceRaw": "F:\\repo\\engine\\data\\var\\market-data\\raw\\fred\\4266ab32-69e4-497e-881b-2c81f333469d.response",
+      "completeSixColumnsDualRead": true
+    }
+  ],
+  "oldCboeFailure": {
+    "path": "var/market-data/scope-review/core-macro-v211-recheck-v217-20261112/source-acceptance-boundaries.json",
+    "sha256": "8923a745c567b596428ae5a3662b683b868a89d5809844e44cba8c19776a43a6"
+  },
+  "sources": [
+    {
+      "provider": "fred",
+      "series": "SP500",
+      "sha256": "4f823e165f758d5fc6ccf7ccdce6ce6838c330be575f72461fcc4efb2b6884ac",
+      "observedAt": "2026-11-13T07:35:33.848391Z",
+      "bytes": 1743,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 15,
+      "fullSourceLastDate": "2026-11-11"
+    },
+    {
+      "provider": "fred",
+      "series": "VIXCLS",
+      "sha256": "692f93f31866352b6de0540d7fd7941e516899202f6656a20ae895808049480d",
+      "observedAt": "2026-11-13T07:35:42.891252Z",
+      "bytes": 1714,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 15,
+      "fullSourceLastDate": "2026-11-11"
+    },
+    {
+      "provider": "fred",
+      "series": "NASDAQCOM",
+      "sha256": "6013cce1fe10f10d1b6e2e63a367b5720e4ccb7e4d9e80ada83e43d84357a447",
+      "observedAt": "2026-11-13T07:35:50.919892Z",
+      "bytes": 1853,
+      "validDates": [
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30",
+        "2026-11-02",
+        "2026-11-03",
+        "2026-11-04",
+        "2026-11-05",
+        "2026-11-06",
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12"
+      ],
+      "newRows": 1,
+      "fullSourceRows": 16,
+      "fullSourceLastDate": "2026-11-12"
+    }
+  ],
+  "verification": {
+    "path": "var/market-data/scope-review/core-macro-v236-20261113/independent-verification.json",
+    "sha256": "19825f78d84a6419e74f07ae202468185906c63c498948c94d23c76cf9454949"
+  },
+  "runtime": {
+    "path": "var/market-data/scope-review/runtime-refresh-v233-20261113/runtime-us-v233.json",
+    "sha256": "b475366105a15b13468a9517e33f77c0dc4e490a74ea9b512a57bd7e1e802183"
+  },
+  "wholeMarketComplete": false
+}
